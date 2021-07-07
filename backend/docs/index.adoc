@@ -1,0 +1,50 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:author: Team CVI
+:email: https://github.com/woowacourse-teams/2021-cvi
+
+= Team CVI Api Specification
+
+=== Common Responses
+==== Common Status Codes
+```java
+# 생성
+## status code: 201
+## Headers: Location
+
+# 조회
+## status code: 200
+
+# 업데이트
+## status code: 204
+
+# 삭제
+## status code: 204
+```
+
+==== Common Exceptions
+```java
+# 클라이언트 입력 예외
+## status code: 400
+
+# 인증 예외
+## status code: 401
+
+# 서버 내부 예외
+## status code: 500
+```
+
+== User (사용자)
+=== 사용자 가입
+==== 성공
+===== Request
+include::{snippets}/user-signup/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-signup/http-response.adoc[]
