@@ -10,4 +10,14 @@ public class UserService {
     public UserResponse signup(UserRequest userRequest) {
         return null;
     }
+
+    public UserResponse findById(Long id) {
+        return null;
+    }
+
+    public void updateById(Long id, UserRequest updateRequest) {
+    }
+
+    public void deleteById(Long id) {
+    }
 }

@@ -40,11 +40,66 @@ endif::[]
 ## status code: 500
 ```
 
-== User (사용자)
-=== 사용자 가입
+== User (유저)
+=== 유저 가입
 ==== 성공
 ===== Request
 include::{snippets}/user-signup/http-request.adoc[]
 
 ===== Response
 include::{snippets}/user-signup/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-signup-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-signup-failure/http-response.adoc[]
+
+
+=== 유저 조회
+==== 성공
+===== Request
+include::{snippets}/user-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-find/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-find-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-find-failure/http-response.adoc[]
+
+
+=== 유저 업데이트
+==== 성공
+===== Request
+include::{snippets}/user-update/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-update/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-update-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-update-failure/http-response.adoc[]
+
+
+=== 유저 삭제
+==== 성공
+===== Request
+include::{snippets}/user-delete/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-delete/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-delete-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-delete-failure/http-response.adoc[]

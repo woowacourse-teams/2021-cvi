@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.common.handler;
 
 import com.backjoongwon.cvi.common.exception.CommonException;
 import com.backjoongwon.cvi.common.exception.ExceptionMessage;
+import com.backjoongwon.cvi.common.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,13 @@ public class CVIControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionMessage commonException(CommonException e) {
         LOG.error("CommonException: {}", e.getMessage(), e);
+        return new ExceptionMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionMessage notFoundException(NotFoundException e) {
+        LOG.error("NotFoundException: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
 
