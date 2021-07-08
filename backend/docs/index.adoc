@@ -57,3 +57,12 @@ include::{snippets}/post-create/http-request.adoc[]
 
 ===== Response
 include::{snippets}/post-create/http-response.adoc[]
+
+== Post (게시글)
+=== 게시글 조회
+==== 성공
+===== Request
+include::{snippets}/post-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-find/http-response.adoc[]

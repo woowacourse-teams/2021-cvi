@@ -10,4 +10,8 @@ public class PostService {
     public PostResponse create(Long userId, PostRequest postRequest) {
         return null;
     }
+
+    public PostResponse find(Long postId) {
+        return null;
+    }
 }

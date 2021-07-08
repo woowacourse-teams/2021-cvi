@@ -1,29 +1,27 @@
 package com.backjoongwon.cvi.user.dto;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserResponse {
 
     private Long id;
     private String nickname;
     private int ageRange;
+    private boolean shotVerified;
 
-    protected UserResponse() {
-    }
-
-    public UserResponse(Long id, String nickname, int ageRange) {
+    public UserResponse(Long id, String nickname, int ageRange, boolean shotVerified) {
         this.id = id;
         this.nickname = nickname;
         this.ageRange = ageRange;
+        this.shotVerified = shotVerified;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public int getAgeRange() {
-        return ageRange;
+    public UserResponse(Long id, String nickname, int ageRange) {
+        this(id, nickname, ageRange, false);
     }
 }

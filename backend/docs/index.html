@@ -509,14 +509,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_성공">성공</h4>
 <div class="sect4">
 <h5 id="_request">Request</h5>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::C:/Users/shine/Desktop/Programming/2021-cvi/backend/build/generated-snippets/user-signup/http-request.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/signup HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 52
+Host: localhost
+
+{
+  "nickname" : "라이언",
+  "ageRange" : 20
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_response">Response</h5>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::C:/Users/shine/Desktop/Programming/2021-cvi/backend/build/generated-snippets/user-signup/http-response.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /api/v1/users/1
+Content-Type: application/json
+Content-Length: 92
+
+{
+  "id" : 1,
+  "nickname" : "라이언",
+  "ageRange" : 20,
+  "shotVerified" : false
+}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -532,14 +554,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_성공_2">성공</h4>
 <div class="sect4">
 <h5 id="_request_2">Request</h5>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::C:/Users/shine/Desktop/Programming/2021-cvi/backend/build/generated-snippets/create-post/http-request.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "화이자"
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_response_2">Response</h5>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::C:/Users/shine/Desktop/Programming/2021-cvi/backend/build/generated-snippets/create-post/http-response.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /api/v1/posts/100</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -549,7 +584,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-08 14:29:29 +0900
+Last updated 2021-07-08 14:33:01 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
