@@ -13,7 +13,7 @@ public class PostService {
         return null;
     }
 
-    public PostResponse find(Long postId) {
+    public PostResponse findById(Long postId) {
         return null;
     }
 

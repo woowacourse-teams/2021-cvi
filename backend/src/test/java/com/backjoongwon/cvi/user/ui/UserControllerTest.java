@@ -84,7 +84,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void update() throws Exception {
         //given
-        willDoNothing().given(userService).updateById(any(Long.class), any(UserRequest.class));
+        willDoNothing().given(userService).update(any(Long.class), any(UserRequest.class));
         //when
         ResultActions response = 유저_업데이트_요청(userRequest);
         //then
@@ -95,7 +95,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void updateFailure() throws Exception {
         //given
-        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다.")).given(userService).updateById(any(Long.class),
+        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다.")).given(userService).update(any(Long.class),
                 any(UserRequest.class));
         //when
         ResultActions response = 유저_업데이트_요청(userRequest);
@@ -107,7 +107,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteUser() throws Exception {
         //given
-        willDoNothing().given(userService).deleteById(any(Long.class));
+        willDoNothing().given(userService).delete(any(Long.class));
         //when
         ResultActions response = 유저_삭제_요청(1L);
         //then
@@ -118,7 +118,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("존재하지 않는 유저입니다.")).given(userService).deleteById(any(Long.class));
+        willThrow(new NotFoundException("존재하지 않는 유저입니다.")).given(userService).delete(any(Long.class));
         //when
         ResultActions response = 유저_삭제_요청(2L);
         //then

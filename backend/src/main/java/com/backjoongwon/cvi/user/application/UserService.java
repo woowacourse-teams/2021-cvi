@@ -15,9 +15,9 @@ public class UserService {
         return null;
     }
 
-    public void updateById(Long id, UserRequest updateRequest) {
+    public void update(Long id, UserRequest updateRequest) {
     }
 
-    public void deleteById(Long id) {
+    public void delete(Long id) {
     }
 }

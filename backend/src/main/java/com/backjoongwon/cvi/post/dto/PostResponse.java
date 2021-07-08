@@ -4,13 +4,11 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class PostResponse {
 
     private Long id;
@@ -27,9 +25,5 @@ public class PostResponse {
         this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
-    }
-
-    public PostResponse(Long id) {
-        this(id, null, null, 0, null, null);
     }
 }
