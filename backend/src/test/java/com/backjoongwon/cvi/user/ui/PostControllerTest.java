@@ -2,6 +2,10 @@ package com.backjoongwon.cvi.user.ui;
 
 
 import com.backjoongwon.cvi.ApiDocument;
+import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.dto.PostRequest;
+import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.ui.PostController;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -25,29 +29,38 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = UserController.class)
-class UserControllerTest extends ApiDocument {
+@WebMvcTest(controllers = PostController.class)
+class PostControllerTest extends ApiDocument {
 
+    private static final Long USER_ID = 1L;
+    private static final Long POST_ID = 100L;
+
+    private PostRequest request;
+    private PostResponse response;
     @MockBean
-    private UserService userService;
-    private UserRequest request;
-    private UserResponse userResponse;
+    private PostService postService;
 
     @BeforeEach
     void init() {
-        request = new UserRequest("라이언", 20);
-        userResponse = new UserResponse(1L, "라이언", 20);
+        request = new PostRequest("글 내용", "화이자");
+        response = new PostResponse(POST_ID);
     }
 
-    @DisplayName("유저 가입 - 성공")
+    @DisplayName("글 등록 - 성공")
     @Test
-    void signup() throws Exception {
+    void createPost() throws Exception {
         //given
-        given(userService.signup(any(UserRequest.class))).willReturn(userResponse);
+        given(postService.create(USER_ID, any(PostRequest.class))).willReturn(response);
         //when
-        ResultActions response = 사용자_회원가입_요청(request);
+        ResultActions response = 글_등록(USER_ID, request);
         //then
-        사용자_회원가입_성공함(response, userResponse);
+        // 사용자_회원가입_성공함(response, userResponse);
+    }
+
+    private ResultActions 글_등록(Long userId, PostRequest request) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request)));
     }
 
     private void 사용자_회원가입_성공함(ResultActions response, UserResponse userResponse) throws Exception {
@@ -56,11 +69,5 @@ class UserControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(userResponse)))
                 .andDo(print())
                 .andDo(toDocument("user-signup"));
-    }
-
-    private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
-        return mockMvc.perform(post("/api/v1/users/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
     }
 }
