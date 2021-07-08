@@ -14,4 +14,10 @@ public class PostService {
     public PostResponse find(Long postId) {
         return null;
     }
+
+    public void update(Long userId, Long postId, PostRequest postRequest) {
+    }
+
+    public void delete(Long postId, Long userId) {
+    }
 }

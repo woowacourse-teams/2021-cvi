@@ -1,13 +1,13 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.post.application.PostService;
-import java.net.URI;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +36,17 @@ public class PostController {
     public ResponseEntity<PostResponse> find(@PathVariable Long postId) {
         PostResponse postResponse = postService.find(postId);
         return ResponseEntity.ok(postResponse);
+    }
+
+    @PutMapping("/{postId}/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Long postId, @PathVariable Long userId, @RequestBody PostRequest postRequest) {
+        postService.update(userId, postId, postRequest);
+    }
+
+    @DeleteMapping("/{postId}/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long postId, @PathVariable Long userId) {
+        postService.delete(postId, userId);
     }
 }
