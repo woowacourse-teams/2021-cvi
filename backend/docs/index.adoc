@@ -48,3 +48,12 @@ include::{snippets}/user-signup/http-request.adoc[]
 
 ===== Response
 include::{snippets}/user-signup/http-response.adoc[]
+
+== Post (게시글)
+=== 게시글 등록
+==== 성공
+===== Request
+include::{snippets}/post-create/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-create/http-response.adoc[]
