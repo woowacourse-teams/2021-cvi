@@ -10,4 +10,11 @@ public class PostService {
     public PostResponse create(Long userId, PostRequest postRequest) {
         return null;
     }
+
+    public void update(Long userId, Long postId, PostRequest postRequest) {
+    }
+
+    public void delete(Long postId, Long userId) {
+
+    }
 }
