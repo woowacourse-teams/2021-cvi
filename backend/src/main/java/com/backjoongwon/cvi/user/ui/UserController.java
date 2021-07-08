@@ -4,10 +4,14 @@ import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,27 +21,29 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponse> signup(@RequestBody UserRequest userRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse signup(@RequestBody UserRequest userRequest, HttpServletResponse servletResponse) {
         UserResponse userResponse = userService.signup(userRequest);
-        return ResponseEntity.created(URI.create("/api/v1/users/" + userResponse.getId())).body(userResponse);
+        servletResponse.setHeader("Location", "/api/v1/users/" + userResponse.getId());
+        return userResponse;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> find(@PathVariable Long id) {
-        UserResponse userResponse = userService.findById(id);
-        return ResponseEntity.ok().body(userResponse);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse find(@PathVariable Long id) {
+        return userService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         userService.updateById(id, userRequest);
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         userService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }
 
