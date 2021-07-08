@@ -4,6 +4,8 @@ import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostService {
 
@@ -12,6 +14,10 @@ public class PostService {
     }
 
     public PostResponse find(Long postId) {
+        return null;
+    }
+
+    public List<PostResponse> findAll() {
         return null;
     }
 

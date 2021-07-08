@@ -3,19 +3,12 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,9 +26,14 @@ public class PostController {
 
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PostResponse> find(@PathVariable Long postId) {
-        PostResponse postResponse = postService.find(postId);
-        return ResponseEntity.ok(postResponse);
+    public PostResponse find(@PathVariable Long postId) {
+        return postService.find(postId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> findAll() {
+        return postService.findAll();
     }
 
     @PutMapping("/{postId}/users/{userId}")

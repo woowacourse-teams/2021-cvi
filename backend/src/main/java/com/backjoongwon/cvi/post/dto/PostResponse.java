@@ -1,12 +1,12 @@
 package com.backjoongwon.cvi.post.dto;
 
 import com.backjoongwon.cvi.user.dto.UserResponse;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
