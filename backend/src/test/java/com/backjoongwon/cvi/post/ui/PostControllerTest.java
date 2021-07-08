@@ -46,7 +46,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID);
+        PostResponse expectedResponse = new PostResponse(POST_ID, null, null, 0, null, null);
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(USER_ID, request);
@@ -56,7 +56,7 @@ class PostControllerTest extends ApiDocument {
 
     @DisplayName("글 등록 - 실패")
     @Test
-    void createPostFail() throws Exception {
+    void createPostFailure() throws Exception {
         //given
         willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).create(any(Long.class), any(PostRequest.class));
         //when
@@ -72,7 +72,7 @@ class PostControllerTest extends ApiDocument {
         UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", 10, true);
         PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, "화이자", LocalDateTime.now());
 
-        given(postService.find(any(Long.class))).willReturn(expectedPostResponse);
+        given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -81,9 +81,9 @@ class PostControllerTest extends ApiDocument {
 
     @DisplayName("글 단일 조회 - 실패")
     @Test
-    void findFail() throws Exception {
+    void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).find(any(Long.class));
+        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).findById(any(Long.class));
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -122,7 +122,7 @@ class PostControllerTest extends ApiDocument {
 
     @DisplayName("글 수정 - 실패")
     @Test
-    void updatePostFail() throws Exception {
+    void updatePostFailure() throws Exception {
         //given
         willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
         //when
@@ -144,7 +144,7 @@ class PostControllerTest extends ApiDocument {
 
     @DisplayName("글 삭제 - 실패")
     @Test
-    void deletePostFail() throws Exception {
+    void deletePostFailure() throws Exception {
         //given
         willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).delete(any(Long.class), any(Long.class));
         //when
@@ -159,27 +159,6 @@ class PostControllerTest extends ApiDocument {
                 .content(toJson(request)));
     }
 
-    private ResultActions 글_단일_조회_요청(Long postId) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/{postId}", postId)
-                .contentType(MediaType.APPLICATION_JSON));
-    }
-
-    private ResultActions 글_전체_조회_요청() throws Exception {
-        return mockMvc.perform(get("/api/v1/posts")
-                .contentType(MediaType.APPLICATION_JSON));
-    }
-
-    private ResultActions 글_수정_요청(Long userId, Long postId, PostRequest request) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts/{postId}/users/{userId}", userId, postId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
-    }
-
-    private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/users/{userId}", userId, postId)
-                .contentType(MediaType.APPLICATION_JSON));
-    }
-
     private void 글_등록_성공함(ResultActions response, PostResponse expectedResponse) throws Exception {
         response.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/posts/" + expectedResponse.getId()))
@@ -190,7 +169,12 @@ class PostControllerTest extends ApiDocument {
     private void 글_등록_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isNotFound())
                 .andDo(print())
-                .andDo(toDocument("post-create-fail"));
+                .andDo(toDocument("post-create-failure"));
+    }
+
+    private ResultActions 글_단일_조회_요청(Long postId) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{postId}", postId)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 글_단일_조회_성공함(ResultActions response, PostResponse expectedResponse) throws Exception {
@@ -203,7 +187,12 @@ class PostControllerTest extends ApiDocument {
     private void 글_단일_조회_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isNotFound())
                 .andDo(print())
-                .andDo(toDocument("post-find-fail"));
+                .andDo(toDocument("post-find-failure"));
+    }
+
+    private ResultActions 글_전체_조회_요청() throws Exception {
+        return mockMvc.perform(get("/api/v1/posts")
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponses) throws Exception {
@@ -213,10 +202,27 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findAll"));
     }
 
+    private ResultActions 글_수정_요청(Long userId, Long postId, PostRequest request) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{postId}/users/{userId}", userId, postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request)));
+    }
+
     private void 글_수정_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isNoContent())
                 .andDo(print())
                 .andDo(toDocument("post-update"));
+    }
+
+    private void 글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("post-update-failure"));
+    }
+
+    private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/users/{userId}", userId, postId)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 글_삭제_성공함(ResultActions response) throws Exception {
@@ -225,15 +231,9 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-delete"));
     }
 
-    private void 글_수정_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isNotFound())
-                .andDo(print())
-                .andDo(toDocument("post-update-fail"));
-    }
-
     private void 글_삭제_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isNotFound())
                 .andDo(print())
-                .andDo(toDocument("post-delete-fail"));
+                .andDo(toDocument("post-delete-failure"));
     }
 }
