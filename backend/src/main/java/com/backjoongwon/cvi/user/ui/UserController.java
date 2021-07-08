@@ -5,13 +5,9 @@ import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1/users")

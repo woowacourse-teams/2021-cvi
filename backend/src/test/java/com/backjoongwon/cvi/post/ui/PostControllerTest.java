@@ -175,12 +175,6 @@ class PostControllerTest extends ApiDocument {
                 .content(toJson(request)));
     }
 
-    private void 글_수정_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isBadRequest())
-                .andDo(print())
-                .andDo(toDocument("post-update-fail"));
-    }
-
     private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
         return mockMvc.perform(delete("/api/v1/posts/{postId}/users/{userId}", userId, postId)
                 .contentType(MediaType.APPLICATION_JSON));
@@ -194,7 +188,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private void 글_등록_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isBadRequest())
+        response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("post-create-fail"));
     }
@@ -207,7 +201,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private void 글_단일_조회_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isBadRequest())
+        response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("post-find-fail"));
     }
@@ -231,8 +225,14 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-delete"));
     }
 
+    private void 글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("post-update-fail"));
+    }
+
     private void 글_삭제_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isBadRequest())
+        response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("post-delete-fail"));
     }
