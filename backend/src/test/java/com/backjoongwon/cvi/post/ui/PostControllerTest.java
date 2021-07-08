@@ -1,4 +1,4 @@
-package com.backjoongwon.cvi.user.ui;
+package com.backjoongwon.cvi.post.ui;
 
 
 import com.backjoongwon.cvi.ApiDocument;
@@ -58,7 +58,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private ResultActions 글_등록(Long userId, PostRequest request) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts")
+        return mockMvc.perform(post("/api/v1/posts/users/{u")
             .contentType(MediaType.APPLICATION_JSON)
             .content(toJson(request)));
     }
