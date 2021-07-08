@@ -1,0 +1,178 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:author: Team CVI
+:email: https://github.com/woowacourse-teams/2021-cvi
+
+= Team CVI Api Specification
+
+=== Common Responses
+==== Common Status Codes
+```java
+# 생성
+## status code: 201
+## Headers: Location
+
+# 조회
+## status code: 200
+
+# 업데이트
+## status code: 204
+
+# 삭제
+## status code: 204
+```
+
+==== Common Exceptions
+```java
+# 클라이언트 입력 예외
+## status code: 400
+
+# 인증 예외
+## status code: 401
+
+# NotFound 예외
+## status code: 404
+
+# 서버 내부 예외
+## status code: 500
+```
+
+== User (유저)
+=== 유저 가입
+==== 성공
+===== Request
+include::{snippets}/user-signup/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-signup/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-signup-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-signup-failure/http-response.adoc[]
+
+
+=== 유저 조회
+==== 성공
+===== Request
+include::{snippets}/user-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-find/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-find-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-find-failure/http-response.adoc[]
+
+
+=== 유저 업데이트
+==== 성공
+===== Request
+include::{snippets}/user-update/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-update/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-update-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-update-failure/http-response.adoc[]
+
+
+=== 유저 삭제
+==== 성공
+===== Request
+include::{snippets}/user-delete/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-delete/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-delete-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-delete-failure/http-response.adoc[]
+
+== Post (게시글)
+=== 게시글 등록
+==== 성공
+===== Request
+include::{snippets}/post-create/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-create/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/post-create-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-create-failure/http-response.adoc[]
+
+== Post (게시글)
+=== 게시글 단일 조회
+==== 성공
+===== Request
+include::{snippets}/post-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-find/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/post-find-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-find-failure/http-response.adoc[]
+
+=== 게시글 전체 조회
+==== 성공
+===== Request
+include::{snippets}/post-findAll/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findAll/http-response.adoc[]
+
+=== 게시글 수정
+==== 성공
+===== Request
+include::{snippets}/post-update/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-update/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/post-update-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-update-failure/http-response.adoc[]
+
+=== 게시글 삭제
+==== 성공
+===== Request
+include::{snippets}/post-delete/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-delete/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/post-delete-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-delete-failure/http-response.adoc[]
