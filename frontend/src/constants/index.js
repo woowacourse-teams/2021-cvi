@@ -1,3 +1,5 @@
-import { VACCINE_COLOR, COLOR } from './palette';
+import PATH from './path';
+import PALETTE from './palette';
+import { VACCINE_COLOR } from './theme';
 
-export { VACCINE_COLOR, COLOR };
+export { PALETTE, PATH, VACCINE_COLOR };

@@ -1,4 +1,4 @@
-import { VACCINE_COLOR, COLOR } from '../../constants';
+import { VACCINE_COLOR, PALETTE } from '../../constants';
 import Label from './Label';
 
 export default {
@@ -13,7 +13,7 @@ Small.args = {
   children: '모더나',
   sizeType: 'SMALL',
   backgroundColor: VACCINE_COLOR.MODERNA,
-  fontColor: COLOR.WHITE,
+  fontColor: PALETTE.WHITE,
 };
 
 export const Medium = Template.bind({});
@@ -21,7 +21,7 @@ Medium.args = {
   children: '모더나',
   sizeType: 'MEDIUM',
   backgroundColor: VACCINE_COLOR.MODERNA,
-  fontColor: COLOR.WHITE,
+  fontColor: PALETTE.WHITE,
 };
 
 export const Large = Template.bind({});
@@ -29,5 +29,5 @@ Large.args = {
   children: '모더나',
   sizeType: 'LARGE',
   backgroundColor: VACCINE_COLOR.MODERNA,
-  fontColor: COLOR.WHITE,
+  fontColor: PALETTE.WHITE,
 };
