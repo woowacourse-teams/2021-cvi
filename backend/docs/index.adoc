@@ -123,7 +123,6 @@ include::{snippets}/post-create-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/post-create-failure/http-response.adoc[]
 
-== Post (게시글)
 === 게시글 단일 조회
 ==== 성공
 ===== Request
