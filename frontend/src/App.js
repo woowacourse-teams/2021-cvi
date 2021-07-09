@@ -1,5 +1,12 @@
 import React from 'react';
+import GlobalStyles from './GlobalStyles';
 
-const App = () => <div>백중원</div>;
+const App = () => {
+  return (
+    <>
+      <GlobalStyles />
+    </>
+  );
+};
 
 export default App;
