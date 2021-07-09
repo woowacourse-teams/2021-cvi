@@ -21,7 +21,8 @@
     "react/jsx-sort-props": [
       2,
       {
-        "callbacksLast": true
+        "callbacksLast": true,
+        "noSortAlphabetically": true
       }
     ]
   }
