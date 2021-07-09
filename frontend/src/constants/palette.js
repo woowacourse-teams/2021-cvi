@@ -1,0 +1,12 @@
+const VACCINE_COLOR = {
+  ASTRA_ZENECA: '#F3F2F2',
+  MODERNA: '#CB4030',
+  PFIZER: '#756AA2',
+  JANSSEN: '#3986C4',
+};
+
+const COLOR = {
+  WHITE: '#FFFFFF',
+};
+
+export { VACCINE_COLOR, COLOR };
