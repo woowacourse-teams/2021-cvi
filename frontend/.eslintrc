@@ -19,7 +19,7 @@
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "error",
     "react/jsx-sort-props": [
-      2,
+      "error",
       {
         "callbacksLast": true,
         "noSortAlphabetically": true
