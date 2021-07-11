@@ -80,6 +80,9 @@ const Container = styled.button`
   & > *:not(:last-child) {
     margin-right: ${({ withIcon }) => withIcon && '1rem'};
   }
+
+  ${({ styles }) => styles}
+  ${({ isSelected, selectedStyles }) => isSelected && selectedStyles}
 `;
 
 export { Container, BUTTON_SIZE_TYPE, BUTTON_BACKGROUND_TYPE };
