@@ -6,6 +6,7 @@ const Background = styled.div`
   width: 100%;
   min-height: 100vh;
   padding: 3.2rem 0;
+  position: relative;
 `;
 
 const Container = styled.div`
@@ -17,7 +18,7 @@ const Container = styled.div`
   background-color: ${PALETTE.NAVY100};
   position: relative;
 
-  &::after {
+  /* &::after {
     content: '';
     position: absolute;
     border-radius: 6.4rem 1.6rem 1.6rem 0;
@@ -25,7 +26,7 @@ const Container = styled.div`
     width: 28rem;
     height: 100%;
     background-color: ${PALETTE.NAVY150};
-  }
+  } */
 `;
 
 export { Background, Container };

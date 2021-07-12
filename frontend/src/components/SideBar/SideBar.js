@@ -4,11 +4,11 @@ import HomeIcon from '../../assets/icons/home.svg';
 import ReviewIcon from '../../assets/icons/review.svg';
 import LoginIcon from '../../assets/icons/login.svg';
 import { Container, LogoContainer, MenuContainer, LinkContainer } from './SideBar.styles';
-import { FONT_COLOR, PALETTE, PATH } from '../../constants';
+import { FONT_COLOR, PATH } from '../../constants';
 
 const SideBar = () => {
   return (
-    <Frame backgroundColor={PALETTE.WHITE} width="20rem" height="inherit">
+    <Frame width="20rem" height="inherit">
       <Container>
         <LogoContainer>
           {/* example logo */}
