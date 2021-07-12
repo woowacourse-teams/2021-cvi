@@ -1,4 +1,5 @@
 import { css, Global } from '@emotion/react';
+import { PALETTE } from './constants';
 
 const GlobalStyles = () => (
   <Global
@@ -19,7 +20,7 @@ const GlobalStyles = () => (
         min-height: 100vh;
         width: 100%;
         background-color: #fafafa;
-        color: #333;
+        color: ${PALETTE.GRAY900};
       }
 
       #root {
