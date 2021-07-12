@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
   border-radius: 1.6rem;
   background-color: ${({ backgroundColor }) => backgroundColor};
   width: ${({ width }) => width};
