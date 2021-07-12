@@ -1,6 +1,7 @@
 const PALETTE = {
   WHITE: '#FFFFFF',
   GRAY100: '#F3F2F2', // astra-zeneca
+  GRAY300: '#ACACAC',
   GRAY700: '#6A6C6F',
   GRAY900: '#222222',
   RED100: '#F5EFEF',
