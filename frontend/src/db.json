@@ -1,0 +1,76 @@
+{
+  "reviewList": [
+    {
+      "id": 1,
+      "writer": {
+        "nickname": "엘라",
+        "age": 10,
+        "shotVerified": true
+      },
+      "content": "백신을 어제 맞았어요. 모더나 맞았어요.아프진 않았는데 머 그냥 ㅇ어 어쩌고저하하하하 2차도 맞아야해서 오늘 내일 아플수도 있다고하더라구요! 그래서 타이레놀도 사놓고 죽도 사놨어욧! 하하하하하하하하하 내일 출근 안한당 예!",
+      "viewCount": 123,
+      "vaccinationType": "화이자",
+      "createdAt": "20210704"
+    },
+    {
+      "id": 2,
+      "writer": {
+        "nickname": "주모",
+        "age": 60,
+        "shotVerified": true
+      },
+      "content": "331 bytes [emitted  runtime modules 26.7 KiB 14 modulesorphan modules 242 bytes [orphan] 1 modulemodules by path ./node_modules/ 1.41 MiB 68 modulesmodules by path ./src/ 5.26 KiB",
+      "viewCount": 123,
+      "vaccinationType": "모더나",
+      "createdAt": "20210704"
+    },
+    {
+      "id": 3,
+      "writer": {
+        "nickname": "인비",
+        "age": 10,
+        "shotVerified": true
+      },
+      "content": "백신을 어제 맞았어요. 모더나 맞았어요.아프진 않았는데 머 그냥 ㅇ어 어쩌고저하하하하 2차도 맞아야해서 오늘 내일 아플수도 있다고하더라구요! 그래서 타이레놀도 사놓고 죽도 사놨어욧! 하하하하하하하하하 내일 출근 안한당 예!",
+      "viewCount": 123,
+      "vaccinationType": "아스트라제네카",
+      "createdAt": "20210704"
+    },
+    {
+      "id": 4,
+      "writer": {
+        "nickname": "라이언",
+        "age": 10,
+        "shotVerified": true
+      },
+      "content": "백신을 어제 맞았어요. 그저 그런듯? 치킨 먹어야지",
+      "viewCount": 123,
+      "vaccinationType": "얀센",
+      "createdAt": "20210704"
+    },
+    {
+      "id": 5,
+      "writer": {
+        "nickname": "검프",
+        "age": 10,
+        "shotVerified": true
+      },
+      "content": "백신을 어제 맞았어요. 그저 그런듯? 치킨 먹어야지",
+      "viewCount": 123,
+      "vaccinationType": "얀센",
+      "createdAt": "20210704"
+    },
+    {
+      "id": 6,
+      "writer": {
+        "nickname": "욘",
+        "age": 12,
+        "shotVerified": true
+      },
+      "content": "너무 덥다",
+      "viewCount": 123,
+      "vaccinationType": "모더나",
+      "createdAt": "20210704"
+    }
+  ]
+}
