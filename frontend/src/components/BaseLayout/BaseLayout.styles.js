@@ -9,6 +9,7 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
+  display: flex;
   margin: 0 auto;
   width: 120rem;
   min-height: 72rem;
