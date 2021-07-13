@@ -11,7 +11,6 @@ import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,19 +60,14 @@ class PostServiceTest {
         postRepository.save(post);
     }
 
-    @AfterEach
-    void clear() {
-        postRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
     @DisplayName("게시글 생성 - 성공")
     @Test
     void create() {
         //given
         //when
         PostResponse postResponse = postService.create(user.getId(), postRequest);
-        Post foundPost = postRepository.findById(postResponse.getId()).get();
+        Post foundPost = postRepository.findById(postResponse.getId())
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
         assertThat(postResponse.getUser().getId()).isEqualTo(user.getId());
         assertThat(postResponse.getContent()).isEqualTo(postRequest.getContent());
@@ -115,10 +109,17 @@ class PostServiceTest {
     @Test
     void findAll() {
         //given
+        post = Post.builder()
+                .content("Test Content222")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRepository.save(post);
         //when
         List<PostResponse> response = postService.findAll();
         //then
-        assertThat(response).hasSize(1);
+        assertThat(response).hasSize(2);
     }
 
     @DisplayName("게시글 수정 - 성공")
@@ -128,7 +129,8 @@ class PostServiceTest {
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
         //when
         postService.update(post.getId(), user.getId(), changedRequest);
-        Post changedPost = postRepository.findById(post.getId()).get();
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
         assertThat(changedPost.getContent()).isEqualTo(changedRequest.getContent());
     }
