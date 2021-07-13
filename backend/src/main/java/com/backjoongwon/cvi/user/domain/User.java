@@ -31,14 +31,14 @@ public class User extends BaseEntity {
     public User(Long id, String nickname, AgeRange ageRange, SocialProvider socialProvider,
                 String socialProfileUrl, LocalDateTime createdAt) {
         super(id, createdAt);
-        validate(nickname);
+        validateNickName(nickname);
         this.nickname = nickname;
         this.ageRange = ageRange;
         this.socialProvider = socialProvider;
         this.socialProfileUrl = socialProfileUrl;
     }
 
-    private void validate(String nickname) {
+    private void validateNickName(String nickname) {
         if (StringUtils.isEmpty(nickname) || nickname.contains(" ")) {
             throw new InvalidInputException("닉네임에는 공백 문자가 포함될 수 없습니다.");
         }

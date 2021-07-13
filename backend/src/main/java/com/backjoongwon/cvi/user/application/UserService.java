@@ -8,44 +8,44 @@ import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public UserResponse signup(UserRequest userRequest) {
-        userRepository.findByNickname(userRequest.getNickname())
-                .ifPresent(user -> {
-                    throw new DuplicateException("닉네임은 중복될 수 없습니다.");
-                });
-
-        User savedUser = userRepository.save(userRequest.toEntity());
-        return UserResponse.of(savedUser);
+        if (userRepository.existsByNickname(userRequest.getNickname())) {
+            throw new DuplicateException("닉네임은 중복될 수 없습니다.");
+        }
+        User user = userRepository.save(userRequest.toEntity());
+        return UserResponse.of(user);
     }
 
     public UserResponse findById(Long id) {
-        User foundUser = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
-        return UserResponse.of(foundUser);
+        return UserResponse.of(findUserById(id));
     }
 
+    @Transactional
     public void update(Long id, UserRequest updateRequest) {
-        User beforeUser = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
-
-        User updateUser = updateRequest.toEntity();
-        beforeUser.update(updateUser);
+        User foundUser = findUserById(id);
+        foundUser.update(updateRequest.toEntity());
     }
 
+    @Transactional
     public void delete(Long id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
-
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("해당 id의 사용자가 없습니다.");
+        }
         userRepository.deleteById(id);
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
     }
 }

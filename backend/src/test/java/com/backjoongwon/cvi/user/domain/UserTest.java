@@ -34,7 +34,7 @@ class UserTest {
     @Test
     void update() {
         //given
-        User updateUser = user = User.builder()
+        User updateUser = User.builder()
                 .id(1L)
                 .ageRange(AgeRange.TWENTIES)
                 .createdAt(LocalDateTime.now())
@@ -46,8 +46,6 @@ class UserTest {
         user.update(updateUser);
         //then
         assertThat(user.getAgeRange()).isEqualTo(updateUser.getAgeRange());
-        assertThat(user.getNickname()).isEqualTo(updateUser.getNickname());
-        assertThat(user.getSocialProfileUrl()).isEqualTo(updateUser.getSocialProfileUrl());
     }
 
     @DisplayName("사용자 백신 접종 여부 수정 - 성공")
