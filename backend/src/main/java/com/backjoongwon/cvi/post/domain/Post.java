@@ -35,11 +35,10 @@ public class Post {
     private LocalDateTime createdAt;
 
     @Builder
-    public Post(Long id, User user, String content, int viewCount, VaccinationType vaccinationType, LocalDateTime createdAt) {
+    public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.content = content;
-        this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
     }
