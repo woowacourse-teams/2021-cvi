@@ -9,16 +9,17 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("Post 도메인 테스트")
+@DisplayName("게시글 도메인 테스트")
 class PostTest {
 
-    @DisplayName("작성자 할당 - 성공")
+    @DisplayName("게시글 작성자 할당 - 성공")
     @Test
     void assignUser() {
         //given
         Post post = Post.builder().build();
         User user = User.builder()
                 .id(1L)
+                .nickname("인비")
                 .build();
         //when
         post.assignUser(user);
@@ -26,17 +27,19 @@ class PostTest {
         assertThat(post.getUser()).isNotNull();
     }
 
-    @DisplayName("작성자 할당 - 실패 - 이미 작성자가 존재함")
+    @DisplayName("게시글 작성자 할당 - 실패 - 이미 작성자가 존재함")
     @Test
     void assignUserFailureWhenAlreadyExists() {
         //given
         User user = User.builder()
                 .id(1L)
+                .nickname("인비")
                 .build();
         Post post = Post.builder()
                 .user(user)
                 .build();
         User newUser = User.builder()
+                .nickname("라이언")
                 .id(2L)
                 .build();
         //when
@@ -45,7 +48,7 @@ class PostTest {
                 .isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("작성자 할당 - 실패 - 할당하려는 작성자가 없음")
+    @DisplayName("게시글 작성자 할당 - 실패 - 할당하려는 작성자가 없음")
     @Test
     void assignUserFailureWhenNull() {
         //given
@@ -57,7 +60,7 @@ class PostTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("조회수 증가 - 성공")
+    @DisplayName("게시글 조회수 증가 - 성공")
     @Test
     void increaseViewCount() {
         //given

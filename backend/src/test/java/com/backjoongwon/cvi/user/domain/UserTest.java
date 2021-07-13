@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("User 도메인 단위 테스트")
+@DisplayName("사용자 도메인 단위 테스트")
 class UserTest {
 
     private User user;
@@ -30,7 +30,7 @@ class UserTest {
                 .build();
     }
 
-    @DisplayName("유저 수정 - 성공")
+    @DisplayName("사용자 수정 - 성공")
     @Test
     void update() {
         //given
@@ -50,7 +50,7 @@ class UserTest {
         assertThat(user.getSocialProfileUrl()).isEqualTo(updateUser.getSocialProfileUrl());
     }
 
-    @DisplayName("유저 백신 접종 여부 변경 - 성공")
+    @DisplayName("사용자 백신 접종 여부 수정 - 성공")
     @Test
     void makeVerified(){
         //given
@@ -60,7 +60,7 @@ class UserTest {
         assertThat(user.isShotVerified()).isTrue();
     }
 
-    @DisplayName("회원가입 - 실패 - 닉네임 빈 문자열")
+    @DisplayName("사용자 회원가입 - 실패 - 닉네임 빈 문자열")
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {" ", "라 이언", " gump", "yon "})

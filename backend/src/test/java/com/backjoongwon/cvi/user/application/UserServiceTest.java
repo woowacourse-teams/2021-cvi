@@ -19,6 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("사용자 비즈니스 흐름 테스트")
 @Transactional
 @SpringBootTest
 public class UserServiceTest {
@@ -35,7 +36,7 @@ public class UserServiceTest {
         userRequest = new UserRequest("인비", 10);
     }
 
-    @DisplayName("회원가입 - 성공")
+    @DisplayName("사용자 회원가입 - 성공")
     @Test
     void signup() {
         //given
@@ -52,7 +53,7 @@ public class UserServiceTest {
         assertThat(userResponse.getAgeRange()).isEqualTo(10);
     }
 
-    @DisplayName("회원가입 - 실패 - 닉네임 중복")
+    @DisplayName("사용자 회원가입 - 실패 - 닉네임 중복")
     @Test
     void signupFailureWhenDuplicateNickname() {
         //given
@@ -63,7 +64,7 @@ public class UserServiceTest {
                 .isInstanceOf(DuplicateException.class);
     }
 
-    @DisplayName("User 조회 - 성공")
+    @DisplayName("사용자 조회 - 성공")
     @Test
     void findById() {
         //given
@@ -74,7 +75,7 @@ public class UserServiceTest {
         assertThat(findResponse.getId()).isEqualTo(signupResponse.getId());
     }
 
-    @DisplayName("User 조회 - 실패 - 존재하지 않는 User")
+    @DisplayName("사용자 조회 - 실패 - 존재하지 않는 User")
     @Test
     void findByIdFailureWhenNotExists() {
         //given
@@ -85,7 +86,7 @@ public class UserServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("User 수정 - 성공")
+    @DisplayName("사용자 수정 - 성공")
     @Test
     void update() {
         //given
@@ -101,7 +102,7 @@ public class UserServiceTest {
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
     }
 
-    @DisplayName("User 수정 - 실패 - 존재하지않는 User")
+    @DisplayName("사용자 수정 - 실패 - 존재하지않는 User")
     @Test
     void updateFailureWhenNotExists() {
         //given
@@ -113,7 +114,7 @@ public class UserServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("User 삭제 - 성공")
+    @DisplayName("사용자 삭제 - 성공")
     @Test
     void delete() {
         //given
@@ -125,7 +126,7 @@ public class UserServiceTest {
         assertThat(foundUser).isEmpty();
     }
 
-    @DisplayName("User 삭제 - 실패 - 존재하지 않는 User")
+    @DisplayName("사용자 삭제 - 실패 - 존재하지 않는 User")
     @Test
     void deleteFailureWhenNotExists() {
         //given

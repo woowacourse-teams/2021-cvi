@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@DisplayName("게시글 컨트롤러 Mock 테스트")
 @WebMvcTest(controllers = PostController.class)
 class PostControllerTest extends ApiDocument {
 
