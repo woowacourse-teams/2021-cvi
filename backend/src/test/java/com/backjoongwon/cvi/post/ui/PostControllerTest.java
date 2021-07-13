@@ -42,7 +42,7 @@ class PostControllerTest extends ApiDocument {
         request = new PostRequest("글 내용", "화이자");
     }
 
-    @DisplayName("글 등록 - 성공")
+    @DisplayName("게시글 등록 - 성공")
     @Test
     void createPost() throws Exception {
         //given
@@ -54,7 +54,7 @@ class PostControllerTest extends ApiDocument {
         글_등록_성공함(response, expectedResponse);
     }
 
-    @DisplayName("글 등록 - 실패")
+    @DisplayName("게시글 등록 - 실패")
     @Test
     void createPostFailure() throws Exception {
         //given
@@ -65,7 +65,7 @@ class PostControllerTest extends ApiDocument {
         글_등록_실패함(response);
     }
 
-    @DisplayName("글 단일 조회 - 성공")
+    @DisplayName("게시글 단일 조회 - 성공")
     @Test
     void find() throws Exception {
         //given
@@ -79,7 +79,7 @@ class PostControllerTest extends ApiDocument {
         글_단일_조회_성공함(response, expectedPostResponse);
     }
 
-    @DisplayName("글 단일 조회 - 실패")
+    @DisplayName("게시글 단일 조회 - 실패")
     @Test
     void findFailure() throws Exception {
         //given
@@ -90,7 +90,7 @@ class PostControllerTest extends ApiDocument {
         글_단일_조회_실패함(response);
     }
 
-    @DisplayName("글 전체 조회 - 성공")
+    @DisplayName("게시글 전체 조회 - 성공")
     @Test
     void findAll() throws Exception {
         //given
@@ -109,7 +109,7 @@ class PostControllerTest extends ApiDocument {
         글_전체_조회_성공함(response, postResponses);
     }
 
-    @DisplayName("글 수정 - 성공")
+    @DisplayName("게시글 수정 - 성공")
     @Test
     void updatePost() throws Exception {
         //given
@@ -120,7 +120,7 @@ class PostControllerTest extends ApiDocument {
         글_수정_성공함(response);
     }
 
-    @DisplayName("글 수정 - 실패")
+    @DisplayName("게시글 수정 - 실패")
     @Test
     void updatePostFailure() throws Exception {
         //given
@@ -131,7 +131,7 @@ class PostControllerTest extends ApiDocument {
         글_수정_실패함(response);
     }
 
-    @DisplayName("글 삭제 - 성공")
+    @DisplayName("게시글 삭제 - 성공")
     @Test
     void deletePost() throws Exception {
         //given
@@ -142,7 +142,7 @@ class PostControllerTest extends ApiDocument {
         글_삭제_성공함(response);
     }
 
-    @DisplayName("글 삭제 - 실패")
+    @DisplayName("게시글 삭제 - 실패")
     @Test
     void deletePostFailure() throws Exception {
         //given
