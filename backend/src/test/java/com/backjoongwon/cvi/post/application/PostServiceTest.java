@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
@@ -145,12 +146,51 @@ class PostServiceTest {
 
     @DisplayName("게시글 수정 - 실패 - 찾을 수 없는 게시글")
     @Test
-    void updateFailure() {
+    void updateFailureWhenCannotFind() {
         //given
         PostRequest changeContent = new PostRequest("change content", postRequest.getVaccinationType());
         //when
         //then
         assertThatThrownBy(() -> postService.update(user.getId(), 0L, changeContent))
+                .isExactlyInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 수정 - 실패 - 다른 작성자의 게시글")
+    @Test
+    void updateFailureWhenOthersPost() {
+        //given
+        PostRequest changeContent = new PostRequest("change content", postRequest.getVaccinationType());
+        User anotherUser = User.builder().build();
+        Post post = Post.builder().build();
+        post.assignUser(user);
+        userRepository.save(anotherUser);
+        postRepository.save(post);
+        //when
+        //then
+        assertThatThrownBy(() -> postService.update(anotherUser.getId(), post.getId(), changeContent))
+                .isExactlyInstanceOf(InvalidOperationException.class);
+    }
+
+    @DisplayName("게시글 삭제 - 성공")
+    @Test
+    void delete() {
+        //given
+        Post post = postRepository.save(postRequest.toEntity());
+        post.assignUser(user);
+        //when
+        postService.delete(user.getId(), post.getId());
+        //then
+        assertThatThrownBy(() -> postService.findById(post.getId()))
+                .isExactlyInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 삭제 - 실패 - 게시글이 존재하지 않는 경우")
+    @Test
+    void deleteFailureWhenPostIsNotExists() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> postService.delete(user.getId(), 0L))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 }

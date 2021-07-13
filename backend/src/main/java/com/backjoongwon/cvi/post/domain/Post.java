@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.post.domain;
 
-import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.User;
@@ -59,7 +58,10 @@ public class Post {
         viewCount++;
     }
 
-    public void update(Post updatePost) {
+    public void update(User user, Post updatePost) {
+        if (!this.user.equals(user)) {
+            throw new InvalidOperationException("다른 사람의 게시글은 수정할 수 없습니다.");
+        }
         this.content = updatePost.content;
     }
 }

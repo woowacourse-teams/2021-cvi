@@ -47,10 +47,15 @@ public class PostService {
         User user = findUserById(userId);
         Post post = findPostById(postId);
 
-        post.update(postRequest.toEntity());
+        post.update(user, postRequest.toEntity());
     }
 
-    public void delete(Long postId, Long userId) {
+    public void delete(Long userId, Long postId) {
+        User user = findUserById(userId);
+        if (!postRepository.existsById(postId)) {
+            throw new NotFoundException("존재하지 않는 게시글입니다.");
+        }
+        postRepository.deleteById(postId);
     }
 
     private User findUserById(Long userId) {

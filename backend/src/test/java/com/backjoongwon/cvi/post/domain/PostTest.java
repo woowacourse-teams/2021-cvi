@@ -79,8 +79,12 @@ class PostTest {
         Post updatePost = Post.builder()
                 .content("content2")
                 .build();
+        User user = User.builder()
+                .nickname("testUser")
+                .build();
+        post.assignUser(user);
         //when
-        post.update(updatePost);
+        post.update(user, updatePost);
         //then
         assertThat(post.getContent()).isEqualTo(updatePost.getContent());
     }
