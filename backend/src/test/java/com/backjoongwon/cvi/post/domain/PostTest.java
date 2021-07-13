@@ -85,14 +85,14 @@ class PostTest {
     @Test
     void update() {
         //given
-        Post updatePost = Post.builder()
+        Post updatedPost = Post.builder()
                 .content("content2")
                 .build();
         //when
         post.assignUser(user);
-        post.update(user, updatePost);
+        post.update(updatedPost, user);
         //then
-        assertThat(post.getContent()).isEqualTo(updatePost.getContent());
+        assertThat(post.getContent()).isEqualTo(updatedPost.getContent());
     }
 
     @DisplayName("게시글 수정 - 실패")
@@ -102,13 +102,13 @@ class PostTest {
         User targetUser = User.builder()
                 .id(2L)
                 .build();
-        Post updatePost = Post.builder()
+        Post updatedPost = Post.builder()
                 .content("content2")
                 .build();
         //when
         post.assignUser(user);
         //then
-        assertThatThrownBy(() -> post.update(targetUser, updatePost))
+        assertThatThrownBy(() -> post.update(updatedPost, targetUser))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 }

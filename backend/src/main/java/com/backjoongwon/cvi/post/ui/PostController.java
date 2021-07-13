@@ -39,12 +39,12 @@ public class PostController {
     @PutMapping("/{postId}/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable Long postId, @PathVariable Long userId, @RequestBody PostRequest postRequest) {
-        postService.update(userId, postId, postRequest);
+        postService.update(postId, userId, postRequest);
     }
 
     @DeleteMapping("/{postId}/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long postId, @PathVariable Long userId) {
-        postService.delete(userId, postId);
+        postService.delete(postId, userId);
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
-@DisplayName("POST 비지니스 흐름 테스트")
+@DisplayName("Post 비즈니스 흐름 테스트")
 class PostServiceTest {
 
     @Autowired
@@ -39,10 +39,8 @@ class PostServiceTest {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private EntityManager em;
-
     private User user;
+    private Post post;
     private PostRequest postRequest;
 
     @BeforeEach
@@ -53,8 +51,14 @@ class PostServiceTest {
                 .socialProfileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-        postRequest = new PostRequest("Test Content", VaccinationType.PFIZER);
-        userRepository.save(user);
+        post = Post.builder()
+                .content("Test Content111")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
+        postRepository.save(post);
     }
 
     @AfterEach
@@ -69,12 +73,12 @@ class PostServiceTest {
         //given
         //when
         PostResponse postResponse = postService.create(user.getId(), postRequest);
-        Post post = postRepository.findById(postResponse.getId()).get();
+        Post foundPost = postRepository.findById(postResponse.getId()).get();
         //then
         assertThat(postResponse.getUser().getId()).isEqualTo(user.getId());
         assertThat(postResponse.getContent()).isEqualTo(postRequest.getContent());
-        assertThat(post).isNotNull();
-        assertThat(post.getUser()).isNotNull();
+        assertThat(foundPost).isNotNull();
+        assertThat(foundPost.getUser()).isNotNull();
     }
 
     @DisplayName("게시글 생성 - 실패 - 존재하지 않는 유저")
@@ -91,11 +95,6 @@ class PostServiceTest {
     @Test
     void findById() {
         //given
-        Post post = postRepository.save(Post.builder()
-                .content("Test Content")
-                .user(user)
-                .vaccinationType(VaccinationType.MODERNA)
-                .build());
         //when
         PostResponse response = postService.findById(post.getId());
         //then
@@ -116,11 +115,6 @@ class PostServiceTest {
     @Test
     void findAll() {
         //given
-        postRepository.save(Post.builder()
-                .content("Test Content")
-                .user(user)
-                .vaccinationType(VaccinationType.MODERNA)
-                .build());
         //when
         List<PostResponse> response = postService.findAll();
         //then
@@ -131,27 +125,22 @@ class PostServiceTest {
     @Test
     void update() {
         //given
-        PostRequest changeRequest = new PostRequest("change content", postRequest.getVaccinationType());
-        Post post = postRepository.save(Post.builder()
-                .content("Test Content")
-                .user(user)
-                .vaccinationType(VaccinationType.MODERNA)
-                .build());
+        PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
         //when
-        postService.update(user.getId(), post.getId(), changeRequest);
+        postService.update(post.getId(), user.getId(), changedRequest);
         Post changedPost = postRepository.findById(post.getId()).get();
         //then
-        assertThat(changedPost.getContent()).isEqualTo(changeRequest.getContent());
+        assertThat(changedPost.getContent()).isEqualTo(changedRequest.getContent());
     }
 
     @DisplayName("게시글 수정 - 실패 - 찾을 수 없는 게시글")
     @Test
     void updateFailureWhenCannotFind() {
         //given
-        PostRequest changeContent = new PostRequest("change content", postRequest.getVaccinationType());
+        PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(user.getId(), 0L, changeContent))
+        assertThatThrownBy(() -> postService.update(0L, user.getId(), changedContent))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -159,15 +148,12 @@ class PostServiceTest {
     @Test
     void updateFailureWhenOthersPost() {
         //given
-        PostRequest changeContent = new PostRequest("change content", postRequest.getVaccinationType());
+        PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
         User anotherUser = User.builder().build();
-        Post post = Post.builder().build();
-        post.assignUser(user);
-        userRepository.save(anotherUser);
-        postRepository.save(post);
         //when
+        userRepository.save(anotherUser);
         //then
-        assertThatThrownBy(() -> postService.update(anotherUser.getId(), post.getId(), changeContent))
+        assertThatThrownBy(() -> postService.update(post.getId(), anotherUser.getId(), changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
@@ -175,10 +161,8 @@ class PostServiceTest {
     @Test
     void delete() {
         //given
-        Post post = postRepository.save(postRequest.toEntity());
-        post.assignUser(user);
         //when
-        postService.delete(user.getId(), post.getId());
+        postService.delete(post.getId(), user.getId());
         //then
         assertThatThrownBy(() -> postService.findById(post.getId()))
                 .isExactlyInstanceOf(NotFoundException.class);
@@ -190,7 +174,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.delete(user.getId(), 0L))
+        assertThatThrownBy(() -> postService.delete(0L, user.getId()))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 }

@@ -22,7 +22,7 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -57,7 +57,7 @@ public class Post {
         viewCount++;
     }
 
-    public void update(User user, Post updatePost) {
+    public void update(Post updatePost, User user) {
         if (!this.user.equals(user)) {
             throw new InvalidOperationException("다른 사람의 게시글은 수정할 수 없습니다.");
         }

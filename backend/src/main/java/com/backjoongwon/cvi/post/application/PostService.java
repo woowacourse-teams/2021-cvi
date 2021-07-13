@@ -43,14 +43,14 @@ public class PostService {
     }
 
     @Transactional
-    public void update(Long userId, Long postId, PostRequest postRequest) {
+    public void update(Long postId, Long userId, PostRequest postRequest) {
         User user = findUserById(userId);
         Post post = findPostById(postId);
 
-        post.update(user, postRequest.toEntity());
+        post.update(postRequest.toEntity(), user);
     }
 
-    public void delete(Long userId, Long postId) {
+    public void delete(Long postId, Long userId) {
         User user = findUserById(userId);
         if (!postRepository.existsById(postId)) {
             throw new NotFoundException("존재하지 않는 게시글입니다.");
