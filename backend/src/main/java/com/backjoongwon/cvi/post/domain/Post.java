@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.post.domain;
 
-import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.User;
@@ -23,7 +22,7 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -36,11 +35,10 @@ public class Post {
     private LocalDateTime createdAt;
 
     @Builder
-    public Post(Long id, User user, String content, int viewCount, VaccinationType vaccinationType, LocalDateTime createdAt) {
+    public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.content = content;
-        this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
     }
@@ -59,7 +57,10 @@ public class Post {
         viewCount++;
     }
 
-    public void update(Post updatePost) {
+    public void update(Post updatePost, User user) {
+        if (!this.user.equals(user)) {
+            throw new InvalidOperationException("다른 사람의 게시글은 수정할 수 없습니다.");
+        }
         this.content = updatePost.content;
     }
 }

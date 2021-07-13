@@ -4,6 +4,7 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -39,7 +40,7 @@ class PostControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        request = new PostRequest("글 내용", "화이자");
+        request = new PostRequest("글 내용",  VaccinationType.PFIZER);
     }
 
     @DisplayName("게시글 등록 - 성공")
@@ -70,7 +71,7 @@ class PostControllerTest extends ApiDocument {
     void find() throws Exception {
         //given
         UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", 10, true);
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, "화이자", LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
@@ -98,8 +99,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse userResponse2 = new UserResponse(101L, "검프", 20, false);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, "화이자", LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse2, "글 내용2", 12, "모더나", LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse2, "글 내용2", 12,  VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
         given(postService.findAll()).willReturn(postResponses);
