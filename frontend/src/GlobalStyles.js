@@ -58,6 +58,22 @@ const GlobalStyles = () => (
         }
       }
 
+      input {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      textarea {
+        outline: none;
+      }
+
       h1,
       h2,
       h3,

@@ -37,11 +37,4 @@ const buttonSelectedStyles = {
   `,
 };
 
-const buttonStyles = css`
-  &:hover {
-    color: ${PALETTE.GRAY700};
-    background-color: transparent;
-  }
-`;
-
-export { Container, buttonSelectedStyles, buttonStyles };
+export { Container, buttonSelectedStyles };
