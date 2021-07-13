@@ -1,13 +1,17 @@
 package com.backjoongwon.cvi.user.domain;
 
-import org.assertj.core.api.Assertions;
+import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("User 도메인 단위 테스트")
 class UserTest {
@@ -21,7 +25,6 @@ class UserTest {
                 .ageRange(AgeRange.TEENS)
                 .createdAt(LocalDateTime.now())
                 .nickname("검프")
-//                .shotVerified(false)
                 .socialProfileUrl("www.gump.com")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
@@ -48,11 +51,24 @@ class UserTest {
     }
 
     @DisplayName("유저 백신 접종 여부 변경 - 성공")
+    @Test
     void makeVerified(){
         //given
         //when
         user.makeVerified();
         //then
         assertThat(user.isShotVerified()).isTrue();
+    }
+
+    @DisplayName("회원가입 - 실패 - 닉네임 빈 문자열")
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "라 이언", " gump", "yon "})
+    void signupFailureWhenEmptyNickname(String nickname) {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> User.builder().nickname(nickname).build())
+                .isInstanceOf(InvalidInputException.class);
     }
 }

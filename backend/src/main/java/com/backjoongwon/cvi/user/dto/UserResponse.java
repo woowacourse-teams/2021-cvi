@@ -1,5 +1,7 @@
 package com.backjoongwon.cvi.user.dto;
 
+import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +25,10 @@ public class UserResponse {
 
     public UserResponse(Long id, String nickname, int ageRange) {
         this(id, nickname, ageRange, false);
+    }
+
+    public static UserResponse of(User user) {
+        return new UserResponse(user.getId(), user.getNickname(),
+                AgeRange.convertToValue(user.getAgeRange()), user.isShotVerified());
     }
 }

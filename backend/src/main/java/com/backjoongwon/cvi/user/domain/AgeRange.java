@@ -1,6 +1,9 @@
 package com.backjoongwon.cvi.user.domain;
 
+import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 @Getter
 public enum AgeRange {
@@ -19,5 +22,20 @@ public enum AgeRange {
         this.meaning = meaning;
         this.minValue = minValue;
         this.maxValue = maxValue;
+    }
+
+    public static AgeRange convertFromValue(int value) {
+        return Arrays.stream(values())
+                .filter(ageRange -> ageRange.minValue == value)
+                .findAny()
+                .orElseThrow(() -> new InvalidInputException("해당 연령대가 존재하지 않습니다."));
+    }
+
+    public static int convertToValue(AgeRange toConvert) {
+        return Arrays.stream(values())
+                .filter(ageRange -> ageRange == toConvert)
+                .map(ageRange -> ageRange.minValue)
+                .findAny()
+                .orElseThrow(() -> new InvalidInputException("해당 연령대가 존재하지 않습니다."));
     }
 }
