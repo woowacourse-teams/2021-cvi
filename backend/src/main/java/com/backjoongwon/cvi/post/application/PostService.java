@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -30,8 +31,10 @@ public class PostService {
         return PostResponse.of(post);
     }
 
+    @Transactional
     public PostResponse findById(Long postId) {
         Post post = findPostById(postId);
+        post.increaseViewCount();
         return PostResponse.of(post);
     }
 
@@ -50,6 +53,7 @@ public class PostService {
         post.update(postRequest.toEntity(), user);
     }
 
+    @Transactional
     public void delete(Long postId, Long userId) {
         User user = findUserById(userId);
         if (!postRepository.existsById(postId)) {

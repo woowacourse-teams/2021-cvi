@@ -17,23 +17,16 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/users/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@PathVariable Long userId, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
-        PostResponse postResponse = postService.create(userId, postRequest);
-        servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> findAll() {
+        return postService.findAll();
     }
 
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public PostResponse find(@PathVariable Long postId) {
         return postService.findById(postId);
-    }
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findAll() {
-        return postService.findAll();
     }
 
     @PutMapping("/{postId}/users/{userId}")
@@ -46,5 +39,13 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long postId, @PathVariable Long userId) {
         postService.delete(postId, userId);
+    }
+
+    @PostMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostResponse create(@PathVariable Long userId, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
+        PostResponse postResponse = postService.create(userId, postRequest);
+        servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
+        return postResponse;
     }
 }
