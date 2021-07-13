@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { PALETTE } from '../../constants';
 
-const Tabs = ({ tabList }) => {
+const Tabs = ({ tabList, selectedTab, setSelectedTab }) => {
   return (
     <Container>
       {tabList.map((tab) => (
@@ -13,9 +13,11 @@ const Tabs = ({ tabList }) => {
           key={tab}
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
           color={PALETTE.NAVY300}
-          isSelected={'전체' === tab}
+          isSelected={selectedTab === tab}
           selectedStyles={selectedButtonStyles}
           styles={buttonStyles}
+          type="button"
+          onClick={() => setSelectedTab(tab)}
         >
           {tab}
         </Button>
@@ -26,6 +28,8 @@ const Tabs = ({ tabList }) => {
 
 Tabs.propTypes = {
   tabList: PropTypes.array.isRequired,
+  selectedTab: PropTypes.string.isRequired,
+  setSelectedTab: PropTypes.func.isRequired,
 };
 
 Tabs.defaultProps = {};

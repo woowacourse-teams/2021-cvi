@@ -4,7 +4,7 @@ import { PALETTE } from '../../constants';
 const Background = styled.div`
   background-color: ${PALETTE.NAVY300};
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   padding: 3.2rem 0;
   position: relative;
 `;
@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   margin: 0 auto;
   width: 120rem;
-  min-height: 72rem;
+  height: 72rem;
   border-radius: 1.6rem;
   background-color: ${PALETTE.NAVY100};
   position: relative;
