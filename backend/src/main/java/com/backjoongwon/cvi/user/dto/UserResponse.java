@@ -15,7 +15,6 @@ public class UserResponse {
     private int ageRange;
     private boolean shotVerified;
 
-
     public UserResponse(Long id, String nickname, int ageRange, boolean shotVerified) {
         this.id = id;
         this.nickname = nickname;

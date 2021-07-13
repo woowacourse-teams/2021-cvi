@@ -92,13 +92,12 @@ public class UserServiceTest {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
         //when
-        UserRequest updateRequest = new UserRequest("인비2", 30);
+        UserRequest updateRequest = new UserRequest(userRequest.getNickname(), 30);
         userService.update(signupResponse.getId(), updateRequest);
         //then
         User updatedUser = userRepository.findById(signupResponse.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
-        assertThat(updatedUser.getNickname()).isEqualTo("인비2");
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
     }
 

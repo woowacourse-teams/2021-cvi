@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.domain;
 
+import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.User;
@@ -15,12 +16,8 @@ import java.util.Objects;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long id;
+@AttributeOverride(name = "id", column = @Column(name = "post_id"))
+public class Post extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
@@ -32,15 +29,13 @@ public class Post {
 
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
-    private LocalDateTime createdAt;
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
-        this.id = id;
+        super(id, createdAt);
         this.user = user;
         this.content = content;
         this.vaccinationType = vaccinationType;
-        this.createdAt = createdAt;
     }
 
     public void assignUser(User user) {
