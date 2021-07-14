@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.dto.LoginResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,14 @@ public class UserController {
         UserResponse userResponse = userService.signup(userRequest);
         servletResponse.setHeader("Location", "/api/v1/users/" + userResponse.getId());
         return userResponse;
+    }
+
+    @PostMapping("/signin")
+    @ResponseStatus(HttpStatus.OK)
+    public LoginResponse signin(@RequestBody UserRequest userRequest, HttpServletResponse servletResponse) {
+        LoginResponse loginResponse = userService.signin(userRequest);
+        servletResponse.setHeader("Authorization", "Bearer asdf");
+        return loginResponse;
     }
 
     @GetMapping("/{id}")

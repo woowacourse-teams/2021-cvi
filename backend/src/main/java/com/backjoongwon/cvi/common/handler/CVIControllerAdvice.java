@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.common.handler;
 import com.backjoongwon.cvi.common.exception.CommonException;
 import com.backjoongwon.cvi.common.exception.ExceptionMessage;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,13 @@ public class CVIControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionMessage notFoundException(NotFoundException e) {
         LOG.error("NotFoundException: {}", e.getMessage(), e);
+        return new ExceptionMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExceptionMessage unAuthorizedException(UnAuthorizedException e) {
+        LOG.error("UnAuthorizedException: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
 
