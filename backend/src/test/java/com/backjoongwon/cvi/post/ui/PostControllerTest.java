@@ -73,8 +73,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", 10, true);
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, VaccinationType.PFIZER, LocalDateTime.now());
+        UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", AgeRange.TEENS, true);
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 1, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
@@ -98,8 +98,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findAll() throws Exception {
         //given
-        UserResponse userResponse1 = new UserResponse(USER_ID, "인비", 10, true);
-        UserResponse userResponse2 = new UserResponse(USER_ID + 1, "검프", 20, false);
+        UserResponse userResponse1 = new UserResponse(USER_ID, "인비", AgeRange.TEENS, true);
+        UserResponse userResponse2 = new UserResponse(USER_ID + 1, "검프", AgeRange.TWENTIES, false);
 
         List<PostResponse> postResponses = Arrays.asList(
                 new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),

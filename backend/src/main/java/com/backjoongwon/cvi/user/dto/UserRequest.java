@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 public class UserRequest {
 
     private String nickname;
-    private int ageRange;
+    private AgeRange ageRange;
 
-    public UserRequest(String nickname, int ageRange) {
+    public UserRequest(String nickname, AgeRange ageRange) {
         this.nickname = nickname;
         this.ageRange = ageRange;
     }
@@ -21,7 +21,7 @@ public class UserRequest {
     public User toEntity() {
         return User.builder()
                 .nickname(nickname)
-                .ageRange(AgeRange.convertFromValue(ageRange))
+                .ageRange(ageRange)
                 .build();
     }
 }
