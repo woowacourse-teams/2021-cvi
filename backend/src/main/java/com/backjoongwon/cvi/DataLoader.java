@@ -19,7 +19,7 @@ import static com.backjoongwon.cvi.DummyData.DUMMY_DATA_10000;
 
 @Component
 @RequiredArgsConstructor
-@Profile("!test & !prod")
+@Profile("!test")
 public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
