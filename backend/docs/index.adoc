@@ -159,6 +159,14 @@ include::{snippets}/post-findAll/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findAll/http-response.adoc[]
 
+=== 게시글 타입별 조회
+==== 성공
+===== Request
+include::{snippets}/post-findByVaccinationType/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType/http-response.adoc[]
+
 === 게시글 수정
 ==== 성공
 ===== Request

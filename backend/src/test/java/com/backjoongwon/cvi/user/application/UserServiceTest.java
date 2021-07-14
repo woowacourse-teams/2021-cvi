@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ActiveProfiles("test")
 @DisplayName("사용자 비즈니스 흐름 테스트")
 @Transactional
 @SpringBootTest
@@ -33,7 +35,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userRequest = new UserRequest("인비", 10);
+        userRequest = new UserRequest("인비", AgeRange.TEENS);
     }
 
     @DisplayName("사용자 회원가입 - 성공")
@@ -50,7 +52,7 @@ public class UserServiceTest {
         assertThat(foundUser.getNickname()).isEqualTo("인비");
         assertThat(foundUser.getAgeRange()).isEqualTo(AgeRange.TEENS);
         assertThat(userResponse.getNickname()).isEqualTo("인비");
-        assertThat(userResponse.getAgeRange()).isEqualTo(10);
+        assertThat(userResponse.getAgeRange().getMeaning()).isEqualTo(AgeRange.TEENS.getMeaning());
     }
 
     @DisplayName("사용자 회원가입 - 실패 - 닉네임 중복")
@@ -92,7 +94,7 @@ public class UserServiceTest {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
         //when
-        UserRequest updateRequest = new UserRequest(userRequest.getNickname(), 30);
+        UserRequest updateRequest = new UserRequest(userRequest.getNickname(), AgeRange.THIRTIES);
         userService.update(signupResponse.getId(), updateRequest);
         //then
         User updatedUser = userRepository.findById(signupResponse.getId())
@@ -107,7 +109,7 @@ public class UserServiceTest {
         //given
         Long lastIndex = getLastIndex();
         //when
-        UserRequest updateRequest = new UserRequest("인비2", 30);
+        UserRequest updateRequest = new UserRequest("인비2", AgeRange.TEENS);
         //then
         assertThatThrownBy(() -> userService.update(lastIndex + 1L, updateRequest))
                 .isInstanceOf(NotFoundException.class);

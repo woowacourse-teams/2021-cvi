@@ -6,6 +6,7 @@ import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.dto.LoginResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -37,8 +38,8 @@ class UserControllerTest extends ApiDocument {
 
     @BeforeEach
     void init() {
-        userRequest = new UserRequest("라이언", 20);
-        userResponse = new UserResponse(1L, "라이언", 20);
+        userRequest = new UserRequest("라이언", AgeRange.TWENTIES);
+        userResponse = new UserResponse(1L, "라이언", AgeRange.TWENTIES, false);
     }
 
     @DisplayName("사용자 가입 - 성공")
@@ -67,7 +68,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void login() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("인비", 10);
+        UserRequest userRequest = new UserRequest("인비", AgeRange.TEENS);
         UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
         LoginResponse loginResponse = new LoginResponse(ACCESS_TOKEN, userResponse);
         willReturn(loginResponse).given(userService).signin(any(UserRequest.class));
@@ -81,7 +82,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void loginFailureWhenNicknameNotExists() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("검프", 10);
+        UserRequest userRequest = new UserRequest("검프", AgeRange.TEENS);
         //when
         willThrow(new UnAuthorizedException("존재하지 않는 닉네임입니다.")).given(userService).signin(any(UserRequest.class));
         ResultActions response = 사용자_로그인_요청(userRequest);

@@ -7,6 +7,9 @@ import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.SocialProvider;
+import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest extends ApiDocument {
 
     private static final Long USER_ID = 1L;
-    private static final Long POST_ID = 100L;
+    private static final Long POST_ID = 1L;
 
     @MockBean
     private PostService postService;
@@ -40,7 +43,7 @@ class PostControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        request = new PostRequest("글 내용",  VaccinationType.PFIZER);
+        request = new PostRequest("글 내용", VaccinationType.PFIZER);
     }
 
     @DisplayName("게시글 등록 - 성공")
@@ -70,8 +73,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", 10, true);
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, VaccinationType.PFIZER, LocalDateTime.now());
+        UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", AgeRange.TEENS, true);
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 1, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
@@ -95,12 +98,12 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findAll() throws Exception {
         //given
-        UserResponse userResponse1 = new UserResponse(USER_ID, "인비", 10, true);
-        UserResponse userResponse2 = new UserResponse(101L, "검프", 20, false);
+        UserResponse userResponse1 = new UserResponse(USER_ID, "인비", AgeRange.TEENS, true);
+        UserResponse userResponse2 = new UserResponse(USER_ID + 1, "검프", AgeRange.TWENTIES, false);
 
         List<PostResponse> postResponses = Arrays.asList(
                 new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse2, "글 내용2", 12,  VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
         given(postService.findAll()).willReturn(postResponses);
@@ -154,8 +157,31 @@ class PostControllerTest extends ApiDocument {
         글_삭제_실패함(response);
     }
 
+    @DisplayName("게시글 타입별 조회 - 성공")
+    @Test
+    void findByVaccineType() throws Exception {
+        //given
+        User user = User.builder()
+                .id(1L)
+                .ageRange(AgeRange.TEENS)
+                .createdAt(LocalDateTime.now())
+                .nickname("검프")
+                .socialProfileUrl("www.gump.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
+        willReturn(Arrays.asList(
+                new PostResponse(1L, UserResponse.of(user), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, UserResponse.of(user), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, UserResponse.of(user), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
+        )).given(postService).findByVaccineType(VaccinationType.PFIZER);
+        //when
+        ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
+        //then
+        게시글_타입별_조회_요청_성공함(response);
+    }
+
     private ResultActions 글_등록_요청(Long userId, PostRequest request) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts/users/" + userId)
+        return mockMvc.perform(post("/api/v1/posts/users/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)));
     }
@@ -236,5 +262,16 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("post-delete-failure"));
+    }
+
+    private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/reviews")
+                .queryParam("vaccinationType", vaccinationType.name()));
+    }
+
+    private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType"));
     }
 }

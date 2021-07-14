@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.post.application;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.User;
@@ -70,5 +71,10 @@ public class PostService {
     private Post findPostById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+    }
+
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType);
+        return PostResponse.of(posts);
     }
 }

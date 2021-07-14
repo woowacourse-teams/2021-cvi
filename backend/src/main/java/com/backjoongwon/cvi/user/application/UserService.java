@@ -1,11 +1,11 @@
 package com.backjoongwon.cvi.user.application;
 
 
-import com.backjoongwon.cvi.user.dto.LoginResponse;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.backjoongwon.cvi.user.dto.LoginResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;

@@ -6,11 +6,15 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class PostResponse {
 
     private Long id;
@@ -33,5 +37,11 @@ public class PostResponse {
     public static PostResponse of(Post post) {
         return new PostResponse(post.getId(), UserResponse.of(post.getUser()), post.getContent(),
                 post.getViewCount(), post.getVaccinationType(), post.getCreatedAt());
+    }
+
+    public static List<PostResponse> of(List<Post> posts) {
+        return posts.stream()
+                .map(PostResponse::of)
+                .collect(Collectors.toList());
     }
 }
