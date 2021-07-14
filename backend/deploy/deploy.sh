@@ -6,9 +6,9 @@ PROJECT_NAME=2021-cvi/backend
 
 cd $REPOSITORY/$PROJECT_NAME/ # 경로로 접근
 
-echo "> git reset --hard"
+echo "> git reset --hard origin/HEAD"
 
-git reset --hard # 깃허브 초기화
+git reset --hard origin/HEAD # 깃허브 초기화
 
 echo "> git pull origin develop"
 
