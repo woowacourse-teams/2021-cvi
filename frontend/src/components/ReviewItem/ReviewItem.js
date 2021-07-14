@@ -42,7 +42,12 @@ const ReviewItem = ({ review }) => {
 };
 
 ReviewItem.propTypes = {
-  review: PropTypes.object.isRequired,
+  review: PropTypes.shape({
+    writer: PropTypes.object.isRequired,
+    content: PropTypes.string.isRequired,
+    vaccinationType: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    viewCount: PropTypes.number.isRequired,
+  }).isRequired,
 };
-
 export default ReviewItem;

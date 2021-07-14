@@ -21,7 +21,7 @@ const ButtonWrapper = styled.div`
   margin-bottom: 2.4rem;
 `;
 
-const ReviewList = styled.div`
+const ReviewList = styled.ul`
   display: flex;
   flex-direction: column;
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR, LINE_LIMIT } from '../../constants';
 
-const Container = styled.div`
+const Container = styled.li`
   padding: 2.4rem 3.2rem;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ const Content = styled.div`
   line-height: 1.5;
   white-space: normal;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: ${LINE_LIMIT.REVIEW_ITEM};
   -webkit-box-orient: vertical;
   overflow: hidden;
 `;
