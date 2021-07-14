@@ -40,7 +40,7 @@ class PostControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        request = new PostRequest("글 내용",  VaccinationType.PFIZER);
+        request = new PostRequest("글 내용", VaccinationType.PFIZER);
     }
 
     @DisplayName("게시글 등록 - 성공")
@@ -100,7 +100,7 @@ class PostControllerTest extends ApiDocument {
 
         List<PostResponse> postResponses = Arrays.asList(
                 new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse2, "글 내용2", 12,  VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
         given(postService.findAll()).willReturn(postResponses);

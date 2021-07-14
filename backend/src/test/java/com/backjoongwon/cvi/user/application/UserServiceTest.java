@@ -2,9 +2,11 @@ package com.backjoongwon.cvi.user.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("사용자 비즈니스 흐름 테스트")
 @Transactional
@@ -62,6 +63,30 @@ public class UserServiceTest {
         //then
         assertThatThrownBy(() -> userService.signup(userRequest))
                 .isInstanceOf(DuplicateException.class);
+    }
+
+    @DisplayName("사용자 로그인 - 성공")
+    @Test
+    void signin() {
+        //given
+        userService.signup(userRequest);
+        SigninResponse signinResponse = userService.signin(userRequest);
+        String accessToken = signinResponse.getAccessToken();
+        //when
+        //then
+        assertThatCode(() -> userService.validateAccessToken(accessToken))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("사용자 로그인 - 실패 - 유효하지 않은 토큰")
+    @Test
+    void signinFailureWhenAccessTokenInvalid() {
+        //given
+        String invalidAccessToken = "asdfasdf";
+        //when
+        //then
+        assertThatThrownBy(() -> userService.validateAccessToken(invalidAccessToken))
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("사용자 조회 - 성공")
