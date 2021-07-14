@@ -84,7 +84,7 @@ class UserControllerTest extends ApiDocument {
         //given
         UserRequest userRequest = new UserRequest("검프", AgeRange.TEENS);
         //when
-        willThrow(new UnAuthorizedException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).signin(any(UserRequest.class));
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(UserRequest.class));
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
         사용자_로그인_실패함(response);
@@ -181,7 +181,7 @@ class UserControllerTest extends ApiDocument {
     private ResultActions 사용자_로그인_요청(UserRequest userRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signin")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(userRequest)));
+                .content("{\"nickname\": \"" + userRequest.getNickname() + "\"}"));
     }
 
     private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {

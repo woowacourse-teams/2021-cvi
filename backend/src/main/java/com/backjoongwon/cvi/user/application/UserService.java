@@ -35,7 +35,7 @@ public class UserService {
 
     public SigninResponse signin(UserRequest userRequest) {
         User foundUser = userRepository.findByNickname(userRequest.getNickname())
-                .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 닉네임입니다."));
+                .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 사용자입니다."));
 
         String accessToken = jwtTokenProvider.createToken(foundUser.getId());
         return new SigninResponse(accessToken, UserResponse.of(foundUser));
