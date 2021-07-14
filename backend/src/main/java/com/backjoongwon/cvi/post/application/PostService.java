@@ -71,4 +71,8 @@ public class PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
     }
+
+    public List<PostResponse> findByVaccineType(String vaccinationType) {
+        return null;
+    }
 }

@@ -11,13 +11,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
 import java.util.List;
 
+import static com.backjoongwon.cvi.DummyData.DUMMY_DATA_10000;
+
 @Component
 @RequiredArgsConstructor
-@Profile("!test")
+@Profile("!test & !prod")
 public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -47,11 +48,13 @@ public class DataLoader implements CommandLineRunner {
                             Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!")
                                     .vaccinationType(VaccinationType.MODERNA).build(),
                             Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!")
+                                    .vaccinationType(VaccinationType.MODERNA).build(),
+                            Post.builder().content(DUMMY_DATA_10000)
                                     .vaccinationType(VaccinationType.MODERNA).build()
                     )
             );
-            for (int idx = 0; idx < users.size(); idx++) {
-                posts.get(idx).assignUser(users.get(idx));
+            for (int idx = 0; idx < posts.size(); idx++) {
+                posts.get(idx).assignUser(users.get(idx % users.size()));
             }
         }
     }
