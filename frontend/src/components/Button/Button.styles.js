@@ -47,15 +47,15 @@ const buttonStyle = {
   },
   MEDIUM: {
     height: '3.2rem',
-    fontSize: '1.6rem',
+    fontSize: '1.4rem',
     borderRadius: '1.6rem',
     padding: '0 1.2rem',
   },
   LARGE: {
     height: '4.0rem',
-    fontSize: '2.0rem',
+    fontSize: '1.6rem',
     borderRadius: '2.0rem',
-    padding: '0 1.2rem',
+    padding: '0 1.6rem',
   },
 };
 

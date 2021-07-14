@@ -3,7 +3,7 @@ import Frame from '../../components/Frame/Frame';
 import ReviewItem from '../../components/ReviewItem/ReviewItem';
 import Tabs from '../../components/Tabs/Tabs';
 import Button from '../../components/Button/Button';
-import WriteReviewModal from '../../components/WriteReviewModal/WriteReviewModal';
+import ReviewWritingModal from '../../components/ReviewWritingModal/ReviewWritingModal';
 import { VACCINE } from '../../constants';
 import { Container, Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
 import db from '../../db.json';
@@ -39,7 +39,7 @@ const ReviewPage = () => {
           </FrameContent>
         </Frame>
       </Container>
-      {isModalOpen && <WriteReviewModal onClickClose={() => setModalOpen(false)} />}
+      {isModalOpen && <ReviewWritingModal onClickClose={() => setModalOpen(false)} />}
     </>
   );
 };

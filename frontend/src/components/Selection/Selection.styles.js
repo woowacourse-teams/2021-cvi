@@ -14,7 +14,7 @@ const Container = styled.button`
   padding: 0 0.6rem;
 
   & > *:not(:last-child) {
-    margin-right: 0.6rem;
+    margin-right: 1.6rem;
   }
 `;
 

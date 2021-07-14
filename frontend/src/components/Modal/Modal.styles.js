@@ -23,11 +23,11 @@ const modalFrameStyles = css`
 `;
 
 const CloseButton = styled.div`
-  margin: 5px;
-  width: 30px;
+  margin: 1.4rem;
+  width: 3rem;
   position: absolute;
-  right: 3px;
-  top: 3px;
+  right: 0.3rem;
+  top: 0.3rem;
   cursor: pointer;
   background: none;
   border: none;

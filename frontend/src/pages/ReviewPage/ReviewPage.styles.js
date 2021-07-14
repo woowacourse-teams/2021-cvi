@@ -4,21 +4,20 @@ import { PALETTE } from '../../constants';
 const Container = styled.div`
   width: 100%;
   padding: 6rem;
-  margin: 1.6rem 0;
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const Title = styled.h2`
   font-size: 2.8rem;
-  margin-bottom: 2.8rem;
+  margin-bottom: 1.4rem;
 `;
 
 const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 2.4rem;
+  margin-bottom: 2.6rem;
 `;
 
 const ReviewList = styled.ul`

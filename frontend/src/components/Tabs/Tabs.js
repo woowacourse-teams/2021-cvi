@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, buttonStyles, selectedButtonStyles } from './Tabs.styles';
 import Button from '../Button/Button';
-import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
+import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 import { PALETTE } from '../../constants';
 
 const Tabs = ({ tabList, selectedTab, setSelectedTab }) => {
@@ -11,6 +11,7 @@ const Tabs = ({ tabList, selectedTab, setSelectedTab }) => {
       {tabList.map((tab) => (
         <Button
           key={tab}
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
           color={PALETTE.NAVY300}
           isSelected={selectedTab === tab}
