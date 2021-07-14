@@ -13,10 +13,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
     generate-ddl: true
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000

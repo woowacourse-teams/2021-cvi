@@ -6,7 +6,7 @@ import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
-import com.backjoongwon.cvi.user.dto.LoginResponse;
+import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,12 +69,12 @@ class UserControllerTest extends ApiDocument {
         //given
         UserRequest userRequest = new UserRequest("인비", 10);
         UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
-        LoginResponse loginResponse = new LoginResponse(ACCESS_TOKEN, userResponse);
-        willReturn(loginResponse).given(userService).signin(any(UserRequest.class));
+        SigninResponse signinResponse = new SigninResponse(ACCESS_TOKEN, userResponse);
+        willReturn(signinResponse).given(userService).signin(any(UserRequest.class));
         //when
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
-        사용자_로그인_성공함(response, loginResponse);
+        사용자_로그인_성공함(response, signinResponse);
     }
 
     @DisplayName("사용자 로그인 - 실패 - 존재하지 않는 닉네임")
@@ -83,7 +83,7 @@ class UserControllerTest extends ApiDocument {
         //given
         UserRequest userRequest = new UserRequest("검프", 10);
         //when
-        willThrow(new UnAuthorizedException("존재하지 않는 닉네임입니다.")).given(userService).signin(any(UserRequest.class));
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(UserRequest.class));
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
         사용자_로그인_실패함(response);
@@ -182,9 +182,9 @@ class UserControllerTest extends ApiDocument {
                 .content(toJson(userRequest)));
     }
 
-    private void 사용자_로그인_성공함(ResultActions response, LoginResponse loginResponse) throws Exception {
+    private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(loginResponse)))
+                .andExpect(content().json(toJson(signinResponse)))
                 .andExpect(header().string("Authorization", "Bearer " + ACCESS_TOKEN))
                 .andDo(print())
                 .andDo(toDocument("user-signin"));

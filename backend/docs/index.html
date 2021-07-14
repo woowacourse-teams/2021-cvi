@@ -462,7 +462,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_게시글_등록">게시글 등록</a></li>
 <li><a href="#_게시글_단일_조회">게시글 단일 조회</a></li>
-<li><a href="#_게시글_전체_조회">게시글 전체 조회</a></li>
 <li><a href="#_게시글_수정">게시글 수정</a></li>
 <li><a href="#_게시글_삭제">게시글 삭제</a></li>
 </ul>
@@ -539,6 +538,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Location: /api/v1/users/1
 Content-Type: application/json
 Content-Length: 87
@@ -576,6 +578,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 59
 
@@ -612,6 +617,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Authorization: Bearer asdf
 Content-Type: application/json
 Content-Length: 135
@@ -652,11 +660,14 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 59
 
 {
-  "message" : "존재하지 않는 닉네임입니다."
+  "message" : "존재하지 않는 사용자입니다."
 }</code></pre>
 </div>
 </div>
@@ -688,6 +699,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 87
 
@@ -724,6 +738,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 59
 
@@ -759,7 +776,10 @@ Host: localhost
 <h5 id="_response_7">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -787,6 +807,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 59
 
@@ -815,7 +838,10 @@ Host: localhost</code></pre>
 <h5 id="_response_9">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -836,6 +862,9 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 59
 
@@ -862,12 +891,12 @@ Content-Length: 59
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 65
+Content-Length: 62
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "화이자"
+  "vaccinationType" : "PFIZER"
 }</code></pre>
 </div>
 </div>
@@ -877,7 +906,21 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /api/v1/posts/100</code></pre>
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Location: /api/v1/posts/100
+Content-Type: application/json
+Content-Length: 122
+
+{
+  "id" : 100,
+  "user" : null,
+  "content" : null,
+  "viewCount" : 0,
+  "vaccinationType" : null,
+  "createdAt" : null
+}</code></pre>
 </div>
 </div>
 </div>
@@ -890,12 +933,12 @@ Location: /api/v1/posts/100</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 65
+Content-Length: 62
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "화이자"
+  "vaccinationType" : "PFIZER"
 }</code></pre>
 </div>
 </div>
@@ -905,6 +948,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 43
 
@@ -935,8 +981,11 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 248
+Content-Length: 245
 
 {
   "id" : 100,
@@ -948,8 +997,8 @@ Content-Length: 248
   },
   "content" : "글 내용",
   "viewCount" : 55,
-  "vaccinationType" : "화이자",
-  "createdAt" : "2021-07-13T19:53:10.086"
+  "vaccinationType" : "PFIZER",
+  "createdAt" : "2021-07-14T15:14:29.922"
 }</code></pre>
 </div>
 </div>
@@ -972,6 +1021,9 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 43
 
@@ -982,9 +1034,6 @@ Content-Length: 43
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_게시글_전체_조회">게시글 전체 조회</h3>
 <div class="sect3">
 <h4 id="_성공_8">성공</h4>
 <div class="sect4">
@@ -1002,8 +1051,11 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 507
+Content-Length: 502
 
 [ {
   "id" : 100,
@@ -1015,8 +1067,8 @@ Content-Length: 507
   },
   "content" : "글 내용1",
   "viewCount" : 55,
-  "vaccinationType" : "화이자",
-  "createdAt" : "2021-07-13T19:53:10.023"
+  "vaccinationType" : "PFIZER",
+  "createdAt" : "2021-07-14T15:14:29.854"
 }, {
   "id" : 100,
   "user" : {
@@ -1027,8 +1079,8 @@ Content-Length: 507
   },
   "content" : "글 내용2",
   "viewCount" : 12,
-  "vaccinationType" : "모더나",
-  "createdAt" : "2021-07-12T19:53:10.023"
+  "vaccinationType" : "MODERNA",
+  "createdAt" : "2021-07-13T15:14:29.854"
 } ]</code></pre>
 </div>
 </div>
@@ -1045,12 +1097,12 @@ Content-Length: 507
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 65
+Content-Length: 62
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "화이자"
+  "vaccinationType" : "PFIZER"
 }</code></pre>
 </div>
 </div>
@@ -1059,7 +1111,10 @@ Host: localhost
 <h5 id="_response_16">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -1072,12 +1127,12 @@ Host: localhost
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 65
+Content-Length: 62
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "화이자"
+  "vaccinationType" : "PFIZER"
 }</code></pre>
 </div>
 </div>
@@ -1087,6 +1142,9 @@ Host: localhost
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 43
 
@@ -1116,7 +1174,10 @@ Host: localhost</code></pre>
 <h5 id="_response_18">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -1138,6 +1199,9 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Content-Length: 43
 
@@ -1154,7 +1218,7 @@ Content-Length: 43
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-14 11:16:56 +0900
+Last updated 2021-07-14 11:32:58 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

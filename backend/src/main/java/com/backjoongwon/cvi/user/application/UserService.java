@@ -1,11 +1,14 @@
 package com.backjoongwon.cvi.user.application;
 
 
-import com.backjoongwon.cvi.user.dto.LoginResponse;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.post.domain.PostRepository;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public UserResponse signup(UserRequest userRequest) {
@@ -28,12 +33,32 @@ public class UserService {
         return UserResponse.of(user);
     }
 
-    public LoginResponse signin(UserRequest userRequest) {
-        return null;
+    public SigninResponse signin(UserRequest userRequest) {
+        User foundUser = userRepository.findByNickname(userRequest.getNickname())
+                .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 닉네임입니다."));
+
+        String accessToken = jwtTokenProvider.createToken(foundUser.getId());
+        return new SigninResponse(accessToken, UserResponse.of(foundUser));
+    }
+
+    public void validateAccessToken(String accessToken) {
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            throw new UnAuthorizedException("유효하지 않은 토큰입니다.");
+        }
+    }
+
+    public User findUserByAccessToken(String accessToken) {
+        Long userId = Long.valueOf(jwtTokenProvider.getPayload(accessToken));
+        return findUserById(userId);
     }
 
     public UserResponse findById(Long id) {
         return UserResponse.of(findUserById(id));
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
     }
 
     @Transactional
@@ -47,11 +72,7 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("해당 id의 사용자가 없습니다.");
         }
+        postRepository.deleteAllByUserId(id);
         userRepository.deleteById(id);
-    }
-
-    private User findUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
     }
 }
