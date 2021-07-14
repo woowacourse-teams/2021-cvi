@@ -188,6 +188,21 @@ class PostServiceTest {
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
+    @DisplayName("게시글 작성자 확인 - 실패 - 글 작성자가 아님")
+    @Test
+    void deletePostFailureWhenNotAuthor() {
+        //given
+        PostRequest postRequest = new PostRequest("변경할 내용", VaccinationType.MODERNA);
+        User anotherUser = User.builder()
+                .nickname("어나더사용자")
+                .build();
+        userRepository.save(anotherUser);
+        //when
+        //then
+        assertThatThrownBy(() -> postService.update(post.getId(), anotherUser.getId(), postRequest))
+                .isInstanceOf(InvalidOperationException.class);
+    }
+
     static Stream<Arguments> findByVaccineType() {
         return Stream.of(
                 Arguments.of(VaccinationType.PFIZER),

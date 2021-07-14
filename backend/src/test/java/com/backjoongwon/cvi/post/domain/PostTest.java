@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("게시글 도메인 테스트")
 class PostTest {
@@ -89,8 +88,8 @@ class PostTest {
         Post updatedPost = Post.builder()
                 .content("content2")
                 .build();
-        //when
         post.assignUser(user);
+        //when
         post.update(updatedPost, user);
         //then
         assertThat(post.getContent()).isEqualTo(updatedPost.getContent());
@@ -107,10 +106,50 @@ class PostTest {
         Post updatedPost = Post.builder()
                 .content("content2")
                 .build();
-        //when
         post.assignUser(user);
+        //when
         //then
         assertThatThrownBy(() -> post.update(updatedPost, targetUser))
                 .isExactlyInstanceOf(InvalidOperationException.class);
+    }
+
+    @DisplayName("게시글 작성자 확인 - 성공")
+    @Test
+    void deletePost() {
+        //given
+        User user = User.builder()
+                .id(2L)
+                .nickname("인비")
+                .build();
+        Post post = Post.builder()
+                .content("내용")
+                .build();
+        post.assignUser(user);
+        //when
+        //then
+        assertThatCode(() -> post.validateAuthor(user))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("게시글 작성자 확인 - 실패 - 글 작성자가 아님")
+    @Test
+    void deletePostFailureWhenNotAuthor() {
+        //given
+        User user = User.builder()
+                .id(2L)
+                .nickname("인비")
+                .build();
+        User otherUser = User.builder()
+                .id(3L)
+                .nickname("라이언")
+                .build();
+        Post post = Post.builder()
+                .content("내용")
+                .build();
+        post.assignUser(user);
+        //when
+        //then
+        assertThatThrownBy(() -> post.validateAuthor(otherUser))
+                .isInstanceOf(InvalidOperationException.class);
     }
 }

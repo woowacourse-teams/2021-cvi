@@ -7,6 +7,8 @@ import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.auth.AuthenticationPrincipalArgumentResolver;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
@@ -39,6 +41,11 @@ class PostControllerTest extends ApiDocument {
     @MockBean
     private PostService postService;
 
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private AuthenticationPrincipalArgumentResolver resolver;
     private PostRequest request;
 
     @BeforeEach
@@ -50,7 +57,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, null, null, 0, null, null);
+        UserResponse userResponse = new UserResponse(1L, "인비", AgeRange.TEENS, true);
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(USER_ID, request);
@@ -62,7 +70,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).create(any(Long.class), any(PostRequest.class));
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(Long.class), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(USER_ID, request);
         //then
@@ -87,7 +95,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).findById(any(Long.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).findById(any(Long.class));
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -106,7 +114,7 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
-        given(postService.findAll()).willReturn(postResponses);
+        willReturn(postResponses).given(postService).findAll();
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
@@ -128,7 +136,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void updatePostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
         //when
         ResultActions response = 글_수정_요청(USER_ID, POST_ID, request);
         //then
@@ -150,7 +158,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deletePostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("잘못된 입력 예시")).given(postService).delete(any(Long.class), any(Long.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any(Long.class));
         //when
         ResultActions response = 글_삭제_요청(USER_ID, POST_ID);
         //then

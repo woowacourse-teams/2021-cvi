@@ -7,7 +7,7 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.dto.LoginResponse;
+import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,12 +70,12 @@ class UserControllerTest extends ApiDocument {
         //given
         UserRequest userRequest = new UserRequest("인비", AgeRange.TEENS);
         UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
-        LoginResponse loginResponse = new LoginResponse(ACCESS_TOKEN, userResponse);
-        willReturn(loginResponse).given(userService).signin(any(UserRequest.class));
+        SigninResponse signinResponse = new SigninResponse(ACCESS_TOKEN, userResponse);
+        willReturn(signinResponse).given(userService).signin(any(UserRequest.class));
         //when
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
-        사용자_로그인_성공함(response, loginResponse);
+        사용자_로그인_성공함(response, signinResponse);
     }
 
     @DisplayName("사용자 로그인 - 실패 - 존재하지 않는 닉네임")
@@ -84,7 +84,7 @@ class UserControllerTest extends ApiDocument {
         //given
         UserRequest userRequest = new UserRequest("검프", AgeRange.TEENS);
         //when
-        willThrow(new UnAuthorizedException("존재하지 않는 닉네임입니다.")).given(userService).signin(any(UserRequest.class));
+        willThrow(new UnAuthorizedException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).signin(any(UserRequest.class));
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
         사용자_로그인_실패함(response);
@@ -105,7 +105,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("존재하지 않는 사용자입니다.")).given(userService).findById(1L);
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(1L);
         //when
         ResultActions response = 사용자_조회_요청(userRequest);
         //then
@@ -127,7 +127,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void updateFailure() throws Exception {
         //given
-        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다.")).given(userService).update(any(Long.class),
+        willThrow(new InvalidInputException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).update(any(Long.class),
                 any(UserRequest.class));
         //when
         ResultActions response = 사용자_업데이트_요청(userRequest);
@@ -150,7 +150,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("존재하지 않는 사용자입니다.")).given(userService).delete(any(Long.class));
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).delete(any(Long.class));
         //when
         ResultActions response = 사용자_삭제_요청(2L);
         //then
@@ -160,6 +160,7 @@ class UserControllerTest extends ApiDocument {
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
+                .param("nickname", "인비")
                 .content(toJson(request)));
     }
 
@@ -183,9 +184,9 @@ class UserControllerTest extends ApiDocument {
                 .content(toJson(userRequest)));
     }
 
-    private void 사용자_로그인_성공함(ResultActions response, LoginResponse loginResponse) throws Exception {
+    private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(loginResponse)))
+                .andExpect(content().json(toJson(signinResponse)))
                 .andExpect(header().string("Authorization", "Bearer " + ACCESS_TOKEN))
                 .andDo(print())
                 .andDo(toDocument("user-signin"));

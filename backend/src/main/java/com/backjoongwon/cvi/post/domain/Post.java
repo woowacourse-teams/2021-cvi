@@ -58,4 +58,10 @@ public class Post extends BaseEntity {
     public void increaseViewCount() {
         viewCount++;
     }
+
+    public void validateAuthor(User user) {
+        if (!this.user.equals(user)) {
+            throw new InvalidOperationException("다른 사람의 게시글은 삭제할 수 없습니다.");
+        }
+    }
 }

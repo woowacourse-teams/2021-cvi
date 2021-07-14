@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (userRepository.findAll().isEmpty()) {
             List<User> users = Arrays.asList(User.builder().nickname("검프").ageRange(AgeRange.TEENS).build(),
                     User.builder().nickname("욘").ageRange(AgeRange.TWENTIES).build(),

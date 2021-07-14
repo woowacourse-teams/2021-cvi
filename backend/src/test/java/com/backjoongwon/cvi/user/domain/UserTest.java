@@ -50,7 +50,7 @@ class UserTest {
 
     @DisplayName("사용자 백신 접종 여부 수정 - 성공")
     @Test
-    void makeVerified(){
+    void makeVerified() {
         //given
         //when
         user.makeVerified();

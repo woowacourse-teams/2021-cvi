@@ -57,20 +57,19 @@ public class PostService {
     @Transactional
     public void delete(Long postId, Long userId) {
         User user = findUserById(userId);
-        if (!postRepository.existsById(postId)) {
-            throw new NotFoundException("존재하지 않는 게시글입니다.");
-        }
+        Post foundPost = findPostById(postId);
+        foundPost.validateAuthor(user);
         postRepository.deleteById(postId);
     }
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 존재하지 않습니다."));
     }
 
     private Post findPostById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
