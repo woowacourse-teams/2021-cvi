@@ -5,19 +5,20 @@ const Background = styled.div`
   background-color: ${PALETTE.NAVY300};
   width: 100%;
   height: 100vh;
-  padding: 3.2rem 0;
+  padding: 1.4rem 0;
   position: relative;
 `;
 
 const Container = styled.div`
   display: flex;
   margin: 0 auto;
-  width: 120rem;
-  height: 72rem;
+  width: 132rem;
+  height: 76rem;
   border-radius: 1.6rem;
   background-color: ${PALETTE.NAVY100};
   position: relative;
 
+  /* TODO */
   /* &::after {
     content: '';
     position: absolute;
