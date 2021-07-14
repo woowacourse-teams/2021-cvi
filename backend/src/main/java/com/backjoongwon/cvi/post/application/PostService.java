@@ -73,6 +73,7 @@ public class PostService {
     }
 
     public List<PostResponse> findByVaccineType(String vaccinationType) {
-        return null;
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType);
+        return PostResponse.of(posts);
     }
 }

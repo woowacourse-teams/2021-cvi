@@ -14,6 +14,9 @@ import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -182,5 +186,35 @@ class PostServiceTest {
         //then
         assertThatThrownBy(() -> postService.delete(0L, user.getId()))
                 .isExactlyInstanceOf(NotFoundException.class);
+    }
+
+    static Stream<Arguments> findByVaccineType() {
+        return Stream.of(
+                Arguments.of(VaccinationType.PFIZER),
+                Arguments.of(VaccinationType.ASTRAZENECA),
+                Arguments.of(VaccinationType.MODERNA),
+                Arguments.of(VaccinationType.JANSSEN)
+        );
+    }
+
+    @DisplayName("게시글 타입별 조회 - 성공")
+    @ParameterizedTest
+    @MethodSource
+    void findByVaccineType(VaccinationType vaccinationType) {
+        //given
+        post = Post.builder()
+                .content("Test Content222")
+                .vaccinationType(vaccinationType)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRepository.save(post);
+
+        //when
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType.name());
+        //then
+        assertThat(postResponses).filteredOn(
+                response -> response.getVaccinationType().equals(vaccinationType)
+        );
     }
 }
