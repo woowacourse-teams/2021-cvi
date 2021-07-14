@@ -161,7 +161,9 @@ class UserControllerTest extends ApiDocument {
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
+                .param("nickname", "인비")
                 .content(toJson(request)));
+        // "{"}"
     }
 
     private void 사용자_회원가입_성공함(ResultActions response, UserResponse userResponse) throws Exception {

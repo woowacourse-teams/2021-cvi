@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.user.auth.AuthenticationPrincipalArgumentResolver;
 import com.backjoongwon.cvi.user.auth.SigninInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,15 +21,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*").allowedOriginPatterns("*");
+        registry.addMapping("/**")
+                .allowedMethods("*")
+                .allowedOriginPatterns("*")
+                .exposedHeaders(HttpHeaders.LOCATION);
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(signinInterceptor)
-                .addPathPatterns("/api/v1/users/*")
-                .addPathPatterns("/api/v1/posts/users/*")
-                .addPathPatterns("/api/v1/posts/*/users/*");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/v1/users/signin")
+                .excludePathPatterns("/api/v1/users/signup");
     }
 
     @Override

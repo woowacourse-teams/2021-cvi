@@ -70,7 +70,7 @@ class PostControllerTest extends ApiDocument {
         willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(Long.class), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(USER_ID, request);
-        //then이
+        //then
         글_등록_실패함(response);
     }
 

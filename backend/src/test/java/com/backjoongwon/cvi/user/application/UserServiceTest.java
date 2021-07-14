@@ -70,9 +70,9 @@ public class UserServiceTest {
     void signin() {
         //given
         userService.signup(userRequest);
+        //when
         SigninResponse signinResponse = userService.signin(userRequest);
         String accessToken = signinResponse.getAccessToken();
-        //when
         //then
         assertThatCode(() -> userService.validateAccessToken(accessToken))
                 .doesNotThrowAnyException();
