@@ -8,11 +8,11 @@ import { FONT_COLOR, PATH } from '../../constants';
 
 const SideBar = () => {
   return (
-    <Frame width="20rem" height="inherit">
+    <Frame width="24rem" height="inherit">
       <Container>
         <LogoContainer>
           {/* example logo */}
-          <HomeIcon width="60" height="60" stroke={FONT_COLOR.PURPLE_GRAY} />
+          <HomeIcon width="80" height="80" stroke={FONT_COLOR.PURPLE_GRAY} />
         </LogoContainer>
         <MenuContainer>
           <LinkContainer to={PATH.HOME}>
