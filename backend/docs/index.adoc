@@ -152,7 +152,6 @@ include::{snippets}/post-find-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/post-find-failure/http-response.adoc[]
 
-=== 게시글 전체 조회
 ==== 성공
 ===== Request
 include::{snippets}/post-findAll/http-request.adoc[]

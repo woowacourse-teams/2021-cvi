@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("사용자 컨트롤러 Mock 테스트")
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest extends ApiDocument {
 
@@ -86,12 +87,6 @@ class UserControllerTest extends ApiDocument {
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
         사용자_로그인_실패함(response);
-    }
-
-    private void 사용자_로그인_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-signin-failure"));
     }
 
     @DisplayName("사용자 정보 조회 - 성공")
@@ -193,6 +188,12 @@ class UserControllerTest extends ApiDocument {
                 .andExpect(header().string("Authorization", "Bearer " + ACCESS_TOKEN))
                 .andDo(print())
                 .andDo(toDocument("user-signin"));
+    }
+
+    private void 사용자_로그인_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("user-signin-failure"));
     }
 
     private ResultActions 사용자_조회_요청(UserRequest request) throws Exception {

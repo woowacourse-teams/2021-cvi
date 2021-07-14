@@ -4,6 +4,7 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@DisplayName("게시글 컨트롤러 Mock 테스트")
 @WebMvcTest(controllers = PostController.class)
 class PostControllerTest extends ApiDocument {
 
@@ -39,10 +40,10 @@ class PostControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        request = new PostRequest("글 내용", "화이자");
+        request = new PostRequest("글 내용",  VaccinationType.PFIZER);
     }
 
-    @DisplayName("글 등록 - 성공")
+    @DisplayName("게시글 등록 - 성공")
     @Test
     void createPost() throws Exception {
         //given
@@ -54,7 +55,7 @@ class PostControllerTest extends ApiDocument {
         글_등록_성공함(response, expectedResponse);
     }
 
-    @DisplayName("글 등록 - 실패")
+    @DisplayName("게시글 등록 - 실패")
     @Test
     void createPostFailure() throws Exception {
         //given
@@ -65,12 +66,12 @@ class PostControllerTest extends ApiDocument {
         글_등록_실패함(response);
     }
 
-    @DisplayName("글 단일 조회 - 성공")
+    @DisplayName("게시글 단일 조회 - 성공")
     @Test
     void find() throws Exception {
         //given
         UserResponse expectedUserResponse = new UserResponse(USER_ID, "인비", 10, true);
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, "화이자", LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 55, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
@@ -79,7 +80,7 @@ class PostControllerTest extends ApiDocument {
         글_단일_조회_성공함(response, expectedPostResponse);
     }
 
-    @DisplayName("글 단일 조회 - 실패")
+    @DisplayName("게시글 단일 조회 - 실패")
     @Test
     void findFailure() throws Exception {
         //given
@@ -90,7 +91,7 @@ class PostControllerTest extends ApiDocument {
         글_단일_조회_실패함(response);
     }
 
-    @DisplayName("글 전체 조회 - 성공")
+    @DisplayName("게시글 전체 조회 - 성공")
     @Test
     void findAll() throws Exception {
         //given
@@ -98,8 +99,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse userResponse2 = new UserResponse(101L, "검프", 20, false);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, "화이자", LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse2, "글 내용2", 12, "모더나", LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse2, "글 내용2", 12,  VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
         given(postService.findAll()).willReturn(postResponses);
@@ -109,7 +110,7 @@ class PostControllerTest extends ApiDocument {
         글_전체_조회_성공함(response, postResponses);
     }
 
-    @DisplayName("글 수정 - 성공")
+    @DisplayName("게시글 수정 - 성공")
     @Test
     void updatePost() throws Exception {
         //given
@@ -120,7 +121,7 @@ class PostControllerTest extends ApiDocument {
         글_수정_성공함(response);
     }
 
-    @DisplayName("글 수정 - 실패")
+    @DisplayName("게시글 수정 - 실패")
     @Test
     void updatePostFailure() throws Exception {
         //given
@@ -131,7 +132,7 @@ class PostControllerTest extends ApiDocument {
         글_수정_실패함(response);
     }
 
-    @DisplayName("글 삭제 - 성공")
+    @DisplayName("게시글 삭제 - 성공")
     @Test
     void deletePost() throws Exception {
         //given
@@ -142,7 +143,7 @@ class PostControllerTest extends ApiDocument {
         글_삭제_성공함(response);
     }
 
-    @DisplayName("글 삭제 - 실패")
+    @DisplayName("게시글 삭제 - 실패")
     @Test
     void deletePostFailure() throws Exception {
         //given
