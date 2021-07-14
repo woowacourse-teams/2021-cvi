@@ -173,9 +173,9 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(1L, UserResponse.of(user), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(2L, UserResponse.of(user), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(3L, UserResponse.of(user), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
-        )).given(postService).findByVaccineType(VaccinationType.PFIZER.name());
+        )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
-        ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER.name());
+        ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
         게시글_타입별_조회_요청_성공함(response);
     }
@@ -264,9 +264,9 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-delete-failure"));
     }
 
-    private ResultActions 게시글_타입별_조회_요청(String vaccinationType) throws Exception {
+    private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
         return mockMvc.perform(get("/api/v1/posts/reviews")
-                .queryParam("vaccinationType", vaccinationType));
+                .queryParam("vaccinationType", vaccinationType.name()));
     }
 
     private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {

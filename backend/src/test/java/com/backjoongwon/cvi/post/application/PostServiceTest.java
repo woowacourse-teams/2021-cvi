@@ -211,7 +211,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType.name());
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType);
         //then
         assertThat(postResponses).filteredOn(
                 response -> response.getVaccinationType().equals(vaccinationType)

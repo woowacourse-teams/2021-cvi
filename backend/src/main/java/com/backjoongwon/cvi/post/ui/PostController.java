@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class PostController {
 
     @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineType(@RequestParam String vaccinationType) {
+    public List<PostResponse> findByVaccineType(@RequestParam VaccinationType vaccinationType) {
         List<PostResponse> responses = postService.findByVaccineType(vaccinationType);
         return responses;
     }

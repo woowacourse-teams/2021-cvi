@@ -20,14 +20,14 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByVaccineType(String vaccinationType) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, QUser.user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType))
                 .fetch();
     }
 
-    private BooleanExpression vaccinationTypeEq(String vaccinationType) {
-        return Objects.nonNull(vaccinationType) ? post.vaccinationType.eq(VaccinationType.valueOf(vaccinationType)) : null;
+    private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
+        return Objects.nonNull(vaccinationType) ? post.vaccinationType.eq(vaccinationType) : null;
     }
 }
