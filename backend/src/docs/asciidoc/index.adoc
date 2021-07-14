@@ -11,8 +11,8 @@ endif::[]
 
 = Team CVI Api Specification
 
-=== Common Responses
-==== Common Status Codes
+== Common Responses
+=== Common Status Codes
 ```java
 # 생성
 ## status code: 201
@@ -28,7 +28,7 @@ endif::[]
 ## status code: 204
 ```
 
-==== Common Exceptions
+=== Common Exceptions
 ```java
 # 클라이언트 입력 예외
 ## status code: 400
