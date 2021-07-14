@@ -67,7 +67,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void login() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("인비", 10);
+        UserRequest userRequest = new UserRequest("인비", 0);
         UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
         SigninResponse signinResponse = new SigninResponse(ACCESS_TOKEN, userResponse);
         willReturn(signinResponse).given(userService).signin(any(UserRequest.class));
@@ -81,9 +81,11 @@ class UserControllerTest extends ApiDocument {
     @Test
     void loginFailureWhenNicknameNotExists() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("검프", 10);
+        UserRequest userRequest = UserRequest.builder()
+                .nickname("검프")
+                .build();
         //when
-        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(UserRequest.class));
+        willThrow(new UnAuthorizedException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).signin(any(UserRequest.class));
         ResultActions response = 사용자_로그인_요청(userRequest);
         //then
         사용자_로그인_실패함(response);
@@ -104,7 +106,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("존재하지 않는 사용자입니다.")).given(userService).findById(1L);
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(1L);
         //when
         ResultActions response = 사용자_조회_요청(userRequest);
         //then
@@ -126,7 +128,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void updateFailure() throws Exception {
         //given
-        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다.")).given(userService).update(any(Long.class),
+        willThrow(new InvalidInputException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).update(any(Long.class),
                 any(UserRequest.class));
         //when
         ResultActions response = 사용자_업데이트_요청(userRequest);
@@ -149,7 +151,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("존재하지 않는 사용자입니다.")).given(userService).delete(any(Long.class));
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).delete(any(Long.class));
         //when
         ResultActions response = 사용자_삭제_요청(2L);
         //then
