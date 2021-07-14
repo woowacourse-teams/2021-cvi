@@ -8,7 +8,7 @@ cd $REPOSITORY/$PROJECT_NAME/ # 경로로 접근
 
 echo "> git reset --hard origin/HEAD"
 
-git reset --hard origin/HEAD # 깃허브 초기화
+ git reset --hard origin/HEAD # 깃허브 초기화
 
 echo "> git pull origin develop"
 
@@ -40,4 +40,4 @@ echo "> 새 애플리케이션 배포"
 echo "> JAR Location: $JAR_LOCATION" 해당 jar파일 실행
 
 #nohup java -jar 실행
-nohup java -jar -Dspring.profiles.active=prod ${JAR_LOCATION} 1> log-prod.md 2>&1  &
+nohup java -jar -Dspring.config.location=/home/ubuntu/deploy/application-prod.yml -Dspring.profiles.active=prod ${JAR_LOCATION} 1> log-prod.out 2>&1  &
