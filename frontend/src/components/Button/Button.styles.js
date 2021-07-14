@@ -34,7 +34,7 @@ const hoverStyle = {
     backgroundColor: 'rgba(240, 117, 117, 0.08)',
   },
   TEXT: {
-    backgroundColor: 'rgba(240, 117, 117, 0.08)',
+    // backgroundColor: 'rgba(240, 117, 117, 0.08)',
   },
 };
 

@@ -4,6 +4,7 @@ import { PALETTE } from '../../constants';
 const Container = styled.div`
   width: 100%;
   padding: 6rem;
+  margin: 1.6rem 0;
   flex: 1;
   overflow-y: scroll;
 `;
