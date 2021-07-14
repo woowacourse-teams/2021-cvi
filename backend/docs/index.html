@@ -449,21 +449,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel2">
 <li><a href="#_common_responses">Common Responses</a></li>
-<li><a href="#_user_유저">User (유저)</a>
+<li><a href="#_user_사용자">User (사용자)</a>
 <ul class="sectlevel2">
-<li><a href="#_유저_가입">유저 가입</a></li>
-<li><a href="#_유저_조회">유저 조회</a></li>
-<li><a href="#_유저_업데이트">유저 업데이트</a></li>
-<li><a href="#_유저_삭제">유저 삭제</a></li>
+<li><a href="#_사용자_가입">사용자 가입</a></li>
+<li><a href="#_사용자_로그인">사용자 로그인</a></li>
+<li><a href="#_사용자_조회">사용자 조회</a></li>
+<li><a href="#_사용자_업데이트">사용자 업데이트</a></li>
+<li><a href="#_사용자_삭제">사용자 삭제</a></li>
 </ul>
 </li>
 <li><a href="#_post_게시글">Post (게시글)</a>
 <ul class="sectlevel2">
 <li><a href="#_게시글_등록">게시글 등록</a></li>
-</ul>
-</li>
-<li><a href="#_post_게시글_2">Post (게시글)</a>
-<ul class="sectlevel2">
 <li><a href="#_게시글_단일_조회">게시글 단일 조회</a></li>
 <li><a href="#_게시글_전체_조회">게시글 전체 조회</a></li>
 <li><a href="#_게시글_수정">게시글 수정</a></li>
@@ -515,10 +512,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_user_유저">User (유저)</h2>
+<h2 id="_user_사용자">User (사용자)</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_유저_가입">유저 가입</h3>
+<h3 id="_사용자_가입">사용자 가입</h3>
 <div class="sect3">
 <h4 id="_성공">성공</h4>
 <div class="sect4">
@@ -591,11 +588,87 @@ Content-Length: 59
 </div>
 </div>
 <div class="sect2">
-<h3 id="_유저_조회">유저 조회</h3>
+<h3 id="_사용자_로그인">사용자 로그인</h3>
 <div class="sect3">
 <h4 id="_성공_2">성공</h4>
 <div class="sect4">
 <h5 id="_request_3">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/signin HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 46
+Host: localhost
+
+{
+  "nickname" : "인비",
+  "ageRange" : 10
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_3">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Authorization: Bearer asdf
+Content-Type: application/json
+Content-Length: 135
+
+{
+  "accessToken" : "asdf",
+  "user" : {
+    "id" : 1,
+    "nickname" : "인비",
+    "ageRange" : 10,
+    "shotVerified" : false
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_2">실패</h4>
+<div class="sect4">
+<h5 id="_request_4">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/signin HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 46
+Host: localhost
+
+{
+  "nickname" : "검프",
+  "ageRange" : 10
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_4">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+Content-Length: 59
+
+{
+  "message" : "존재하지 않는 닉네임입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자_조회">사용자 조회</h3>
+<div class="sect3">
+<h4 id="_성공_3">성공</h4>
+<div class="sect4">
+<h5 id="_request_5">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/1 HTTP/1.1
@@ -611,7 +684,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_3">Response</h5>
+<h5 id="_response_5">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -629,9 +702,9 @@ Content-Length: 87
 </div>
 </div>
 <div class="sect3">
-<h4 id="_실패_2">실패</h4>
+<h4 id="_실패_3">실패</h4>
 <div class="sect4">
-<h5 id="_request_4">Request</h5>
+<h5 id="_request_6">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/1 HTTP/1.1
@@ -647,78 +720,15 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_4">Response</h5>
+<h5 id="_response_6">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
 Content-Type: application/json
-Content-Length: 56
-
-{
-  "message" : "존재하지 않는 유저입니다."
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_유저_업데이트">유저 업데이트</h3>
-<div class="sect3">
-<h4 id="_성공_3">성공</h4>
-<div class="sect4">
-<h5 id="_request_5">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 49
-Host: localhost
-
-{
-  "nickname" : "라이언",
-  "ageRange" : 20
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_5">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_3">실패</h4>
-<div class="sect4">
-<h5 id="_request_6">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 49
-Host: localhost
-
-{
-  "nickname" : "라이언",
-  "ageRange" : 20
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_6">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
-Content-Type: application/json
 Content-Length: 59
 
 {
-  "message" : "중복된 닉네임이 존재합니다."
+  "message" : "존재하지 않는 사용자입니다."
 }</code></pre>
 </div>
 </div>
@@ -726,15 +736,22 @@ Content-Length: 59
 </div>
 </div>
 <div class="sect2">
-<h3 id="_유저_삭제">유저 삭제</h3>
+<h3 id="_사용자_업데이트">사용자 업데이트</h3>
 <div class="sect3">
 <h4 id="_성공_4">성공</h4>
 <div class="sect4">
 <h5 id="_request_7">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users/1 HTTP/1.1
-Host: localhost</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 49
+Host: localhost
+
+{
+  "nickname" : "라이언",
+  "ageRange" : 20
+}</code></pre>
 </div>
 </div>
 </div>
@@ -753,8 +770,15 @@ Host: localhost</code></pre>
 <h5 id="_request_8">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users/2 HTTP/1.1
-Host: localhost</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 49
+Host: localhost
+
+{
+  "nickname" : "라이언",
+  "ageRange" : 20
+}</code></pre>
 </div>
 </div>
 </div>
@@ -762,12 +786,61 @@ Host: localhost</code></pre>
 <h5 id="_response_8">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
 Content-Type: application/json
-Content-Length: 56
+Content-Length: 59
 
 {
-  "message" : "존재하지 않는 유저입니다."
+  "message" : "중복된 닉네임이 존재합니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자_삭제">사용자 삭제</h3>
+<div class="sect3">
+<h4 id="_성공_5">성공</h4>
+<div class="sect4">
+<h5 id="_request_9">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users/1 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_9">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_5">실패</h4>
+<div class="sect4">
+<h5 id="_request_10">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users/2 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_10">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json
+Content-Length: 59
+
+{
+  "message" : "존재하지 않는 사용자입니다."
 }</code></pre>
 </div>
 </div>
@@ -782,83 +855,20 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_게시글_등록">게시글 등록</h3>
 <div class="sect3">
-<h4 id="_성공_5">성공</h4>
-<div class="sect4">
-<h5 id="_request_9">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 65
-Host: localhost
-
-{
-  "content" : "글 내용",
-  "vaccinationType" : "화이자"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_9">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Location: /api/v1/posts/100</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_5">실패</h4>
-<div class="sect4">
-<h5 id="_request_10">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 65
-Host: localhost
-
-{
-  "content" : "글 내용",
-  "vaccinationType" : "화이자"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_10">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
-Content-Type: application/json
-Content-Length: 43
-
-{
-  "message" : "잘못된 입력 예시"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_post_게시글_2">Post (게시글)</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_게시글_단일_조회">게시글 단일 조회</h3>
-<div class="sect3">
 <h4 id="_성공_6">성공</h4>
 <div class="sect4">
 <h5 id="_request_11">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/100 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Host: localhost</code></pre>
+Content-Length: 65
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "화이자"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -866,23 +876,8 @@ Host: localhost</code></pre>
 <h5 id="_response_11">Response</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 251
-
-{
-  "id" : 100,
-  "user" : {
-    "id" : 1,
-    "nickname" : "인비",
-    "ageRange" : 10,
-    "shotVerified" : true
-  },
-  "content" : "글 내용",
-  "viewCount" : 55,
-  "vaccinationType" : "화이자",
-  "createdAt" : "2021-07-08T17:02:08.697267"
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /api/v1/posts/100</code></pre>
 </div>
 </div>
 </div>
@@ -893,9 +888,15 @@ Content-Length: 251
 <h5 id="_request_12">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/100 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/users/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Host: localhost</code></pre>
+Content-Length: 65
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "화이자"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -916,14 +917,14 @@ Content-Length: 43
 </div>
 </div>
 <div class="sect2">
-<h3 id="_게시글_전체_조회">게시글 전체 조회</h3>
+<h3 id="_게시글_단일_조회">게시글 단일 조회</h3>
 <div class="sect3">
 <h4 id="_성공_7">성공</h4>
 <div class="sect4">
 <h5 id="_request_13">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Host: localhost</code></pre>
 </div>
@@ -935,9 +936,9 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 513
+Content-Length: 248
 
-[ {
+{
   "id" : 100,
   "user" : {
     "id" : 1,
@@ -945,53 +946,11 @@ Content-Length: 513
     "ageRange" : 10,
     "shotVerified" : true
   },
-  "content" : "글 내용1",
+  "content" : "글 내용",
   "viewCount" : 55,
   "vaccinationType" : "화이자",
-  "createdAt" : "2021-07-08T17:02:08.466428"
-}, {
-  "id" : 100,
-  "user" : {
-    "id" : 101,
-    "nickname" : "검프",
-    "ageRange" : 20,
-    "shotVerified" : false
-  },
-  "content" : "글 내용2",
-  "viewCount" : 12,
-  "vaccinationType" : "모더나",
-  "createdAt" : "2021-07-07T17:02:08.466483"
-} ]</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_게시글_수정">게시글 수정</h3>
-<div class="sect3">
-<h4 id="_성공_8">성공</h4>
-<div class="sect4">
-<h5 id="_request_14">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 65
-Host: localhost
-
-{
-  "content" : "글 내용",
-  "vaccinationType" : "화이자"
+  "createdAt" : "2021-07-13T19:53:10.086"
 }</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_14">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
 </div>
 </div>
 </div>
@@ -999,23 +958,17 @@ Host: localhost
 <div class="sect3">
 <h4 id="_실패_7">실패</h4>
 <div class="sect4">
-<h5 id="_request_15">Request</h5>
+<h5 id="_request_14">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 65
-Host: localhost
-
-{
-  "content" : "글 내용",
-  "vaccinationType" : "화이자"
-}</code></pre>
+Host: localhost</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_15">Response</h5>
+<h5 id="_response_14">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -1031,16 +984,74 @@ Content-Length: 43
 </div>
 </div>
 <div class="sect2">
-<h3 id="_게시글_삭제">게시글 삭제</h3>
+<h3 id="_게시글_전체_조회">게시글 전체 조회</h3>
+<div class="sect3">
+<h4 id="_성공_8">성공</h4>
+<div class="sect4">
+<h5 id="_request_15">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_15">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 507
+
+[ {
+  "id" : 100,
+  "user" : {
+    "id" : 1,
+    "nickname" : "인비",
+    "ageRange" : 10,
+    "shotVerified" : true
+  },
+  "content" : "글 내용1",
+  "viewCount" : 55,
+  "vaccinationType" : "화이자",
+  "createdAt" : "2021-07-13T19:53:10.023"
+}, {
+  "id" : 100,
+  "user" : {
+    "id" : 101,
+    "nickname" : "검프",
+    "ageRange" : 20,
+    "shotVerified" : false
+  },
+  "content" : "글 내용2",
+  "viewCount" : 12,
+  "vaccinationType" : "모더나",
+  "createdAt" : "2021-07-12T19:53:10.023"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_수정">게시글 수정</h3>
 <div class="sect3">
 <h4 id="_성공_9">성공</h4>
 <div class="sect4">
 <h5 id="_request_16">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/users/100 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Host: localhost</code></pre>
+Content-Length: 65
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "화이자"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1059,9 +1070,15 @@ Host: localhost</code></pre>
 <h5 id="_request_17">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/users/100 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/users/100 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Host: localhost</code></pre>
+Content-Length: 65
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "화이자"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1081,12 +1098,63 @@ Content-Length: 43
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_게시글_삭제">게시글 삭제</h3>
+<div class="sect3">
+<h4 id="_성공_10">성공</h4>
+<div class="sect4">
+<h5 id="_request_18">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/users/100 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_18">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_9">실패</h4>
+<div class="sect4">
+<h5 id="_request_19">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/users/100 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_19">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json
+Content-Length: 43
+
+{
+  "message" : "잘못된 입력 예시"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-08 16:59:50 +0900
+Last updated 2021-07-14 11:16:56 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
