@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -191,7 +192,8 @@ class PostControllerTest extends ApiDocument {
     private ResultActions 글_등록_요청(Long userId, PostRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/posts/users/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
 
     private void 글_등록_성공함(ResultActions response, PostResponse expectedResponse) throws Exception {
@@ -240,7 +242,8 @@ class PostControllerTest extends ApiDocument {
     private ResultActions 글_수정_요청(Long userId, Long postId, PostRequest request) throws Exception {
         return mockMvc.perform(put("/api/v1/posts/{postId}/users/{userId}", userId, postId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
 
     private void 글_수정_성공함(ResultActions response) throws Exception {
@@ -257,7 +260,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
         return mockMvc.perform(delete("/api/v1/posts/{postId}/users/{userId}", userId, postId)
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
 
     private void 글_삭제_성공함(ResultActions response) throws Exception {
