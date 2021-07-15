@@ -7,6 +7,7 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends ApiDocument {
 
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
+    private static final String BEARER = "Bearer ";
 
     @MockBean
     private UserService userService;
@@ -41,6 +43,12 @@ class UserControllerTest extends ApiDocument {
     void init() {
         userRequest = new UserRequest("라이언", AgeRange.TWENTIES);
         userResponse = new UserResponse(1L, "라이언", AgeRange.TWENTIES, false);
+        User user = User.builder()
+                .id(1L)
+                .nickname("라이언")
+                .build();
+        given(userService.findUserByAccessToken(ACCESS_TOKEN))
+                .willReturn(user);
     }
 
     @DisplayName("사용자 가입 - 성공")
@@ -219,10 +227,10 @@ class UserControllerTest extends ApiDocument {
 
 
     private ResultActions 사용자_업데이트_요청(UserRequest userRequest) throws Exception {
-        return mockMvc.perform(put("/api/v1/users/" + 1)
+        return mockMvc.perform(put("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(userRequest))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_업데이트_성공(ResultActions response) throws Exception {
@@ -238,8 +246,8 @@ class UserControllerTest extends ApiDocument {
     }
 
     private ResultActions 사용자_삭제_요청(Long id) throws Exception {
-        return mockMvc.perform(delete("/api/v1/users/" + id)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
+        return mockMvc.perform(delete("/api/v1/users")
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_삭제_성공(ResultActions response) throws Exception {

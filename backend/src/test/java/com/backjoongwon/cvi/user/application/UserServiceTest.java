@@ -118,6 +118,7 @@ public class UserServiceTest {
     void update() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
+        userRepository.flush();
         //when
         UserRequest updateRequest = new UserRequest(userRequest.getNickname(), AgeRange.THIRTIES);
         userService.update(signupResponse.getId(), updateRequest);

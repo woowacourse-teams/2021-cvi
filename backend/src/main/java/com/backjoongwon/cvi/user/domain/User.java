@@ -2,7 +2,6 @@ package com.backjoongwon.cvi.user.domain;
 
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,9 +45,6 @@ public class User extends BaseEntity {
     }
 
     public void update(User updateUser) {
-        if (!this.equals(updateUser)) {
-            throw new InvalidOperationException("다른 사용자의 정보는 수정할 수 없습니다.");
-        }
         this.ageRange = updateUser.ageRange;
     }
 
