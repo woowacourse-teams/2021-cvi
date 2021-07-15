@@ -137,6 +137,16 @@ include::{snippets}/post-create-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/post-create-failure/http-response.adoc[]
 
+=== 게시글 전체 조회
+==== 성공
+===== Request
+include::{snippets}/post-findAll/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findAll/http-response.adoc[]
+
+- 게시글 전체 조회 시, 게시글이 하나도 없으면 빈 리스트가 반환된다.
+
 === 게시글 단일 조회
 ==== 성공
 ===== Request
@@ -151,13 +161,6 @@ include::{snippets}/post-find-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/post-find-failure/http-response.adoc[]
-
-==== 성공
-===== Request
-include::{snippets}/post-findAll/http-request.adoc[]
-
-===== Response
-include::{snippets}/post-findAll/http-response.adoc[]
 
 === 게시글 타입별 조회
 ==== 성공

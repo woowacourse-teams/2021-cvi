@@ -28,13 +28,7 @@ public class PostController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findAll() {
-        return postService.findAll();
-    }
-
-    @GetMapping("/reviews")
-    @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineType(@RequestParam VaccinationType vaccinationType) {
+    public List<PostResponse> findByVaccineType(@RequestParam(required = false, defaultValue = "ALL") VaccinationType vaccinationType) {
         return postService.findByVaccineType(vaccinationType);
     }
 

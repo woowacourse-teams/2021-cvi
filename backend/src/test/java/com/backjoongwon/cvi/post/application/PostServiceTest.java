@@ -123,7 +123,7 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
         //when
-        List<PostResponse> response = postService.findAll();
+        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL);
         //then
         assertThat(response).hasSize(2);
     }
