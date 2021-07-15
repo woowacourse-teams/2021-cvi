@@ -128,7 +128,7 @@ public class UserServiceTest {
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
     }
 
-    @DisplayName("사용자 수정 - 실패 - 존재하지않는 User")
+    @DisplayName("사용자 수정 - 실패 - 존재하지 않는 User")
     @Test
     void updateFailureWhenNotExists() {
         //given

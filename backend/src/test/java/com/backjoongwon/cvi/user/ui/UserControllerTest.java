@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest extends ApiDocument {
 
-    private static final String ACCESS_TOKEN = "asdf";
+    private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
 
     @MockBean
     private UserService userService;
