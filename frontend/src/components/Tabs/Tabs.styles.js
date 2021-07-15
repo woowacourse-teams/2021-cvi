@@ -1,15 +1,16 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.button`
   display: flex;
-  height: 4.5rem;
+  height: 5.2rem;
   width: 100%;
-  border-bottom: 0.15rem solid ${PALETTE.NAVY100};
-  justify-content: center;
+  border-bottom: 0.2rem solid ${PALETTE.NAVY100};
+  justify-content: flex-start;
   align-items: center;
   line-height: 1.5;
+  padding: 0 3.2rem;
 `;
 
 const buttonStyles = css`
@@ -22,8 +23,10 @@ const buttonStyles = css`
 `;
 
 const selectedButtonStyles = css`
-  border-bottom: 2px solid ${PALETTE.GRAY900};
+  border-bottom: 2px solid ${FONT_COLOR.BLACK};
   color: ${PALETTE.GRAY900};
+  padding-bottom: 0.1rem;
+  box-sizing: content-box;
 `;
 
 export { Container, buttonStyles, selectedButtonStyles };

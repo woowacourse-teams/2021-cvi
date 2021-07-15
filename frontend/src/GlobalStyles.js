@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import { PALETTE } from './constants';
+import { FONT_COLOR } from './constants';
 
 const GlobalStyles = () => (
   <Global
@@ -20,7 +20,7 @@ const GlobalStyles = () => (
         min-height: 100vh;
         width: 100%;
         background-color: #fafafa;
-        color: ${PALETTE.GRAY900};
+        color: ${FONT_COLOR.BLACK};
       }
 
       #root {
@@ -56,6 +56,22 @@ const GlobalStyles = () => (
         &[disabled] {
           cursor: not-allowed;
         }
+      }
+
+      input {
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      textarea {
+        outline: none;
       }
 
       h1,

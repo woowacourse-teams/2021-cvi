@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, buttonSelectedStyles, buttonStyles } from './Selection.styles';
+import { Container, buttonSelectedStyles, defaultButtonStyles } from './Selection.styles';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 import { PALETTE } from '../../constants';
 
-const Selection = ({ selectionList }) => {
+const Selection = ({ selectionList, selectedItem, setSelectedItem }) => {
   return (
     <Container>
       {selectionList.map((selectionItem) => (
@@ -14,9 +14,10 @@ const Selection = ({ selectionList }) => {
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
           sizeType={BUTTON_SIZE_TYPE.LARGE}
           color={PALETTE.NAVY300}
-          isSelected={'아스트라제네카' === selectionItem}
-          selectedStyles={buttonSelectedStyles[selectionItem]}
-          styles={buttonStyles}
+          isSelected={selectedItem === selectionItem}
+          selectedStyles={buttonSelectedStyles[selectionItem] || defaultButtonStyles}
+          type="button"
+          onClick={() => setSelectedItem(selectionItem)}
         >
           {selectionItem}
         </Button>
@@ -27,6 +28,8 @@ const Selection = ({ selectionList }) => {
 
 Selection.propTypes = {
   selectionList: PropTypes.array.isRequired,
+  selectedItem: PropTypes.string.isRequired,
+  setSelectedItem: PropTypes.func.isRequired,
 };
 
 Selection.defaultProps = {};

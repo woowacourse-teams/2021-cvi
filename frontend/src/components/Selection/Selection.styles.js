@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE, VACCINE_COLOR } from '../../constants';
 
-const Container = styled.button`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@ const Container = styled.button`
   padding: 0 0.6rem;
 
   & > *:not(:last-child) {
-    margin-right: 0.6rem;
+    margin-right: 1.6rem;
   }
 `;
 
@@ -37,11 +37,9 @@ const buttonSelectedStyles = {
   `,
 };
 
-const buttonStyles = css`
-  &:hover {
-    color: ${PALETTE.GRAY700};
-    background-color: transparent;
-  }
+const defaultButtonStyles = css`
+  background-color: ${PALETTE.RED300};
+  color: ${PALETTE.WHITE};
 `;
 
-export { Container, buttonSelectedStyles, buttonStyles };
+export { Container, buttonSelectedStyles, defaultButtonStyles };
