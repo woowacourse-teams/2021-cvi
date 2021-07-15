@@ -12,6 +12,7 @@ import com.backjoongwon.cvi.user.auth.AuthenticationPrincipalArgumentResolver;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +52,8 @@ class PostControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
+        UserRequest userRequest = new UserRequest("인비", AgeRange.TEENS);
+
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
     }
 
@@ -58,7 +61,10 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        UserResponse userResponse = new UserResponse(1L, "인비", AgeRange.TEENS, true);
+        User 인비 = User.builder().id(USER_ID).nickname("인비").ageRange(AgeRange.TEENS).build();
+        given(userService.findUserByAccessToken("Bearer secrettokentoken")).willReturn(인비);
+        UserResponse userResponse = UserResponse.of(인비);
+
         PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
@@ -190,7 +196,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private ResultActions 글_등록_요청(Long userId, PostRequest request) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts/users/{userId}", userId)
+        return mockMvc.perform(post("/api/v1/posts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
@@ -240,7 +246,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private ResultActions 글_수정_요청(Long userId, Long postId, PostRequest request) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts/{postId}/users/{userId}", userId, postId)
+        return mockMvc.perform(put("/api/v1/posts/{postId}", userId, postId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
@@ -259,7 +265,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/users/{userId}", userId, postId)
+        return mockMvc.perform(delete("/api/v1/posts/{postId}", userId, postId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
