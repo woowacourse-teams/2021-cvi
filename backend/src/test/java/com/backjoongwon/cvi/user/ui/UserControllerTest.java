@@ -150,7 +150,7 @@ class UserControllerTest extends ApiDocument {
         //given
         willDoNothing().given(userService).delete(any(Long.class));
         //when
-        ResultActions response = 사용자_삭제_요청(1L);
+        ResultActions response = 사용자_삭제_요청();
         //then
         사용자_삭제_성공(response);
     }
@@ -161,7 +161,7 @@ class UserControllerTest extends ApiDocument {
         //given
         willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).delete(any(Long.class));
         //when
-        ResultActions response = 사용자_삭제_요청(2L);
+        ResultActions response = 사용자_삭제_요청();
         //then
         사용자_삭제_실패(response);
     }
@@ -195,7 +195,7 @@ class UserControllerTest extends ApiDocument {
     private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
         response.andExpect(status().isOk())
                 .andExpect(content().json(toJson(signinResponse)))
-                .andExpect(header().string("Authorization", "Bearer " + ACCESS_TOKEN))
+                .andExpect(header().string("Authorization", BEARER + ACCESS_TOKEN))
                 .andDo(print())
                 .andDo(toDocument("user-signin"));
     }
@@ -245,7 +245,7 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-update-failure"));
     }
 
-    private ResultActions 사용자_삭제_요청(Long id) throws Exception {
+    private ResultActions 사용자_삭제_요청() throws Exception {
         return mockMvc.perform(delete("/api/v1/users")
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
