@@ -5,7 +5,7 @@ import {
   ButtonContainer,
   frameStyles,
   loginButtonStyles,
-  signupButtonStyles,
+  goSignupStyles,
 } from './LoginPage.styles';
 import Frame from '../../components/Frame/Frame';
 import Button from '../../components/Button/Button';
@@ -24,12 +24,12 @@ const LoginPage = () => {
     <Container>
       <Frame width="48rem" styles={frameStyles}>
         <Title>로그인</Title>
-        <Input placeholder="닉네임을 입력해주세요." width="100%" />
+        <Input placeholder="닉네임을 입력해주세요" width="100%" />
         <Button styles={loginButtonStyles}>로그인하기</Button>
         <ButtonContainer>
           <Button
             backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-            styles={signupButtonStyles}
+            styles={goSignupStyles}
             onClick={goSignupPage}
           >
             아직 회원이 아니신가요?

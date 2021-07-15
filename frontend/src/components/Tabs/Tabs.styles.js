@@ -25,6 +25,8 @@ const buttonStyles = css`
 const selectedButtonStyles = css`
   border-bottom: 2px solid ${FONT_COLOR.BLACK};
   color: ${PALETTE.GRAY900};
+  padding-bottom: 0.1rem;
+  box-sizing: content-box;
 `;
 
 export { Container, buttonStyles, selectedButtonStyles };

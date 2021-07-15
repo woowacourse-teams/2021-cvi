@@ -8,7 +8,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 18rem 6rem;
 `;
 
 const Title = styled.div`
@@ -29,13 +28,15 @@ const frameStyles = css`
 `;
 
 const loginButtonStyles = css`
-  margin-top: 2.4rem;
+  margin-top: 3.6rem;
+  border-radius: 2.6rem;
   width: 100%;
-  height: 4rem;
+  height: 5.2rem;
+  font-size: 1.6rem;
 `;
 
-const signupButtonStyles = css`
-  margin-top: 0.4rem;
+const goSignupStyles = css`
+  margin-top: 0.6rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
 
   &:hover {
@@ -43,4 +44,4 @@ const signupButtonStyles = css`
   }
 `;
 
-export { Title, Container, ButtonContainer, frameStyles, loginButtonStyles, signupButtonStyles };
+export { Title, Container, ButtonContainer, frameStyles, loginButtonStyles, goSignupStyles };

@@ -1,13 +1,23 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR } from '../../constants';
 
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+`;
+
+const LabelText = styled.span`
+  margin: 0 0 0.3rem 0.4rem;
+`;
+
 const InputElement = styled.input`
   vertical-align: middle;
-  border-radius: 1.6rem;
+  border-radius: 2.6rem;
   border: 0.1rem solid ${FONT_COLOR.PURPLE_GRAY};
-  height: 4rem;
+  height: 5.2rem;
   line-height: 4rem;
-  padding: 0.1rem 0 0 1.2rem;
+  padding: 0.2rem 0 0 2.2rem;
   font-size: 1.6rem;
   color: ${FONT_COLOR.BLACK};
 
@@ -18,4 +28,4 @@ const InputElement = styled.input`
   }
 `;
 
-export { InputElement };
+export { Label, LabelText, InputElement };
