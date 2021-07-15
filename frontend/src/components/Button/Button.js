@@ -39,8 +39,8 @@ Button.propTypes = {
   withIcon: PropTypes.bool,
   color: PropTypes.string,
   isSelected: PropTypes.bool,
-  selectedStyles: PropTypes.node,
-  styles: PropTypes.node,
+  selectedStyles: PropTypes.object,
+  styles: PropTypes.object,
   type: PropTypes.string,
   onClick: PropTypes.func,
 };

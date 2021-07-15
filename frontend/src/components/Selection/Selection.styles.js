@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE, VACCINE_COLOR } from '../../constants';
 
-const Container = styled.button`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,4 +37,9 @@ const buttonSelectedStyles = {
   `,
 };
 
-export { Container, buttonSelectedStyles };
+const defaultButtonStyles = css`
+  background-color: ${PALETTE.RED300};
+  color: ${PALETTE.WHITE};
+`;
+
+export { Container, buttonSelectedStyles, defaultButtonStyles };

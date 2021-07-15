@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, buttonSelectedStyles } from './Selection.styles';
+import { Container, buttonSelectedStyles, defaultButtonStyles } from './Selection.styles';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 import { PALETTE } from '../../constants';
@@ -15,7 +15,7 @@ const Selection = ({ selectionList, selectedItem, setSelectedItem }) => {
           sizeType={BUTTON_SIZE_TYPE.LARGE}
           color={PALETTE.NAVY300}
           isSelected={selectedItem === selectionItem}
-          selectedStyles={buttonSelectedStyles[selectionItem]}
+          selectedStyles={buttonSelectedStyles[selectionItem] || defaultButtonStyles}
           type="button"
           onClick={() => setSelectedItem(selectionItem)}
         >

@@ -8,7 +8,7 @@ import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritin
 import { BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 
 const ReviewWritingModal = ({ onClickClose }) => {
-  const selectionList = Object.keys(VACCINE);
+  const vaccinationList = Object.keys(VACCINE);
 
   const [selectedVaccine, setSelectedVaccine] = useState('모더나');
 
@@ -16,7 +16,7 @@ const ReviewWritingModal = ({ onClickClose }) => {
     <Modal showCloseButton={true} onClickClose={onClickClose}>
       <Container>
         <Selection
-          selectionList={selectionList}
+          selectionList={vaccinationList}
           selectedItem={selectedVaccine}
           setSelectedItem={setSelectedVaccine}
         />
