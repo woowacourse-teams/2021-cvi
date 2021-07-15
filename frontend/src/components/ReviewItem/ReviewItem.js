@@ -15,23 +15,23 @@ import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
 
 const ReviewItem = ({ review }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
-  const labelFontColor = vaccinationType === '아스트라제네카' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
     <Container>
       <TopContainer>
         <Label
-          backgroundColor={VACCINATION_COLOR[VACCINATION[vaccinationType]]}
+          backgroundColor={VACCINATION_COLOR[vaccinationType]}
           sizeType={LABEL_SIZE_TYPE.MEDIUM}
           fontColor={labelFontColor}
         >
-          {vaccinationType}
+          {VACCINATION[vaccinationType]}
         </Label>
         <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
       </TopContainer>
       <Content>{content}</Content>
       <Writer>
-        {writer?.nickname} · {writer?.age}대
+        {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>
       <BottomContainer>
         <ViewCount>{viewCount}</ViewCount>

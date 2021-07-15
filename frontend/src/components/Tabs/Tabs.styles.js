@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR, PALETTE } from '../../constants';
 
-const Container = styled.button`
+const Container = styled.div`
   display: flex;
   height: 5.2rem;
   width: 100%;

@@ -2,4 +2,7 @@ import { BASE_URL } from './constants';
 
 const requestGetReviewList = () => fetch(`${BASE_URL}/posts`);
 
-export { requestGetReviewList };
+const requestGetSelectedVaccinationReviewList = (vaccinationType) =>
+  fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
+
+export { requestGetReviewList, requestGetSelectedVaccinationReviewList };
