@@ -39,11 +39,13 @@ public class PostService {
         return PostResponse.of(post);
     }
 
-    public List<PostResponse> findAll() {
-        return postRepository.findAll()
-                .stream()
-                .map(PostResponse::of)
-                .collect(Collectors.toList());
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
+        if (vaccinationType == VaccinationType.ALL) {
+            List<Post> posts = postRepository.findAll();
+            return PostResponse.of(posts);
+        }
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType);
+        return PostResponse.of(posts);
     }
 
     @Transactional
@@ -70,10 +72,5 @@ public class PostService {
     private Post findPostById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
-    }
-
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType);
-        return PostResponse.of(posts);
     }
 }

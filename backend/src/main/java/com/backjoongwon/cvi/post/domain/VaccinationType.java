@@ -1,5 +1,5 @@
 package com.backjoongwon.cvi.post.domain;
 
 public enum VaccinationType {
-    PFIZER, ASTRAZENECA, MODERNA, JANSSEN
+    PFIZER, ASTRAZENECA, MODERNA, JANSSEN, ALL
 }
