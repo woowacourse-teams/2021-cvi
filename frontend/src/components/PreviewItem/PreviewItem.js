@@ -9,21 +9,21 @@ import {
   BottomContainer,
   ShotVerified,
 } from './PreviewItem.styles';
-import { VACCINE_COLOR, VACCINE, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
 
 const PreviewItem = ({ review }) => {
   const { writer, content, vaccinationType, createdAt } = review;
-  const labelFontColor = vaccinationType === '아스트라제네카' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
     <Container>
       <TopContainer>
         <Label
           sizeType={LABEL_SIZE_TYPE.SMALL}
-          backgroundColor={VACCINE_COLOR[VACCINE[vaccinationType]]}
+          backgroundColor={VACCINATION_COLOR[vaccinationType]}
           fontColor={labelFontColor}
         >
-          {vaccinationType}
+          {VACCINATION[vaccinationType]}
         </Label>
         <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
       </TopContainer>

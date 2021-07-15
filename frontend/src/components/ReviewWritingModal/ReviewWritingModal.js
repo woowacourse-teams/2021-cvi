@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { VACCINE } from '../../constants';
+import { VACCINATION } from '../../constants';
 import Modal from '../Modal/Modal';
 import Selection from '../Selection/Selection';
 import Button from '../Button/Button';
@@ -8,7 +8,7 @@ import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritin
 import { BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 
 const ReviewWritingModal = ({ onClickClose }) => {
-  const vaccinationList = Object.keys(VACCINE);
+  const vaccinationList = Object.keys(VACCINATION);
 
   const [selectedVaccine, setSelectedVaccine] = useState('모더나');
 

@@ -4,7 +4,7 @@ import ReviewItem from '../../components/ReviewItem/ReviewItem';
 import Tabs from '../../components/Tabs/Tabs';
 import Button from '../../components/Button/Button';
 import ReviewWritingModal from '../../components/ReviewWritingModal/ReviewWritingModal';
-import { VACCINE } from '../../constants';
+import { VACCINATION } from '../../constants';
 import { Container, Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
 import db from '../../db.json';
 import { BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
@@ -13,7 +13,7 @@ const ReviewPage = () => {
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const tabList = ['전체', ...Object.keys(VACCINE)];
+  const tabList = ['전체', ...Object.keys(VACCINATION)];
 
   return (
     <>

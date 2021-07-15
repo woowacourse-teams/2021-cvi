@@ -11,7 +11,7 @@ import {
 import Label from '../Label/Label';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
-import { VACCINE_COLOR, VACCINE, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
 
 const ReviewItem = ({ review }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
@@ -21,7 +21,7 @@ const ReviewItem = ({ review }) => {
     <Container>
       <TopContainer>
         <Label
-          backgroundColor={VACCINE_COLOR[VACCINE[vaccinationType]]}
+          backgroundColor={VACCINATION_COLOR[VACCINATION[vaccinationType]]}
           sizeType={LABEL_SIZE_TYPE.MEDIUM}
           fontColor={labelFontColor}
         >
