@@ -17,4 +17,12 @@ const Container = styled.ul`
   }
 `;
 
-export { Container };
+const Error = styled.div`
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  padding-top: 14rem;
+  height: 36rem;
+`;
+
+export { Container, Error };
