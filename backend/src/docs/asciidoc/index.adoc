@@ -52,6 +52,9 @@ include::{snippets}/user-signup/http-request.adoc[]
 ===== Response
 include::{snippets}/user-signup/http-response.adoc[]
 
+- 닉네임은 중복될 수 없다.
+- 닉네임은 공백 문자를 포함할 수 없다.
+
 ==== 실패
 ===== Request
 include::{snippets}/user-signup-failure/http-request.adoc[]
