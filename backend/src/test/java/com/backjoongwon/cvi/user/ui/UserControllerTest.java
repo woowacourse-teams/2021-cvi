@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -221,7 +222,8 @@ class UserControllerTest extends ApiDocument {
     private ResultActions 사용자_업데이트_요청(UserRequest userRequest) throws Exception {
         return mockMvc.perform(put("/api/v1/users/" + 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(userRequest)));
+                .content(toJson(userRequest))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
 
     private void 사용자_업데이트_성공(ResultActions response) throws Exception {
@@ -237,7 +239,8 @@ class UserControllerTest extends ApiDocument {
     }
 
     private ResultActions 사용자_삭제_요청(Long id) throws Exception {
-        return mockMvc.perform(delete("/api/v1/users/" + id));
+        return mockMvc.perform(delete("/api/v1/users/" + id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
     }
 
     private void 사용자_삭제_성공(ResultActions response) throws Exception {
