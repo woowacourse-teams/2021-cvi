@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, LabelText, InputElement } from './Input.styles';
 
-const Input = ({ type, placeholder, width, labelText }) => (
+const Input = ({ type, placeholder, width, labelText, onChange }) => (
   <Label>
     <LabelText>{labelText}</LabelText>
-    <InputElement type={type} placeholder={placeholder} width={width} />
+    <InputElement type={type} placeholder={placeholder} width={width} onChange={onChange} />
   </Label>
 );
 
@@ -14,6 +14,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   width: PropTypes.string,
   labelText: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 Input.defaultProps = {
@@ -21,6 +22,7 @@ Input.defaultProps = {
   placeholder: '',
   width: '',
   labelText: '',
+  onChange: () => {},
 };
 
 export default Input;

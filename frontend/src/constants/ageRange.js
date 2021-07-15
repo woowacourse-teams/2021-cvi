@@ -1,4 +1,10 @@
-// 객체로 생성
-const AGE_RANGE_LIST = ['10대', '20대', '30대', '40대', '50대', '60대 이상'];
+const AGE_RANGE = {
+  '10대': 'TEENS',
+  '20대': 'TWENTIES',
+  '30대': 'THIRTIES',
+  '40대': 'FORTIES',
+  '50대': 'FIFTIES',
+  '60대 이상': 'OVER_SIXTIES',
+};
 
-export default AGE_RANGE_LIST;
+export default AGE_RANGE;
