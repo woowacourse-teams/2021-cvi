@@ -24,7 +24,7 @@ public class PostService {
 
     @Transactional
     public PostResponse create(Long userId, PostRequest postRequest) {
-        User user = findUserById(userId);
+        User user = findUserByUserId(userId);
         Post post = postRequest.toEntity();
         post.assignUser(user);
         postRepository.save(post);
@@ -32,8 +32,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse findById(Long postId) {
-        Post post = findPostById(postId);
+    public PostResponse findById(Long id) {
+        Post post = findPostByPostId(id);
         post.increaseViewCount();
         return PostResponse.of(post);
     }
@@ -45,27 +45,27 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, Long userId, PostRequest postRequest) {
-        User user = findUserById(userId);
-        Post post = findPostById(postId);
+        User user = findUserByUserId(userId);
+        Post post = findPostByPostId(postId);
 
         post.update(postRequest.toEntity(), user);
     }
 
     @Transactional
     public void delete(Long postId, Long userId) {
-        User user = findUserById(userId);
-        Post foundPost = findPostById(postId);
+        User user = findUserByUserId(userId);
+        Post foundPost = findPostByPostId(postId);
         foundPost.validateAuthor(user);
         postRepository.deleteById(postId);
     }
 
-    private User findUserById(Long userId) {
-        return userRepository.findById(userId)
+    private User findUserByUserId(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 존재하지 않습니다."));
     }
 
-    private Post findPostById(Long postId) {
-        return postRepository.findById(postId)
+    private Post findPostByPostId(Long id) {
+        return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 }

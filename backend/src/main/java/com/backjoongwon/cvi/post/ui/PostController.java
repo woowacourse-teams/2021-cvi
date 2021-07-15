@@ -34,10 +34,10 @@ public class PostController {
         return postService.findByVaccineType(vaccinationType);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long postId) {
-        return postService.findById(postId);
+    public PostResponse find(@PathVariable Long id) {
+        return postService.findById(id);
     }
 
     @PutMapping("/{id}")
@@ -46,9 +46,9 @@ public class PostController {
         postService.update(id, user.getId(), postRequest);
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long postId, @SigninUser User user) {
-        postService.delete(postId, user.getId());
+    public void delete(@PathVariable Long id, @SigninUser User user) {
+        postService.delete(id, user.getId());
     }
 }

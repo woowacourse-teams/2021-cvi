@@ -136,7 +136,7 @@ class PostControllerTest extends ApiDocument {
         given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
         willDoNothing().given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
         //when
-        ResultActions response = 글_수정_요청(USER_ID, POST_ID, request);
+        ResultActions response = 글_수정_요청(POST_ID, request);
         //then
         글_수정_성공함(response);
     }
@@ -148,7 +148,7 @@ class PostControllerTest extends ApiDocument {
         given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
         willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
         //when
-        ResultActions response = 글_수정_요청(USER_ID, POST_ID, request);
+        ResultActions response = 글_수정_요청(POST_ID, request);
         //then
         글_수정_실패함(response);
     }
@@ -160,7 +160,7 @@ class PostControllerTest extends ApiDocument {
         given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
         willDoNothing().given(postService).delete(any(Long.class), any(Long.class));
         //when
-        ResultActions response = 글_삭제_요청(USER_ID, POST_ID);
+        ResultActions response = 글_삭제_요청(POST_ID);
         //then
         글_삭제_성공함(response);
     }
@@ -172,7 +172,7 @@ class PostControllerTest extends ApiDocument {
         given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
         willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any(Long.class));
         //when
-        ResultActions response = 글_삭제_요청(USER_ID, POST_ID);
+        ResultActions response = 글_삭제_요청(POST_ID);
         //then
         글_삭제_실패함(response);
     }
@@ -221,8 +221,8 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-create-failure"));
     }
 
-    private ResultActions 글_단일_조회_요청(Long postId) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/{postId}", postId)
+    private ResultActions 글_단일_조회_요청(Long id) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
@@ -251,8 +251,8 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findAll"));
     }
 
-    private ResultActions 글_수정_요청(Long userId, Long postId, PostRequest request) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts/{postId}", userId, postId)
+    private ResultActions 글_수정_요청(Long id, PostRequest request) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -270,8 +270,8 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-update-failure"));
     }
 
-    private ResultActions 글_삭제_요청(Long userId, Long postId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}", userId, postId)
+    private ResultActions 글_삭제_요청(Long id) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
