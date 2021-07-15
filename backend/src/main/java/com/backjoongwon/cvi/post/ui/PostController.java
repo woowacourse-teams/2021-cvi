@@ -4,6 +4,8 @@ import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,10 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/users/{userId}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse create(@PathVariable Long userId, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
-        PostResponse postResponse = postService.create(userId, postRequest);
+    public PostResponse create(@SigninUser User user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
+        PostResponse postResponse = postService.create(user.getId(), postRequest);
         servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
         return postResponse;
     }
@@ -44,15 +46,15 @@ public class PostController {
         return postService.findById(postId);
     }
 
-    @PutMapping("/{postId}/users/{userId}")
+    @PutMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long postId, @PathVariable Long userId, @RequestBody PostRequest postRequest) {
-        postService.update(postId, userId, postRequest);
+    public void update(@PathVariable Long postId, @SigninUser User user, @RequestBody PostRequest postRequest) {
+        postService.update(postId, user.getId(), postRequest);
     }
 
-    @DeleteMapping("/{postId}/users/{userId}")
+    @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long postId, @PathVariable Long userId) {
-        postService.delete(postId, userId);
+    public void delete(@PathVariable Long postId, @SigninUser User user) {
+        postService.delete(postId, user.getId());
     }
 }
