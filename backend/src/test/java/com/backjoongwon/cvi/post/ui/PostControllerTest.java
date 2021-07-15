@@ -115,7 +115,7 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         );
 
-        willReturn(postResponses).given(postService).findAll();
+        willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
@@ -277,7 +277,7 @@ class PostControllerTest extends ApiDocument {
     }
 
     private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/reviews")
+        return mockMvc.perform(get("/api/v1/posts")
                 .queryParam("vaccinationType", vaccinationType.name()));
     }
 

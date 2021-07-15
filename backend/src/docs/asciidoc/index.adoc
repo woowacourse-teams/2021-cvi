@@ -98,12 +98,15 @@ include::{snippets}/user-update/http-request.adoc[]
 ===== Response
 include::{snippets}/user-update/http-response.adoc[]
 
+- 사용자 정보 수정 요청 시, 닉네임을 바꿔서 보내면 에러가 발생하지 않지만 변경이 반영되지 않는다.
+
 ==== 실패
 ===== Request
 include::{snippets}/user-update-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/user-update-failure/http-response.adoc[]
+
 
 
 === 사용자 삭제
@@ -137,6 +140,16 @@ include::{snippets}/post-create-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/post-create-failure/http-response.adoc[]
 
+=== 게시글 전체 조회
+==== 성공
+===== Request
+include::{snippets}/post-findAll/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findAll/http-response.adoc[]
+
+- 게시글 전체 조회 시, 게시글이 하나도 없으면 빈 리스트가 반환된다.
+
 === 게시글 단일 조회
 ==== 성공
 ===== Request
@@ -151,13 +164,6 @@ include::{snippets}/post-find-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/post-find-failure/http-response.adoc[]
-
-==== 성공
-===== Request
-include::{snippets}/post-findAll/http-request.adoc[]
-
-===== Response
-include::{snippets}/post-findAll/http-response.adoc[]
 
 === 게시글 타입별 조회
 ==== 성공
@@ -174,6 +180,8 @@ include::{snippets}/post-update/http-request.adoc[]
 
 ===== Response
 include::{snippets}/post-update/http-response.adoc[]
+
+- 게시글 수정 요청 시, 백신 타입을 바꿔서 보내면 에러가 발생하지 않지만 변경이 반영되지 않는다.
 
 ==== 실패
 ===== Request
