@@ -9,6 +9,7 @@ import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
+import com.backjoongwon.cvi.user.dto.UserMeResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,9 +104,9 @@ class UserControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        willReturn(userResponse).given(userService).findById(1L);
+        willReturn(userResponse).given(userService).findById(any(Long.class));
         //when
-        ResultActions response = 사용자_조회_요청(userRequest);
+        ResultActions response = 사용자_조회_요청(userResponse.getId());
         //then
         사용자_조회_성공함(response);
     }
@@ -114,9 +115,9 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(1L);
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(any(Long.class));
         //when
-        ResultActions response = 사용자_조회_요청(userRequest);
+        ResultActions response = 사용자_조회_요청(userResponse.getId());
         //then
         사용자_조회_실패함(response);
     }
@@ -206,10 +207,9 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-signin-failure"));
     }
 
-    private ResultActions 사용자_조회_요청(UserRequest request) throws Exception {
-        return mockMvc.perform(get("/api/v1/users/" + 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+    private ResultActions 사용자_조회_요청(Long id) throws Exception {
+        return mockMvc.perform(get("/api/v1/users/" + id)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 사용자_조회_성공함(ResultActions response) throws Exception {
