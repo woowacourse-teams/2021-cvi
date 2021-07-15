@@ -40,10 +40,10 @@ public class PostController {
         return postService.findById(postId);
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long postId, @SigninUser User user, @RequestBody PostRequest postRequest) {
-        postService.update(postId, user.getId(), postRequest);
+    public void update(@PathVariable Long id, @SigninUser User user, @RequestBody PostRequest postRequest) {
+        postService.update(id, user.getId(), postRequest);
     }
 
     @DeleteMapping("/{postId}")
