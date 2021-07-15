@@ -9,6 +9,7 @@ import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
+import com.backjoongwon.cvi.user.dto.UserMeResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,10 @@ public class UserService {
 
     public UserResponse findById(Long id) {
         return UserResponse.of(findUserById(id));
+    }
+
+    public UserMeResponse findMeById(Long id) {
+        return UserMeResponse.of(findUserById(id));
     }
 
     private User findUserById(Long id) {

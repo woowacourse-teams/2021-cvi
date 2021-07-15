@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.auth.SigninUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
+import com.backjoongwon.cvi.user.dto.UserMeResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ public class UserController {
         SigninResponse signinResponse = userService.signin(userRequest);
         servletResponse.setHeader("Authorization", "Bearer " + signinResponse.getAccessToken());
         return signinResponse;
+    }
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public UserMeResponse findMe(@SigninUser User user) {
+        return userService.findMeById(user.getId());
     }
 
     @GetMapping("/{id}")

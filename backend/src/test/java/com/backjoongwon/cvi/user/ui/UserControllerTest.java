@@ -100,6 +100,29 @@ class UserControllerTest extends ApiDocument {
         사용자_로그인_실패함(response);
     }
 
+    @DisplayName("사용자 내 정보 조회 - 성공")
+    @Test
+    void findMe() throws Exception {
+        //given
+        UserMeResponse userMeResponse = new UserMeResponse(1L, "검프", AgeRange.TEENS, true);
+        willReturn(userMeResponse).given(userService).findMeById(any(Long.class));
+        //when
+        ResultActions response = 사용자_내_정보_조회_요청();
+        //then
+        사용자_내_정보_조회_성공함(response, userMeResponse);
+    }
+
+    @DisplayName("사용자 내 정보 조회 - 실패")
+    @Test
+    void findMeFailure() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).findMeById(any(Long.class));
+        //when
+        ResultActions response = 사용자_내_정보_조회_요청();
+        //then
+        사용자_내_정보_조회_실패함(response);
+    }
+
     @DisplayName("사용자 정보 조회 - 성공")
     @Test
     void find() throws Exception {
@@ -205,6 +228,24 @@ class UserControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("user-signin-failure"));
+    }
+
+    private ResultActions 사용자_내_정보_조회_요청() throws Exception {
+        return mockMvc.perform(get("/api/v1/users/me")
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 사용자_내_정보_조회_성공함(ResultActions response, UserMeResponse userMeResponse) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(userMeResponse)))
+                .andDo(print())
+                .andDo(toDocument("user-find-me"));
+    }
+
+    private void 사용자_내_정보_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("user-find-me-failure"));
     }
 
     private ResultActions 사용자_조회_요청(Long id) throws Exception {
