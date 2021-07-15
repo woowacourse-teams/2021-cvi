@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends ApiDocument {
 
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
+    private static final String BEARER = "Bearer ";
 
     @MockBean
     private UserService userService;
@@ -187,7 +188,7 @@ class UserControllerTest extends ApiDocument {
     private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
         response.andExpect(status().isOk())
                 .andExpect(content().json(toJson(signinResponse)))
-                .andExpect(header().string("Authorization", "Bearer " + ACCESS_TOKEN))
+                .andExpect(header().string("Authorization", BEARER + ACCESS_TOKEN))
                 .andDo(print())
                 .andDo(toDocument("user-signin"));
     }
@@ -222,7 +223,7 @@ class UserControllerTest extends ApiDocument {
         return mockMvc.perform(put("/api/v1/users/" + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(userRequest))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_업데이트_성공(ResultActions response) throws Exception {
@@ -239,7 +240,7 @@ class UserControllerTest extends ApiDocument {
 
     private ResultActions 사용자_삭제_요청(Long id) throws Exception {
         return mockMvc.perform(delete("/api/v1/users/" + id)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer secrettokentoken"));
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_삭제_성공(ResultActions response) throws Exception {
