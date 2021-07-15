@@ -28,7 +28,9 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
-        return Objects.nonNull(vaccinationType) &&
-                !vaccinationType.equals(VaccinationType.ALL) ? post.vaccinationType.eq(vaccinationType) : null;
+        if (Objects.nonNull(vaccinationType) && !vaccinationType.equals(VaccinationType.ALL)) {
+            return post.vaccinationType.eq(vaccinationType);
+        }
+        return null;
     }
 }
