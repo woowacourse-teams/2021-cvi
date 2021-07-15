@@ -47,7 +47,7 @@ public class DataLoader implements CommandLineRunner {
                                     .vaccinationType(VaccinationType.ASTRAZENECA).build(),
                             Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요")
                                     .vaccinationType(VaccinationType.PFIZER).build(),
-                            Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요 ")
+                            Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.")
                                     .vaccinationType(VaccinationType.JANSSEN).build(),
                             Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!")
                                     .vaccinationType(VaccinationType.MODERNA).build(),
