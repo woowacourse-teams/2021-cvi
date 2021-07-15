@@ -8,10 +8,7 @@ import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.SigninResponse;
-import com.backjoongwon.cvi.user.dto.UserMeResponse;
-import com.backjoongwon.cvi.user.dto.UserRequest;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.backjoongwon.cvi.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +31,7 @@ public class UserService {
         return UserResponse.of(user);
     }
 
-    public SigninResponse signin(UserRequest userRequest) {
+    public SigninResponse signin(SigninRequest userRequest) {
         User foundUser = userRepository.findByNickname(userRequest.getNickname())
                 .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 사용자입니다."));
 

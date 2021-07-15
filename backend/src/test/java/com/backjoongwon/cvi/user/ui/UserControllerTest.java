@@ -8,10 +8,7 @@ import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.SigninResponse;
-import com.backjoongwon.cvi.user.dto.UserMeResponse;
-import com.backjoongwon.cvi.user.dto.UserRequest;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.backjoongwon.cvi.user.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,12 +75,12 @@ class UserControllerTest extends ApiDocument {
     @Test
     void login() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("인비", AgeRange.TEENS);
-        UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
+        SigninRequest signinRequest = new SigninRequest("인비");
+        UserResponse userResponse = new UserResponse(1L, signinRequest.getNickname(), AgeRange.TEENS, false);
         SigninResponse signinResponse = new SigninResponse(ACCESS_TOKEN, userResponse);
-        willReturn(signinResponse).given(userService).signin(any(UserRequest.class));
+        willReturn(signinResponse).given(userService).signin(any(SigninRequest.class));
         //when
-        ResultActions response = 사용자_로그인_요청(userRequest);
+        ResultActions response = 사용자_로그인_요청(signinRequest);
         //then
         사용자_로그인_성공함(response, signinResponse);
     }
@@ -92,10 +89,10 @@ class UserControllerTest extends ApiDocument {
     @Test
     void loginFailureWhenNicknameNotExists() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("검프", AgeRange.TEENS);
+        SigninRequest signinRequest = new SigninRequest("검프");
         //when
-        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(UserRequest.class));
-        ResultActions response = 사용자_로그인_요청(userRequest);
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(SigninRequest.class));
+        ResultActions response = 사용자_로그인_요청(signinRequest);
         //then
         사용자_로그인_실패함(response);
     }
@@ -210,10 +207,10 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-signup-failure"));
     }
 
-    private ResultActions 사용자_로그인_요청(UserRequest userRequest) throws Exception {
+    private ResultActions 사용자_로그인_요청(SigninRequest userRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signin")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"nickname\": \"" + userRequest.getNickname() + "\"}"));
+                .content(toJson(userRequest)));
     }
 
     private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
