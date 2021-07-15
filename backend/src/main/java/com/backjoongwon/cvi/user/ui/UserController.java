@@ -2,7 +2,6 @@ package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.auth.SigninUser;
-import com.backjoongwon.cvi.user.auth.SigninUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
