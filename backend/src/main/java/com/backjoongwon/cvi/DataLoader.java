@@ -36,6 +36,9 @@ public class DataLoader implements CommandLineRunner {
                     User.builder().nickname("주모").ageRange(AgeRange.FIFTIES).build(),
                     User.builder().nickname("똥강아지").ageRange(AgeRange.OVER_SIXTIES).build());
 
+            users.get(0).makeVerified();
+            users.get(3).makeVerified();
+
             List<Post> posts = postRepository.saveAll(
                     Arrays.asList(
                             Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!")
