@@ -39,10 +39,6 @@ public class PostService {
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
-        if (vaccinationType == VaccinationType.ALL) {
-            List<Post> posts = postRepository.findAll();
-            return PostResponse.of(posts);
-        }
         List<Post> posts = postRepository.findByVaccineType(vaccinationType);
         return PostResponse.of(posts);
     }
