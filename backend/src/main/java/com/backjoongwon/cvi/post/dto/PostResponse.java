@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class PostResponse {
 
     private Long id;
-    private UserResponse user;
+    private UserResponse writer;
     private String content;
     private int viewCount;
     private VaccinationType vaccinationType;
@@ -27,7 +27,7 @@ public class PostResponse {
     public PostResponse(Long id, UserResponse user, String content, int viewCount,
                         VaccinationType vaccinationType, LocalDateTime createdAt) {
         this.id = id;
-        this.user = user;
+        this.writer = user;
         this.content = content;
         this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;

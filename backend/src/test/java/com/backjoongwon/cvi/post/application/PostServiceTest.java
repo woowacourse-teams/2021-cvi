@@ -75,7 +75,7 @@ class PostServiceTest {
         Post foundPost = postRepository.findById(postResponse.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
-        assertThat(postResponse.getUser().getId()).isEqualTo(user.getId());
+        assertThat(postResponse.getWriter().getId()).isEqualTo(user.getId());
         assertThat(postResponse.getContent()).isEqualTo(postRequest.getContent());
         assertThat(foundPost).isNotNull();
         assertThat(foundPost.getUser()).isNotNull();
@@ -123,7 +123,7 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
         //when
-        List<PostResponse> response = postService.findAll();
+        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL);
         //then
         assertThat(response).hasSize(2);
     }
