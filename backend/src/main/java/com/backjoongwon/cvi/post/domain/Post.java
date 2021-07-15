@@ -50,7 +50,7 @@ public class Post extends BaseEntity {
 
     public void update(Post updatePost, User user) {
         if (!this.user.equals(user)) {
-            throw new InvalidOperationException("다른 사람의 게시글은 수정할 수 없습니다.");
+            throw new InvalidOperationException("다른 사용자의 게시글은 수정할 수 없습니다.");
         }
         this.content = updatePost.content;
     }
@@ -61,7 +61,7 @@ public class Post extends BaseEntity {
 
     public void validateAuthor(User user) {
         if (!this.user.equals(user)) {
-            throw new InvalidOperationException("다른 사람의 게시글은 삭제할 수 없습니다.");
+            throw new InvalidOperationException("다른 사용자의 게시글은 삭제할 수 없습니다.");
         }
     }
 }

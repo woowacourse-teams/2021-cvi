@@ -1,6 +1,9 @@
 package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -39,16 +42,16 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        userService.update(id, userRequest);
+    public void update(@SigninUser User user, @RequestBody UserRequest userRequest) {
+        userService.update(user.getId(), userRequest);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        userService.delete(id);
+    public void delete(@SigninUser User user) {
+        userService.delete(user.getId());
     }
 }
 
