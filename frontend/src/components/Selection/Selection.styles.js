@@ -28,7 +28,7 @@ const buttonSelectedStyles = {
     color: ${PALETTE.WHITE};
   `,
   아스트라제네카: css`
-    background-color: ${VACCINATION_COLOR.ASTRA_ZENECA};
+    background-color: ${VACCINATION_COLOR.ASTRAZENECA};
     color: ${PALETTE.GRAY700};
   `,
   얀센: css`

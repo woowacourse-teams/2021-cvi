@@ -1,11 +1,11 @@
 import PreviewItem from '../PreviewItem/PreviewItem';
 import { Container, Error } from './PreviewList.styles';
 import { useFetch } from '../../hooks';
-import { requestGetReviewList } from '../../requests';
+import { requestGetAllReviewList } from '../../requests';
 import { ERROR_MESSAGE } from '../../constants';
 
 const PreviewList = () => {
-  const { response: reviewList, error: reviewError } = useFetch([], requestGetReviewList);
+  const { response: reviewList, error: reviewError } = useFetch([], requestGetAllReviewList);
 
   if (reviewError) {
     return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW_LIST}</Error>;

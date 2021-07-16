@@ -1,9 +1,19 @@
 import { BASE_URL } from './constants';
 
-const requestGetReviewList = () => fetch(`${BASE_URL}/posts`);
+const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
 
-const requestGetSelectedVaccinationReviewList = (vaccinationType) =>
+const requestGetSelectedReviewList = (vaccinationType) =>
   fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
+
+const requestCreateReview = (accessToken, data) =>
+  fetch(`${BASE_URL}/posts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
 
 const requestPostSignup = (data) =>
   fetch(`${BASE_URL}/users/signup`, {
@@ -33,8 +43,9 @@ const requestGetMyInfo = (accessToken) =>
   });
 
 export {
-  requestGetReviewList,
-  requestGetSelectedVaccinationReviewList,
+  requestGetAllReviewList,
+  requestGetSelectedReviewList,
+  requestCreateReview,
   requestPostSignup,
   requestPostLogin,
   requestGetMyInfo,
