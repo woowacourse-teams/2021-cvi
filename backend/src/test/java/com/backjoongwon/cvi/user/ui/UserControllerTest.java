@@ -8,9 +8,7 @@ import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.SigninResponse;
-import com.backjoongwon.cvi.user.dto.UserRequest;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.backjoongwon.cvi.user.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,12 +75,12 @@ class UserControllerTest extends ApiDocument {
     @Test
     void login() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("인비", AgeRange.TEENS);
-        UserResponse userResponse = new UserResponse(1L, userRequest.getNickname(), userRequest.getAgeRange(), false);
+        SigninRequest signinRequest = new SigninRequest("인비");
+        UserResponse userResponse = new UserResponse(1L, signinRequest.getNickname(), AgeRange.TEENS, false);
         SigninResponse signinResponse = new SigninResponse(ACCESS_TOKEN, userResponse);
-        willReturn(signinResponse).given(userService).signin(any(UserRequest.class));
+        willReturn(signinResponse).given(userService).signin(any(SigninRequest.class));
         //when
-        ResultActions response = 사용자_로그인_요청(userRequest);
+        ResultActions response = 사용자_로그인_요청(signinRequest);
         //then
         사용자_로그인_성공함(response, signinResponse);
     }
@@ -91,21 +89,44 @@ class UserControllerTest extends ApiDocument {
     @Test
     void loginFailureWhenNicknameNotExists() throws Exception {
         //given
-        UserRequest userRequest = new UserRequest("검프", AgeRange.TEENS);
+        SigninRequest signinRequest = new SigninRequest("검프");
         //when
-        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(UserRequest.class));
-        ResultActions response = 사용자_로그인_요청(userRequest);
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).signin(any(SigninRequest.class));
+        ResultActions response = 사용자_로그인_요청(signinRequest);
         //then
         사용자_로그인_실패함(response);
+    }
+
+    @DisplayName("사용자 내 정보 조회 - 성공")
+    @Test
+    void findMe() throws Exception {
+        //given
+        UserMeResponse userMeResponse = new UserMeResponse(1L, "검프", AgeRange.TEENS, true);
+        willReturn(userMeResponse).given(userService).findMeById(any(Long.class));
+        //when
+        ResultActions response = 사용자_내_정보_조회_요청();
+        //then
+        사용자_내_정보_조회_성공함(response, userMeResponse);
+    }
+
+    @DisplayName("사용자 내 정보 조회 - 실패")
+    @Test
+    void findMeFailure() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).findMeById(any(Long.class));
+        //when
+        ResultActions response = 사용자_내_정보_조회_요청();
+        //then
+        사용자_내_정보_조회_실패함(response);
     }
 
     @DisplayName("사용자 정보 조회 - 성공")
     @Test
     void find() throws Exception {
         //given
-        willReturn(userResponse).given(userService).findById(1L);
+        willReturn(userResponse).given(userService).findById(any(Long.class));
         //when
-        ResultActions response = 사용자_조회_요청(userRequest);
+        ResultActions response = 사용자_조회_요청(userResponse.getId());
         //then
         사용자_조회_성공함(response);
     }
@@ -114,9 +135,9 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(1L);
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).findById(any(Long.class));
         //when
-        ResultActions response = 사용자_조회_요청(userRequest);
+        ResultActions response = 사용자_조회_요청(userResponse.getId());
         //then
         사용자_조회_실패함(response);
     }
@@ -186,10 +207,10 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-signup-failure"));
     }
 
-    private ResultActions 사용자_로그인_요청(UserRequest userRequest) throws Exception {
+    private ResultActions 사용자_로그인_요청(SigninRequest userRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signin")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"nickname\": \"" + userRequest.getNickname() + "\"}"));
+                .content(toJson(userRequest)));
     }
 
     private void 사용자_로그인_성공함(ResultActions response, SigninResponse signinResponse) throws Exception {
@@ -206,10 +227,27 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-signin-failure"));
     }
 
-    private ResultActions 사용자_조회_요청(UserRequest request) throws Exception {
-        return mockMvc.perform(get("/api/v1/users/" + 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+    private ResultActions 사용자_내_정보_조회_요청() throws Exception {
+        return mockMvc.perform(get("/api/v1/users/me")
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 사용자_내_정보_조회_성공함(ResultActions response, UserMeResponse userMeResponse) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(userMeResponse)))
+                .andDo(print())
+                .andDo(toDocument("user-find-me"));
+    }
+
+    private void 사용자_내_정보_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("user-find-me-failure"));
+    }
+
+    private ResultActions 사용자_조회_요청(Long id) throws Exception {
+        return mockMvc.perform(get("/api/v1/users/" + id)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 사용자_조회_성공함(ResultActions response) throws Exception {

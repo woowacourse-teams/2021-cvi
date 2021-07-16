@@ -30,7 +30,7 @@ public class PostController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineType(@RequestParam(required = false, defaultValue = "ALL") VaccinationType vaccinationType) {
+    public List<PostResponse> findByVaccineType(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType) {
         return postService.findByVaccineType(vaccinationType);
     }
 

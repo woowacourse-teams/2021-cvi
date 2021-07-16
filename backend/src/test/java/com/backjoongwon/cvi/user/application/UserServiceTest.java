@@ -6,6 +6,7 @@ import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.backjoongwon.cvi.user.dto.SigninRequest;
 import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -73,7 +74,7 @@ public class UserServiceTest {
         //given
         userService.signup(userRequest);
         //when
-        SigninResponse signinResponse = userService.signin(userRequest);
+        SigninResponse signinResponse = userService.signin(new SigninRequest(userRequest.getNickname()));
         String accessToken = signinResponse.getAccessToken();
         //then
         assertThatCode(() -> userService.validateAccessToken(accessToken))
