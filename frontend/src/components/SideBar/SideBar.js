@@ -15,23 +15,15 @@ import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
-import { useHistory } from 'react-router-dom';
 
 const SideBar = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
-  const isLogin = useSelector((state) => state.authReducer?.user);
+  const user = useSelector((state) => state.authReducer?.user);
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
-
-  const goHomePage = () => {
-    history.push(PATH.HOME);
-  };
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     dispatch(logoutAction());
-
-    goHomePage();
   };
 
   useEffect(() => {
@@ -56,7 +48,7 @@ const SideBar = () => {
           </NavLinkElement>
         </MenuContainer>
 
-        {Object.keys(isLogin).length > 0 ? (
+        {Object.keys(user).length > 0 ? (
           <LogoutButton onClick={logout}>
             <LogoutIcon width="24" height="24" stroke={FONT_COLOR.PURPLE_GRAY} /> 로그아웃
           </LogoutButton>

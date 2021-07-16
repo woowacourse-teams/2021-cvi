@@ -36,10 +36,11 @@ const MainContainer = styled.div`
   padding: 2.5rem 6rem 2.5rem 6rem;
   flex: 1;
   overflow: auto;
+  width: 100%;
 `;
 
 const TopContainer = styled.div`
-  height: 3.6rem;
+  min-height: 3.6rem;
   display: flex;
   gap: 0.6rem;
   justify-content: flex-end;

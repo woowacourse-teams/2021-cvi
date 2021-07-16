@@ -7,7 +7,7 @@ import { FONT_COLOR } from '../../constants';
 import { useSelector } from 'react-redux';
 
 const BaseLayout = ({ children }) => {
-  const isLogin = useSelector((state) => state.authReducer.accessToken);
+  const isLogin = !!useSelector((state) => state.authReducer.accessToken);
 
   return (
     <Background>
