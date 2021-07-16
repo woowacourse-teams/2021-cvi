@@ -13,12 +13,12 @@ import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <TopContainer>
         <Label
           backgroundColor={VACCINATION_COLOR[vaccinationType]}
@@ -49,5 +49,10 @@ ReviewItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     viewCount: PropTypes.number.isRequired,
   }).isRequired,
+  onClick: PropTypes.func,
+};
+
+ReviewItem.defaultProps = {
+  onClick: () => {},
 };
 export default ReviewItem;
