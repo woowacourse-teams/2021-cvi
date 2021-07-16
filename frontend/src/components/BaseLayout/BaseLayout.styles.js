@@ -30,4 +30,19 @@ const Container = styled.div`
   } */
 `;
 
-export { Background, Container };
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 6rem 2.5rem 6rem;
+  flex: 1;
+  overflow: auto;
+`;
+
+const TopContainer = styled.div`
+  height: 3.6rem;
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+`;
+
+export { Background, Container, MainContainer, TopContainer };

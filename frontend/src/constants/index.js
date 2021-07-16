@@ -6,6 +6,7 @@ import { LINE_LIMIT } from './limit';
 import AGE_RANGE from './ageRange';
 import { BASE_URL } from './url';
 import { ERROR_MESSAGE, ALERT_MESSAGE } from './message';
+import { LOCAL_STORAGE_KEY } from './localStorage';
 
 export {
   PALETTE,
@@ -19,4 +20,5 @@ export {
   BASE_URL,
   ERROR_MESSAGE,
   ALERT_MESSAGE,
+  LOCAL_STORAGE_KEY,
 };
