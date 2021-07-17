@@ -20,7 +20,6 @@ import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
 const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
-  const accessToken = useSelector((state) => state.authReducer?.accessToken);
   const { enqueueSnackbar } = useSnackbar();
 
   const logout = () => {
@@ -31,10 +30,10 @@ const SideBar = () => {
   };
 
   useEffect(() => {
-    if (accessToken) {
-      dispatch(getMyInfoAsync(accessToken));
-    }
-  }, [accessToken]);
+    const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
+
+    dispatch(getMyInfoAsync(accessToken));
+  }, []);
 
   return (
     <Frame width="24rem" height="inherit">

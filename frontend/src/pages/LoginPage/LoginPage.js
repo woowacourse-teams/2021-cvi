@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import {
   Title,
   Container,
@@ -11,14 +12,16 @@ import {
 import Frame from '../../components/Frame/Frame';
 import Button from '../../components/Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/Button/Button.styles';
-import { PATH } from '../../constants';
+import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../constants';
 import Input from '../../components/Input/Input';
 import { useDispatch } from 'react-redux';
-import { loginAsync } from '../../redux/authSlice';
+import { getMyInfoAsync } from '../../redux/authSlice';
+import { requestPostLogin } from '../../requests';
 
 const LoginPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [nickname, setNickname] = useState('');
 
@@ -30,10 +33,26 @@ const LoginPage = () => {
     history.push(`${PATH.HOME}`);
   };
 
-  const login = () => {
-    dispatch(loginAsync({ nickname }));
-    // 로그인 실패시 redirect 안 해야함
-    goHomePage();
+  const login = async () => {
+    try {
+      const response = await requestPostLogin({ nickname });
+
+      if (!response.ok) {
+        throw new Error(response);
+      }
+
+      const userData = await response.json();
+
+      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(userData?.accessToken));
+
+      dispatch(getMyInfoAsync(userData.accessToken));
+
+      enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGIN);
+      goHomePage();
+    } catch (error) {
+      alert(ALERT_MESSAGE.FAIL_TO_LOGIN);
+      console.error(error);
+    }
   };
 
   return (

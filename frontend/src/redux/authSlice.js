@@ -27,17 +27,19 @@ const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
     if (!response.ok) {
       throw new Error(response);
     }
+    const myInfo = await response.json();
 
-    return await response.json();
+    return { accessToken, user: myInfo };
   } catch (error) {
     console.error(error);
+    localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
   }
 });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    accessToken: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN)),
+    accessToken: '',
     user: {},
   },
   reducers: {
@@ -52,7 +54,12 @@ const authSlice = createSlice({
       state.user = action.payload.user;
     },
     [getMyInfoAsync.fulfilled]: (state, action) => {
-      state.user = action.payload;
+      state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
+    },
+    [getMyInfoAsync.rejected]: (state) => {
+      state.accessToken = '';
+      state.user = {};
     },
   },
 });
