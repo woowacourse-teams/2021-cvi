@@ -5,6 +5,8 @@ const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
 const requestGetSelectedReviewList = (vaccinationType) =>
   fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
 
+const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
+
 const requestCreateReview = (accessToken, data) =>
   fetch(`${BASE_URL}/posts`, {
     method: 'POST',
@@ -45,6 +47,7 @@ const requestGetMyInfo = (accessToken) =>
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
+  requestGetReview,
   requestCreateReview,
   requestPostSignup,
   requestPostLogin,

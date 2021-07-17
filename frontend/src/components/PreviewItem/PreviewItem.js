@@ -12,12 +12,12 @@ import {
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
 import toDate from '../../utils/toDate';
 
-const PreviewItem = ({ review }) => {
+const PreviewItem = ({ review, onClick }) => {
   const { writer, content, vaccinationType, createdAt } = review;
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <TopContainer>
         <Label
           sizeType={LABEL_SIZE_TYPE.SMALL}
@@ -41,8 +41,11 @@ PreviewItem.propTypes = {
     vaccinationType: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
   }).isRequired,
+  onClick: PropTypes.func,
 };
 
-PreviewItem.defaultProps = {};
+PreviewItem.defaultProps = {
+  onClick: () => {},
+};
 
 export default PreviewItem;
