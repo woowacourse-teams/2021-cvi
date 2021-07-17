@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { VACCINATION } from '../../constants';
+import { useSnackbar } from 'notistack';
+import { SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
 import Modal from '../Modal/Modal';
 import Selection from '../Selection/Selection';
 import Button from '../Button/Button';
@@ -15,6 +16,7 @@ import {
 
 const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedVaccine, setSelectedVaccine] = useState('모더나');
   const [content, setContent] = useState('');
@@ -35,6 +37,7 @@ const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
       }
 
       onClickClose();
+      enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
       if (selectedTab === '전체') {
         getReviewList(requestGetAllReviewList);

@@ -4,7 +4,13 @@ const ERROR_MESSAGE = {
 };
 
 const ALERT_MESSAGE = {
-  SUCCESS_TO_SIGNUP: '회원가입에 성곻했습니다',
+  SUCCESS_TO_SIGNUP: '회원가입에 성공했습니다',
 };
 
-export { ERROR_MESSAGE, ALERT_MESSAGE };
+const SNACKBAR_MESSAGE = {
+  SUCCESS_TO_LOGIN: '로그인에 성공했습니다',
+  SUCCESS_TO_LOGOUT: '로그아웃에 성공했습니다',
+  SUCCESS_TO_CREATE_REVIEW: '성공적으로 후기를 작성하였습니다',
+};
+
+export { ERROR_MESSAGE, ALERT_MESSAGE, SNACKBAR_MESSAGE };

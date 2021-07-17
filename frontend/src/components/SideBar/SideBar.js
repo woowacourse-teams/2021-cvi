@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import Frame from '../Frame/Frame';
 import HomeIcon from '../../assets/icons/home.svg';
 import ReviewIcon from '../../assets/icons/review.svg';
@@ -11,19 +14,20 @@ import {
   LogoutButton,
   selectedNavStyles,
 } from './SideBar.styles';
-import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH } from '../../constants';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
+  const { enqueueSnackbar } = useSnackbar();
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     dispatch(logoutAction());
+
+    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
   };
 
   useEffect(() => {
