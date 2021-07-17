@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { FONT_COLOR, PALETTE } from '../../constants';
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-top: 4rem;
+`;
 
 const FrameContent = styled.div`
   display: flex;
@@ -21,10 +23,10 @@ const Info = styled.div`
   border-bottom: 0.15rem solid ${PALETTE.NAVY100};
 `;
 
-const ReviewInfo = styled.div`
+const VaccinationInfo = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5.2rem;
+  margin-bottom: 3rem;
 `;
 
 const ShotVerified = styled.div`
@@ -32,10 +34,17 @@ const ShotVerified = styled.div`
   color: ${FONT_COLOR.GREEN};
 `;
 
-const WriterContainer = styled.div`
+const WriterInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.6rem;
+`;
+
+const ReviewInfo = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 1rem;
 `;
 
 const Writer = styled.div`
@@ -44,17 +53,20 @@ const Writer = styled.div`
 `;
 
 const CreatedAt = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
-  margin-top: 0.4rem;
+  padding-bottom: 0.2rem;
+  margin: 0 1.6rem 0 0.3rem;
 `;
 const Content = styled.div`
   padding: 2rem 3rem;
 `;
 
 const ViewCount = styled.div`
-  margin-top: auto;
-  padding: 3rem;
+  font-size: 1.2rem;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  padding-bottom: 0.2rem;
+  margin-left: 0.3rem;
 `;
 
 const Error = styled.div`
@@ -70,9 +82,10 @@ export {
   FrameContent,
   ButtonContainer,
   Info,
+  VaccinationInfo,
+  WriterInfo,
   ReviewInfo,
   ShotVerified,
-  WriterContainer,
   Writer,
   CreatedAt,
   Content,

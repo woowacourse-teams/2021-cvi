@@ -1,13 +1,13 @@
 <svg 
-  xmlns="http://www.w3.org/2000/svg"
+  xmlns="http://www.w3.org/2000/svg" 
   width="current" 
   height="current" 
   viewBox="0 0 512 512"
 >
-  <title>ionicons-v5-a</title>
+  <title>left-arrow</title>
   <polyline 
-    points="328 112 184 256 328 400"
-    storke="current"
+    points="328 112 184 256 328 400" 
+    stroke="current"
     style="fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"
   />
 </svg>
