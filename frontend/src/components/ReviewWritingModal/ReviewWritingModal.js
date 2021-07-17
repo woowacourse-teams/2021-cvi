@@ -53,7 +53,7 @@ const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
   };
 
   return (
-    <Modal showCloseButton={true} onClickClose={onClickClose}>
+    <Modal showCloseButton={true} showShadow={true} onClickClose={onClickClose}>
       <Container>
         <Selection
           selectionList={vaccinationList}
