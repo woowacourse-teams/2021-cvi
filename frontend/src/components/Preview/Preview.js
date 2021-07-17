@@ -19,7 +19,7 @@ const Preview = ({ title }) => {
   return (
     <div>
       {title && <Title>{title}</Title>}
-      <Frame width="100%">
+      <Frame width="100%" showShadow={true}>
         <Container>
           <ButtonContainer>
             <Button

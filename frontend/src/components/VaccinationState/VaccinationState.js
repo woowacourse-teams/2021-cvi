@@ -6,8 +6,8 @@ import { Title } from './VaccinationState.styles';
 const VaccinationState = ({ title }) => (
   <div>
     {title && <Title>{title}</Title>}
-    <Frame width="100%">
-      <div style={{ height: '10rem' }}></div>
+    <Frame width="100%" showShadow={true}>
+      <div style={{ display: 'flex', alignItems: 'center', height: '10rem' }}>준비 중입니다</div>
     </Frame>
   </div>
 );

@@ -53,7 +53,7 @@ const ReviewDetailPage = () => {
 
   return (
     <Container>
-      <Frame width="100%">
+      <Frame width="100%" showShadow={true}>
         <FrameContent>
           <ButtonContainer>
             <Button

@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import { Container } from './Frame.styles';
 import { THEME_COLOR } from '../../constants';
 
-const Frame = ({ children, backgroundColor, width, height, styles }) => {
+const Frame = ({ children, backgroundColor, width, height, showShadow, styles }) => {
   return (
-    <Container backgroundColor={backgroundColor} width={width} height={height} styles={styles}>
+    <Container
+      backgroundColor={backgroundColor}
+      width={width}
+      height={height}
+      showShadow={showShadow}
+      styles={styles}
+    >
       {children}
     </Container>
   );
@@ -16,6 +22,7 @@ Frame.propTypes = {
   backgroundColor: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
+  showShadow: PropTypes.bool,
   styles: PropTypes.object,
 };
 
@@ -23,6 +30,7 @@ Frame.defaultProps = {
   backgroundColor: THEME_COLOR.WHITE,
   width: 'fit-content',
   height: 'fit-content',
+  showShadow: false,
   styles: {},
 };
 

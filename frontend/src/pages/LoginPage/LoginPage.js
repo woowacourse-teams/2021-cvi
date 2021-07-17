@@ -57,7 +57,7 @@ const LoginPage = () => {
 
   return (
     <Container>
-      <Frame width="48rem" styles={frameStyles}>
+      <Frame width="48rem" showShadow={true} styles={frameStyles}>
         <Title>로그인</Title>
         <Input
           placeholder="닉네임을 입력해주세요"

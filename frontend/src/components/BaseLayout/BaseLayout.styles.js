@@ -17,9 +17,10 @@ const Container = styled.div`
   border-radius: 1.6rem;
   background-color: ${PALETTE.NAVY100};
   position: relative;
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  z-index: 0;
 
-  /* TODO */
-  /* &::after {
+  &::after {
     content: '';
     position: absolute;
     border-radius: 6.4rem 1.6rem 1.6rem 0;
@@ -27,7 +28,8 @@ const Container = styled.div`
     width: 28rem;
     height: 100%;
     background-color: ${PALETTE.NAVY150};
-  } */
+    z-index: -1;
+  }
 `;
 
 const MainContainer = styled.div`

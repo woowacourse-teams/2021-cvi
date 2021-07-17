@@ -75,7 +75,7 @@ const ReviewPage = () => {
             후기 작성
           </Button>
         </ButtonWrapper>
-        <Frame width="100%">
+        <Frame width="100%" showShadow={true}>
           <FrameContent>
             <Tabs tabList={tabList} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
             <ReviewList>
