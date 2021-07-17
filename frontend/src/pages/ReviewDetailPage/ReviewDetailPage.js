@@ -33,8 +33,8 @@ const ReviewDetailPage = () => {
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
-  const goReviewPage = () => {
-    history.push(PATH.REVIEW);
+  const goBack = () => {
+    history.goBack();
   };
 
   if (error) {
@@ -51,7 +51,7 @@ const ReviewDetailPage = () => {
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
               color={FONT_COLOR.BLACK}
               withIcon={true}
-              onClick={goReviewPage}
+              onClick={goBack}
             >
               <LeftArrowIcon width="24" height="24" stroke={FONT_COLOR.BLACK} />
               <div>뒤로 가기</div>

@@ -4,6 +4,7 @@ import { LINE_LIMIT, FONT_COLOR } from '../../constants';
 const Container = styled.div`
   padding: 1.2rem;
   width: 100%;
+  cursor: pointer;
 `;
 
 const TopContainer = styled.div`
