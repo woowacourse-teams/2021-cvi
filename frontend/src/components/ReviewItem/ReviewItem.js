@@ -1,5 +1,6 @@
 import {
   Container,
+  ViewCountContainer,
   Content,
   Writer,
   ViewCount,
@@ -11,7 +12,9 @@ import {
 import Label from '../Label/Label';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import toDate from '../../utils/toDate';
+import EyeIcon from '../../assets/icons/eye.svg';
 
 const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
@@ -34,8 +37,11 @@ const ReviewItem = ({ review, onClick }) => {
         {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>
       <BottomContainer>
-        <ViewCount>{viewCount}</ViewCount>
-        <Date>{createdAt}</Date>
+        <ViewCountContainer>
+          <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+          <ViewCount>{viewCount}</ViewCount>
+        </ViewCountContainer>
+        <Date>{toDate(TO_DATE_TYPE.TIME, createdAt)}</Date>
       </BottomContainer>
     </Container>
   );
