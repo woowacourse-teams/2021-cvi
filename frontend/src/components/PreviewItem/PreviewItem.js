@@ -9,7 +9,8 @@ import {
   BottomContainer,
   ShotVerified,
 } from './PreviewItem.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import toDate from '../../utils/toDate';
 
 const PreviewItem = ({ review }) => {
   const { writer, content, vaccinationType, createdAt } = review;
@@ -28,7 +29,7 @@ const PreviewItem = ({ review }) => {
         <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
       </TopContainer>
       <Content>{content}</Content>
-      <BottomContainer>{createdAt}</BottomContainer>
+      <BottomContainer>{toDate(TO_DATE_TYPE.DATE, createdAt)}</BottomContainer>
     </Container>
   );
 };

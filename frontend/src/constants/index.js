@@ -7,6 +7,7 @@ import AGE_RANGE from './ageRange';
 import { BASE_URL } from './url';
 import { ERROR_MESSAGE, ALERT_MESSAGE } from './message';
 import { LOCAL_STORAGE_KEY } from './localStorage';
+import { TO_DATE_TYPE } from './toDateType';
 
 export {
   PALETTE,
@@ -21,4 +22,5 @@ export {
   ERROR_MESSAGE,
   ALERT_MESSAGE,
   LOCAL_STORAGE_KEY,
+  TO_DATE_TYPE,
 };

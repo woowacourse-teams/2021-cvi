@@ -11,7 +11,8 @@ import {
 import Label from '../Label/Label';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import toDate from '../../utils/toDate';
 
 const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
@@ -35,7 +36,7 @@ const ReviewItem = ({ review, onClick }) => {
       </Writer>
       <BottomContainer>
         <ViewCount>{viewCount}</ViewCount>
-        <Date>{createdAt}</Date>
+        <Date>{toDate(TO_DATE_TYPE.TIME, createdAt)}</Date>
       </BottomContainer>
     </Container>
   );
