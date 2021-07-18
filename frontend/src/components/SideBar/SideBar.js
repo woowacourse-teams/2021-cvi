@@ -6,6 +6,7 @@ import HomeIcon from '../../assets/icons/home.svg';
 import ReviewIcon from '../../assets/icons/review.svg';
 import LoginIcon from '../../assets/icons/login.svg';
 import LogoutIcon from '../../assets/icons/logout.svg';
+import LogoIcon from '../../assets/icons/logo.svg';
 import {
   Container,
   LogoContainer,
@@ -40,7 +41,7 @@ const SideBar = () => {
       <Container>
         <LogoContainer to={PATH.HOME}>
           {/* example logo */}
-          <HomeIcon width="80" height="80" stroke={FONT_COLOR.PURPLE_GRAY} />
+          <LogoIcon width="120" fill="#CE3732" />
         </LogoContainer>
         <MenuContainer>
           <NavLinkElement exact to={PATH.HOME} activeStyle={selectedNavStyles}>

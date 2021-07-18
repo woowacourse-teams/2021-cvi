@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 6rem;
   width: 100%;
-  padding-left: 1.2rem;
+  padding-left: 0.4rem;
 
   & > *:last-child {
     margin-top: 22rem;
@@ -15,13 +15,13 @@ const Container = styled.div`
 `;
 
 const LogoContainer = styled(Link)`
-  margin: 0 auto;
+  margin: 1rem auto 0 auto;
 `;
 
 const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 12rem;
+  margin-top: 11rem;
 `;
 
 const NavLinkElement = styled(NavLink)`
