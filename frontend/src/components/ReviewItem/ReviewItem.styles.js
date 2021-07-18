@@ -5,6 +5,13 @@ const Container = styled.li`
   padding: 2.4rem 3.2rem;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+`;
+
+const ViewCountContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const Content = styled.div`
@@ -27,7 +34,10 @@ const ShotVerified = styled.div`
   color: ${FONT_COLOR.GREEN};
 `;
 
-const ViewCount = styled.div``;
+const ViewCount = styled.div`
+  margin-left: 0.5rem;
+  padding-bottom: 0.1rem;
+`;
 
 const Date = styled.div``;
 
@@ -44,4 +54,14 @@ const BottomContainer = styled.div`
   margin-top: 0.4rem;
 `;
 
-export { Container, Content, Writer, ShotVerified, ViewCount, Date, TopContainer, BottomContainer };
+export {
+  Container,
+  ViewCountContainer,
+  Content,
+  Writer,
+  ShotVerified,
+  ViewCount,
+  Date,
+  TopContainer,
+  BottomContainer,
+};

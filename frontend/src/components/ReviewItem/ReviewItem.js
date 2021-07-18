@@ -1,5 +1,6 @@
 import {
   Container,
+  ViewCountContainer,
   Content,
   Writer,
   ViewCount,
@@ -11,31 +12,36 @@ import {
 import Label from '../Label/Label';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
-import { VACCINE_COLOR, VACCINE, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import toDate from '../../utils/toDate';
+import EyeIcon from '../../assets/icons/eye.svg';
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
-  const labelFontColor = vaccinationType === '아스트라제네카' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <TopContainer>
         <Label
-          backgroundColor={VACCINE_COLOR[VACCINE[vaccinationType]]}
+          backgroundColor={VACCINATION_COLOR[vaccinationType]}
           sizeType={LABEL_SIZE_TYPE.MEDIUM}
           fontColor={labelFontColor}
         >
-          {vaccinationType}
+          {VACCINATION[vaccinationType]}
         </Label>
         <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
       </TopContainer>
       <Content>{content}</Content>
       <Writer>
-        {writer?.nickname} · {writer?.age}대
+        {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>
       <BottomContainer>
-        <ViewCount>{viewCount}</ViewCount>
-        <Date>{createdAt}</Date>
+        <ViewCountContainer>
+          <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+          <ViewCount>{viewCount}</ViewCount>
+        </ViewCountContainer>
+        <Date>{toDate(TO_DATE_TYPE.TIME, createdAt)}</Date>
       </BottomContainer>
     </Container>
   );
@@ -49,5 +55,10 @@ ReviewItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     viewCount: PropTypes.number.isRequired,
   }).isRequired,
+  onClick: PropTypes.func,
+};
+
+ReviewItem.defaultProps = {
+  onClick: () => {},
 };
 export default ReviewItem;

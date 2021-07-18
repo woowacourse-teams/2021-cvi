@@ -9,26 +9,27 @@ import {
   BottomContainer,
   ShotVerified,
 } from './PreviewItem.styles';
-import { VACCINE_COLOR, VACCINE, FONT_COLOR } from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import toDate from '../../utils/toDate';
 
-const PreviewItem = ({ review }) => {
+const PreviewItem = ({ review, onClick }) => {
   const { writer, content, vaccinationType, createdAt } = review;
-  const labelFontColor = vaccinationType === '아스트라제네카' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <TopContainer>
         <Label
           sizeType={LABEL_SIZE_TYPE.SMALL}
-          backgroundColor={VACCINE_COLOR[VACCINE[vaccinationType]]}
+          backgroundColor={VACCINATION_COLOR[vaccinationType]}
           fontColor={labelFontColor}
         >
-          {vaccinationType}
+          {VACCINATION[vaccinationType]}
         </Label>
         <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
       </TopContainer>
       <Content>{content}</Content>
-      <BottomContainer>{createdAt}</BottomContainer>
+      <BottomContainer>{toDate(TO_DATE_TYPE.DATE, createdAt)}</BottomContainer>
     </Container>
   );
 };
@@ -40,8 +41,11 @@ PreviewItem.propTypes = {
     vaccinationType: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
   }).isRequired,
+  onClick: PropTypes.func,
 };
 
-PreviewItem.defaultProps = {};
+PreviewItem.defaultProps = {
+  onClick: () => {},
+};
 
 export default PreviewItem;

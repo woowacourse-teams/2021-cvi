@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE, VACCINE_COLOR } from '../../constants';
+import { PALETTE, VACCINATION_COLOR } from '../../constants';
 
 const Container = styled.div`
   display: flex;
@@ -20,19 +20,19 @@ const Container = styled.div`
 
 const buttonSelectedStyles = {
   모더나: css`
-    background-color: ${VACCINE_COLOR.MODERNA};
+    background-color: ${VACCINATION_COLOR.MODERNA};
     color: ${PALETTE.WHITE};
   `,
   화이자: css`
-    background-color: ${VACCINE_COLOR.PFIZER};
+    background-color: ${VACCINATION_COLOR.PFIZER};
     color: ${PALETTE.WHITE};
   `,
   아스트라제네카: css`
-    background-color: ${VACCINE_COLOR.ASTRA_ZENECA};
+    background-color: ${VACCINATION_COLOR.ASTRAZENECA};
     color: ${PALETTE.GRAY700};
   `,
   얀센: css`
-    background-color: ${VACCINE_COLOR.JANSSEN};
+    background-color: ${VACCINATION_COLOR.JANSSEN};
     color: ${PALETTE.WHITE};
   `,
 };

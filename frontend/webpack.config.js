@@ -7,6 +7,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   devServer: {
     hot: true,
@@ -27,7 +28,8 @@ const config = {
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-react', '@babel/preset-env'],
-          plugins: ['react-require'],
+          plugins: ['@babel/plugin-transform-runtime', 'react-require'],
+          sourceType: 'unambiguous',
         },
       },
       {

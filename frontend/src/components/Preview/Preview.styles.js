@@ -7,6 +7,7 @@ const Title = styled.h3`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   margin: 2rem 1.5rem;
 `;
 

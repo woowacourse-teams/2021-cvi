@@ -1,13 +1,6 @@
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
-const Container = styled.div`
-  width: 100%;
-  padding: 6rem;
-  flex: 1;
-  overflow-y: auto;
-`;
-
 const Title = styled.h2`
   font-size: 2.8rem;
   margin-bottom: 1.4rem;
@@ -33,6 +26,7 @@ const FrameContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  width: 100%;
 `;
 
-export { Container, Title, ReviewList, FrameContent, ButtonWrapper };
+export { Title, ReviewList, FrameContent, ButtonWrapper };

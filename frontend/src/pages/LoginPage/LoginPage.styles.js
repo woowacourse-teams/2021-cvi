@@ -4,10 +4,10 @@ import { FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
   display: flex;
-  flex: 1;
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
 `;
 
 const Title = styled.div`
