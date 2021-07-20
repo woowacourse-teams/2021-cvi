@@ -40,8 +40,7 @@ const SideBar = () => {
     <Frame width="24rem" height="inherit">
       <Container>
         <LogoContainer to={PATH.HOME}>
-          {/* example logo */}
-          <LogoIcon width="120" fill="#CE3732" />
+          <LogoIcon width="120" />
         </LogoContainer>
         <MenuContainer>
           <NavLinkElement exact to={PATH.HOME} activeStyle={selectedNavStyles}>
