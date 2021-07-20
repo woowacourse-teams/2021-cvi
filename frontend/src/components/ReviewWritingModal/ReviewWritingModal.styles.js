@@ -12,7 +12,7 @@ const TextArea = styled.textarea`
   width: 100%;
   margin: 2.4rem 0;
   height: 36rem;
-  border: 0.1rem solid ${FONT_COLOR.PURPLE_GRAY};
+  border: 0.1rem solid ${FONT_COLOR.BLUE_GRAY};
   border-radius: 1.6rem;
   font-size: 1.6rem;
   padding: 2rem;

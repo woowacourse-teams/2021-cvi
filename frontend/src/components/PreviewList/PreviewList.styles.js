@@ -4,15 +4,15 @@ import { PALETTE } from '../../constants';
 const Container = styled.ul`
   display: grid;
   grid-template-rows: repeat(2, 1fr);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   & > li {
     border-bottom: 0.1rem solid ${PALETTE.NAVY150};
   }
-  & > li:nth-of-type(2n + 1) {
+  & > li:not(:nth-of-type(3n)) {
     border-right: 0.1rem solid ${PALETTE.NAVY150};
   }
-  & > li:nth-last-child(-n + 2) {
+  & > li:nth-last-child(-n + 3) {
     border-bottom: none;
   }
 `;
