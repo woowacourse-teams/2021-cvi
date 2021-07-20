@@ -14,7 +14,7 @@ const LabelText = styled.span`
 const InputElement = styled.input`
   vertical-align: middle;
   border-radius: 2.6rem;
-  border: 0.1rem solid ${FONT_COLOR.PURPLE_GRAY};
+  border: 0.1rem solid ${FONT_COLOR.BLUE_GRAY};
   height: 5.2rem;
   line-height: 4rem;
   padding: 0.2rem 0 0 2.2rem;
@@ -24,7 +24,7 @@ const InputElement = styled.input`
   width: ${({ width }) => width};
 
   ::placeholder {
-    color: ${FONT_COLOR.PURPLE_GRAY};
+    color: ${FONT_COLOR.BLUE_GRAY};
   }
 `;
 

@@ -13,7 +13,7 @@ import Label from '../Label/Label';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
-import toDate from '../../utils/toDate';
+import { toDate } from '../../utils';
 import EyeIcon from '../../assets/icons/eye.svg';
 
 const ReviewItem = ({ review, onClick }) => {

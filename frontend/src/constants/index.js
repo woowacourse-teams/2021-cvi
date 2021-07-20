@@ -8,6 +8,7 @@ import { BASE_URL } from './url';
 import { ERROR_MESSAGE, ALERT_MESSAGE, SNACKBAR_MESSAGE } from './message';
 import { LOCAL_STORAGE_KEY } from './localStorage';
 import { TO_DATE_TYPE } from './toDateType';
+import { RESPONSE_STATE } from './service';
 
 export {
   PALETTE,
@@ -24,4 +25,5 @@ export {
   SNACKBAR_MESSAGE,
   LOCAL_STORAGE_KEY,
   TO_DATE_TYPE,
+  RESPONSE_STATE,
 };

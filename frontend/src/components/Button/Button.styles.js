@@ -28,13 +28,11 @@ const backgroundStyle = {
 
 const hoverStyle = {
   FILLED: {
-    backgroundColor: '#d96868',
+    backgroundColor: '#3e909c',
+    border: '0.1rem solid #3e909c',
   },
   OUTLINE: {
-    backgroundColor: 'rgba(240, 117, 117, 0.08)',
-  },
-  TEXT: {
-    // backgroundColor: 'rgba(240, 117, 117, 0.08)',
+    backgroundColor: 'rgba(70, 159, 171, 0.08)',
   },
 };
 

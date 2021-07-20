@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 import { Link, NavLink } from 'react-router-dom';
-import { FONT_COLOR, PALETTE } from '../../constants';
+import { FONT_COLOR, THEME_COLOR } from '../../constants';
 
 const Container = styled.div`
+  height: inherit;
   display: flex;
   flex-direction: column;
-  margin-top: 6rem;
-  width: 100%;
-  padding-left: 0.4rem;
+  padding-top: 6rem;
+  width: 28rem;
+  background-color: ${THEME_COLOR.PRIMARY};
 
   & > *:last-child {
     margin-top: 22rem;
@@ -15,7 +16,8 @@ const Container = styled.div`
 `;
 
 const LogoContainer = styled(Link)`
-  margin: 1rem auto 0 auto;
+  margin: 0 auto;
+  padding-right: 1.6rem;
 `;
 
 const MenuContainer = styled.div`
@@ -28,10 +30,12 @@ const NavLinkElement = styled(NavLink)`
   display: flex;
   align-items: center;
   padding-left: 6.4rem;
+  margin-left: 1rem;
   gap: 0.8rem;
-  color: ${FONT_COLOR.PURPLE_GRAY};
+  color: ${FONT_COLOR.WHITE};
   width: 100%;
-  height: 5.2rem;
+  height: 5.6rem;
+  font-size: 1.8rem;
 `;
 const LogoutButton = styled.button`
   display: flex;
@@ -39,13 +43,13 @@ const LogoutButton = styled.button`
   align-items: center;
   padding-left: 6.4rem;
   gap: 0.8rem;
-  color: ${FONT_COLOR.PURPLE_GRAY};
+  color: ${FONT_COLOR.WHITE};
   width: 100%;
   height: 5.2rem;
 `;
 
 const selectedNavStyles = {
-  backgroundColor: PALETTE.NAVY100,
+  backgroundColor: THEME_COLOR.BACKGROUND,
   color: FONT_COLOR.BLACK,
   borderTopLeftRadius: '1.6rem',
   borderBottomLeftRadius: '1.6rem',

@@ -4,12 +4,13 @@ import ReviewItem from '../../components/ReviewItem/ReviewItem';
 import Tabs from '../../components/Tabs/Tabs';
 import Button from '../../components/Button/Button';
 import ReviewWritingModal from '../../components/ReviewWritingModal/ReviewWritingModal';
-import { VACCINATION, PATH } from '../../constants';
+import { VACCINATION, PATH, RESPONSE_STATE } from '../../constants';
 import { Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
 import { BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import { requestGetAllReviewList, requestGetSelectedReviewList } from '../../requests';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { getAllReviewList, getSelectedReviewList } from '../../service';
+import { findKey } from '../../utils';
 
 const ReviewPage = () => {
   const history = useHistory();
@@ -29,20 +30,6 @@ const ReviewPage = () => {
     history.push(`${PATH.LOGIN}`);
   };
 
-  const getReviewList = async (callback) => {
-    try {
-      const response = await callback();
-
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-
-      setReviewList(await response.json());
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const onClickButton = () => {
     if (isLogin) {
       setModalOpen(true);
@@ -55,15 +42,33 @@ const ReviewPage = () => {
     }
   };
 
-  useEffect(() => {
+  const getReviewList = async () => {
     if (selectedTab === '전체') {
-      getReviewList(requestGetAllReviewList);
-    } else {
-      const selectedVaccination =
-        Object.keys(VACCINATION)[Object.values(VACCINATION).indexOf(selectedTab)];
+      const response = await getAllReviewList();
 
-      getReviewList(() => requestGetSelectedReviewList(selectedVaccination));
+      if (response.state === RESPONSE_STATE.FAILURE) {
+        alert('failure - getAllReviewList');
+
+        return;
+      }
+
+      setReviewList(response.data.reverse());
+    } else {
+      const vaccinationType = findKey(VACCINATION, selectedTab);
+      const response = await getSelectedReviewList(vaccinationType);
+
+      if (response.state === RESPONSE_STATE.FAILURE) {
+        alert('failure - getSelectedReviewList');
+
+        return;
+      }
+
+      setReviewList(response.data.reverse());
     }
+  };
+
+  useEffect(() => {
+    getReviewList();
   }, [selectedTab]);
 
   return (
@@ -92,7 +97,6 @@ const ReviewPage = () => {
       </div>
       {isModalOpen && (
         <ReviewWritingModal
-          selectedTab={selectedTab}
           getReviewList={getReviewList}
           onClickClose={() => setModalOpen(false)}
         />
