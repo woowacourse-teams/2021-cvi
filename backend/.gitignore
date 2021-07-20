@@ -38,3 +38,7 @@ out/
 
 # QueryDSL
 /backend/src/main/generated/
+
+# db
+/backend/src/main/resources/application-db.yml
+/backend/src/main/resources/application-jwt.yml
