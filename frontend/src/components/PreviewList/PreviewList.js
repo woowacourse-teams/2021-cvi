@@ -20,7 +20,7 @@ const PreviewList = () => {
 
   return (
     <Container>
-      {reviewList.slice(0, 4).map((review) => (
+      {reviewList.slice(0, 6).map((review) => (
         <li key={review.id}>
           <PreviewItem review={review} onClick={() => goReviewDetailPage(review.id)} />
         </li>

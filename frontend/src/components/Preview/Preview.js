@@ -24,12 +24,12 @@ const Preview = ({ title }) => {
           <ButtonContainer>
             <Button
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-              color={FONT_COLOR.PURPLE_GRAY}
+              color={FONT_COLOR.BLUE_GRAY}
               withIcon={true}
               onClick={goReviewPage}
             >
               <div>더보기</div>
-              <RightArrowIcon width="18" height="18" stroke={FONT_COLOR.PURPLE_GRAY} />
+              <RightArrowIcon width="18" height="18" stroke={FONT_COLOR.BLUE_GRAY} />
             </Button>
           </ButtonContainer>
           <PreviewList />

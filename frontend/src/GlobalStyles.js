@@ -17,7 +17,7 @@ const GlobalStyles = () => (
         margin: 0;
         padding: 0;
         font-size: 1.6rem;
-        min-height: 100vh;
+        height: 100vh;
         width: 100%;
         background-color: #fafafa;
         color: ${FONT_COLOR.BLACK};

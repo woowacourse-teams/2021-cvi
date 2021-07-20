@@ -7,7 +7,7 @@ const VaccinationState = ({ title }) => (
   <Container>
     {title && <Title>{title}</Title>}
     <Frame width="100%" showShadow={true}>
-      <div style={{ display: 'flex', alignItems: 'center', height: '10rem' }}>준비 중입니다</div>
+      <div style={{ display: 'flex', alignItems: 'center', height: '12rem' }}>준비 중입니다</div>
     </Frame>
   </Container>
 );
