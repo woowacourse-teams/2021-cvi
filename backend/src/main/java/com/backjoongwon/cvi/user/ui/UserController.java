@@ -25,17 +25,9 @@ public class UserController {
         return userResponse;
     }
 
-    @PostMapping("/signin")
-    @ResponseStatus(HttpStatus.OK)
-    public SigninResponse signin(@RequestBody SigninRequest userRequest, HttpServletResponse servletResponse) {
-        SigninResponse signinResponse = userService.signin(userRequest);
-        servletResponse.setHeader("Authorization", "Bearer " + signinResponse.getAccessToken());
-        return signinResponse;
-    }
-
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UserMeResponse findMe(@SigninUser User user) {
+    public UserResponse findMe(@SigninUser User user) {
         return userService.findMeById(user.getId());
     }
 
