@@ -3,7 +3,6 @@ package com.backjoongwon.cvi.auth.domain.authorization;
 import com.backjoongwon.cvi.auth.domain.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.Profile;
 import com.backjoongwon.cvi.auth.domain.kakao.KakaoProfile;
-import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;

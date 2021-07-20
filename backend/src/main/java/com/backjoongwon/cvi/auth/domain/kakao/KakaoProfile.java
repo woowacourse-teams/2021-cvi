@@ -10,11 +10,11 @@ public class KakaoProfile {
     public Properties properties;
     public KakaoAccount kakao_account;
 
-    public String getProfileImage(){
+    public String getProfileImage() {
         return this.properties.nickname;
     }
 
-    public String getNickname(){
+    public String getNickname() {
         return this.properties.profile_image;
     }
 

@@ -8,12 +8,11 @@ import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.*;
+import com.backjoongwon.cvi.user.dto.UserRequest;
+import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
