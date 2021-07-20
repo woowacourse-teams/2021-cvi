@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE, Container } from './Button.styles';
-import { PALETTE } from '../../constants';
+import { THEME_COLOR } from '../../constants';
 
 const Button = ({
   children,
@@ -49,7 +49,7 @@ Button.defaultProps = {
   backgroundType: BUTTON_BACKGROUND_TYPE.FILLED,
   sizeType: BUTTON_SIZE_TYPE.MEDIUM,
   withIcon: false,
-  color: PALETTE.RED300,
+  color: THEME_COLOR.PRIMARY,
   isSelected: false,
   selectedStyles: null,
   styles: null,
