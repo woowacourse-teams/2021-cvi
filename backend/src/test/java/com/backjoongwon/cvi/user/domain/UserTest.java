@@ -25,7 +25,7 @@ class UserTest {
                 .ageRange(AgeRange.TEENS)
                 .createdAt(LocalDateTime.now())
                 .nickname("검프")
-                .socialProfileUrl("www.gump.com")
+                .profileUrl("www.gump.com")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
     }
@@ -39,7 +39,7 @@ class UserTest {
                 .ageRange(AgeRange.TWENTIES)
                 .createdAt(LocalDateTime.now())
                 .nickname("인비")
-                .socialProfileUrl("www.budae.com")
+                .profileUrl("www.budae.com")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
         //when

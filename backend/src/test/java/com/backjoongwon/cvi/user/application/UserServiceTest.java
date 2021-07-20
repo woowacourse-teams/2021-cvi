@@ -4,10 +4,9 @@ import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.SigninRequest;
-import com.backjoongwon.cvi.user.dto.SigninResponse;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +27,8 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 public class UserServiceTest {
 
+    private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
+
     @Autowired
     private UserService userService;
 
@@ -37,7 +38,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userRequest = new UserRequest("인비", AgeRange.TEENS);
+        userRequest = new UserRequest("인비", AgeRange.TEENS, SocialProvider.NAVER, null, null);
     }
 
     @DisplayName("사용자 회원가입 - 성공")
@@ -66,30 +67,6 @@ public class UserServiceTest {
         //then
         assertThatThrownBy(() -> userService.signup(userRequest))
                 .isInstanceOf(DuplicateException.class);
-    }
-
-    @DisplayName("사용자 로그인 - 성공")
-    @Test
-    void signin() {
-        //given
-        userService.signup(userRequest);
-        //when
-        SigninResponse signinResponse = userService.signin(new SigninRequest(userRequest.getNickname()));
-        String accessToken = signinResponse.getAccessToken();
-        //then
-        assertThatCode(() -> userService.validateAccessToken(accessToken))
-                .doesNotThrowAnyException();
-    }
-
-    @DisplayName("사용자 로그인 - 실패 - 유효하지 않은 토큰")
-    @Test
-    void signinFailureWhenAccessTokenInvalid() {
-        //given
-        String invalidAccessToken = "asdfasdf";
-        //when
-        //then
-        assertThatThrownBy(() -> userService.validateAccessToken(invalidAccessToken))
-                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("사용자 조회 - 성공")
@@ -121,7 +98,7 @@ public class UserServiceTest {
         UserResponse signupResponse = userService.signup(userRequest);
         userRepository.flush();
         //when
-        UserRequest updateRequest = new UserRequest(userRequest.getNickname(), AgeRange.THIRTIES);
+        UserRequest updateRequest = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
         userService.update(signupResponse.getId(), updateRequest);
         //then
         User updatedUser = userRepository.findById(signupResponse.getId())
@@ -136,7 +113,7 @@ public class UserServiceTest {
         //given
         Long lastIndex = getLastIndex();
         //when
-        UserRequest updateRequest = new UserRequest("인비2", AgeRange.TEENS);
+        UserRequest updateRequest = new UserRequest(null, null, null, null, null);
         //then
         assertThatThrownBy(() -> userService.update(lastIndex + 1L, updateRequest))
                 .isInstanceOf(NotFoundException.class);

@@ -53,7 +53,7 @@ class PostServiceTest {
         user = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
-                .socialProfileUrl("")
+                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
         post = Post.builder()
