@@ -1,0 +1,67 @@
+import styled from '@emotion/styled';
+import { FONT_COLOR, LINE_LIMIT } from '../../constants';
+
+const Container = styled.li`
+  padding: 2.4rem 3.2rem;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+`;
+
+const ViewCountContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  margin: 2.4rem 0;
+  line-height: 1.5;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: ${LINE_LIMIT.REVIEW_ITEM};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const Writer = styled.div`
+  font-size: 1.4rem;
+`;
+
+const ShotVerified = styled.div`
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.GREEN};
+`;
+
+const ViewCount = styled.div`
+  margin-left: 0.5rem;
+  padding-bottom: 0.1rem;
+`;
+
+const Date = styled.div``;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  font-size: 1.4rem;
+  margin-top: 0.4rem;
+`;
+
+export {
+  Container,
+  ViewCountContainer,
+  Content,
+  Writer,
+  ShotVerified,
+  ViewCount,
+  Date,
+  TopContainer,
+  BottomContainer,
+};
