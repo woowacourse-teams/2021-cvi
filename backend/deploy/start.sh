@@ -5,7 +5,7 @@ ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
 echo "> Build 파일 경로 복사"
-JAR_LOCATION=$(find /home/ubuntu/deploy/* -name "*jar" | grep cvi)
+JAR_LOCATION=$(find /home/ubuntu/deploy/* -name "*jar" | grep SNAPSHOT.jar)
 
 echo "> 새 애플리케이션 배포"
 echo "> JAR Location: $JAR_LOCATION" 해당 jar파일 실행
