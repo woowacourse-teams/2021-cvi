@@ -1,10 +1,10 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
-import com.backjoongwon.cvi.auth.domain.oauthtoken.NaverOAuthToken;
 import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
+import com.backjoongwon.cvi.common.exception.InternalServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
@@ -59,13 +59,11 @@ public class NaverAuthorization implements Authorization {
 
     @Override
     public OAuthToken mapToOAuthToken(ResponseEntity<String> response) {
-        NaverOAuthToken oauthToken = null;
         try {
-            oauthToken = objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
+            return objectMapper.readValue(response.getBody(), OAuthToken.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new InternalServerException(e.getMessage());
         }
-        return oauthToken;
     }
 
     @Override
@@ -89,13 +87,11 @@ public class NaverAuthorization implements Authorization {
 
     @Override
     public SocialProfile mapToProfile(ResponseEntity<String> response) {
-        NaverProfile profile = null;
         try {
             return objectMapper.readValue(response.getBody(), NaverProfile.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new InternalServerException(e.getMessage());
         }
-        return profile;
     }
 
     @Override

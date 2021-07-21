@@ -1,9 +1,7 @@
 package com.backjoongwon.cvi.common.handler;
 
-import com.backjoongwon.cvi.common.exception.CommonException;
-import com.backjoongwon.cvi.common.exception.ExceptionMessage;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.common.exception.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
