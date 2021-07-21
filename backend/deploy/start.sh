@@ -1,11 +1,17 @@
 #!/bin/bash
 
+if [ $# -lt 1 ] ;  then
+  echo '배호 환경을 작성해주세요 (ex) sudo sh start.sh prod)'
+  exit 1
+fi
+
+
 ABSPATH=$(readlink -f -- "$0")
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
 echo "> Build 파일 경로 복사"
-JAR_LOCATION=$(find /home/ubuntu/deploy/* -name "*jar" | grep SNAPSHOT.jar)
+JAR_LOCATION=$(find /home/ubuntu/deploy/* -name "*.jar" | grep SNAPSHOT.jar)
 
 echo "> 새 애플리케이션 배포"
 echo "> JAR Location: $JAR_LOCATION" 해당 jar파일 실행
@@ -18,7 +24,16 @@ echo "> $JAR_LOCATION 실행"
 IDLE_PROFILE=$(find_idle_profile)
 
 echo "> $JAR_LOCATION 를 profile=$IDLE_PROFILE 로 실행합니다."
-nohup java -jar \
-    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-prod.yml \
-    -Dspring.profiles.active=$IDLE_PROFILE \
+if [[ "$1" == prod ]]
+then
+  nohup java -jar \
+    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml \
+    -Dspring.profiles.active=$IDLE_PROFILE,"$1"\
     $JAR_LOCATION > ~/nohup.out 2>&1 &
+else
+  nohup java -jar \
+    -Dspring.config.location=classpath:/application.yml\
+    -Dspring.profiles.active=$IDLE_PROFILE,"$1"\
+    $JAR_LOCATION > ~/nohup.out 2>&1 &
+fi
+
