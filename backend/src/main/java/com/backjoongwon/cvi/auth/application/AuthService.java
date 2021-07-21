@@ -45,7 +45,7 @@ public class AuthService {
                     .build();
             user.update(updateUser);
 
-            String token = jwtTokenProvider.createToken(user.getId());
+            String token = jwtTokenProvider.createToken(user.getNickname());
 
             return UserResponse.of(user, token);
         }

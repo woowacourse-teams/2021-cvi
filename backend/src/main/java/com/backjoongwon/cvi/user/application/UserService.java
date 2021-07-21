@@ -30,7 +30,7 @@ public class UserService {
         }
 
         User user = userRepository.save(userRequest.toEntity());
-        String accessToken = jwtTokenProvider.createToken(user.getId());
+        String accessToken = jwtTokenProvider.createToken(user.getNickname());
 
         return UserResponse.of(user, accessToken);
     }
