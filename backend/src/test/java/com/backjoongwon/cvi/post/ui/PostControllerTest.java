@@ -64,7 +64,7 @@ class PostControllerTest extends ApiDocument {
     void createPost() throws Exception {
         //given
         given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        UserResponse userResponse = UserResponse.of(user);
+        UserResponse userResponse = UserResponse.of(user, null);
         PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
@@ -89,7 +89,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        UserResponse expectedUserResponse = new UserResponse(USER_ID, "user", AgeRange.TEENS, true);
+        UserResponse expectedUserResponse = UserResponse.of(user, ACCESS_TOKEN);
         PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 1, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
@@ -114,8 +114,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findAll() throws Exception {
         //given
-        UserResponse userResponse1 = new UserResponse(USER_ID, "user", AgeRange.TEENS, true);
-        UserResponse userResponse2 = new UserResponse(USER_ID + 1, "검프", AgeRange.TWENTIES, false);
+        UserResponse userResponse1 = UserResponse.of(user, ACCESS_TOKEN);
+        UserResponse userResponse2 = UserResponse.of(user, ACCESS_TOKEN);
 
         List<PostResponse> postResponses = Arrays.asList(
                 new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
@@ -186,13 +186,13 @@ class PostControllerTest extends ApiDocument {
                 .ageRange(AgeRange.TEENS)
                 .createdAt(LocalDateTime.now())
                 .nickname("검프")
-                .socialProfileUrl("www.gump.com")
+                .profileUrl("www.gump.com")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
         willReturn(Arrays.asList(
-                new PostResponse(1L, UserResponse.of(user), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, UserResponse.of(user), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, UserResponse.of(user), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);

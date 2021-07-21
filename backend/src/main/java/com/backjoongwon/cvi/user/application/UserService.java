@@ -8,7 +8,8 @@ import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.*;
+import com.backjoongwon.cvi.user.dto.UserRequest;
+import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +28,11 @@ public class UserService {
         if (userRepository.existsByNickname(userRequest.getNickname())) {
             throw new DuplicateException("닉네임은 중복될 수 없습니다.");
         }
+
         User user = userRepository.save(userRequest.toEntity());
-        return UserResponse.of(user);
-    }
+        String accessToken = jwtTokenProvider.createToken(user.getId());
 
-    public SigninResponse signin(SigninRequest userRequest) {
-        User foundUser = userRepository.findByNickname(userRequest.getNickname())
-                .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 사용자입니다."));
-
-        String accessToken = jwtTokenProvider.createToken(foundUser.getId());
-        return new SigninResponse(accessToken, UserResponse.of(foundUser));
+        return UserResponse.of(user, accessToken);
     }
 
     public void validateAccessToken(String accessToken) {
@@ -51,11 +47,11 @@ public class UserService {
     }
 
     public UserResponse findById(Long id) {
-        return UserResponse.of(findUserById(id));
+        return UserResponse.of(findUserById(id), null);
     }
 
-    public UserMeResponse findMeById(Long id) {
-        return UserMeResponse.of(findUserById(id));
+    public UserResponse findMeById(Long id) {
+        return UserResponse.of(findUserById(id), null);
     }
 
     private User findUserById(Long id) {

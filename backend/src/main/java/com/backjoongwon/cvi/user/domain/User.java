@@ -25,17 +25,19 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private SocialProvider socialProvider;
-    private String socialProfileUrl;
+    private String socialId;
+    private String profileUrl;
 
     @Builder
     public User(Long id, String nickname, AgeRange ageRange, SocialProvider socialProvider,
-                String socialProfileUrl, LocalDateTime createdAt) {
+                String socialId, String profileUrl, LocalDateTime createdAt) {
         super(id, createdAt);
         validateNickName(nickname);
         this.nickname = nickname;
         this.ageRange = ageRange;
         this.socialProvider = socialProvider;
-        this.socialProfileUrl = socialProfileUrl;
+        this.socialId = socialId;
+        this.profileUrl = profileUrl;
     }
 
     private void validateNickName(String nickname) {
@@ -45,7 +47,11 @@ public class User extends BaseEntity {
     }
 
     public void update(User updateUser) {
+        this.profileUrl = updateUser.profileUrl;
         this.ageRange = updateUser.ageRange;
+        this.socialProvider = updateUser.socialProvider;
+        this.socialId = updateUser.socialId;
+        this.profileUrl = updateUser.profileUrl;
     }
 
     public void makeVerified() {

@@ -30,7 +30,7 @@ class PostTest {
                 .id(1L)
                 .nickname("안녕하세욘")
                 .ageRange(AgeRange.TEENS)
-                .socialProfileUrl("")
+                .profileUrl("")
                 .socialProvider(SocialProvider.KAKAO)
                 .createdAt(LocalDateTime.now())
                 .build();
