@@ -11,7 +11,7 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("OAuth 컨트롤러 테스트")
-@WebMvcTest(controllers = AuthController.class)
+@SpringBootTest
 public class AuthControllerTest extends ApiDocument {
 
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
@@ -52,7 +52,7 @@ public class AuthControllerTest extends ApiDocument {
                 .profileUrl(PROFILE_URL)
                 .build();
         authRequest = new AuthRequest(SocialProvider.KAKAO, "sadnkfsadnfk", null);
-        userResponse = UserResponse.of(user, ACCESS_TOKEN);
+        userResponse = UserResponse.of(user, BEARER + ACCESS_TOKEN);
     }
 
     @DisplayName("OAuth 로그인 - 성공")
