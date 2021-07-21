@@ -55,6 +55,9 @@ class PostControllerTest extends ApiDocument {
                 .id(USER_ID)
                 .nickname("user")
                 .ageRange(AgeRange.TEENS)
+                .socialProvider(SocialProvider.NAVER)
+                .profileUrl("naver.com")
+                .socialId("naver_id")
                 .build();
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
     }
@@ -118,8 +121,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse userResponse2 = UserResponse.of(user, ACCESS_TOKEN);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse1, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         );
 
         willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);

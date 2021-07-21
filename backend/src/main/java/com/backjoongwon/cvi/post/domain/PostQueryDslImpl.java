@@ -24,6 +24,7 @@ public class PostQueryDslImpl implements PostQueryDsl {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, QUser.user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType))
+                .orderBy(post.createdAt.desc())
                 .fetch();
     }
 

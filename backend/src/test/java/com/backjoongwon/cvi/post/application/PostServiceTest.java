@@ -116,7 +116,7 @@ class PostServiceTest {
     void findAll() {
         //given
         post = Post.builder()
-                .content("Test Content222")
+                .content("Last Content")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
                 .user(user)
                 .createdAt(LocalDateTime.now())
@@ -126,6 +126,7 @@ class PostServiceTest {
         List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL);
         //then
         assertThat(response).hasSize(2);
+        assertThat(response.get(0).getContent()).isEqualTo("Last Content");
     }
 
     @DisplayName("게시글 수정 - 성공")
