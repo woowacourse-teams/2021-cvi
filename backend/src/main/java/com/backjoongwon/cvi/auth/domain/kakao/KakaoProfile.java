@@ -11,20 +11,16 @@ public class KakaoProfile {
     public KakaoAccount kakao_account;
 
     public String getProfileImage() {
-        return this.properties.nickname;
-    }
-
-    public String getNickname() {
         return this.properties.profile_image;
     }
 
-    class Properties {
+    static class Properties {
         public String nickname;
         public String profile_image;
         public String thumbnail_image;
     }
 
-    class KakaoAccount {
+    static class KakaoAccount {
         public Boolean profile_needs_agreement;
         public Profile profile;
         public Boolean has_email;
@@ -42,7 +38,7 @@ public class KakaoProfile {
         public Boolean profile_image_needs_agreement;
     }
 
-    class Profile {
+    static class Profile {
         public String nickname;
         public String thumbnail_image_url;
         public String profile_image_url;
