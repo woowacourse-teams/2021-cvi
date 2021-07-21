@@ -1,4 +1,11 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import Button from '../../components/Button/Button';
+import Frame from '../../components/Frame/Frame';
+import { FONT_COLOR, PATH, TO_DATE_TYPE, VACCINATION, VACCINATION_COLOR } from '../../constants';
+import { useFetch } from '../../hooks';
+import { requestGetReview, requestPutReview } from '../../requests';
 import {
   Container,
   FrameContent,
@@ -10,42 +17,26 @@ import {
   WriterInfo,
   Writer,
   InfoBottom,
-  UpdateButtonContainer,
   CreatedAt,
-  Content,
+  TextArea,
   ViewCount,
-  Error,
-  buttonStyles,
-} from './ReviewDetailPage.styles';
-import Frame from '../../components/Frame/Frame';
-import { useHistory, useParams } from 'react-router-dom';
-import { useFetch } from '../../hooks';
-import { requestDeleteReview, requestGetReview } from '../../requests';
-import Label from '../../components/Label/Label';
-import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
-import {
-  CONFIRM_MESSAGE,
-  ERROR_MESSAGE,
-  FONT_COLOR,
-  PATH,
-  TO_DATE_TYPE,
-  VACCINATION,
-  VACCINATION_COLOR,
-} from '../../constants';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
+  editButtonStyles,
+} from './ReviewEditPage.styles';
 import LeftArrowIcon from '../../assets/icons/left-arrow.svg';
 import Avatar from '../../components/Avatar/Avatar';
 import toDate from '../../utils/toDate';
 import ClockIcon from '../../assets/icons/clock.svg';
 import EyeIcon from '../../assets/icons/eye.svg';
+import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
+import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
+import Label from '../../components/Label/Label';
 
-const ReviewDetailPage = () => {
+const ReviewEditPage = () => {
   const history = useHistory();
   const { id } = useParams();
-  const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
+  const [content, setContent] = useState('');
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
 
   const labelFontColor =
@@ -55,33 +46,25 @@ const ReviewDetailPage = () => {
     history.goBack();
   };
 
-  const goReviewPage = () => {
-    history.push(`${PATH.REVIEW}`);
+  const goReviewDetailPage = () => {
+    history.push(`${PATH.REVIEW}/${id}`);
   };
 
-  const goReviewEditPage = () => {
-    history.push(`${PATH.REVIEW}/${id}/edit`);
-  };
-
-  const deleteReview = async () => {
-    if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
+  const editReview = async () => {
+    const data = { content, vaccinationType: review?.vaccinationType };
 
     try {
-      const response = await requestDeleteReview(accessToken, id);
+      const response = await requestPutReview(accessToken, id, data);
 
       if (!response.ok) {
         throw new Error();
       }
 
-      goReviewPage();
+      goReviewDetailPage();
     } catch (error) {
       console.error(error);
     }
   };
-
-  if (error) {
-    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
-  }
 
   return (
     <Container>
@@ -102,11 +85,11 @@ const ReviewDetailPage = () => {
           <Info>
             <VaccinationInfo>
               <Label
-                backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
+                backgroundColor={VACCINATION_COLOR[review.vaccinationType]}
                 sizeType={LABEL_SIZE_TYPE.MEDIUM}
                 fontColor={labelFontColor}
               >
-                {VACCINATION[review?.vaccinationType]}
+                {VACCINATION[review.vaccinationType]}
               </Label>
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
@@ -125,33 +108,23 @@ const ReviewDetailPage = () => {
                 <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
                 <ViewCount>{review?.viewCount}</ViewCount>
               </ReviewInfo>
-              {user.id === review?.writer?.id && (
-                <UpdateButtonContainer>
-                  <Button
-                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                    color={FONT_COLOR.GRAY}
-                    styles={buttonStyles}
-                    onClick={goReviewEditPage}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                    color={FONT_COLOR.GRAY}
-                    styles={buttonStyles}
-                    onClick={deleteReview}
-                  >
-                    삭제
-                  </Button>
-                </UpdateButtonContainer>
-              )}
             </InfoBottom>
           </Info>
-          <Content>{review?.content}</Content>
+          <TextArea onChange={(event) => setContent(event.target.value)}>
+            {review?.content}
+          </TextArea>
         </FrameContent>
       </Frame>
+      <Button
+        backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
+        sizeType={BUTTON_SIZE_TYPE.LARGE}
+        styles={editButtonStyles}
+        onClick={editReview}
+      >
+        수정하기
+      </Button>
     </Container>
   );
 };
 
-export default ReviewDetailPage;
+export default ReviewEditPage;

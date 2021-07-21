@@ -26,6 +26,16 @@ const requestDeleteReview = (accessToken, reviewId) =>
     },
   });
 
+const requestPutReview = (accessToken, reviewId, data) =>
+  fetch(`${BASE_URL}/posts/${reviewId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
 const requestPostSignup = (data) =>
   fetch(`${BASE_URL}/users/signup`, {
     method: 'POST',
@@ -59,6 +69,7 @@ export {
   requestGetReview,
   requestCreateReview,
   requestDeleteReview,
+  requestPutReview,
   requestPostSignup,
   requestPostLogin,
   requestGetMyInfo,
