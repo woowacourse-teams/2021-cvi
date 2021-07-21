@@ -11,7 +11,7 @@ public class AuthorizationFactory {
         }
 
         if (provider == SocialProvider.NAVER) {
-//            return new NaverAuthorization();
+            return new NaverAuthorization();
         }
 
         return null;
