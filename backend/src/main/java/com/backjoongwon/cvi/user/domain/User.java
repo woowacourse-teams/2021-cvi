@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.user.domain;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import lombok.AccessLevel;

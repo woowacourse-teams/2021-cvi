@@ -1,7 +1,6 @@
 package com.backjoongwon.cvi.auth.application;
 
-import com.backjoongwon.cvi.auth.domain.authorization.Authorization;
-import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationFactory;
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
@@ -24,11 +23,9 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public UserResponse authenticate(AuthRequest authRequest) {
-        AuthorizationFactory authorizationFactory = new AuthorizationFactory();
-        Authorization authorization = authorizationFactory.of(authRequest.getProvider());
-        UserInformation userInformation = authorization.requestProfile(authRequest.getCode(), authRequest.getState());
+        UserInformation userInfo = SocialProvider.requestProfile(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
 
-        return createUserResponse(authRequest, userInformation);
+        return createUserResponse(authRequest, userInfo);
     }
 
     private UserResponse createUserResponse(AuthRequest authRequest, UserInformation userInformation) {
@@ -37,10 +34,6 @@ public class AuthService {
         if (foundUser.isPresent()) {
             User user = foundUser.get();
             User updateUser = User.builder()
-                    .profileUrl(userInformation.getProfileUrl())
-                    .ageRange(user.getAgeRange())
-                    .socialProvider(authRequest.getProvider())
-                    .socialId(userInformation.getSocialId())
                     .profileUrl(userInformation.getProfileUrl())
                     .build();
             user.update(updateUser);

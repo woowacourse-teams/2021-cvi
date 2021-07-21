@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.user.domain;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
