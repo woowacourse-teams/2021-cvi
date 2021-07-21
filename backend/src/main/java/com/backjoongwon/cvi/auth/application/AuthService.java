@@ -23,7 +23,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public UserResponse authorize(AuthRequest authRequest) {
+    public UserResponse authenticate(AuthRequest authRequest) {
         AuthorizationFactory authorizationFactory = new AuthorizationFactory();
         Authorization authorization = authorizationFactory.of(authRequest.getProvider());
         UserInformation userInformation = authorization.requestProfile(authRequest.getCode(), authRequest.getState());

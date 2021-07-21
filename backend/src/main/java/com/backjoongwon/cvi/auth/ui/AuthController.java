@@ -17,8 +17,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/auth")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse signup(@RequestBody AuthRequest authRequest, HttpServletResponse servletResponse) {
-        return authService.authorize(authRequest);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse authenticate(@RequestBody AuthRequest authRequest, HttpServletResponse httpServletResponse) {
+        UserResponse userResponse = authService.authenticate(authRequest);
+        httpServletResponse.setHeader("Authorization", userResponse.getAccessToken());
+        return userResponse;
     }
 }

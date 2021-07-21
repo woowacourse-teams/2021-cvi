@@ -201,25 +201,6 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-signup-failure"));
     }
 
-    private ResultActions 사용자_로그인_요청() throws Exception {
-        return mockMvc.perform(post("/api/v1/users/signin")
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
-    }
-
-    private void 사용자_로그인_성공함(ResultActions response, UserResponse signinResponse) throws Exception {
-        response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(signinResponse)))
-                .andExpect(header().string("Authorization", BEARER + ACCESS_TOKEN))
-                .andDo(print())
-                .andDo(toDocument("user-signin"));
-    }
-
-    private void 사용자_로그인_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-signin-failure"));
-    }
-
     private ResultActions 사용자_내_정보_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/users/me")
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
