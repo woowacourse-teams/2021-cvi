@@ -35,4 +35,10 @@ public class UserResponse {
         return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
                 user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
+
+    public static UserResponse of(Long id, String nickname, AgeRangeResponse ageRange, boolean shotVerified, String accessToken,
+                                  SocialProvider socialProvider, String socialId, String socialProfileUrl) {
+        return new UserResponse(id, nickname, ageRange,
+                shotVerified, accessToken, socialProvider, socialId, socialProfileUrl);
+    }
 }

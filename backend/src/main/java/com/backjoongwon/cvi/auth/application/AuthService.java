@@ -45,11 +45,8 @@ public class AuthService {
 
             return UserResponse.of(user, token);
         }
-        User notFoundUser = User.builder()
-                .socialProvider(authRequest.getProvider())
-                .socialId(profile.getSocialId())
-                .profileUrl(profile.getProfileUrl())
-                .build();
-        return UserResponse.of(notFoundUser, null);
+
+        return UserResponse.of(null, null, null, false,
+                null, authRequest.getProvider(), profile.getSocialId(), profile.getProfileUrl());
     }
 }
