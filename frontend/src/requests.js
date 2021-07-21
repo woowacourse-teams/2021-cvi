@@ -17,6 +17,15 @@ const requestCreateReview = (accessToken, data) =>
     body: JSON.stringify(data),
   });
 
+const requestDeleteReview = (accessToken, reviewId) =>
+  fetch(`${BASE_URL}/posts/${reviewId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
 const requestPostSignup = (data) =>
   fetch(`${BASE_URL}/users/signup`, {
     method: 'POST',
@@ -49,6 +58,7 @@ export {
   requestGetSelectedReviewList,
   requestGetReview,
   requestCreateReview,
+  requestDeleteReview,
   requestPostSignup,
   requestPostLogin,
   requestGetMyInfo,

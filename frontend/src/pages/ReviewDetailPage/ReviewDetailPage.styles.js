@@ -52,6 +52,15 @@ const Writer = styled.div`
   font-weight: 600;
 `;
 
+const UpdateButtonContainer = styled.div`
+  display: flex;
+`;
+
+const InfoBottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const CreatedAt = styled.div`
   font-size: 1.2rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
@@ -87,6 +96,8 @@ export {
   ReviewInfo,
   ShotVerified,
   Writer,
+  InfoBottom,
+  UpdateButtonContainer,
   CreatedAt,
   Content,
   ViewCount,

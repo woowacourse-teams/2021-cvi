@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import {
   Container,
   FrameContent,
@@ -8,6 +9,8 @@ import {
   ShotVerified,
   WriterInfo,
   Writer,
+  InfoBottom,
+  UpdateButtonContainer,
   CreatedAt,
   Content,
   ViewCount,
@@ -16,12 +19,14 @@ import {
 import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
-import { requestGetReview } from '../../requests';
+import { requestDeleteReview, requestGetReview } from '../../requests';
 import Label from '../../components/Label/Label';
 import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
 import {
+  CONFIRM_MESSAGE,
   ERROR_MESSAGE,
   FONT_COLOR,
+  PATH,
   TO_DATE_TYPE,
   VACCINATION,
   VACCINATION_COLOR,
@@ -37,6 +42,8 @@ import EyeIcon from '../../assets/icons/eye.svg';
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
+  const user = useSelector((state) => state.authReducer.user);
+  const accessToken = useSelector((state) => state.authReducer.accessToken);
 
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
 
@@ -45,6 +52,28 @@ const ReviewDetailPage = () => {
 
   const goBack = () => {
     history.goBack();
+  };
+
+  const goReviewPage = () => {
+    history.push(`${PATH.REVIEW}`);
+  };
+
+  const editReview = () => {};
+
+  const deleteReview = async () => {
+    if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
+
+    try {
+      const response = await requestDeleteReview(accessToken, id);
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      goReviewPage();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (error) {
@@ -84,14 +113,34 @@ const ReviewDetailPage = () => {
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>
             </WriterInfo>
-            <ReviewInfo>
-              <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-              {review.createdAt && (
-                <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
+            <InfoBottom>
+              <ReviewInfo>
+                <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
+                {review.createdAt && (
+                  <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
+                )}
+                <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+                <ViewCount>{review?.viewCount}</ViewCount>
+              </ReviewInfo>
+              {user.id === review?.writer?.id && (
+                <UpdateButtonContainer>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    onClick={editReview}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    onClick={deleteReview}
+                  >
+                    삭제
+                  </Button>
+                </UpdateButtonContainer>
               )}
-              <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
-              <ViewCount>{review?.viewCount}</ViewCount>
-            </ReviewInfo>
+            </InfoBottom>
           </Info>
           <Content>{review?.content}</Content>
         </FrameContent>
