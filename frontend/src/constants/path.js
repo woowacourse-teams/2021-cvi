@@ -3,6 +3,7 @@ const PATH = {
   REVIEW: '/review',
   LOGIN: '/login',
   SIGNUP: '/signup',
+  OAUTH: '/auth/kakao/callback',
 };
 
 export default PATH;
