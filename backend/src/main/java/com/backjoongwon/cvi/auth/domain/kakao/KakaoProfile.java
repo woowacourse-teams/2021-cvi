@@ -11,7 +11,7 @@ public class KakaoProfile {
     public KakaoAccount kakao_account;
 
     public String getProfileImage() {
-        return this.properties.profile_image;
+        return this.kakao_account.profile.profile_image_url;
     }
 
     static class Properties {
