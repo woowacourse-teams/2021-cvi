@@ -1,21 +1,23 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, RESPONSE_STATE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postOAuthLogin } from '../../service';
 
 const OAuthPage = () => {
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const login = async () => {
-    const code = new URLSearchParams(window.location.search).get('code');
-    // KAKAO
+    const code = new URLSearchParams(location.search).get('code');
+    const state = new URLSearchParams(location.search).get('state');
+
     const data = {
-      provider: 'KAKAO',
+      provider: location.pathname.includes('kakao') ? 'KAKAO' : 'NAVER',
       code,
-      state: '',
+      state,
     };
 
     const response = await postOAuthLogin(data);
@@ -26,7 +28,7 @@ const OAuthPage = () => {
       return;
     }
 
-    if (response.data.accessToken === null) {
+    if (!response.data.accessToken) {
       const { socialProvider, socialId, socialProfileUrl } = response.data;
 
       history.push({
@@ -54,10 +56,3 @@ const OAuthPage = () => {
 };
 
 export default OAuthPage;
-
-// NAVER
-// const data = {
-//   provider: 'NAVER',
-//   code,
-//   state: '',
-// };

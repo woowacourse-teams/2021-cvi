@@ -25,7 +25,8 @@ const App = () => {
               <Route exact path={`${PATH.REVIEW}/:id`} component={ReviewDetailPage} />
               <Route exact path={PATH.LOGIN} component={LoginPage} />
               <Route exact path={PATH.SIGNUP} component={SignupPage} />
-              <Route exact path={PATH.OAUTH} component={OAuthPage} />
+              <Route exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
+              <Route exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
               <Redirect to={PATH.HOME} />
             </Switch>
           </BaseLayout>

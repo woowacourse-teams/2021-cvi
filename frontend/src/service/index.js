@@ -67,8 +67,9 @@ const postSignup = async (data) => {
   } catch (error) {
     // const errorResponse = JSON.parse(error.message).message;
     // alert(errorResponse);
-
     console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
   }
 };
 

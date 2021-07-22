@@ -16,32 +16,9 @@ const Title = styled.div`
   margin-bottom: 4.4rem;
 `;
 
-const ButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
 const frameStyles = css`
   flex-direction: column;
   padding: 4rem;
-`;
-
-const loginButtonStyles = css`
-  margin-top: 3.6rem;
-  border-radius: 2.6rem;
-  width: 100%;
-  height: 5.2rem;
-  font-size: 1.6rem;
-`;
-
-const goSignupStyles = css`
-  margin-top: 0.6rem;
-  color: ${FONT_COLOR.LIGHT_GRAY};
-
-  &:hover {
-    color: ${FONT_COLOR.GRAY};
-  }
 `;
 
 const NaverButton = styled.a`
@@ -75,13 +52,4 @@ const KakaoButton = styled.a`
   }
 `;
 
-export {
-  Title,
-  Container,
-  ButtonContainer,
-  frameStyles,
-  loginButtonStyles,
-  goSignupStyles,
-  KakaoButton,
-  NaverButton,
-};
+export { Title, Container, frameStyles, KakaoButton, NaverButton };
