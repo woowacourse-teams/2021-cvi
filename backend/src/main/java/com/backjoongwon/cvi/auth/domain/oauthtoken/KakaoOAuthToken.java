@@ -1,5 +1,8 @@
 package com.backjoongwon.cvi.auth.domain.oauthtoken;
 
+import lombok.Getter;
+
+@Getter
 public class KakaoOAuthToken extends OAuthToken {
 
     private String scope;
