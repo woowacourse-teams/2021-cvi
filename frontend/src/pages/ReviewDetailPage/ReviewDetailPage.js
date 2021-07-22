@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import {
   Container,
   FrameContent,
@@ -8,10 +10,13 @@ import {
   ShotVerified,
   WriterInfo,
   Writer,
+  InfoBottom,
+  UpdateButtonContainer,
   CreatedAt,
   Content,
   ViewCount,
   Error,
+  buttonStyles,
 } from './ReviewDetailPage.styles';
 import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
@@ -20,8 +25,13 @@ import { requestGetReview } from '../../requests';
 import Label from '../../components/Label/Label';
 import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
 import {
+  ALERT_MESSAGE,
+  CONFIRM_MESSAGE,
   ERROR_MESSAGE,
   FONT_COLOR,
+  PATH,
+  RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
   TO_DATE_TYPE,
   VACCINATION,
   VACCINATION_COLOR,
@@ -31,18 +41,41 @@ import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Butto
 import Avatar from '../../components/Avatar/Avatar';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
+import { deleteReviewAsync } from '../../service';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
+  const user = useSelector((state) => state.authReducer.user);
+  const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const { enqueueSnackbar } = useSnackbar();
 
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
-  const goBack = () => {
-    history.goBack();
+  const goReviewPage = () => {
+    history.push(`${PATH.REVIEW}`);
+  };
+
+  const goReviewEditPage = () => {
+    history.push(`${PATH.REVIEW}/${id}/edit`);
+  };
+
+  const deleteReview = async () => {
+    if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
+
+    const response = await deleteReviewAsync(accessToken, id);
+
+    if (!response.state === RESPONSE_STATE.FAILURE) {
+      alert(ALERT_MESSAGE.FAIL_TO_DELETE_REVIEW);
+
+      return;
+    }
+
+    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
+    goReviewPage();
   };
 
   if (error) {
@@ -59,10 +92,10 @@ const ReviewDetailPage = () => {
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
               color={FONT_COLOR.BLACK}
               withIcon={true}
-              onClick={goBack}
+              onClick={goReviewPage}
             >
               <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
-              <div>뒤로 가기</div>
+              <div>목록 보기</div>
             </Button>
           </ButtonContainer>
           <Info>
@@ -82,14 +115,36 @@ const ReviewDetailPage = () => {
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>
             </WriterInfo>
-            <ReviewInfo>
-              <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-              {review.createdAt && (
-                <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
+            <InfoBottom>
+              <ReviewInfo>
+                <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
+                {review.createdAt && (
+                  <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
+                )}
+                <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+                <ViewCount>{review?.viewCount}</ViewCount>
+              </ReviewInfo>
+              {user.id === review?.writer?.id && (
+                <UpdateButtonContainer>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    styles={buttonStyles}
+                    onClick={goReviewEditPage}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    styles={buttonStyles}
+                    onClick={deleteReview}
+                  >
+                    삭제
+                  </Button>
+                </UpdateButtonContainer>
               )}
-              <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
-              <ViewCount>{review?.viewCount}</ViewCount>
-            </ReviewInfo>
+            </InfoBottom>
           </Info>
           <Content>{review?.content}</Content>
         </FrameContent>

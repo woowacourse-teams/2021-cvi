@@ -10,7 +10,7 @@ const FrameContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 60rem;
+  height: 55rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -53,10 +53,6 @@ const Writer = styled.div`
   font-weight: 600;
 `;
 
-const UpdateButtonContainer = styled.div`
-  display: flex;
-`;
-
 const InfoBottom = styled.div`
   display: flex;
   justify-content: space-between;
@@ -68,8 +64,12 @@ const CreatedAt = styled.div`
   padding-bottom: 0.2rem;
   margin: 0 1.6rem 0 0.3rem;
 `;
-const Content = styled.div`
+const TextArea = styled.textarea`
+  margin: 3rem;
+  height: 100%;
   padding: 2rem 3rem;
+  font-size: 1.6rem;
+  color: ${FONT_COLOR.BLACK};
 `;
 
 const ViewCount = styled.div`
@@ -79,17 +79,12 @@ const ViewCount = styled.div`
   margin-left: 0.3rem;
 `;
 
-const Error = styled.div`
-  font-size: 2rem;
-  display: flex;
-  justify-content: center;
-  padding-top: 14rem;
-  height: 36rem;
+const editButtonStyles = css`
+  width: 100%;
+  margin-top: 2.6rem;
+  height: 4.8rem;
 `;
 
-const buttonStyles = css`
-  padding-right: 0;
-`;
 export {
   Container,
   FrameContent,
@@ -101,10 +96,8 @@ export {
   ShotVerified,
   Writer,
   InfoBottom,
-  UpdateButtonContainer,
   CreatedAt,
-  Content,
+  TextArea,
   ViewCount,
-  Error,
-  buttonStyles,
+  editButtonStyles,
 };

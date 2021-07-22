@@ -9,13 +9,7 @@ import {
   LogoutButton,
   selectedNavStyles,
 } from './SideBar.styles';
-import {
-  FONT_COLOR,
-  LOCAL_STORAGE_KEY,
-  PATH,
-  SNACKBAR_MESSAGE,
-  THEME_COLOR,
-} from '../../constants';
+import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
 import { HomeIcon, LoginIcon, LogoIcon, LogoutIcon, ReviewIcon } from '../../assets/icons';
 
@@ -45,20 +39,20 @@ const SideBar = () => {
       </LogoContainer>
       <MenuContainer>
         <NavLinkElement exact to={PATH.HOME} activeStyle={selectedNavStyles}>
-          <HomeIcon width="20" height="20" stroke={FONT_COLOR.WHITE} /> 홈
+          <HomeIcon width="20" height="20" stroke="currentColor" /> 홈
         </NavLinkElement>
         <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
-          <ReviewIcon width="20" height="20" stroke={FONT_COLOR.WHITE} /> 접종후기
+          <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
         </NavLinkElement>
       </MenuContainer>
 
       {Object.keys(user).length > 0 ? (
         <LogoutButton onClick={logout}>
-          <LogoutIcon width="24" height="24" stroke={FONT_COLOR.WHITE} /> 로그아웃
+          <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
         </LogoutButton>
       ) : (
         <NavLinkElement to={PATH.LOGIN} activeStyle={selectedNavStyles}>
-          <LoginIcon width="24" height="24" stroke={FONT_COLOR.WHITE} /> 로그인
+          <LoginIcon width="24" height="24" stroke="currentColor" /> 로그인
         </NavLinkElement>
       )}
     </Container>
