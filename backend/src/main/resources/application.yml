@@ -1,9 +1,32 @@
 spring:
+  profiles:
+    group:
+      prod:
+        - db
+        - jwt
+  h2:
+    console:
+      enabled: false
+
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000
+
+server:
+  shutdown: graceful
+---
+spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
     username: sa
     password:
+
   h2:
     console:
       enabled: true
@@ -25,3 +48,20 @@ security:
     token:
       secret-key: cvi_secret_key
       expire-length: 3600000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy1
+server:
+  port: 8081
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy2
+
+server:
+  port: 8082
