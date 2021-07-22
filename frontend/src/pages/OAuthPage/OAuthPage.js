@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, RESPONSE_STATE } from '../../constants';
+import { getMyInfoAsync } from '../../redux/authSlice';
 import { postOAuthLogin } from '../../service';
 
 const OAuthPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const login = async () => {
     const code = new URLSearchParams(window.location.search).get('code');
@@ -22,8 +25,6 @@ const OAuthPage = () => {
 
       return;
     }
-    console.log(response.data);
-    // 회원가입 한 유저도 accessToken이 안오는거 같아,,
 
     if (response.data.accessToken === null) {
       const { socialProvider, socialId, socialProfileUrl } = response.data;
@@ -37,12 +38,14 @@ const OAuthPage = () => {
         },
       });
     } else {
-      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, response.data.accessToken);
+      const accessToken = response.data.accessToken;
+
+      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(accessToken));
+      dispatch(getMyInfoAsync(accessToken));
       history.push(`${PATH.HOME}`);
     }
   };
 
-  //
   useEffect(() => {
     login();
   }, []);

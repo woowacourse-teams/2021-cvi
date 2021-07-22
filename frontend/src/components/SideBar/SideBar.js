@@ -26,6 +26,7 @@ import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
 const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const logout = () => {

@@ -20,16 +20,19 @@ const loginAsync = createAsyncThunk('auth/login', async (loginData) => {
   }
 });
 
-const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
+const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (token) => {
   try {
-    const response = await requestGetMyInfo(accessToken);
-
+    const response = await requestGetMyInfo(token);
     if (!response.ok) {
       throw new Error(response);
     }
-    const myInfo = await response.json();
 
-    return { accessToken, user: myInfo };
+    const { id, nickname, ageRange, shotVerified, socialProfileUrl } = await response.json();
+
+    return {
+      accessToken: token,
+      user: { id, nickname, ageRange, shotVerified, socialProfileUrl },
+    };
   } catch (error) {
     console.error(error);
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
