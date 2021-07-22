@@ -45,6 +45,7 @@ class UserControllerTest extends ApiDocument {
     private UserRequest signinRequest;
     private UserRequest updateRequest;
     private UserResponse userResponse;
+    private UserResponse userMeResponse;
 
     @BeforeEach
     void beforeEach() {
@@ -60,6 +61,7 @@ class UserControllerTest extends ApiDocument {
         signinRequest = new UserRequest(NICKNAME, AGE_RANGE, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         updateRequest = new UserRequest(NICKNAME, AGE_RANGE, null, null, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
+        userMeResponse = UserResponse.of(user, null);
 
         given(userService.findUserByAccessToken(ACCESS_TOKEN))
                 .willReturn(user);
@@ -91,11 +93,11 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMe() throws Exception {
         //given
-        willReturn(userResponse).given(userService).findMeById(any(Long.class));
+        willReturn(userMeResponse).given(userService).findMeById(any(Long.class));
         //when
         ResultActions response = 사용자_내_정보_조회_요청();
         //then
-        사용자_내_정보_조회_성공함(response, userResponse);
+        사용자_내_정보_조회_성공함(response, userMeResponse);
     }
 
     @DisplayName("사용자 내 정보 조회 - 실패")

@@ -6,10 +6,10 @@ import lombok.Getter;
 public class UserInformation {
 
     private final String socialId;
-    private final String profileUrl;
+    private final String socialProfileUrl;
 
-    public UserInformation(String socialId, String profileUrl) {
+    public UserInformation(String socialId, String socialProfileUrl) {
         this.socialId = socialId;
-        this.profileUrl = profileUrl;
+        this.socialProfileUrl = socialProfileUrl;
     }
 }
