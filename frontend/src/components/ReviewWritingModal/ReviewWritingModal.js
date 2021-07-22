@@ -8,7 +8,7 @@ import Selection from '../Selection/Selection';
 import Button from '../Button/Button';
 import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../Button/Button.styles';
-import { postReview } from '../../service';
+import { postReviewAsync } from '../../service';
 import { findKey } from '../../utils';
 
 const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
@@ -23,7 +23,7 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
   const createReview = async () => {
     const vaccinationType = findKey(VACCINATION, selectedVaccine);
     const data = { content, vaccinationType };
-    const response = await postReview(accessToken, data);
+    const response = await postReviewAsync(accessToken, data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('리뷰 작성 실패 - createReview');

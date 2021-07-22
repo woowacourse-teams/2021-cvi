@@ -1,11 +1,22 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import Button from '../../components/Button/Button';
 import Frame from '../../components/Frame/Frame';
-import { FONT_COLOR, PATH, TO_DATE_TYPE, VACCINATION, VACCINATION_COLOR } from '../../constants';
+import {
+  ALERT_MESSAGE,
+  CONFIRM_MESSAGE,
+  FONT_COLOR,
+  PATH,
+  RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
+  TO_DATE_TYPE,
+  VACCINATION,
+  VACCINATION_COLOR,
+} from '../../constants';
 import { useFetch } from '../../hooks';
-import { requestGetReview, requestPutReview } from '../../requests';
+import { requestGetReview } from '../../requests';
 import {
   Container,
   FrameContent,
@@ -22,19 +33,19 @@ import {
   ViewCount,
   editButtonStyles,
 } from './ReviewEditPage.styles';
-import LeftArrowIcon from '../../assets/icons/left-arrow.svg';
 import Avatar from '../../components/Avatar/Avatar';
 import toDate from '../../utils/toDate';
-import ClockIcon from '../../assets/icons/clock.svg';
-import EyeIcon from '../../assets/icons/eye.svg';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
 import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
 import Label from '../../components/Label/Label';
+import { putReviewAsync } from '../../service';
+import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 
 const ReviewEditPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [content, setContent] = useState('');
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
@@ -43,6 +54,8 @@ const ReviewEditPage = () => {
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   const goBack = () => {
+    if (!window.confirm(CONFIRM_MESSAGE.GO_BACK)) return;
+
     history.goBack();
   };
 
@@ -53,17 +66,16 @@ const ReviewEditPage = () => {
   const editReview = async () => {
     const data = { content, vaccinationType: review?.vaccinationType };
 
-    try {
-      const response = await requestPutReview(accessToken, id, data);
+    const response = await putReviewAsync(accessToken, id, data);
 
-      if (!response.ok) {
-        throw new Error();
-      }
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert(ALERT_MESSAGE.FAIL_TO_EDIT);
 
-      goReviewDetailPage();
-    } catch (error) {
-      console.error(error);
+      return;
     }
+
+    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
+    goReviewDetailPage();
   };
 
   return (

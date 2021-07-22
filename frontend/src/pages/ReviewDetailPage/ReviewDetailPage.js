@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import {
   Container,
   FrameContent,
@@ -20,14 +21,17 @@ import {
 import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
-import { requestDeleteReview, requestGetReview } from '../../requests';
+import { requestGetReview } from '../../requests';
 import Label from '../../components/Label/Label';
 import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
 import {
+  ALERT_MESSAGE,
   CONFIRM_MESSAGE,
   ERROR_MESSAGE,
   FONT_COLOR,
   PATH,
+  RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
   TO_DATE_TYPE,
   VACCINATION,
   VACCINATION_COLOR,
@@ -37,21 +41,19 @@ import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Butto
 import Avatar from '../../components/Avatar/Avatar';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
+import { deleteReviewAsync } from '../../service';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const { enqueueSnackbar } = useSnackbar();
 
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
-
-  const goBack = () => {
-    history.goBack();
-  };
 
   const goReviewPage = () => {
     history.push(`${PATH.REVIEW}`);
@@ -64,17 +66,16 @@ const ReviewDetailPage = () => {
   const deleteReview = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
 
-    try {
-      const response = await requestDeleteReview(accessToken, id);
+    const response = await deleteReviewAsync(accessToken, id);
 
-      if (!response.ok) {
-        throw new Error();
-      }
+    if (!response.state === RESPONSE_STATE.FAILURE) {
+      alert(ALERT_MESSAGE.FAIL_TO_DELETE_REVIEW);
 
-      goReviewPage();
-    } catch (error) {
-      console.error(error);
+      return;
     }
+
+    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
+    goReviewPage();
   };
 
   if (error) {
@@ -91,10 +92,10 @@ const ReviewDetailPage = () => {
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
               color={FONT_COLOR.BLACK}
               withIcon={true}
-              onClick={goBack}
+              onClick={goReviewPage}
             >
               <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
-              <div>뒤로 가기</div>
+              <div>목록 보기</div>
             </Button>
           </ButtonContainer>
           <Info>

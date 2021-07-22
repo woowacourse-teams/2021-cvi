@@ -1,8 +1,8 @@
 import { BASE_URL } from './constants';
 
-const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
+const requestgetAllReviewList = () => fetch(`${BASE_URL}/posts`);
 
-const requestGetSelectedReviewList = (vaccinationType) =>
+const requestgetSelectedReviewList = (vaccinationType) =>
   fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
 
 const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
@@ -64,8 +64,8 @@ const requestPostOAuthLogin = (data) =>
   });
 
 export {
-  requestGetAllReviewList,
-  requestGetSelectedReviewList,
+  requestgetAllReviewList,
+  requestgetSelectedReviewList,
   requestGetReview,
   requestCreateReview,
   requestDeleteReview,

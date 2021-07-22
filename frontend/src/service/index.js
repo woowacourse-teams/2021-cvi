@@ -1,15 +1,17 @@
 import { RESPONSE_STATE } from '../constants';
 import {
   requestCreateReview,
-  requestGetAllReviewList,
-  requestGetSelectedReviewList,
+  requestDeleteReview,
+  requestgetAllReviewList,
+  requestgetSelectedReviewList,
   requestPostOAuthLogin,
   requestPostSignup,
+  requestPutReview,
 } from '../requests';
 
-const getAllReviewList = async () => {
+const getAllReviewListAsync = async () => {
   try {
-    const response = await requestGetAllReviewList();
+    const response = await requestgetAllReviewList();
 
     if (!response.ok) {
       throw new Error(response.status);
@@ -23,9 +25,9 @@ const getAllReviewList = async () => {
   }
 };
 
-const getSelectedReviewList = async (selectedVaccination) => {
+const getSelectedReviewListAsync = async (selectedVaccination) => {
   try {
-    const response = await requestGetSelectedReviewList(selectedVaccination);
+    const response = await requestgetSelectedReviewList(selectedVaccination);
 
     if (!response.ok) {
       throw new Error(response.status);
@@ -39,7 +41,7 @@ const getSelectedReviewList = async (selectedVaccination) => {
   }
 };
 
-const postReview = async (accessToken, data) => {
+const postReviewAsync = async (accessToken, data) => {
   try {
     const response = await requestCreateReview(accessToken, data);
 
@@ -55,7 +57,39 @@ const postReview = async (accessToken, data) => {
   }
 };
 
-const postSignup = async (data) => {
+const putReviewAsync = async (accessToken, id, data) => {
+  try {
+    const response = await requestPutReview(accessToken, id, data);
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const deleteReviewAsync = async (accessToken, id) => {
+  try {
+    const response = await requestDeleteReview(accessToken, id);
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const postSignupAsync = async (data) => {
   try {
     const response = await requestPostSignup(data);
 
@@ -73,7 +107,7 @@ const postSignup = async (data) => {
   }
 };
 
-const postOAuthLogin = async (data) => {
+const postOAuthLoginAsync = async (data) => {
   try {
     const response = await requestPostOAuthLogin(data);
 
@@ -89,4 +123,12 @@ const postOAuthLogin = async (data) => {
   }
 };
 
-export { getAllReviewList, getSelectedReviewList, postReview, postSignup, postOAuthLogin };
+export {
+  getAllReviewListAsync,
+  getSelectedReviewListAsync,
+  postReviewAsync,
+  putReviewAsync,
+  deleteReviewAsync,
+  postSignupAsync,
+  postOAuthLoginAsync,
+};

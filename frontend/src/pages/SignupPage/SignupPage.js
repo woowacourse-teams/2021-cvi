@@ -8,7 +8,7 @@ import Input from '../../components/Input/Input';
 import Selection from '../../components/Selection/Selection';
 import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { postSignup } from '../../service';
+import { postSignupAsync } from '../../service';
 import {
   signupButtonStyles,
   Container,
@@ -35,7 +35,7 @@ const SignupPage = () => {
 
   const signup = async () => {
     const data = { nickname, ageRange: AGE_RANGE[selectedAgeRange], ...location.state };
-    const response = await postSignup(data);
+    const response = await postSignupAsync(data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);
