@@ -1,8 +1,7 @@
 package com.backjoongwon.cvi.auth.application;
 
-import com.backjoongwon.cvi.auth.domain.Profile;
-import com.backjoongwon.cvi.auth.domain.authorization.Authorization;
-import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationFactory;
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
@@ -23,30 +22,23 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public UserResponse authorize(AuthRequest authRequest) {
-        AuthorizationFactory authorizationFactory = new AuthorizationFactory();
-        Authorization authorization = authorizationFactory.of(authRequest.getProvider());
-        Profile profile = authorization.requestProfile(authRequest.getCode(), authRequest.getState());
+    public UserResponse authenticate(AuthRequest authRequest) {
+        UserInformation userInfo = SocialProvider.requestProfile(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
 
-        Optional<User> foundUser = userRepository.findBySocialProviderAndSocialId(authRequest.getProvider(), profile.getSocialId());
+        return createUserResponse(authRequest, userInfo);
+    }
+
+    private UserResponse createUserResponse(AuthRequest authRequest, UserInformation userInformation) {
+        Optional<User> foundUser = userRepository.findBySocialProviderAndSocialId(authRequest.getProvider(), userInformation.getSocialId());
 
         if (foundUser.isPresent()) {
             User user = foundUser.get();
-            User updateUser = User.builder()
-                    .profileUrl(profile.getProfileUrl())
-                    .ageRange(user.getAgeRange())
-                    .socialProvider(authRequest.getProvider())
-                    .socialId(profile.getSocialId())
-                    .profileUrl(profile.getProfileUrl())
-                    .build();
-            user.update(updateUser);
-
             String token = jwtTokenProvider.createToken(user.getId());
 
             return UserResponse.of(user, token);
         }
 
         return UserResponse.of(null, null, null, false,
-                null, authRequest.getProvider(), profile.getSocialId(), profile.getProfileUrl());
+                null, authRequest.getProvider(), userInformation.getSocialId(), userInformation.getProfileUrl());
     }
 }

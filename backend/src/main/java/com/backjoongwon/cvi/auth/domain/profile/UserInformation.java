@@ -1,13 +1,14 @@
-package com.backjoongwon.cvi.auth.domain;
+package com.backjoongwon.cvi.auth.domain.profile;
 
 import lombok.Getter;
 
 @Getter
-public class Profile {
+public class UserInformation {
+
     private final String socialId;
     private final String profileUrl;
 
-    public Profile(String socialId, String profileUrl) {
+    public UserInformation(String socialId, String profileUrl) {
         this.socialId = socialId;
         this.profileUrl = profileUrl;
     }

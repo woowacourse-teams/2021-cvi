@@ -1,26 +1,39 @@
-package com.backjoongwon.cvi.auth.domain.kakao;
+package com.backjoongwon.cvi.auth.domain.profile;
 
 import lombok.Getter;
 
 @Getter
-public class KakaoProfile {
+public class KakaoProfile implements SocialProfile {
 
     public String id;
     public String connected_at;
     public Properties properties;
     public KakaoAccount kakao_account;
 
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getNickname() {
+        return getNickname();
+    }
+
+    @Override
     public String getProfileImage() {
         return this.kakao_account.profile.profile_image_url;
     }
 
     static class Properties {
+
         public String nickname;
         public String profile_image;
         public String thumbnail_image;
     }
 
     static class KakaoAccount {
+
         public Boolean profile_needs_agreement;
         public Profile profile;
         public Boolean has_email;
@@ -39,10 +52,10 @@ public class KakaoProfile {
     }
 
     static class Profile {
+
         public String nickname;
         public String thumbnail_image_url;
         public String profile_image_url;
         public String is_default_image;
     }
 }
-

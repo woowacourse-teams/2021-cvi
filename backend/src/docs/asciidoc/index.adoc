@@ -44,6 +44,22 @@ endif::[]
 ```
 
 == User (사용자)
+=== 사용자 OAuth
+==== 성공
+===== Request
+include::{snippets}/user-auth/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-auth/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-auth-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-auth-failure/http-response.adoc[]
+
+
 === 사용자 가입
 ==== 성공
 ===== Request
@@ -62,20 +78,6 @@ include::{snippets}/user-signup-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/user-signup-failure/http-response.adoc[]
 
-=== 사용자 로그인
-==== 성공
-===== Request
-include::{snippets}/user-signin/http-request.adoc[]
-
-===== Response
-include::{snippets}/user-signin/http-response.adoc[]
-
-==== 실패
-===== Request
-include::{snippets}/user-signin-failure/http-request.adoc[]
-
-===== Response
-include::{snippets}/user-signin-failure/http-response.adoc[]
 
 === 사용자 내 정보 조회
 ==== 성공
@@ -165,7 +167,12 @@ include::{snippets}/post-findAll/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findAll/http-response.adoc[]
 
-- 게시글 전체 조회 시, 게시글이 하나도 없으면 빈 리스트가 반환된다.
+==== 성공 - 게시글이 하나도 없는 경우
+===== Request
+include::{snippets}/post-findAll-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findAll-when-empty/http-response.adoc[]
 
 === 게시글 단일 조회
 ==== 성공

@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
@@ -8,7 +9,6 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,7 +116,7 @@ class PostServiceTest {
     void findAll() {
         //given
         post = Post.builder()
-                .content("Test Content222")
+                .content("Last Content")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
                 .user(user)
                 .createdAt(LocalDateTime.now())
@@ -126,6 +126,7 @@ class PostServiceTest {
         List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL);
         //then
         assertThat(response).hasSize(2);
+        assertThat(response.get(0).getContent()).isEqualTo("Last Content");
     }
 
     @DisplayName("게시글 수정 - 성공")

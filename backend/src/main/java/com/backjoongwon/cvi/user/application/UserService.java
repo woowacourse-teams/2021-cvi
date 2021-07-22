@@ -25,14 +25,17 @@ public class UserService {
 
     @Transactional
     public UserResponse signup(UserRequest userRequest) {
-        if (userRepository.existsByNickname(userRequest.getNickname())) {
-            throw new DuplicateException("닉네임은 중복될 수 없습니다.");
-        }
-
+        validateDuplicateNickname(userRequest);
         User user = userRepository.save(userRequest.toEntity());
         String accessToken = jwtTokenProvider.createToken(user.getId());
 
         return UserResponse.of(user, accessToken);
+    }
+
+    private void validateDuplicateNickname(UserRequest userRequest) {
+        if (userRepository.existsByNickname(userRequest.getNickname())) {
+            throw new DuplicateException("닉네임은 중복될 수 없습니다.");
+        }
     }
 
     public void validateAccessToken(String accessToken) {
@@ -60,9 +63,10 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserRequest updateRequest) {
+    public void update(Long id, UserRequest userRequest) {
+        validateDuplicateNickname(userRequest);
         User foundUser = findUserById(id);
-        foundUser.update(updateRequest.toEntity());
+        foundUser.update(userRequest.toEntity());
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.user.domain;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
