@@ -45,9 +45,9 @@ public class NaverAuthorization implements Authorization {
     @Override
     public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", "8nbRZEMcC6ZKkwCgUqNr");
-        params.add("redirect_uri", "http://localhost:9000/auth/naver/callback");
+        params.add("grant_type","authorization_code");
+        params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
+        params.add("client_secret", "R_zN6l1A3V");
         params.add("code", code);
         params.add("state", state);
 

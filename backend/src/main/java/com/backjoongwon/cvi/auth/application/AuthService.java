@@ -39,6 +39,6 @@ public class AuthService {
         }
 
         return UserResponse.of(null, null, null, false,
-                null, authRequest.getProvider(), userInformation.getSocialId(), userInformation.getProfileUrl());
+                null, authRequest.getProvider(), userInformation.getSocialId(), userInformation.getSocialProfileUrl());
     }
 }
