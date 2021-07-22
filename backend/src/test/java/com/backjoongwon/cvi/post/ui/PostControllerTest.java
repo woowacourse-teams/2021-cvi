@@ -92,7 +92,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        UserResponse expectedUserResponse = UserResponse.of(user, ACCESS_TOKEN);
+        UserResponse expectedUserResponse = UserResponse.of(user, null);
         PostResponse expectedPostResponse = new PostResponse(POST_ID, expectedUserResponse, "글 내용", 1, VaccinationType.PFIZER, LocalDateTime.now());
 
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
@@ -117,8 +117,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findAll() throws Exception {
         //given
-        UserResponse userResponse1 = UserResponse.of(user, ACCESS_TOKEN);
-        UserResponse userResponse2 = UserResponse.of(user, ACCESS_TOKEN);
+        UserResponse userResponse1 = UserResponse.of(user, null);
+        UserResponse userResponse2 = UserResponse.of(user, null);
 
         List<PostResponse> postResponses = Arrays.asList(
                 new PostResponse(POST_ID + 1, userResponse2, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now()),
@@ -193,9 +193,9 @@ class PostControllerTest extends ApiDocument {
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
         willReturn(Arrays.asList(
-                new PostResponse(1L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, UserResponse.of(user, ACCESS_TOKEN), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, UserResponse.of(user, null), "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, UserResponse.of(user, null), "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, UserResponse.of(user, null), "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
