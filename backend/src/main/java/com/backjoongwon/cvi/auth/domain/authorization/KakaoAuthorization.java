@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
+import com.backjoongwon.cvi.auth.domain.oauthtoken.KakaoOAuthToken;
 import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.KakaoProfile;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
@@ -59,7 +60,7 @@ public class KakaoAuthorization implements Authorization {
     @Override
     public OAuthToken mapToOAuthToken(ResponseEntity<String> response) {
         try {
-            return objectMapper.readValue(response.getBody(), OAuthToken.class);
+            return objectMapper.readValue(response.getBody(), KakaoOAuthToken.class);
         } catch (JsonProcessingException e) {
             throw new InternalServerException(e.getMessage());
         }
