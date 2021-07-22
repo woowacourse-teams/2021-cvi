@@ -8,12 +8,13 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
+
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
-    public String createToken(String payload) {
+    public String createToken(Long payload) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(payload));
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

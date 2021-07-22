@@ -28,9 +28,8 @@ public class UserService {
         if (userRepository.existsByNickname(userRequest.getNickname())) {
             throw new DuplicateException("닉네임은 중복될 수 없습니다.");
         }
-
         User user = userRepository.save(userRequest.toEntity());
-        String accessToken = jwtTokenProvider.createToken(user.getNickname());
+        String accessToken = jwtTokenProvider.createToken(user.getId());
 
         return UserResponse.of(user, accessToken);
     }

@@ -33,12 +33,7 @@ public class AuthService {
 
         if (foundUser.isPresent()) {
             User user = foundUser.get();
-            User updateUser = User.builder()
-                    .profileUrl(userInformation.getProfileUrl())
-                    .build();
-            user.update(updateUser);
-
-            String token = jwtTokenProvider.createToken(user.getNickname());
+            String token = jwtTokenProvider.createToken(user.getId());
 
             return UserResponse.of(user, token);
         }
