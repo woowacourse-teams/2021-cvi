@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/Button/Button.styles';
 import Frame from '../../components/Frame/Frame';
 import Input from '../../components/Input/Input';
 import Selection from '../../components/Selection/Selection';
-import { AGE_RANGE, ALERT_MESSAGE, PATH } from '../../constants';
-import { requestPostSignup } from '../../requests';
+import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
+import { getMyInfoAsync } from '../../redux/authSlice';
+import { postSignup } from '../../service';
 import {
   signupButtonStyles,
   Container,
@@ -21,31 +23,30 @@ import {
 
 const SignupPage = () => {
   const history = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
 
-  const goLoginPage = () => {
-    history.push(`${PATH.LOGIN}`);
+  const goHomePage = () => {
+    history.push(`${PATH.HOME}`);
   };
 
   const signup = async () => {
-    const data = { nickname, ageRange: AGE_RANGE[selectedAgeRange] };
+    const data = { nickname, ageRange: AGE_RANGE[selectedAgeRange], ...location.state };
+    const response = await postSignup(data);
 
-    try {
-      const response = await requestPostSignup(data);
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert(ALERT_MESSAGE.FAIL_TO_SERVER);
 
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-
-      alert(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
-      goLoginPage();
-    } catch (error) {
-      const errorResponse = JSON.parse(error.message).message;
-
-      alert(errorResponse);
-      console.error(errorResponse);
+      return;
     }
+
+    dispatch(getMyInfoAsync(response.data.accessToken));
+
+    alert(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
+    goHomePage();
   };
 
   return (
@@ -73,7 +74,7 @@ const SignupPage = () => {
           <Button
             backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
             styles={goLoginStyles}
-            onClick={goLoginPage}
+            onClick={goHomePage}
           >
             로그인 하기
           </Button>

@@ -1,0 +1,6 @@
+const RESPONSE_STATE = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+};
+
+export { RESPONSE_STATE };

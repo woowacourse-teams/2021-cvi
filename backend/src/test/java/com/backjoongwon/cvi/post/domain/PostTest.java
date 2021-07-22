@@ -1,9 +1,9 @@
 package com.backjoongwon.cvi.post.domain;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.SocialProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class PostTest {
                 .id(1L)
                 .nickname("안녕하세욘")
                 .ageRange(AgeRange.TEENS)
-                .socialProfileUrl("")
+                .profileUrl("")
                 .socialProvider(SocialProvider.KAKAO)
                 .createdAt(LocalDateTime.now())
                 .build();

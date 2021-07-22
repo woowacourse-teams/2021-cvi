@@ -3,19 +3,17 @@ import PropTypes from 'prop-types';
 import { Container } from './Frame.styles';
 import { THEME_COLOR } from '../../constants';
 
-const Frame = ({ children, backgroundColor, width, height, showShadow, styles }) => {
-  return (
-    <Container
-      backgroundColor={backgroundColor}
-      width={width}
-      height={height}
-      showShadow={showShadow}
-      styles={styles}
-    >
-      {children}
-    </Container>
-  );
-};
+const Frame = ({ children, backgroundColor, width, height, showShadow, styles }) => (
+  <Container
+    backgroundColor={backgroundColor}
+    width={width}
+    height={height}
+    showShadow={showShadow}
+    styles={styles}
+  >
+    {children}
+  </Container>
+);
 
 Frame.propTypes = {
   children: PropTypes.node.isRequired,

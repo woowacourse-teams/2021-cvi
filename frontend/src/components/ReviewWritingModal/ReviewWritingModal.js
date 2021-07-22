@@ -2,19 +2,16 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
+import { RESPONSE_STATE, SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
 import Modal from '../Modal/Modal';
 import Selection from '../Selection/Selection';
 import Button from '../Button/Button';
 import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../Button/Button.styles';
-import {
-  requestGetAllReviewList,
-  requestGetSelectedReviewList,
-  requestCreateReview,
-} from '../../requests';
+import { postReview } from '../../service';
+import { findKey } from '../../utils';
 
-const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
+const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -24,32 +21,20 @@ const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
   const vaccinationList = Object.values(VACCINATION);
 
   const createReview = async () => {
-    const vaccinationType =
-      Object.keys(VACCINATION)[Object.values(VACCINATION).indexOf(selectedVaccine)];
-
+    const vaccinationType = findKey(VACCINATION, selectedVaccine);
     const data = { content, vaccinationType };
+    const response = await postReview(accessToken, data);
 
-    try {
-      const response = await requestCreateReview(accessToken, data);
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert('리뷰 작성 실패 - createReview');
 
-      if (!response.ok) {
-        throw new Error(response);
-      }
-
-      onClickClose();
-      enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
-
-      if (selectedTab === '전체') {
-        getReviewList(requestGetAllReviewList);
-      } else {
-        const selectedVaccination =
-          Object.keys(VACCINATION)[Object.values(VACCINATION).indexOf(selectedTab)];
-
-        getReviewList(() => requestGetSelectedReviewList(selectedVaccination));
-      }
-    } catch (error) {
-      console.error(error);
+      return;
     }
+
+    onClickClose();
+    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
+
+    getReviewList();
   };
 
   return (
@@ -72,7 +57,6 @@ const ReviewWritingModal = ({ selectedTab, getReviewList, onClickClose }) => {
 };
 
 ReviewWritingModal.propTypes = {
-  selectedTab: PropTypes.string.isRequired,
   getReviewList: PropTypes.func.isRequired,
   onClickClose: PropTypes.func.isRequired,
 };
