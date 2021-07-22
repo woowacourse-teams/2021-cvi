@@ -6,6 +6,7 @@ const ERROR_MESSAGE = {
 const ALERT_MESSAGE = {
   SUCCESS_TO_SIGNUP: '회원가입에 성공했습니다',
   FAIL_TO_LOGIN: '로그인에 실패했습니다. 알맞은 닉네임을 입력해주세요.',
+  FAIL_TO_SERVER: '오류가 발생했습니다. 다시 한 번 시도해주세요.',
 };
 
 const SNACKBAR_MESSAGE = {

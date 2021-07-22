@@ -26,14 +26,14 @@ const requestPostSignup = (data) =>
     body: JSON.stringify(data),
   });
 
-const requestPostLogin = (data) =>
-  fetch(`${BASE_URL}/users/signin`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify(data),
-  });
+// const requestPostLogin = (data) =>
+//   fetch(`${BASE_URL}/users/signin`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     },
+//     body: JSON.stringify(data),
+//   });
 
 const requestGetMyInfo = (accessToken) =>
   fetch(`${BASE_URL}/users/me`, {
@@ -44,12 +44,21 @@ const requestGetMyInfo = (accessToken) =>
     },
   });
 
+const requestPostOAuthLogin = (data) =>
+  fetch(`${BASE_URL}/users/auth`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(data),
+  });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
   requestGetReview,
   requestCreateReview,
   requestPostSignup,
-  requestPostLogin,
+  requestPostOAuthLogin,
   requestGetMyInfo,
 };

@@ -35,7 +35,7 @@ public class PostResponse {
     }
 
     public static PostResponse of(Post post) {
-        return new PostResponse(post.getId(), UserResponse.of(post.getUser()), post.getContent(),
+        return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
                 post.getViewCount(), post.getVaccinationType(), post.getCreatedAt());
     }
 

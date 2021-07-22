@@ -10,7 +10,7 @@ import {
   ShotVerified,
 } from './PreviewItem.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
-import toDate from '../../utils/toDate';
+import { toDate } from '../../utils';
 
 const PreviewItem = ({ review, onClick }) => {
   const { writer, content, vaccinationType, createdAt } = review;
