@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
+import com.backjoongwon.cvi.auth.domain.oauthtoken.NaverOAuthToken;
 import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
@@ -60,7 +61,7 @@ public class NaverAuthorization implements Authorization {
     @Override
     public OAuthToken mapToOAuthToken(ResponseEntity<String> response) {
         try {
-            return objectMapper.readValue(response.getBody(), OAuthToken.class);
+            return objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
         } catch (JsonProcessingException e) {
             throw new InternalServerException(e.getMessage());
         }
