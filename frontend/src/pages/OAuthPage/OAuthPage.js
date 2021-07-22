@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, RESPONSE_STATE } from '../../constants';
+import { postOAuthLogin } from '../../service';
+
 const OAuthPage = () => {
+  const history = useHistory();
+
   const login = async () => {
     const code = new URLSearchParams(window.location.search).get('code');
-
-    console.log(code);
-
     // KAKAO
     const data = {
       provider: 'KAKAO',
@@ -11,25 +15,46 @@ const OAuthPage = () => {
       state: '',
     };
 
-    // NAVER
-    // const data = {
-    //   provider: 'NAVER',
-    //   code,
-    //   state: '',
-    // };
+    const response = await postOAuthLogin(data);
 
-    try {
-      // const response = await requestPostLogin(data);
-      // success, 이미 우리 회원 -> main page
-      // success, 우리 회웡 아님 -> signupPage
-    } catch (error) {
-      // failure
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert(ALERT_MESSAGE.FAIL_TO_SERVER);
+
+      return;
+    }
+    console.log(response.data);
+    // 회원가입 한 유저도 accessToken이 안오는거 같아,,
+
+    if (response.data.accessToken === null) {
+      const { socialProvider, socialId, socialProfileUrl } = response.data;
+
+      history.push({
+        pathname: `${PATH.SIGNUP}`,
+        state: {
+          socialProvider,
+          socialId,
+          socialProfileUrl,
+        },
+      });
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, response.data.accessToken);
+      history.push(`${PATH.HOME}`);
     }
   };
 
-  login();
+  //
+  useEffect(() => {
+    login();
+  }, []);
 
   return <></>;
 };
 
 export default OAuthPage;
+
+// NAVER
+// const data = {
+//   provider: 'NAVER',
+//   code,
+//   state: '',
+// };
