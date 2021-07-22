@@ -27,8 +27,8 @@ public class NaverProfile implements SocialProfile {
 
     static class Response {
 
-        private String id;
-        private String nickname;
-        private String profile_image;
+        public String id;
+        public String nickname;
+        public String profile_image;
     }
 }
