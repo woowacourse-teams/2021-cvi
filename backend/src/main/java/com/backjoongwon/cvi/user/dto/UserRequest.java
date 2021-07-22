@@ -13,14 +13,14 @@ public class UserRequest {
 
     private String nickname;
     private AgeRange ageRange;
-    private SocialProvider provider;
+    private SocialProvider socialProvider;
     private String socialId;
     private String profileUrl;
 
-    public UserRequest(String nickname, AgeRange ageRange, SocialProvider provider, String socialId, String profileUrl) {
+    public UserRequest(String nickname, AgeRange ageRange, SocialProvider socialProvider, String socialId, String profileUrl) {
         this.nickname = nickname;
         this.ageRange = ageRange;
-        this.provider = provider;
+        this.socialProvider = socialProvider;
         this.socialId = socialId;
         this.profileUrl = profileUrl;
     }
@@ -29,7 +29,7 @@ public class UserRequest {
         return User.builder()
                 .nickname(nickname)
                 .ageRange(ageRange)
-                .socialProvider(provider)
+                .socialProvider(socialProvider)
                 .socialId(socialId)
                 .profileUrl(profileUrl)
                 .build();
