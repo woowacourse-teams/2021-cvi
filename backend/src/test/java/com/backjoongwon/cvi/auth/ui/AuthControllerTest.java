@@ -32,7 +32,7 @@ public class AuthControllerTest extends ApiDocument {
     private static final String NICKNAME = "인비";
     private static final String PROFILE_URL = "kakao.com/profile";
     private static final SocialProvider SOCIAL_PROVIDER = SocialProvider.KAKAO;
-    private static final String SOCIAL_ID = "KAKAO_ID";
+    private static final String SOCIAL_ID = "{Unique ID received from social provider}";
     private static final String CODE = "{CODE received from social provider}";
     private static final long ID = 1L;
 

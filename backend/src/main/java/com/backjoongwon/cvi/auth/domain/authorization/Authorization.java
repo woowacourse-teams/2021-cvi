@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 
 public interface Authorization {
+
     UserInformation requestProfile(String code, String state);
 
     OAuthToken requestToken(String code, String state);

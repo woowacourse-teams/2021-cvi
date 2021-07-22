@@ -59,4 +59,3 @@ public class KakaoProfile implements SocialProfile {
         public String is_default_image;
     }
 }
-
