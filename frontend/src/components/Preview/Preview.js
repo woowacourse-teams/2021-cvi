@@ -4,10 +4,10 @@ import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import Button from '../Button/Button';
 import Frame from '../Frame/Frame';
 import { Title, Container, ButtonContainer } from './Preview.styles';
-import RightArrowIcon from '../../assets/icons/right-arrow.svg';
 import PropTypes from 'prop-types';
 import PreviewList from '../PreviewList/PreviewList';
 import { useHistory } from 'react-router-dom';
+import { RightArrowIcon } from '../../assets/icons';
 
 const Preview = ({ title }) => {
   const history = useHistory();

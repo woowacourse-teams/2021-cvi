@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import HomeIcon from '../../assets/icons/home.svg';
-import ReviewIcon from '../../assets/icons/review.svg';
-import LoginIcon from '../../assets/icons/login.svg';
-import LogoutIcon from '../../assets/icons/logout.svg';
-import LogoIcon from '../../assets/icons/logo.svg';
 import {
   Container,
   LogoContainer,
@@ -16,10 +11,12 @@ import {
 } from './SideBar.styles';
 import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
+import { HomeIcon, LoginIcon, LogoIcon, LogoutIcon, ReviewIcon } from '../../assets/icons';
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const logout = () => {

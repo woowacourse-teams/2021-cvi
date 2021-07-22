@@ -3,7 +3,8 @@ package com.backjoongwon.cvi.user.ui;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.auth.SigninUser;
 import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.*;
+import com.backjoongwon.cvi.user.dto.UserRequest;
+import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +26,9 @@ public class UserController {
         return userResponse;
     }
 
-    @PostMapping("/signin")
-    @ResponseStatus(HttpStatus.OK)
-    public SigninResponse signin(@RequestBody SigninRequest userRequest, HttpServletResponse servletResponse) {
-        SigninResponse signinResponse = userService.signin(userRequest);
-        servletResponse.setHeader("Authorization", "Bearer " + signinResponse.getAccessToken());
-        return signinResponse;
-    }
-
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UserMeResponse findMe(@SigninUser User user) {
+    public UserResponse findMe(@SigninUser User user) {
         return userService.findMeById(user.getId());
     }
 
@@ -57,4 +50,3 @@ public class UserController {
         userService.delete(user.getId());
     }
 }
-

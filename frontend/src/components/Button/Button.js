@@ -14,23 +14,21 @@ const Button = ({
   styles,
   type,
   onClick,
-}) => {
-  return (
-    <Container
-      backgroundType={backgroundType}
-      sizeType={sizeType}
-      withIcon={withIcon}
-      color={color}
-      isSelected={isSelected}
-      selectedStyles={selectedStyles}
-      styles={styles}
-      type={type}
-      onClick={onClick}
-    >
-      {children}
-    </Container>
-  );
-};
+}) => (
+  <Container
+    backgroundType={backgroundType}
+    sizeType={sizeType}
+    withIcon={withIcon}
+    color={color}
+    isSelected={isSelected}
+    selectedStyles={selectedStyles}
+    styles={styles}
+    type={type}
+    onClick={onClick}
+  >
+    {children}
+  </Container>
+);
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,

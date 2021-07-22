@@ -34,11 +34,9 @@ import {
 } from '../../constants';
 import Button from '../../components/Button/Button';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import LeftArrowIcon from '../../assets/icons/left-arrow.svg';
 import Avatar from '../../components/Avatar/Avatar';
-import toDate from '../../utils/toDate';
-import ClockIcon from '../../assets/icons/clock.svg';
-import EyeIcon from '../../assets/icons/eye.svg';
+import { toDate } from '../../utils';
+import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 
 const ReviewDetailPage = () => {
   const history = useHistory();

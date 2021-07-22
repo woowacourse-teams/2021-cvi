@@ -19,7 +19,7 @@ import static com.backjoongwon.cvi.DummyData.DUMMY_DATA_10000;
 
 @Component
 @RequiredArgsConstructor
-@Profile("!test")
+@Profile("local&!test")
 public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -41,7 +41,7 @@ public class DataLoader implements CommandLineRunner {
 
             List<Post> posts = postRepository.saveAll(
                     Arrays.asList(
-                            Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!")
+                            Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ")
                                     .vaccinationType(VaccinationType.ASTRAZENECA).build(),
                             Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.")
                                     .vaccinationType(VaccinationType.ASTRAZENECA).build(),
