@@ -17,7 +17,7 @@ endif::[]
 # 생성
 ## status code: 201
 ## Headers: Location
-햣
+
 # 조회
 ## status code: 200
 
@@ -167,7 +167,12 @@ include::{snippets}/post-findAll/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findAll/http-response.adoc[]
 
-- 게시글 전체 조회 시, 게시글이 하나도 없으면 빈 리스트가 반환된다.
+==== 성공 - 게시글이 하나도 없는 경우
+===== Request
+include::{snippets}/post-findAll-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findAll-when-empty/http-response.adoc[]
 
 === 게시글 단일 조회
 ==== 성공
