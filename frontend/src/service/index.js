@@ -63,12 +63,13 @@ const postSignup = async (data) => {
       throw new Error(await response.text());
     }
 
-    return { state: RESPONSE_STATE.SUCCESS, data: null };
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
     // const errorResponse = JSON.parse(error.message).message;
     // alert(errorResponse);
-
     console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
   }
 };
 

@@ -15,14 +15,14 @@ public class UserRequest {
     private AgeRange ageRange;
     private SocialProvider socialProvider;
     private String socialId;
-    private String profileUrl;
+    private String socialProfileUrl;
 
     public UserRequest(String nickname, AgeRange ageRange, SocialProvider socialProvider, String socialId, String profileUrl) {
         this.nickname = nickname;
         this.ageRange = ageRange;
         this.socialProvider = socialProvider;
         this.socialId = socialId;
-        this.profileUrl = profileUrl;
+        this.socialProfileUrl = profileUrl;
     }
 
     public User toEntity() {
@@ -31,7 +31,7 @@ public class UserRequest {
                 .ageRange(ageRange)
                 .socialProvider(socialProvider)
                 .socialId(socialId)
-                .profileUrl(profileUrl)
+                .profileUrl(socialProfileUrl)
                 .build();
     }
 }

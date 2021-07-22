@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/Button/Button.styles';
@@ -6,6 +7,7 @@ import Frame from '../../components/Frame/Frame';
 import Input from '../../components/Input/Input';
 import Selection from '../../components/Selection/Selection';
 import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
+import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignup } from '../../service';
 import {
   signupButtonStyles,
@@ -22,6 +24,7 @@ import {
 const SignupPage = () => {
   const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
@@ -39,6 +42,8 @@ const SignupPage = () => {
 
       return;
     }
+
+    dispatch(getMyInfoAsync(response.data.accessToken));
 
     alert(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
     goHomePage();

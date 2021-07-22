@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import Avatar from '../Avatar/Avatar';
 import SideBar from '../SideBar/SideBar';
-import EllipsisIcon from '../../assets/icons/ellipsis.svg';
 import { Container, MainContainer, TopContainer } from './BaseLayout.styles';
 import { FONT_COLOR } from '../../constants';
 import { useSelector } from 'react-redux';
+import { EllipsisIcon } from '../../assets/icons';
 
 const BaseLayout = ({ children }) => {
   const isLogin = !!useSelector((state) => state.authReducer.accessToken);
