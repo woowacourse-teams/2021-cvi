@@ -9,7 +9,7 @@ import { Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.sty
 import { BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getAllReviewList, getSelectedReviewList } from '../../service';
+import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
 
 const ReviewPage = () => {
@@ -44,26 +44,26 @@ const ReviewPage = () => {
 
   const getReviewList = async () => {
     if (selectedTab === '전체') {
-      const response = await getAllReviewList();
+      const response = await getAllReviewListAsync();
 
       if (response.state === RESPONSE_STATE.FAILURE) {
-        alert('failure - getAllReviewList');
+        alert('failure - getAllReviewListAsync');
 
         return;
       }
 
-      setReviewList(response.data.reverse());
+      setReviewList(response.data);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedTab);
-      const response = await getSelectedReviewList(vaccinationType);
+      const response = await getSelectedReviewListAsync(vaccinationType);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
-        alert('failure - getSelectedReviewList');
+        alert('failure - getSelectedReviewListAsync');
 
         return;
       }
 
-      setReviewList(response.data.reverse());
+      setReviewList(response.data);
     }
   };
 
