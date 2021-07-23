@@ -1,14 +1,14 @@
 import PreviewItem from '../PreviewItem/PreviewItem';
 import { Container, Error } from './PreviewList.styles';
 import { useFetch } from '../../hooks';
-import { requestGetAllReviewList } from '../../requests';
+import { requestgetAllReviewList } from '../../requests';
 import { ERROR_MESSAGE, PATH } from '../../constants';
 import { useHistory } from 'react-router-dom';
 
 const PreviewList = () => {
   const history = useHistory();
 
-  const { response: reviewList, error: reviewError } = useFetch([], requestGetAllReviewList);
+  const { response: reviewList, error: reviewError } = useFetch([], requestgetAllReviewList);
 
   const goReviewDetailPage = (id) => {
     history.push(`${PATH.REVIEW}/${id}`);

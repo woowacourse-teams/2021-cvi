@@ -1,8 +1,8 @@
 import { BASE_URL } from './constants';
 
-const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
+const requestgetAllReviewList = () => fetch(`${BASE_URL}/posts`);
 
-const requestGetSelectedReviewList = (vaccinationType) =>
+const requestgetSelectedReviewList = (vaccinationType) =>
   fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
 
 const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
@@ -10,6 +10,25 @@ const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
 const requestCreateReview = (accessToken, data) =>
   fetch(`${BASE_URL}/posts`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+const requestDeleteReview = (accessToken, reviewId) =>
+  fetch(`${BASE_URL}/posts/${reviewId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestPutReview = (accessToken, reviewId, data) =>
+  fetch(`${BASE_URL}/posts/${reviewId}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${accessToken}`,
@@ -45,10 +64,12 @@ const requestPostOAuthLogin = (data) =>
   });
 
 export {
-  requestGetAllReviewList,
-  requestGetSelectedReviewList,
+  requestgetAllReviewList,
+  requestgetSelectedReviewList,
   requestGetReview,
   requestCreateReview,
+  requestDeleteReview,
+  requestPutReview,
   requestPostSignup,
   requestPostOAuthLogin,
   requestGetMyInfo,

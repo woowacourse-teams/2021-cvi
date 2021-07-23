@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, RESPONSE_STATE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { postOAuthLogin } from '../../service';
+import { postOAuthLoginAsync } from '../../service';
 
 const OAuthPage = () => {
   const history = useHistory();
@@ -20,7 +20,7 @@ const OAuthPage = () => {
       state,
     };
 
-    const response = await postOAuthLogin(data);
+    const response = await postOAuthLoginAsync(data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);
