@@ -11,17 +11,12 @@ public class KakaoProfile implements SocialProfile {
     public KakaoAccount kakao_account;
 
     @Override
-    public String getId() {
+    public String extractSocialId() {
         return id;
     }
 
     @Override
-    public String getNickname() {
-        return getNickname();
-    }
-
-    @Override
-    public String getProfileImage() {
+    public String extractProfileUrl() {
         return this.kakao_account.profile.profile_image_url;
     }
 

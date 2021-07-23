@@ -11,17 +11,12 @@ public class NaverProfile implements SocialProfile {
     private NaverAccount response;
 
     @Override
-    public String getId() {
+    public String extractSocialId() {
         return response.id;
     }
 
     @Override
-    public String getNickname() {
-        return response.nickname;
-    }
-
-    @Override
-    public String getProfileImage() {
+    public String extractProfileUrl() {
         return response.profile_image;
     }
 
