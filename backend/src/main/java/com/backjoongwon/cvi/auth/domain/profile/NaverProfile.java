@@ -8,7 +8,7 @@ public class NaverProfile implements SocialProfile {
 
     private String resultcode;
     private String message;
-    private Response response;
+    private NaverAccount response;
 
     @Override
     public String getId() {
@@ -25,7 +25,7 @@ public class NaverProfile implements SocialProfile {
         return response.profile_image;
     }
 
-    static class Response {
+    private static class NaverAccount {
 
         public String id;
         public String nickname;
