@@ -29,6 +29,8 @@ const SideBar = () => {
   useEffect(() => {
     const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
 
+    if (!accessToken) return;
+
     dispatch(getMyInfoAsync(accessToken));
   }, []);
 
