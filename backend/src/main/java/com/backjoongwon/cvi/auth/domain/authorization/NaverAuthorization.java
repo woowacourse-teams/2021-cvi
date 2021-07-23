@@ -13,10 +13,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 public class NaverAuthorization implements Authorization {
 
     @Value("${security.auth.naver.client-secret}")
@@ -26,7 +28,6 @@ public class NaverAuthorization implements Authorization {
 
     @Override
     public UserInformation requestProfile(String code, String state) {
-        System.out.println(clientSecret);
         OAuthToken naverOAuthToken = requestToken(code, state);
         return parseProfile(naverOAuthToken);
     }
@@ -42,7 +43,7 @@ public class NaverAuthorization implements Authorization {
     @Override
     public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type","authorization_code");
+        params.add("grant_type", "authorization_code");
         params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
         params.add("client_secret", clientSecret);
         params.add("code", code);

@@ -8,15 +8,6 @@ spring:
     console:
       enabled: false
 
-security:
-  jwt:
-    token:
-      secret-key: cvi_secret_key
-      expire-length: 3600000
-  auth:
-    naver:
-      client-secret: R_zN6l1A3V
-
 server:
   shutdown: graceful
 ---
@@ -51,7 +42,9 @@ security:
     token:
       secret-key: cvi_secret_key
       expire-length: 3600000
-
+  auth:
+    naver:
+      client-secret: R_zN6l1A3V
 ---
 spring:
   config:
