@@ -59,7 +59,6 @@ public class NaverAuthorization implements Authorization {
     @Override
     public OAuthToken mapToOAuthToken(ResponseEntity<String> response) {
         try {
-            System.out.println(response.getBody());
             return objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
         } catch (JsonProcessingException e) {
             throw new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.");
