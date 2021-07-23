@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Avatar } from '../../components/common';
 import { AVATAR_SIZE_TYPE } from '../../components/common/Avatar/Avatar.styles';
+import { PATH } from '../../constants';
 import {
   Container,
   RightSideBar,
@@ -14,8 +16,6 @@ import {
 
 const MyPage = ({ children }) => {
   const user = useSelector((state) => state.authReducer.user);
-
-  console.log(user);
 
   return (
     <Container>
@@ -31,7 +31,12 @@ const MyPage = ({ children }) => {
         <MenuContainer>
           <MenuItem>
             <MenuTitle>계정</MenuTitle>
-            <div>계정 변경</div>
+            <div>
+              <Link to={PATH.MY_PAGE_ACCOUNT}>내 정보 관리</Link>
+            </div>
+            <div>
+              <Link to={PATH.MY_PAGE_SHOT_VERIFICATION}>접종 인증</Link>
+            </div>
           </MenuItem>
           <MenuItem>
             <MenuTitle>글 관리</MenuTitle>

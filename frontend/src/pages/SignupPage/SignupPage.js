@@ -61,6 +61,7 @@ const SignupPage = () => {
         <Input
           placeholder="닉네임을 입력해주세요"
           width="100%"
+          value={nickname}
           onChange={(event) => setNickname(event.target.value)}
         />
         <Button styles={signupButtonStyles} onClick={signup}>

@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const RightSideBar = styled.div`
   background-color: ${THEME_COLOR.WHITE};
-  width: 28rem;
+  min-width: 28rem;
   height: 100%;
   margin-left: auto;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;

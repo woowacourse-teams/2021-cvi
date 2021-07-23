@@ -47,7 +47,7 @@ const SideBar = () => {
           <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
         </NavLinkElement>
         {!!Object.keys(user).length && (
-          <NavLinkElement to={PATH.MY_PAGE_ACCOUNT} activeStyle={selectedNavStyles}>
+          <NavLinkElement to={PATH.MY_PAGE_SHOT_VERIFICATION} activeStyle={selectedNavStyles}>
             <ReviewIcon width="20" height="20" stroke="currentColor" /> 마이페이지
           </NavLinkElement>
         )}

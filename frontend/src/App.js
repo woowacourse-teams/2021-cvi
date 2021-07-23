@@ -12,6 +12,7 @@ import {
   OAuthPage,
   MyPage,
   MyPageAccount,
+  MyPageShotVerification,
 } from './pages';
 import { BaseLayout } from './components/common';
 
@@ -42,6 +43,15 @@ const App = () => {
                 render={() => (
                   <MyPage>
                     <MyPageAccount />
+                  </MyPage>
+                )}
+              />
+              <Route
+                exact
+                path={PATH.MY_PAGE_SHOT_VERIFICATION}
+                render={() => (
+                  <MyPage>
+                    <MyPageShotVerification />
                   </MyPage>
                 )}
               />
