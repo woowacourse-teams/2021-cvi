@@ -1,7 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE, Container } from './Button.styles';
-import { THEME_COLOR } from '../../constants';
+import { THEME_COLOR } from '../../../constants';
 
 const Button = ({
   children,

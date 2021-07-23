@@ -18,12 +18,10 @@ import {
   Error,
   buttonStyles,
 } from './ReviewDetailPage.styles';
-import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
 import { requestGetReview } from '../../requests';
-import Label from '../../components/Label/Label';
-import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
+import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -36,12 +34,14 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import Avatar from '../../components/Avatar/Avatar';
+import {
+  BUTTON_BACKGROUND_TYPE,
+  BUTTON_SIZE_TYPE,
+} from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 import { deleteReviewAsync } from '../../service';
+import { Avatar, Button, Frame, Label } from '../../components/common';
 
 const ReviewDetailPage = () => {
   const history = useHistory();

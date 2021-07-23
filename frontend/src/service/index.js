@@ -2,8 +2,8 @@ import { RESPONSE_STATE } from '../constants';
 import {
   requestCreateReview,
   requestDeleteReview,
-  requestgetAllReviewList,
-  requestgetSelectedReviewList,
+  requestGetAllReviewList,
+  requestGetSelectedReviewList,
   requestPostOAuthLogin,
   requestPostSignup,
   requestPutReview,
@@ -11,30 +11,34 @@ import {
 
 const getAllReviewListAsync = async () => {
   try {
-    const response = await requestgetAllReviewList();
+    const response = await requestGetAllReviewList();
 
     if (!response.ok) {
-      throw new Error(response.status);
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
-    console.error(error);
     // error code 별로 관리
+    // console.error(JSON.parse(error.message).message);
+    console.error(error);
+
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
 };
 
 const getSelectedReviewListAsync = async (selectedVaccination) => {
   try {
-    const response = await requestgetSelectedReviewList(selectedVaccination);
+    const response = await requestGetSelectedReviewList(selectedVaccination);
 
     if (!response.ok) {
-      throw new Error(response.status);
+      // 에러 메시지 넣어달라고 하기
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
+    // console.error(JSON.parse(error.message).message);
     console.error(error);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
@@ -46,12 +50,12 @@ const postReviewAsync = async (accessToken, data) => {
     const response = await requestCreateReview(accessToken, data);
 
     if (!response.ok) {
-      throw new Error(response);
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
-    console.error(error);
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -62,12 +66,12 @@ const putReviewAsync = async (accessToken, id, data) => {
     const response = await requestPutReview(accessToken, id, data);
 
     if (!response.ok) {
-      throw new Error();
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: null };
   } catch (error) {
-    console.error(error);
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -78,12 +82,12 @@ const deleteReviewAsync = async (accessToken, id) => {
     const response = await requestDeleteReview(accessToken, id);
 
     if (!response.ok) {
-      throw new Error();
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: null };
   } catch (error) {
-    console.error(error);
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -99,9 +103,7 @@ const postSignupAsync = async (data) => {
 
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
-    // const errorResponse = JSON.parse(error.message).message;
-    // alert(errorResponse);
-    console.error(error);
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -112,12 +114,12 @@ const postOAuthLoginAsync = async (data) => {
     const response = await requestPostOAuthLogin(data);
 
     if (!response.ok) {
-      throw new Error(response);
+      throw new Error(await response.text());
     }
 
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
   } catch (error) {
-    console.error(error);
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { CloseIcon } from '../../assets/icons';
+import { CloseIcon } from '../../../assets/icons';
 import Frame from '../Frame/Frame';
 import { Container, modalFrameStyles, CloseButton } from './Modal.styles';
 

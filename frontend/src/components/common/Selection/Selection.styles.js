@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE, VACCINATION_COLOR, THEME_COLOR } from '../../constants';
+import { PALETTE, VACCINATION_COLOR, THEME_COLOR } from '../../../constants';
 
 const Container = styled.div`
   display: flex;

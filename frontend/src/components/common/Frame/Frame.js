@@ -1,7 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from './Frame.styles';
-import { THEME_COLOR } from '../../constants';
+import { THEME_COLOR } from '../../../constants';
 
 const Frame = ({ children, backgroundColor, width, height, showShadow, styles }) => (
   <Container

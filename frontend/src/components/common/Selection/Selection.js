@@ -1,9 +1,8 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, buttonSelectedStyles, defaultButtonStyles } from './Selection.styles';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../Button/Button.styles';
-import { PALETTE } from '../../constants';
+import { PALETTE } from '../../../constants';
 
 const Selection = ({ selectionList, selectedItem, setSelectedItem }) => (
   <Container>

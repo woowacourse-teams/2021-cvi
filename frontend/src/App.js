@@ -12,7 +12,7 @@ import {
   ReviewEditPage,
   OAuthPage,
 } from './pages';
-import BaseLayout from './components/BaseLayout/BaseLayout';
+import { BaseLayout } from './components/common';
 
 const App = () => {
   return (

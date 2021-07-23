@@ -1,4 +1,4 @@
-import { VACCINATION_COLOR, PALETTE } from '../../constants';
+import { VACCINATION_COLOR, PALETTE } from '../../../constants';
 import Label from './Label';
 
 export default {

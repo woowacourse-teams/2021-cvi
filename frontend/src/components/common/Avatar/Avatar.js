@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AVATAR_SIZE_TYPE, Container } from './Avatar.styles';
-import defaultImg from '../../assets/images/default_profile.png';
+import defaultImg from '../../../assets/images/default_profile.png';
 
 const Avatar = ({ sizeType, src }) => <Container sizeType={sizeType} src={src}></Container>;
 

@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE } from '../../components/Button/Button.styles';
-import Frame from '../../components/Frame/Frame';
-import Input from '../../components/Input/Input';
-import Selection from '../../components/Selection/Selection';
+import { Button, Frame, Input, Selection } from '../../components/common';
+import { BUTTON_BACKGROUND_TYPE } from '../../components/common/Button/Button.styles';
 import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';

@@ -1,7 +1,4 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import Label from '../Label/Label';
-import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
 import {
   Container,
   TopContainer,
@@ -11,6 +8,8 @@ import {
 } from './PreviewItem.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
 import { toDate } from '../../utils';
+import { Label } from '../common';
+import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 
 const PreviewItem = ({ review, onClick }) => {
   const { writer, content, vaccinationType, createdAt } = review;

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Link, NavLink } from 'react-router-dom';
-import { FONT_COLOR, THEME_COLOR } from '../../constants';
+import { FONT_COLOR, THEME_COLOR } from '../../../constants';
 
 const Container = styled.div`
   height: inherit;

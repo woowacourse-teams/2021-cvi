@@ -9,9 +9,9 @@ import {
   LogoutButton,
   selectedNavStyles,
 } from './SideBar.styles';
-import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../constants';
-import { getMyInfoAsync, logout as logoutAction } from '../../redux/authSlice';
-import { HomeIcon, LoginIcon, LogoIcon, LogoutIcon, ReviewIcon } from '../../assets/icons';
+import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../../constants';
+import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
+import { HomeIcon, LoginIcon, LogoIcon, LogoutIcon, ReviewIcon } from '../../../assets/icons';
 
 const SideBar = () => {
   const dispatch = useDispatch();

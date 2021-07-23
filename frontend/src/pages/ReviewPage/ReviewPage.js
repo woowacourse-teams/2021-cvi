@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
-import Frame from '../../components/Frame/Frame';
-import ReviewItem from '../../components/ReviewItem/ReviewItem';
-import Tabs from '../../components/Tabs/Tabs';
-import Button from '../../components/Button/Button';
-import ReviewWritingModal from '../../components/ReviewWritingModal/ReviewWritingModal';
 import { VACCINATION, PATH, RESPONSE_STATE } from '../../constants';
 import { Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
-import { BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
+import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
+import { Button, Frame, Tabs } from '../../components/common';
+import { ReviewItem, ReviewWritingModal } from '../../components';
 
 const ReviewPage = () => {
   const history = useHistory();

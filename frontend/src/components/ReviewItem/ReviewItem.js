@@ -9,12 +9,12 @@ import {
   BottomContainer,
   ShotVerified,
 } from './ReviewItem.styles';
-import Label from '../Label/Label';
 import PropTypes from 'prop-types';
-import { LABEL_SIZE_TYPE } from '../Label/Label.styles';
+import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
 import { toDate } from '../../utils';
-import EyeIcon from '../../assets/icons/eye.svg';
+import { Label } from '../common';
+import { EyeIcon } from '../../assets/icons';
 
 const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;

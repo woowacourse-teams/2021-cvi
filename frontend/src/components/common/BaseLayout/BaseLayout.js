@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import Avatar from '../Avatar/Avatar';
 import SideBar from '../SideBar/SideBar';
 import { Container, MainContainer, TopContainer } from './BaseLayout.styles';
-import { FONT_COLOR } from '../../constants';
 import { useSelector } from 'react-redux';
-import { EllipsisIcon } from '../../assets/icons';
+import { EllipsisIcon } from '../../../assets/icons';
+import { FONT_COLOR } from '../../../constants';
 
 const BaseLayout = ({ children }) => {
   const isLogin = !!useSelector((state) => state.authReducer.accessToken);

@@ -1,6 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { PALETTE, VACCINATION_COLOR } from '../../constants';
+import { PALETTE, VACCINATION_COLOR } from '../../../constants';
 import { Container, LABEL_SIZE_TYPE } from './Label.styles';
 
 const Label = ({ children, sizeType, backgroundColor, fontColor }) => (
