@@ -8,10 +8,6 @@ import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.InternalServerException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,9 +16,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-@Builder
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class KakaoAuthorization implements Authorization {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -72,7 +65,7 @@ public class KakaoAuthorization implements Authorization {
         ResponseEntity<String> response = sendRequest(kakaoProfileRequest, "https://kapi.kakao.com/v2/user/me");
 
         SocialProfile socialProfile = mapToProfile(response);
-        return new UserInformation(socialProfile.getId(), socialProfile.getProfileImage());
+        return new UserInformation(socialProfile.extractSocialId(), socialProfile.extractProfileUrl());
     }
 
     @Override
@@ -95,11 +88,11 @@ public class KakaoAuthorization implements Authorization {
     }
 
     @Override
-    public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest, String url) {
+    public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
                 url,
                 HttpMethod.POST,
-                kakaoProfileRequest,
+                request,
                 String.class
         );
     }
