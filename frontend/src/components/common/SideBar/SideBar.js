@@ -44,9 +44,14 @@ const SideBar = () => {
         <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
           <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
         </NavLinkElement>
+        {!!Object.keys(user).length && (
+          <NavLinkElement to={PATH.MY_PAGE_ACCOUNT} activeStyle={selectedNavStyles}>
+            <ReviewIcon width="20" height="20" stroke="currentColor" /> 마이페이지
+          </NavLinkElement>
+        )}
       </MenuContainer>
 
-      {Object.keys(user).length > 0 ? (
+      {Object.keys(user).length ? (
         <LogoutButton onClick={logout}>
           <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
         </LogoutButton>

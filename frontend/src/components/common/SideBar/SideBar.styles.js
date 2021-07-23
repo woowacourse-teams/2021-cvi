@@ -6,12 +6,12 @@ const Container = styled.div`
   height: inherit;
   display: flex;
   flex-direction: column;
-  padding-top: 6rem;
+  padding: 6rem 0;
   width: 28rem;
   background-color: ${THEME_COLOR.PRIMARY};
 
   & > *:last-child {
-    margin-top: 22rem;
+    margin-top: auto;
   }
 `;
 
@@ -29,7 +29,7 @@ const MenuContainer = styled.div`
 const NavLinkElement = styled(NavLink)`
   display: flex;
   align-items: center;
-  padding-left: 7.4rem;
+  padding-left: 7.8rem;
   margin-left: 1rem;
   gap: 0.8rem;
   color: ${FONT_COLOR.WHITE};
@@ -43,7 +43,7 @@ const LogoutButton = styled.button`
   font-size: 1.6rem;
   align-items: center;
   margin-left: 1rem;
-  padding-left: 7.4rem;
+  padding-left: 7.8rem;
   gap: 0.8rem;
   color: ${FONT_COLOR.WHITE};
   width: 100%;

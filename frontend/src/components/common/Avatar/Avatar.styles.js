@@ -10,7 +10,12 @@ const avatarStyle = {
   SMALL: {
     height: '3.6rem',
     width: '3.6rem',
-    border: '1.8rem',
+    borderRadius: '1.8rem',
+  },
+  LARGE: {
+    height: '12rem',
+    width: '12rem',
+    borderRadius: '6rem',
   },
 };
 
