@@ -8,6 +8,10 @@ spring:
     console:
       enabled: false
 
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
 security:
   jwt:
     token:
