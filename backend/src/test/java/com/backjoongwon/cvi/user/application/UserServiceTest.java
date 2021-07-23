@@ -27,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 public class UserServiceTest {
 
-    private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
-
     @Autowired
     private UserService userService;
 
