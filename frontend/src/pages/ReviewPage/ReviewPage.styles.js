@@ -14,11 +14,15 @@ const ButtonWrapper = styled.div`
 `;
 
 const ReviewList = styled.ul`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  & > li:nth-of-type(2n + 1) {
+    border-right: 0.15rem solid ${PALETTE.NAVY100};
+  }
 
   & > *:not(:last-child) {
-    border-bottom: 0.2rem solid ${PALETTE.GRAY100};
+    border-bottom: 0.15rem solid ${PALETTE.NAVY100};
   }
 `;
 

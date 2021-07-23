@@ -17,7 +17,7 @@ const SelectionContainer = styled.div`
 `;
 
 const SelectionTitle = styled.div`
-  color: ${FONT_COLOR.PURPLE_GRAY};
+  color: ${FONT_COLOR.BLUE_GRAY};
   font-size: 1.4rem;
   margin: 0 0 0.4rem 1.2rem;
 `;

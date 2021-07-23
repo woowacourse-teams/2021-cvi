@@ -7,9 +7,11 @@ const useFetch = (defaultValue, callback) => {
   const fetchData = async () => {
     try {
       const response = await callback();
+
       if (!response.ok) {
         throw new Error(response.status);
       }
+
       const json = await response.json();
 
       setResponse(json);

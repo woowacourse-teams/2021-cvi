@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE, Container } from './Button.styles';
-import { PALETTE } from '../../constants';
+import { THEME_COLOR } from '../../constants';
 
 const Button = ({
   children,
@@ -14,23 +14,21 @@ const Button = ({
   styles,
   type,
   onClick,
-}) => {
-  return (
-    <Container
-      backgroundType={backgroundType}
-      sizeType={sizeType}
-      withIcon={withIcon}
-      color={color}
-      isSelected={isSelected}
-      selectedStyles={selectedStyles}
-      styles={styles}
-      type={type}
-      onClick={onClick}
-    >
-      {children}
-    </Container>
-  );
-};
+}) => (
+  <Container
+    backgroundType={backgroundType}
+    sizeType={sizeType}
+    withIcon={withIcon}
+    color={color}
+    isSelected={isSelected}
+    selectedStyles={selectedStyles}
+    styles={styles}
+    type={type}
+    onClick={onClick}
+  >
+    {children}
+  </Container>
+);
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
@@ -49,7 +47,7 @@ Button.defaultProps = {
   backgroundType: BUTTON_BACKGROUND_TYPE.FILLED,
   sizeType: BUTTON_SIZE_TYPE.MEDIUM,
   withIcon: false,
-  color: PALETTE.RED300,
+  color: THEME_COLOR.PRIMARY,
   isSelected: false,
   selectedStyles: null,
   styles: null,

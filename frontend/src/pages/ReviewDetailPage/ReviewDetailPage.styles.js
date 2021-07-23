@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR, PALETTE } from '../../constants';
 
@@ -52,6 +53,15 @@ const Writer = styled.div`
   font-weight: 600;
 `;
 
+const UpdateButtonContainer = styled.div`
+  display: flex;
+`;
+
+const InfoBottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const CreatedAt = styled.div`
   font-size: 1.2rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
@@ -77,6 +87,9 @@ const Error = styled.div`
   height: 36rem;
 `;
 
+const buttonStyles = css`
+  padding-right: 0;
+`;
 export {
   Container,
   FrameContent,
@@ -87,8 +100,11 @@ export {
   ReviewInfo,
   ShotVerified,
   Writer,
+  InfoBottom,
+  UpdateButtonContainer,
   CreatedAt,
   Content,
   ViewCount,
   Error,
+  buttonStyles,
 };

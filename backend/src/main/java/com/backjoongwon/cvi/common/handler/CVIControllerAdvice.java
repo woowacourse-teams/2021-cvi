@@ -19,7 +19,7 @@ public class CVIControllerAdvice {
     @ExceptionHandler(CommonException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionMessage commonException(CommonException e) {
-        LOG.error("CommonException: {}", e.getMessage(), e);
+        LOG.info("CommonException: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
 
@@ -33,7 +33,7 @@ public class CVIControllerAdvice {
     @ExceptionHandler(UnAuthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ExceptionMessage unAuthorizedException(UnAuthorizedException e) {
-        LOG.error("UnAuthorizedException: {}", e.getMessage(), e);
+        LOG.info("UnAuthorizedException: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
 

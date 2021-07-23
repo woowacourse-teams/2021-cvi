@@ -2,8 +2,9 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: flex;
+  height: 100%;
   flex-direction: column;
-  gap: 4rem;
+  justify-content: space-between;
 `;
 
 export { Container };

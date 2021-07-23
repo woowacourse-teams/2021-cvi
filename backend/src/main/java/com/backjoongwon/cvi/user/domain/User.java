@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.user.domain;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import lombok.AccessLevel;
@@ -25,17 +26,19 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private SocialProvider socialProvider;
-    private String socialProfileUrl;
+    private String socialId;
+    private String profileUrl;
 
     @Builder
     public User(Long id, String nickname, AgeRange ageRange, SocialProvider socialProvider,
-                String socialProfileUrl, LocalDateTime createdAt) {
+                String socialId, String profileUrl, LocalDateTime createdAt) {
         super(id, createdAt);
         validateNickName(nickname);
         this.nickname = nickname;
         this.ageRange = ageRange;
         this.socialProvider = socialProvider;
-        this.socialProfileUrl = socialProfileUrl;
+        this.socialId = socialId;
+        this.profileUrl = profileUrl;
     }
 
     private void validateNickName(String nickname) {
@@ -45,7 +48,9 @@ public class User extends BaseEntity {
     }
 
     public void update(User updateUser) {
+        this.nickname = updateUser.nickname;
         this.ageRange = updateUser.ageRange;
+        this.profileUrl = updateUser.profileUrl;
     }
 
     public void makeVerified() {
