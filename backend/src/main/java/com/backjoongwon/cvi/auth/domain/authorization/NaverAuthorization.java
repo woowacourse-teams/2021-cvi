@@ -66,7 +66,7 @@ public class NaverAuthorization implements Authorization {
         ResponseEntity<String> response = sendRequest(naverProfileRequest, "https://openapi.naver.com/v1/nid/me");
 
         SocialProfile socialProfile = mapToProfile(response);
-        return new UserInformation(socialProfile.extractSocialId(), socialProfile.extractProfileUrl());
+        return UserInformation.of(socialProfile);
     }
 
     @Override

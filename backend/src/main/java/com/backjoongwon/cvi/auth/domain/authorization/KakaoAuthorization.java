@@ -65,7 +65,7 @@ public class KakaoAuthorization implements Authorization {
         ResponseEntity<String> response = sendRequest(kakaoProfileRequest, "https://kapi.kakao.com/v2/user/me");
 
         SocialProfile socialProfile = mapToProfile(response);
-        return new UserInformation(socialProfile.extractSocialId(), socialProfile.extractProfileUrl());
+        return UserInformation.of(socialProfile);
     }
 
     @Override
