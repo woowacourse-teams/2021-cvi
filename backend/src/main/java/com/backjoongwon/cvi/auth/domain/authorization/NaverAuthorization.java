@@ -5,9 +5,10 @@ import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
-import com.backjoongwon.cvi.common.exception.InternalServerException;
+import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,11 +19,14 @@ import org.springframework.web.client.RestTemplate;
 
 public class NaverAuthorization implements Authorization {
 
+    @Value("${security.auth.naver.client-secret}")
+    private String clientSecret;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public UserInformation requestProfile(String code, String state) {
+        System.out.println(clientSecret);
         OAuthToken naverOAuthToken = requestToken(code, state);
         return parseProfile(naverOAuthToken);
     }
@@ -40,7 +44,7 @@ public class NaverAuthorization implements Authorization {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
         params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
-        params.add("client_secret", "R_zN6l1A3V");
+        params.add("client_secret", clientSecret);
         params.add("code", code);
         params.add("state", state);
 
@@ -54,9 +58,10 @@ public class NaverAuthorization implements Authorization {
     @Override
     public OAuthToken mapToOAuthToken(ResponseEntity<String> response) {
         try {
+            System.out.println(response.getBody());
             return objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
         } catch (JsonProcessingException e) {
-            throw new InternalServerException(e.getMessage());
+            throw new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.");
         }
     }
 
@@ -84,7 +89,7 @@ public class NaverAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), NaverProfile.class);
         } catch (JsonProcessingException e) {
-            throw new InternalServerException(e.getMessage());
+            throw new MappingFailureException("프로필을 불러오는 데 실패했습니다.");
         }
     }
 

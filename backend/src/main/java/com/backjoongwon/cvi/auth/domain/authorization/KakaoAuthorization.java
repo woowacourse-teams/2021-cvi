@@ -5,7 +5,7 @@ import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.KakaoProfile;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
-import com.backjoongwon.cvi.common.exception.InternalServerException;
+import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
@@ -55,7 +55,7 @@ public class KakaoAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), KakaoOAuthToken.class);
         } catch (JsonProcessingException e) {
-            throw new InternalServerException(e.getMessage());
+            throw new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.");
         }
     }
 
@@ -83,7 +83,7 @@ public class KakaoAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), KakaoProfile.class);
         } catch (JsonProcessingException e) {
-            throw new InternalServerException(e.getMessage());
+            throw new MappingFailureException("프로필을 불러오는 데 실패했습니다.");
         }
     }
 
