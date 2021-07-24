@@ -2,11 +2,15 @@ package com.backjoongwon.cvi.auth.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.application.AuthService;
+import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
+import com.backjoongwon.cvi.auth.domain.authorization.NaverAuthorization;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +42,14 @@ public class AuthControllerTest extends ApiDocument {
 
     @MockBean
     private AuthService authService;
+    @MockBean
+    private UserRepository userRepository;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private AuthorizationManager authorizationManager;
+    @MockBean
+    private NaverAuthorization naverAuthorization;
 
     private User user;
     private UserResponse userResponse;

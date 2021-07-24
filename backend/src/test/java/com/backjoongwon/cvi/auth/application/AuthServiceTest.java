@@ -38,13 +38,10 @@ class AuthServiceTest {
 
     @MockBean
     private UserRepository userRepository;
-
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-
     @MockBean
     private AuthorizationManager authorizationManager;
-
     @MockBean
     private NaverAuthorization naverAuthorization;
 

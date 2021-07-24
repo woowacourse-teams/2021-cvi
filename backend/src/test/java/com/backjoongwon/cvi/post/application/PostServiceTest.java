@@ -1,5 +1,8 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.auth.application.AuthService;
+import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
+import com.backjoongwon.cvi.auth.domain.authorization.NaverAuthorization;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -9,6 +12,7 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +23,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +39,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Transactional
 @DisplayName("게시글 비즈니스 흐름 테스트")
 class PostServiceTest {
+
+    @MockBean
+    private AuthService authService;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private AuthorizationManager authorizationManager;
+    @MockBean
+    private NaverAuthorization naverAuthorization;
 
     @Autowired
     private PostRepository postRepository;
