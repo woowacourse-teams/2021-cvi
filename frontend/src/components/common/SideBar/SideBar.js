@@ -11,7 +11,14 @@ import {
 } from './SideBar.styles';
 import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
-import { HomeIcon, LoginIcon, LogoIcon, LogoutIcon, ReviewIcon } from '../../../assets/icons';
+import {
+  HomeIcon,
+  LoginIcon,
+  LogoIcon,
+  LogoutIcon,
+  ReviewIcon,
+  MyPageIcon,
+} from '../../../assets/icons';
 
 const SideBar = () => {
   const dispatch = useDispatch();
@@ -25,6 +32,14 @@ const SideBar = () => {
 
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
   };
+
+  const isRelatedMyPage = (pathname) =>
+    [
+      PATH.MY_PAGE,
+      PATH.MY_PAGE_ACCOUNT,
+      PATH.MY_PAGE_REVIEWS,
+      PATH.MY_PAGE_SHOT_VERIFICATION,
+    ].includes(pathname);
 
   useEffect(() => {
     const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
@@ -47,8 +62,13 @@ const SideBar = () => {
           <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
         </NavLinkElement>
         {!!Object.keys(user).length && (
-          <NavLinkElement to={PATH.MY_PAGE_SHOT_VERIFICATION} activeStyle={selectedNavStyles}>
-            <ReviewIcon width="20" height="20" stroke="currentColor" /> 마이페이지
+          <NavLinkElement
+            to={PATH.MY_PAGE_SHOT_VERIFICATION}
+            activeStyle={selectedNavStyles}
+            isActive={(_, { pathname }) => isRelatedMyPage(pathname)}
+          >
+            <MyPageIcon width="20" height="20" stroke="currentColor" fill="currentColor" />{' '}
+            마이페이지
           </NavLinkElement>
         )}
       </MenuContainer>
