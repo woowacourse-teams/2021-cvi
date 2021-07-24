@@ -26,7 +26,7 @@ const MyPage = ({ children }) => {
           <User>
             {user.nickname} · {user.ageRange?.meaning}
           </User>
-          <div>{user.shotVerified ? '접종 완료' : '접종 미완료'}</div>
+          <div>{user.shotVerified ? '인증 완료' : '인증 미완료'}</div>
         </ProfileContainer>
         <MenuContainer>
           <MenuItem>
@@ -40,7 +40,9 @@ const MyPage = ({ children }) => {
           </MenuItem>
           <MenuItem>
             <MenuTitle>글 관리</MenuTitle>
-            <div>내가 쓴 글</div>
+            <div>
+              <Link to={PATH.MY_PAGE_REVIEWS}>내가 쓴 글</Link>
+            </div>
           </MenuItem>
         </MenuContainer>
       </RightSideBar>

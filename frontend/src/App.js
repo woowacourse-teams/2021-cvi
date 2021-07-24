@@ -13,6 +13,7 @@ import {
   MyPage,
   MyPageAccount,
   MyPageShotVerification,
+  MyPageReviews,
 } from './pages';
 import { BaseLayout } from './components/common';
 
@@ -52,6 +53,15 @@ const App = () => {
                 render={() => (
                   <MyPage>
                     <MyPageShotVerification />
+                  </MyPage>
+                )}
+              />
+              <Route
+                exact
+                path={PATH.MY_PAGE_REVIEWS}
+                render={() => (
+                  <MyPage>
+                    <MyPageReviews />
                   </MyPage>
                 )}
               />

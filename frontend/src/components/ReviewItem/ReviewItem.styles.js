@@ -22,6 +22,7 @@ const Content = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: ${LINE_LIMIT.REVIEW_ITEM};
   -webkit-box-orient: vertical;
+  height: 7.2rem;
   overflow: hidden;
 `;
 
