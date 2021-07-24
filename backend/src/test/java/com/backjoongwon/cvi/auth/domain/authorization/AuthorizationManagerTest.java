@@ -14,12 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.spy;
 
 @ActiveProfiles("test")
-@SpringBootTest
 @DisplayName("Authorization 매니저 도메인 테스트")
 class AuthorizationManagerTest {
 
@@ -28,14 +31,11 @@ class AuthorizationManagerTest {
     public static final String STATE = "STATE";
     public static final String SOCIAL_CODE = "CODE";
 
-    @Autowired
-    private AuthorizationManager authorizationManager;
+    private Map<String, Authorization> authorizationMap = new HashMap<>();
+    private AuthorizationManager authorizationManager = new AuthorizationManager(authorizationMap);
 
-    @MockBean
-    private NaverAuthorization naverAuthorization;
-
-    @MockBean
-    private KakaoAuthorization kakaoAuthorization;
+    private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
+    private KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private UserInformation naverUserInfo;
@@ -43,6 +43,8 @@ class AuthorizationManagerTest {
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
+        authorizationMap.put("naverAuthorization", naverAuthorization);
+        authorizationMap.put("kakaoAuthorization", kakaoAuthorization);
         NaverProfile naverProfile = objectMapper.readValue(NAVER_PROFILE_RESPONSE, NaverProfile.class);
         naverUserInfo = UserInformation.of(naverProfile);
         KakaoProfile kakaoProfile = objectMapper.readValue(KAKAO_PROFILE_RESPONSE, KakaoProfile.class);
