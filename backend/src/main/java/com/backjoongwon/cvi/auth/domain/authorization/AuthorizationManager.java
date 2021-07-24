@@ -20,6 +20,10 @@ public class AuthorizationManager {
     }
 
     private Authorization extractAuthorization(SocialProvider provider) {
+        if (provider == null) {
+            throw new InvalidOperationException("해당 OAuth 제공자가 존재하지 않습니다");
+        }
+
         String key = provider.convertToComponentName();
         if (authorizationMap.containsKey(key)) {
             return authorizationMap.get(key);
