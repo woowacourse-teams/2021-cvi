@@ -1,13 +1,9 @@
 package com.backjoongwon.cvi.user.application;
 
-import com.backjoongwon.cvi.auth.application.AuthService;
-import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
-import com.backjoongwon.cvi.auth.domain.authorization.NaverAuthorization;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
@@ -17,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
@@ -27,19 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ActiveProfiles("test")
-@DisplayName("사용자 비즈니스 흐름 테스트")
 @Transactional
 @SpringBootTest
+@DisplayName("사용자 비즈니스 흐름 테스트")
 public class UserServiceTest {
-
-    @MockBean
-    private AuthService authService;
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
-    @MockBean
-    private AuthorizationManager authorizationManager;
-    @MockBean
-    private NaverAuthorization naverAuthorization;
 
     @Autowired
     private UserService userService;

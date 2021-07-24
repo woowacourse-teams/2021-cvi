@@ -1,7 +1,6 @@
 package com.backjoongwon.cvi.auth.application;
 
 import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
-import com.backjoongwon.cvi.auth.domain.authorization.NaverAuthorization;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
@@ -20,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
@@ -27,8 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@DisplayName("소셜로그인 비즈니스 흐름 테스트")
+@ActiveProfiles("test")
 @SpringBootTest
+@TestPropertySource(properties = {"security.auth.naver.client-secret"})
+@DisplayName("소셜로그인 비즈니스 흐름 테스트")
 class AuthServiceTest {
 
     private static final String NAVER_PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"naver.com/profile\"}}";
@@ -37,14 +40,13 @@ class AuthServiceTest {
     private AuthService authService;
 
     @MockBean
+    private AuthorizationManager authorizationManager;
+
+    @MockBean
     private UserRepository userRepository;
+
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-    @MockBean
-    private AuthorizationManager authorizationManager;
-    @MockBean
-    private NaverAuthorization naverAuthorization;
-
     private AuthRequest authRequest;
     private User user;
     private String token;
