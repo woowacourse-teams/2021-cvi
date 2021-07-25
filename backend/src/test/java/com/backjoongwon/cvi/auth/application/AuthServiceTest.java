@@ -26,7 +26,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -77,9 +78,9 @@ class AuthServiceTest {
     @Test
     void authenticateWhenUserIsExists() {
         //given
-        when(userRepository.findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID")).thenReturn(Optional.of(user));
-        when(jwtTokenProvider.createToken(user.getId())).thenReturn(token);
-        when(authorizationManager.requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState())).thenReturn(userInfo);
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(token).given(jwtTokenProvider).createToken(user.getId());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
         //when
         UserResponse expected = authService.authenticate(authRequest);
         //then
@@ -90,9 +91,9 @@ class AuthServiceTest {
     @Test
     void authenticateWhenUserIsNotExists() {
         //given
-        when(userRepository.findBySocialProviderAndSocialId(SocialProvider.NAVER, "NEW_ID")).thenReturn(Optional.of(user));
-        when(jwtTokenProvider.createToken(user.getId())).thenReturn(token);
-        when(authorizationManager.requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState())).thenReturn(userInfo);
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NEW_ID");
+        willReturn(token).given(jwtTokenProvider).createToken(user.getId());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
         //when
         UserResponse expected = authService.authenticate(authRequest);
         //then
@@ -105,9 +106,10 @@ class AuthServiceTest {
     void authenticateFailureWhenNotValidCode() {
         //given
         AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, "INVALID_SOCIAL_CODE", "STATE");
-        when(userRepository.findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID")).thenReturn(Optional.of(user));
-        when(jwtTokenProvider.createToken(user.getId())).thenReturn(token);
-        when(authorizationManager.requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState())).thenThrow(MappingFailureException.class);
+
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(token).given(jwtTokenProvider).createToken(user.getId());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
         //when
         //then
         assertThatThrownBy(() -> authService.authenticate(invalidRequest))
@@ -119,9 +121,10 @@ class AuthServiceTest {
     void authenticateFailureWhenNotValidState() {
         //given
         AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, "SOCIAL_CODE", "INVALID_STATE");
-        when(userRepository.findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID")).thenReturn(Optional.of(user));
-        when(jwtTokenProvider.createToken(user.getId())).thenReturn(token);
-        when(authorizationManager.requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState())).thenThrow(MappingFailureException.class);
+
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(token).given(jwtTokenProvider).createToken(user.getId());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
         //when
         //then
         assertThatThrownBy(() -> authService.authenticate(invalidRequest))
