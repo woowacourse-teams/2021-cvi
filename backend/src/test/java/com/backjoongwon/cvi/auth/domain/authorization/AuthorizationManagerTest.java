@@ -42,8 +42,10 @@ class AuthorizationManagerTest {
     void setUp() throws JsonProcessingException {
         authorizationMap.put("naverAuthorization", naverAuthorization);
         authorizationMap.put("kakaoAuthorization", kakaoAuthorization);
+
         NaverProfile naverProfile = objectMapper.readValue(NAVER_PROFILE_RESPONSE, NaverProfile.class);
         naverUserInfo = UserInformation.of(naverProfile);
+
         KakaoProfile kakaoProfile = objectMapper.readValue(KAKAO_PROFILE_RESPONSE, KakaoProfile.class);
         kakaoUserInfo = UserInformation.of(kakaoProfile);
     }
@@ -54,8 +56,9 @@ class AuthorizationManagerTest {
         //given
         willReturn(naverUserInfo).given(naverAuthorization).requestProfile(SOCIAL_CODE, STATE);
         //when
+        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.NAVER, SOCIAL_CODE, STATE);
         //then
-        assertThat(authorizationManager.requestUserInfo(SocialProvider.NAVER, SOCIAL_CODE, STATE)).isEqualTo(naverUserInfo);
+        assertThat(expected).isEqualTo(naverUserInfo);
     }
 
     @DisplayName("Kakao Authorization 매니저 유저 정보 요청 - 성공")
@@ -64,8 +67,9 @@ class AuthorizationManagerTest {
         //given
         willReturn(kakaoUserInfo).given(kakaoAuthorization).requestProfile(SOCIAL_CODE, null);
         //when
+        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, null);
         //then
-        assertThat(authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, null)).isEqualTo(kakaoUserInfo);
+        assertThat(expected).isEqualTo(kakaoUserInfo);
     }
 
     @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 유효하지 않은 경우 - Naver")

@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
+import com.backjoongwon.cvi.auth.domain.oauthtoken.NaverOAuthToken;
 import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.spy;
 @DisplayName("Naver Authorization 도메인 테스트")
 class NaverAuthorizationTest {
 
-    private static final String TOKEN_RESPONSE = "{\"access_token\":\"{ACCESS_TOKEN}\",\"refresh_token\":\"JSqocvvAT06rIisis6NPsxNMAOj1txUhzisYuo4hn1A96k1QZUeWLyFrlYe6lcNii6o9cDO4VBbcA30yyVPdCE8OY5zsQK2uZniiCzWS2pzbzP4J2m7ipisJmlKawOZrdFhky4g\",\"token_type\":\"bearer\",\"expires_in\":\"3600\"}";
+    private static final String TOKEN_RESPONSE = "{\"access_token\":\"{ACCESS_TOKEN}\",\"refresh_token\":\"{REFRESH_TOKEN}\",\"token_type\":\"bearer\",\"expires_in\":\"3600\"}";
     private static final String PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"http://www.naver.com/profile\"}}";
     private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
     private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
@@ -45,15 +46,28 @@ class NaverAuthorizationTest {
         willReturn(profileResponse).given(naverAuthorization).sendRequest(naverProfileRequest, PROFILE_REQUEST_URL);
     }
 
+    @DisplayName("네이버 프로필 요청 테스트 - 성공")
+    @Test
+    void requestProfile() {
+        //given
+        //when
+        UserInformation userInformation = naverAuthorization.requestProfile("CODE", "STATE");
+        //then
+        assertThat(userInformation.getSocialId()).isEqualTo("NAVER_ID");
+        assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://www.naver.com/profile");
+    }
+
     @DisplayName("토큰 요청 테스트 - 성공")
     @Test
     void requestToken() {
         //given
         //when
+        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.requestToken("CODE", "STATE");
         //then
-        OAuthToken expected = naverAuthorization.requestToken("CODE", "STATE");
         assertThat(expected.getToken_type()).isEqualTo("bearer");
         assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
+        assertThat(expected.getExpires_in()).isEqualTo("3600");
     }
 
     @DisplayName("토큰 요청 테스트 - 실패")
@@ -74,10 +88,12 @@ class NaverAuthorizationTest {
     void mapToOAuthToken() {
         //given
         //when
-        OAuthToken oAuthToken = naverAuthorization.mapToOAuthToken(tokenResponse);
+        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.mapToOAuthToken(tokenResponse);
         //then
-        assertThat(oAuthToken.getToken_type()).isEqualTo("bearer");
-        assertThat(oAuthToken.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getToken_type()).isEqualTo("bearer");
+        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
+        assertThat(expected.getExpires_in()).isEqualTo("3600");
     }
 
     @DisplayName("토큰 매핑 테스트 - 실패 - 올바르지 않은 토큰 Response인 경우")

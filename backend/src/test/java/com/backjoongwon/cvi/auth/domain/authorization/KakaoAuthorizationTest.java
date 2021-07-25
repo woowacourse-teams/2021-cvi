@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
+import com.backjoongwon.cvi.auth.domain.oauthtoken.KakaoOAuthToken;
 import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
 import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
 import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
@@ -13,7 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.MultiValueMap;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.spy;
 
@@ -44,15 +46,30 @@ class KakaoAuthorizationTest {
         willReturn(profileResponse).given(kakaoAuthorization).sendRequest(kakaoProfileRequest, PROFILE_REQUEST_URL);
     }
 
+    @DisplayName("카카오 프로필 요청 테스트 - 성공")
+    @Test
+    void requestProfile() {
+        //given
+        //when
+        UserInformation userInformation = kakaoAuthorization.requestProfile("CODE", null);
+        //then
+        assertThat(userInformation.getSocialId()).isEqualTo("1816688137");
+        assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
+    }
+
     @DisplayName("토큰 요청 테스트 - 성공")
     @Test
     void requestToken() {
         //given
         //when
+        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.requestToken("CODE", null);
         //then
-        OAuthToken expected = kakaoAuthorization.requestToken("CODE", null);
         assertThat(expected.getToken_type()).isEqualTo("bearer");
         assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getExpires_in()).isEqualTo("43199");
+        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
+        assertThat(expected.getRefresh_token_expires_in()).isEqualTo("25184000");
+        assertThat(expected.getScope()).isEqualTo("account_email profile");
     }
 
     @DisplayName("토큰 요청 테스트 - 실패")
@@ -73,10 +90,14 @@ class KakaoAuthorizationTest {
     void mapToOAuthToken() {
         //given
         //when
-        OAuthToken oAuthToken = kakaoAuthorization.mapToOAuthToken(tokenResponse);
+        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.mapToOAuthToken(tokenResponse);
         //then
-        assertThat(oAuthToken.getToken_type()).isEqualTo("bearer");
-        assertThat(oAuthToken.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getToken_type()).isEqualTo("bearer");
+        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
+        assertThat(expected.getExpires_in()).isEqualTo("43199");
+        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
+        assertThat(expected.getRefresh_token_expires_in()).isEqualTo("25184000");
+        assertThat(expected.getScope()).isEqualTo("account_email profile");
     }
 
     @DisplayName("토큰 매핑 테스트 - 실패 - 올바르지 않은 토큰 Response인 경우")
