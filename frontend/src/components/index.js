@@ -5,6 +5,7 @@ import ReviewItem from './ReviewItem/ReviewItem';
 import ReviewWritingModal from './ReviewWritingModal/ReviewWritingModal';
 import VaccinationState from './VaccinationState/VaccinationState';
 import CommentForm from './CommentForm/CommentForm';
+import CommentItem from './CommentItem/CommentItem';
 
 export {
   Preview,
@@ -14,4 +15,5 @@ export {
   ReviewWritingModal,
   VaccinationState,
   CommentForm,
+  CommentItem,
 };

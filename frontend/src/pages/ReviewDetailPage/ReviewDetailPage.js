@@ -21,6 +21,8 @@ import {
   IconContainer,
   BottomContainer,
   CommentCount,
+  CommentList,
+  CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
@@ -46,7 +48,7 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
 import { deleteReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { CommentForm } from '../../components';
+import { CommentForm, CommentItem } from '../../components';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -54,8 +56,8 @@ const ReviewDetailPage = () => {
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
-
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
+  console.log(review);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -86,6 +88,66 @@ const ReviewDetailPage = () => {
   if (error) {
     return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
   }
+
+  const commentList = [
+    {
+      id: 1,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '60대 이상',
+        },
+        shotVerified: false,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 2,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '30대',
+        },
+        shotVerified: true,
+      },
+      content:
+        '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 ',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 3,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '20대',
+        },
+        shotVerified: false,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 4,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '20대',
+        },
+        shotVerified: true,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+  ];
 
   return (
     <Container>
@@ -164,10 +226,14 @@ const ReviewDetailPage = () => {
           </BottomContainer>
           <Comment>
             <CommentCount>댓글 12</CommentCount>
-            <CommentForm
-              nickname={review.writer?.nickname}
-              socialProfileUrl={review.writer?.socialProfileUrl}
-            />
+            <CommentFormContainer>
+              <CommentForm nickname={user.nickname} socialProfileUrl={user.socialProfileUrl} />
+            </CommentFormContainer>
+            <CommentList>
+              {commentList.map((comment) => (
+                <CommentItem key={comment.id} comment={comment} />
+              ))}
+            </CommentList>
           </Comment>
         </FrameContent>
       </Frame>

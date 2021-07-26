@@ -95,7 +95,7 @@ const buttonStyles = css`
 
 const Comment = styled.div`
   border-top: 0.15rem solid ${PALETTE.NAVY100};
-  padding: 2rem 3rem;
+  padding: 2rem 0;
 `;
 
 const IconContainer = styled.div`
@@ -112,7 +112,24 @@ const BottomContainer = styled.div`
 
 const CommentCount = styled.div`
   font-size: 1.8rem;
-  margin-bottom: 1.6rem;
+  margin: 0 3rem;
+  font-weight: 500;
+`;
+
+const CommentList = styled.div`
+  border-top: 0.1rem solid ${PALETTE.NAVY100};
+
+  & > *:not(:last-child) {
+    border-bottom: 0.1rem solid ${PALETTE.NAVY100};
+  }
+
+  & > * {
+    padding: 2rem 3rem;
+  }
+`;
+
+const CommentFormContainer = styled.div`
+  padding: 2rem 3rem;
 `;
 
 export {
@@ -136,4 +153,6 @@ export {
   IconContainer,
   BottomContainer,
   CommentCount,
+  CommentList,
+  CommentFormContainer,
 };
