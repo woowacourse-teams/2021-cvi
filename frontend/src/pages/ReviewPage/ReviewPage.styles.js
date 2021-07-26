@@ -1,6 +1,10 @@
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
+const Container = styled.div`
+  padding: 2.5rem 8rem 6rem 8rem;
+`;
+
 const Title = styled.h2`
   font-size: 2.8rem;
   margin-bottom: 1.4rem;
@@ -33,4 +37,4 @@ const FrameContent = styled.div`
   width: 100%;
 `;
 
-export { Title, ReviewList, FrameContent, ButtonWrapper };
+export { Container, Title, ReviewList, FrameContent, ButtonWrapper };

@@ -1,8 +1,8 @@
 import { BASE_URL } from './constants';
 
-const requestgetAllReviewList = () => fetch(`${BASE_URL}/posts`);
+const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
 
-const requestgetSelectedReviewList = (vaccinationType) =>
+const requestGetSelectedReviewList = (vaccinationType) =>
   fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
 
 const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
@@ -63,9 +63,19 @@ const requestPostOAuthLogin = (data) =>
     body: JSON.stringify(data),
   });
 
+const requestPutAccount = (accessToken, data) =>
+  fetch(`${BASE_URL}/users`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
 export {
-  requestgetAllReviewList,
-  requestgetSelectedReviewList,
+  requestGetAllReviewList,
+  requestGetSelectedReviewList,
   requestGetReview,
   requestCreateReview,
   requestDeleteReview,
@@ -73,4 +83,5 @@ export {
   requestPostSignup,
   requestPostOAuthLogin,
   requestGetMyInfo,
+  requestPutAccount,
 };

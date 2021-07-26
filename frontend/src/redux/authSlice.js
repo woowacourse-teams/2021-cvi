@@ -1,24 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEY } from '../constants';
-import { requestGetMyInfo, requestPostLogin } from '../requests';
-
-const loginAsync = createAsyncThunk('auth/login', async (loginData) => {
-  try {
-    const response = await requestPostLogin(loginData);
-
-    if (!response.ok) {
-      throw new Error(response);
-    }
-
-    const userData = await response.json();
-
-    localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(userData?.accessToken));
-
-    return userData;
-  } catch (error) {
-    console.error(error);
-  }
-});
+import { requestGetMyInfo } from '../requests';
 
 const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
   try {
@@ -52,10 +34,6 @@ const authSlice = createSlice({
     },
   },
   extraReducers: {
-    [loginAsync.fulfilled]: (state, action) => {
-      state.accessToken = action.payload.accessToken;
-      state.user = action.payload.user;
-    },
     [getMyInfoAsync.fulfilled]: (state, action) => {
       state.accessToken = action.payload.accessToken;
       state.user = action.payload.user;
@@ -69,4 +47,4 @@ const authSlice = createSlice({
 
 export const { logout } = authSlice.actions;
 
-export { authSlice, loginAsync, getMyInfoAsync };
+export { authSlice, getMyInfoAsync };
