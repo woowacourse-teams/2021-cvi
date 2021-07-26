@@ -62,7 +62,6 @@ public class UserServiceTest {
     void signupFailureWhenDuplicateNickname() {
         //given
         userService.signup(userRequest);
-        userRepository.flush();
         //when
         //then
         assertThatThrownBy(() -> userService.signup(userRequest))
@@ -128,7 +127,6 @@ public class UserServiceTest {
         UserResponse signupResponse = userService.signup(userRequest);
         UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
-        userRepository.flush();
 
         UserRequest updateRequest = UserRequest.builder()
                 .nickname("인비")
