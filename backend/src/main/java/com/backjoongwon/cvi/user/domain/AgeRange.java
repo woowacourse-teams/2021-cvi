@@ -10,7 +10,7 @@ public enum AgeRange {
     THIRTIES("30대", 30, 40),
     FORTIES("40대", 40, 50),
     FIFTIES("50대", 50, 60),
-    OVER_SIXTIES("60대", 60, Integer.MAX_VALUE);
+    OVER_SIXTIES("60대 이상", 60, Integer.MAX_VALUE);
 
     private final String meaning;
     private final int minAge;
