@@ -110,7 +110,7 @@ const ReviewDetailPage = () => {
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
             <WriterInfo>
-              <Avatar />
+              <Avatar src={review?.writer?.socialProfileUrl} />
               <Writer>
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>

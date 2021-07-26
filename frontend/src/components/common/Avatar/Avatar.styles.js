@@ -27,7 +27,8 @@ const Container = styled.div`
   background-size: cover;
   background-image: url(${({ src }) => src});
 
-  ${({ sizeType }) => avatarStyle[sizeType]}
+  ${({ sizeType }) => avatarStyle[sizeType] || avatarStyle[AVATAR_SIZE_TYPE.SMALL]}
+  ${({ styles }) => styles && styles}
 `;
 
 export { Container, AVATAR_SIZE_TYPE };

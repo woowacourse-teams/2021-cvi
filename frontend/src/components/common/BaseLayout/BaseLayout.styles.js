@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { THEME_COLOR } from '../../../constants';
 
@@ -25,4 +26,10 @@ const TopContainer = styled.div`
   padding: 2rem 8rem 0 0;
 `;
 
-export { Container, MainContainer, TopContainer };
+const avatarStyles = css`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export { Container, MainContainer, TopContainer, avatarStyles };
