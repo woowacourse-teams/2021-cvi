@@ -8,12 +8,6 @@ const Container = styled.li`
   cursor: pointer;
 `;
 
-const ViewCountContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
 const Content = styled.div`
   width: 100%;
   margin: 2.4rem 0;
@@ -36,11 +30,8 @@ const ShotVerified = styled.div`
 `;
 
 const ViewCount = styled.div`
-  margin-left: 0.5rem;
-  padding-bottom: 0.1rem;
+  margin-left: 0.4rem;
 `;
-
-const Date = styled.div``;
 
 const TopContainer = styled.div`
   display: flex;
@@ -52,17 +43,28 @@ const BottomContainer = styled.div`
   justify-content: space-between;
   color: ${FONT_COLOR.LIGHT_GRAY};
   font-size: 1.4rem;
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  gap: 1.6rem;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export {
   Container,
-  ViewCountContainer,
+  IconContainer,
   Content,
   Writer,
   ShotVerified,
   ViewCount,
-  Date,
   TopContainer,
   BottomContainer,
+  InfoContainer,
 };

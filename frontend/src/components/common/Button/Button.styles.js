@@ -79,7 +79,7 @@ const Container = styled.button`
     margin-right: ${({ withIcon }) => withIcon && '1rem'};
   }
 
-  ${({ styles }) => styles}
+  ${({ styles }) => styles && styles}
   ${({ isSelected, selectedStyles }) => isSelected && selectedStyles}
 `;
 

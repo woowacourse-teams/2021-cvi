@@ -8,6 +8,11 @@ const AVATAR_SIZE_TYPE = Object.freeze({
 
 const avatarStyle = {
   SMALL: {
+    height: '2.4rem',
+    width: '2.4rem',
+    borderRadius: '1.2rem',
+  },
+  MEDIUM: {
     height: '3.6rem',
     width: '3.6rem',
     borderRadius: '1.8rem',
@@ -20,14 +25,15 @@ const avatarStyle = {
 };
 
 const Container = styled.div`
-  min-height: 3.6rem;
-  min-width: 3.6rem;
-  border-radius: 1.8rem;
+  min-height: 2rem;
+  min-width: 2rem;
+  border-radius: 1rem;
 
   background-size: cover;
   background-image: url(${({ src }) => src});
 
-  ${({ sizeType }) => avatarStyle[sizeType]}
+  ${({ sizeType }) => avatarStyle[sizeType] || avatarStyle[AVATAR_SIZE_TYPE.MEDIUM]}
+  ${({ styles }) => styles && styles}
 `;
 
 export { Container, AVATAR_SIZE_TYPE };

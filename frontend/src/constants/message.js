@@ -26,4 +26,9 @@ const CONFIRM_MESSAGE = {
   GO_BACK: '현재 화면에서 나가시겠습니까? 변경사항이 저장되지 않을 수 있습니다.',
 };
 
-export { ERROR_MESSAGE, ALERT_MESSAGE, SNACKBAR_MESSAGE, CONFIRM_MESSAGE };
+const PLACEHOLDER = {
+  COMMENT_FORM:
+    '저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다. 건전한 토론문화와 양질의 댓글 문화를 위해, 타인에게 불쾌감을 주는 욕설 또는 특정 계층/민족, 종교 등을 비하하는 단어들은 표시가 제한됩니다.',
+};
+
+export { ERROR_MESSAGE, ALERT_MESSAGE, SNACKBAR_MESSAGE, CONFIRM_MESSAGE, PLACEHOLDER };

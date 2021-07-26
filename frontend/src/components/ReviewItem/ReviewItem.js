@@ -1,20 +1,20 @@
 import {
   Container,
-  ViewCountContainer,
   Content,
   Writer,
   ViewCount,
-  Date,
   TopContainer,
   BottomContainer,
   ShotVerified,
+  IconContainer,
+  InfoContainer,
 } from './ReviewItem.styles';
 import PropTypes from 'prop-types';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
 import { toDate } from '../../utils';
 import { Label } from '../common';
-import { EyeIcon } from '../../assets/icons';
+import { EyeIcon, CommentIcon, LikeIcon } from '../../assets/icons';
 
 const ReviewItem = ({ review, onClick }) => {
   const { writer, content, viewCount, vaccinationType, createdAt } = review;
@@ -37,11 +37,26 @@ const ReviewItem = ({ review, onClick }) => {
         {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>
       <BottomContainer>
-        <ViewCountContainer>
-          <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
-          <ViewCount>{viewCount}</ViewCount>
-        </ViewCountContainer>
-        <Date>{toDate(TO_DATE_TYPE.TIME, createdAt)}</Date>
+        <InfoContainer>
+          <IconContainer>
+            <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+            <ViewCount>{viewCount}</ViewCount>
+          </IconContainer>
+          <IconContainer>
+            <LikeIcon
+              width="18"
+              height="18"
+              stroke={FONT_COLOR.LIGHT_GRAY}
+              fill={FONT_COLOR.LIGHT_GRAY}
+            />
+            <ViewCount>{viewCount}</ViewCount>
+          </IconContainer>
+          <IconContainer>
+            <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
+            <ViewCount>{viewCount}</ViewCount>
+          </IconContainer>
+        </InfoContainer>
+        <div>{toDate(TO_DATE_TYPE.TIME, createdAt)}</div>
       </BottomContainer>
     </Container>
   );
