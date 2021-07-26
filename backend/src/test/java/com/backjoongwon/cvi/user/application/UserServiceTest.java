@@ -47,7 +47,6 @@ public class UserServiceTest {
         //given
         //when
         UserResponse userResponse = userService.signup(userRequest);
-        userRepository.flush();
         //then
         User foundUser = userRepository.findById(userResponse.getId())
                 .orElseThrow(() -> new NotFoundException("User 조회 에러"));
