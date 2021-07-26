@@ -4,7 +4,7 @@ import {
   Container,
   FrameContent,
   ButtonContainer,
-  Info,
+  TopContainer,
   VaccinationInfo,
   ReviewInfo,
   ShotVerified,
@@ -17,6 +17,10 @@ import {
   ViewCount,
   Error,
   buttonStyles,
+  Comment,
+  IconContainer,
+  BottomContainer,
+  CommentCount,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
@@ -39,9 +43,10 @@ import {
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
 import { deleteReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
+import { CommentForm } from '../../components';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -98,7 +103,7 @@ const ReviewDetailPage = () => {
               <div>목록 보기</div>
             </Button>
           </ButtonContainer>
-          <Info>
+          <TopContainer>
             <VaccinationInfo>
               <Label
                 backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
@@ -145,8 +150,25 @@ const ReviewDetailPage = () => {
                 </UpdateButtonContainer>
               )}
             </InfoBottom>
-          </Info>
+          </TopContainer>
           <Content>{review?.content}</Content>
+          <BottomContainer>
+            <IconContainer>
+              <LikeIcon width="26" height="26" stroke={FONT_COLOR.BLACK} fill={FONT_COLOR.BLACK} />
+              <div>37</div>
+            </IconContainer>
+            <IconContainer>
+              <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
+              <div>12</div>
+            </IconContainer>
+          </BottomContainer>
+          <Comment>
+            <CommentCount>댓글 12</CommentCount>
+            <CommentForm
+              nickname={review.writer?.nickname}
+              socialProfileUrl={review.writer?.socialProfileUrl}
+            />
+          </Comment>
         </FrameContent>
       </Frame>
     </Container>

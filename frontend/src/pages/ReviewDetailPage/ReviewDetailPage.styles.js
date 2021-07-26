@@ -18,7 +18,7 @@ const ButtonContainer = styled.div`
   padding: 2rem 2rem 0 1rem;
 `;
 
-const Info = styled.div`
+const TopContainer = styled.div`
   padding: 2rem 3rem 2rem 3rem;
   display: flex;
   flex-direction: column;
@@ -70,6 +70,7 @@ const CreatedAt = styled.div`
   margin: 0 1.6rem 0 0.3rem;
 `;
 const Content = styled.div`
+  min-height: 30rem;
   padding: 2rem 3rem;
 `;
 
@@ -91,11 +92,34 @@ const Error = styled.div`
 const buttonStyles = css`
   padding-right: 0;
 `;
+
+const Comment = styled.div`
+  border-top: 0.15rem solid ${PALETTE.NAVY100};
+  padding: 2rem 3rem;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  padding: 2rem 3rem;
+  gap: 2rem;
+`;
+
+const CommentCount = styled.div`
+  font-size: 1.8rem;
+  margin-bottom: 1.6rem;
+`;
+
 export {
   Container,
   FrameContent,
   ButtonContainer,
-  Info,
+  TopContainer,
   VaccinationInfo,
   WriterInfo,
   ReviewInfo,
@@ -108,4 +132,8 @@ export {
   ViewCount,
   Error,
   buttonStyles,
+  Comment,
+  IconContainer,
+  BottomContainer,
+  CommentCount,
 };

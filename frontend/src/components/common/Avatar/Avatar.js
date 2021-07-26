@@ -19,7 +19,7 @@ Avatar.propTypes = {
 };
 
 Avatar.defaultProps = {
-  sizeType: AVATAR_SIZE_TYPE.SMALL,
+  sizeType: AVATAR_SIZE_TYPE.MEDIUM,
   src: defaultImg,
   styles: null,
   onClick: () => {},
