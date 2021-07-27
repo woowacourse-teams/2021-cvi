@@ -44,7 +44,7 @@ security:
       expire-length: 3600000
   auth:
     naver:
-      client-secret: cvi_secret_key
+      client-secret: R_zN6l1A3V
 ---
 spring:
   config:
