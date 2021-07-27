@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.dto.LikeRequest;
+import com.backjoongwon.cvi.like.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -214,12 +215,13 @@ class PostControllerTest extends ApiDocument {
                 ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
         PostResponse expectedPostResponse = new PostResponse(1L, userResponse, "내용", 1,
                 1, true, VaccinationType.PFIZER, LocalDateTime.now());
+        LikeResponse likeResponse = new LikeResponse(1L, expectedPostResponse);
 
-        willReturn(1L).given(postService).createLike(any(Long.class), any(RequestUser.class));
+        willReturn(likeResponse).given(postService).createLike(any(Long.class), any(RequestUser.class));
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
         //then
-        글_좋아요_생성_성공(actualResponse, 1L);
+        글_좋아요_생성_성공(actualResponse, expectedPostResponse, 1L);
     }
 
     @DisplayName("게시글 좋아요 생성 - 실패 - 게시글이 없는 경우")
@@ -350,9 +352,10 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_좋아요_생성_성공(ResultActions actualResponse, Long likeId) throws Exception {
+    private void 글_좋아요_생성_성공(ResultActions actualResponse, PostResponse postResponse, Long likeId) throws Exception {
         actualResponse.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/likes/" + likeId))
+                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("like-create"));
     }

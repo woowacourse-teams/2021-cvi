@@ -34,7 +34,7 @@ public class Post extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")

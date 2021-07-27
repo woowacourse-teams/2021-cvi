@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.like.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -54,8 +55,9 @@ public class PostController {
 
     @PostMapping("/{id}/likes")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createLike(@PathVariable Long id, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
-        Long likeId = postService.createLike(id, user);
-        servletResponse.setHeader("Location", "/api/v1/likes/" + likeId);
+    public PostResponse createLike(@PathVariable Long id, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
+        LikeResponse likeResponse = postService.createLike(id, user);
+        servletResponse.setHeader("Location", "/api/v1/likes/" + likeResponse.getId());
+        return likeResponse.getPostResponse();
     }
 }
