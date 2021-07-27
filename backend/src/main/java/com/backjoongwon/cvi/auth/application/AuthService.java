@@ -31,14 +31,11 @@ public class AuthService {
 
     private UserResponse createUserResponse(AuthRequest authRequest, UserInformation userInformation) {
         Optional<User> foundUser = userRepository.findBySocialProviderAndSocialId(authRequest.getProvider(), userInformation.getSocialId());
-
-        if (foundUser.equals(Optional.empty())) {
-            return UserResponse.newUser(null, null, null, false,
-                    null, authRequest.getProvider(), userInformation.getSocialId(), userInformation.getSocialProfileUrl());
+        if (foundUser.isPresent()) {
+            User user = foundUser.get();
+            String token = jwtTokenProvider.createToken(user.getId());
+            return UserResponse.of(user, token);
         }
-
-        User user = foundUser.get();
-        String token = jwtTokenProvider.createToken(user.getId());
-        return UserResponse.of(user, token);
+        return UserResponse.newUser(authRequest.getProvider(), userInformation.getSocialId(), userInformation.getSocialProfileUrl());
     }
 }

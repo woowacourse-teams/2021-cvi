@@ -38,14 +38,8 @@ public class UserResponse {
                 user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
 
-    public static UserResponse newUser(Long id, String nickname, AgeRangeResponse ageRange, boolean shotVerified, String accessToken,
-                                       SocialProvider socialProvider, String socialId, String socialProfileUrl) {
-        return new UserResponse(id, nickname, ageRange,
-                shotVerified, accessToken, socialProvider, socialId, socialProfileUrl);
-    }
-
-    public static UserResponse emptyUser(AuthRequest authRequest, UserInformation userInformation) {
+    public static UserResponse newUser(SocialProvider socialProvider, String socialId, String socialProfileUrl) {
         return new UserResponse(null, null, null, false,
-                null, authRequest.getProvider(), userInformation.getSocialId(), userInformation.getSocialProfileUrl());
+                null, socialProvider, socialId, socialProfileUrl);
     }
 }
