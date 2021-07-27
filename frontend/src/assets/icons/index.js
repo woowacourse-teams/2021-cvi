@@ -11,6 +11,9 @@ import LogoIcon from './logo.svg';
 import LeftArrowIcon from './left-arrow.svg';
 import RightArrowIcon from './right-arrow.svg';
 import CloseIcon from './close.svg';
+import MyPageIcon from './mypage.svg';
+import CommentIcon from './comment.svg';
+import LikeIcon from './like.svg';
 
 export {
   KakaoIcon,
@@ -26,4 +29,7 @@ export {
   LeftArrowIcon,
   RightArrowIcon,
   CloseIcon,
+  MyPageIcon,
+  CommentIcon,
+  LikeIcon,
 };

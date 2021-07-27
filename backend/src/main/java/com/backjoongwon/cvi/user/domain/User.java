@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends BaseEntity {
 
+    @Column(unique = true)
     private String nickname;
 
     @Enumerated(EnumType.STRING)

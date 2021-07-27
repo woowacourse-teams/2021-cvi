@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class UserRequest {
     private String socialId;
     private String socialProfileUrl;
 
+    @Builder
     public UserRequest(String nickname, AgeRange ageRange, SocialProvider socialProvider, String socialId, String profileUrl) {
         this.nickname = nickname;
         this.ageRange = ageRange;

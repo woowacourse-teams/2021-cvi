@@ -4,6 +4,7 @@ import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   margin-top: 4rem;
+  padding: 2.5rem 8rem 6rem 8rem;
 `;
 
 const FrameContent = styled.div`
@@ -17,7 +18,7 @@ const ButtonContainer = styled.div`
   padding: 2rem 2rem 0 1rem;
 `;
 
-const Info = styled.div`
+const TopContainer = styled.div`
   padding: 2rem 3rem 2rem 3rem;
   display: flex;
   flex-direction: column;
@@ -69,6 +70,7 @@ const CreatedAt = styled.div`
   margin: 0 1.6rem 0 0.3rem;
 `;
 const Content = styled.div`
+  min-height: 30rem;
   padding: 2rem 3rem;
 `;
 
@@ -90,11 +92,51 @@ const Error = styled.div`
 const buttonStyles = css`
   padding-right: 0;
 `;
+
+const Comment = styled.div`
+  border-top: 0.15rem solid ${PALETTE.NAVY100};
+  padding: 2rem 0;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  padding: 2rem 3rem;
+  gap: 2rem;
+`;
+
+const CommentCount = styled.div`
+  font-size: 1.8rem;
+  margin: 0 3rem;
+  font-weight: 500;
+`;
+
+const CommentList = styled.div`
+  border-top: 0.1rem solid ${PALETTE.NAVY100};
+
+  & > *:not(:last-child) {
+    border-bottom: 0.1rem solid ${PALETTE.NAVY100};
+  }
+
+  & > * {
+    padding: 2rem 3rem;
+  }
+`;
+
+const CommentFormContainer = styled.div`
+  padding: 2rem 3rem;
+`;
+
 export {
   Container,
   FrameContent,
   ButtonContainer,
-  Info,
+  TopContainer,
   VaccinationInfo,
   WriterInfo,
   ReviewInfo,
@@ -107,4 +149,10 @@ export {
   ViewCount,
   Error,
   buttonStyles,
+  Comment,
+  IconContainer,
+  BottomContainer,
+  CommentCount,
+  CommentList,
+  CommentFormContainer,
 };

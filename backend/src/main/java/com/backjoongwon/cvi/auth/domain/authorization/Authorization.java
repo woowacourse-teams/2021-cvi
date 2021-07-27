@@ -23,5 +23,5 @@ public interface Authorization {
 
     SocialProfile mapToProfile(ResponseEntity<String> response);
 
-    ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> profileRequest, String url);
+    ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url);
 }

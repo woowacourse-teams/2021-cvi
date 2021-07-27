@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import Button from '../../components/Button/Button';
-import Frame from '../../components/Frame/Frame';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -33,13 +31,15 @@ import {
   ViewCount,
   editButtonStyles,
 } from './ReviewEditPage.styles';
-import Avatar from '../../components/Avatar/Avatar';
 import toDate from '../../utils/toDate';
-import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
-import Label from '../../components/Label/Label';
+import {
+  BUTTON_BACKGROUND_TYPE,
+  BUTTON_SIZE_TYPE,
+} from '../../components/common/Button/Button.styles';
+import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
+import { Avatar, Button, Frame, Label } from '../../components/common';
 
 const ReviewEditPage = () => {
   const history = useHistory();

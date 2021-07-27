@@ -1,6 +1,5 @@
+import { Preview, VaccinationState } from '../../components';
 import { Container } from './HomePage.styles';
-import VaccinationState from '../../components/VaccinationState/VaccinationState';
-import Preview from '../../components/Preview/Preview';
 
 const HomePage = () => (
   <Container>

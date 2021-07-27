@@ -1,4 +1,3 @@
-import React from 'react';
 import { SnackbarProvider } from 'notistack';
 import GlobalStyles from './GlobalStyles';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
@@ -11,8 +10,12 @@ import {
   SignupPage,
   ReviewEditPage,
   OAuthPage,
+  MyPage,
+  MyPageAccount,
+  MyPageShotVerification,
+  MyPageReviews,
 } from './pages';
-import BaseLayout from './components/BaseLayout/BaseLayout';
+import { BaseLayout } from './components/common';
 
 const App = () => {
   return (
@@ -34,6 +37,34 @@ const App = () => {
               <Route exact path={`${PATH.REVIEW}/:id/edit`} component={ReviewEditPage} />
               <Route exact path={PATH.LOGIN} component={LoginPage} />
               <Route exact path={PATH.SIGNUP} component={SignupPage} />
+              <Route exact path={PATH.MY_PAGE} component={MyPage} />
+              <Route
+                exact
+                path={PATH.MY_PAGE_ACCOUNT}
+                render={() => (
+                  <MyPage>
+                    <MyPageAccount />
+                  </MyPage>
+                )}
+              />
+              <Route
+                exact
+                path={PATH.MY_PAGE_SHOT_VERIFICATION}
+                render={() => (
+                  <MyPage>
+                    <MyPageShotVerification />
+                  </MyPage>
+                )}
+              />
+              <Route
+                exact
+                path={PATH.MY_PAGE_REVIEWS}
+                render={() => (
+                  <MyPage>
+                    <MyPageReviews />
+                  </MyPage>
+                )}
+              />
               <Route exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
               <Route exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
               <Redirect to={PATH.HOME} />

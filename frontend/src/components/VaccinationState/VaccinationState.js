@@ -1,7 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import Frame from '../Frame/Frame';
 import { Container, Title } from './VaccinationState.styles';
+import { Frame } from '../common';
 
 const VaccinationState = ({ title }) => (
   <Container>

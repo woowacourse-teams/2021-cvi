@@ -4,7 +4,7 @@ import {
   Container,
   FrameContent,
   ButtonContainer,
-  Info,
+  TopContainer,
   VaccinationInfo,
   ReviewInfo,
   ShotVerified,
@@ -17,13 +17,17 @@ import {
   ViewCount,
   Error,
   buttonStyles,
+  Comment,
+  IconContainer,
+  BottomContainer,
+  CommentCount,
+  CommentList,
+  CommentFormContainer,
 } from './ReviewDetailPage.styles';
-import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
 import { useFetch } from '../../hooks';
 import { requestGetReview } from '../../requests';
-import Label from '../../components/Label/Label';
-import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
+import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -36,12 +40,15 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import Avatar from '../../components/Avatar/Avatar';
+import {
+  BUTTON_BACKGROUND_TYPE,
+  BUTTON_SIZE_TYPE,
+} from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
 import { deleteReviewAsync } from '../../service';
+import { Avatar, Button, Frame, Label } from '../../components/common';
+import { CommentForm, CommentItem } from '../../components';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -49,8 +56,8 @@ const ReviewDetailPage = () => {
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
-
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
+  console.log(review);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -82,6 +89,66 @@ const ReviewDetailPage = () => {
     return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
   }
 
+  const commentList = [
+    {
+      id: 1,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '60대 이상',
+        },
+        shotVerified: false,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 2,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '30대',
+        },
+        shotVerified: true,
+      },
+      content:
+        '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 ',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 3,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '20대',
+        },
+        shotVerified: false,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+    {
+      id: 4,
+      writer: {
+        id: 1,
+        socialProfileUrl: user.socialProfileUrl,
+        nickname: user.nickname,
+        ageRange: {
+          meaning: '20대',
+        },
+        shotVerified: true,
+      },
+      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
+      createdAt: '2021-07-26T14:36:37.929',
+    },
+  ];
+
   return (
     <Container>
       <Frame width="100%" showShadow={true}>
@@ -98,7 +165,7 @@ const ReviewDetailPage = () => {
               <div>목록 보기</div>
             </Button>
           </ButtonContainer>
-          <Info>
+          <TopContainer>
             <VaccinationInfo>
               <Label
                 backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
@@ -110,7 +177,7 @@ const ReviewDetailPage = () => {
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
             <WriterInfo>
-              <Avatar />
+              <Avatar src={review?.writer?.socialProfileUrl} />
               <Writer>
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>
@@ -145,8 +212,29 @@ const ReviewDetailPage = () => {
                 </UpdateButtonContainer>
               )}
             </InfoBottom>
-          </Info>
+          </TopContainer>
           <Content>{review?.content}</Content>
+          <BottomContainer>
+            <IconContainer>
+              <LikeIcon width="26" height="26" stroke={FONT_COLOR.BLACK} fill={FONT_COLOR.BLACK} />
+              <div>37</div>
+            </IconContainer>
+            <IconContainer>
+              <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
+              <div>12</div>
+            </IconContainer>
+          </BottomContainer>
+          <Comment>
+            <CommentCount>댓글 12</CommentCount>
+            <CommentFormContainer>
+              <CommentForm nickname={user.nickname} socialProfileUrl={user.socialProfileUrl} />
+            </CommentFormContainer>
+            <CommentList>
+              {commentList.map((comment) => (
+                <CommentItem key={comment.id} comment={comment} />
+              ))}
+            </CommentList>
+          </Comment>
         </FrameContent>
       </Frame>
     </Container>

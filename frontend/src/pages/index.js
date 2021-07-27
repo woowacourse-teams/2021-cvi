@@ -5,5 +5,21 @@ import ReviewEditPage from './ReviewEditPage/ReviewEditPage';
 import LoginPage from './LoginPage/LoginPage';
 import SignupPage from './SignupPage/SignupPage';
 import OAuthPage from './OAuthPage/OAuthPage';
+import MyPage from './MyPage/MyPage';
+import MyPageAccount from './MyPageAccount/MyPageAccount';
+import MyPageShotVerification from './MyPageShotVerification/MyPageShotVerification';
+import MyPageReviews from './MyPageReviews/MyPageReivews';
 
-export { HomePage, ReviewPage, ReviewDetailPage, ReviewEditPage, LoginPage, SignupPage, OAuthPage };
+export {
+  HomePage,
+  ReviewPage,
+  ReviewDetailPage,
+  ReviewEditPage,
+  LoginPage,
+  SignupPage,
+  OAuthPage,
+  MyPage,
+  MyPageAccount,
+  MyPageShotVerification,
+  MyPageReviews,
+};
