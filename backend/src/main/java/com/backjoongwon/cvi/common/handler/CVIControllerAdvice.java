@@ -1,9 +1,6 @@
 package com.backjoongwon.cvi.common.handler;
 
-import com.backjoongwon.cvi.common.exception.CommonException;
-import com.backjoongwon.cvi.common.exception.ExceptionMessage;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.common.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,6 +37,13 @@ public class CVIControllerAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionMessage serverException(Exception e) {
+        LOG.error("Internal Server Exception: {}", e.getMessage(), e);
+        return new ExceptionMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(MappingFailureException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionMessage mappingException(Exception e) {
         LOG.error("Internal Server Exception: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
