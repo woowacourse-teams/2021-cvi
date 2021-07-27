@@ -61,7 +61,7 @@ public class NaverAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
         } catch (JsonProcessingException e) {
-            throw new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.");
+            throw new MappingFailureException("토큰 정보를 매핑하는데 실패했습니다.");
         }
     }
 
@@ -89,7 +89,7 @@ public class NaverAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), NaverProfile.class);
         } catch (JsonProcessingException e) {
-            throw new MappingFailureException("프로필을 불러오는 데 실패했습니다.");
+            throw new MappingFailureException("프로필을 매핑하는데 실패했습니다.");
         }
     }
 

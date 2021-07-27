@@ -27,6 +27,14 @@ class NaverAuthorizationTest {
     private static final String PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"http://www.naver.com/profile\"}}";
     private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
     private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
+    private static final String CODE = "CODE";
+    private static final String STATE = "STATE";
+    private static final String NAVER_ID = "NAVER_ID";
+    private static final String NAVER_PROFILE_URL = "http://www.naver.com/profile";
+    private static final String BEARER = "bearer";
+    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN}";
+    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN}";
+    private static final String EXPIRE_TIME = "3600";
 
     private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
     private HttpEntity<MultiValueMap<String, String>> naverTokenRequest;
@@ -36,7 +44,7 @@ class NaverAuthorizationTest {
 
     @BeforeEach
     void beforeEach() {
-        naverTokenRequest = naverAuthorization.createTokenRequest("CODE", "STATE");
+        naverTokenRequest = naverAuthorization.createTokenRequest(CODE, STATE);
         tokenResponse = ResponseEntity.ok(TOKEN_RESPONSE);
         profileResponse = ResponseEntity.ok(PROFILE_RESPONSE);
 
@@ -51,10 +59,10 @@ class NaverAuthorizationTest {
     void requestProfile() {
         //given
         //when
-        UserInformation userInformation = naverAuthorization.requestProfile("CODE", "STATE");
+        UserInformation userInformation = naverAuthorization.requestProfile(CODE, STATE);
         //then
-        assertThat(userInformation.getSocialId()).isEqualTo("NAVER_ID");
-        assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://www.naver.com/profile");
+        assertThat(userInformation.getSocialId()).isEqualTo(NAVER_ID);
+        assertThat(userInformation.getSocialProfileUrl()).isEqualTo(NAVER_PROFILE_URL);
     }
 
     @DisplayName("토큰 요청 테스트 - 성공")
@@ -62,23 +70,23 @@ class NaverAuthorizationTest {
     void requestToken() {
         //given
         //when
-        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.requestToken("CODE", "STATE");
+        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.requestToken(CODE, STATE);
         //then
-        assertThat(expected.getToken_type()).isEqualTo("bearer");
-        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
-        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
-        assertThat(expected.getExpires_in()).isEqualTo("3600");
+        assertThat(expected.getToken_type()).isEqualTo(BEARER);
+        assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
+        assertThat(expected.getRefresh_token()).isEqualTo(REFRESH_TOKEN);
+        assertThat(expected.getExpires_in()).isEqualTo(EXPIRE_TIME);
     }
 
     @DisplayName("토큰 요청 테스트 - 실패")
     @Test
     void requestTokenFailure() {
         //given
-        HttpEntity<MultiValueMap<String, String>> invalidToken = naverAuthorization.createTokenRequest("INVALID_TOKEN", "STATE");
+        HttpEntity<MultiValueMap<String, String>> invalidToken = naverAuthorization.createTokenRequest("INVALID_TOKEN", STATE);
         willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(naverAuthorization).sendRequest(invalidToken, TOKEN_REQUEST_URL);
         //when
         //then
-        assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", "STATE"))
+        assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", STATE))
                 .isExactlyInstanceOf(MappingFailureException.class)
                 .hasMessage("토큰 정보를 불러오는 데 실패했습니다.");
     }
@@ -90,10 +98,10 @@ class NaverAuthorizationTest {
         //when
         NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.mapToOAuthToken(tokenResponse);
         //then
-        assertThat(expected.getToken_type()).isEqualTo("bearer");
-        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
-        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
-        assertThat(expected.getExpires_in()).isEqualTo("3600");
+        assertThat(expected.getToken_type()).isEqualTo(BEARER);
+        assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
+        assertThat(expected.getRefresh_token()).isEqualTo(REFRESH_TOKEN);
+        assertThat(expected.getExpires_in()).isEqualTo(EXPIRE_TIME);
     }
 
     @DisplayName("토큰 매핑 테스트 - 실패 - 올바르지 않은 토큰 Response인 경우")
@@ -114,7 +122,7 @@ class NaverAuthorizationTest {
         //when
         UserInformation userInformation = naverAuthorization.parseProfile(naverAuthorization.mapToOAuthToken(tokenResponse));
         //then
-        assertThat(userInformation.getSocialId()).isEqualTo("NAVER_ID");
+        assertThat(userInformation.getSocialId()).isEqualTo(NAVER_ID);
         assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://www.naver.com/profile");
     }
 
@@ -139,7 +147,7 @@ class NaverAuthorizationTest {
         //when
         SocialProfile socialProfile = naverAuthorization.mapToProfile(profileResponse);
         //then
-        assertThat(socialProfile.extractSocialId()).isEqualTo("NAVER_ID");
+        assertThat(socialProfile.extractSocialId()).isEqualTo(NAVER_ID);
         assertThat(socialProfile.extractProfileUrl()).isEqualTo("http://www.naver.com/profile");
     }
 

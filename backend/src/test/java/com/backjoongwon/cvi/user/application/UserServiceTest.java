@@ -27,8 +27,8 @@ import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
 
 @ActiveProfiles("test")
-@Transactional
 @SpringBootTest
+@Transactional
 @DisplayName("사용자 비즈니스 흐름 테스트")
 public class UserServiceTest {
 

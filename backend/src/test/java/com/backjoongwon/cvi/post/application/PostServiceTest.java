@@ -30,8 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ActiveProfiles("test")
-@Transactional
 @SpringBootTest
+@Transactional
 @DisplayName("게시글 비즈니스 흐름 테스트")
 class PostServiceTest {
 

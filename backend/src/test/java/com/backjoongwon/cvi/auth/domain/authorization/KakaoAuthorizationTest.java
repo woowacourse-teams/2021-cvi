@@ -27,6 +27,14 @@ class KakaoAuthorizationTest {
     private static final String PROFILE_RESPONSE = "{\"id\":1816688137,\"connected_at\":\"2021-07-22T05:43:16Z\",\"properties\":{\"nickname\":\"김영빈\"},\"kakao_account\":{\"profile_nickname_needs_agreement\":false,\"profile_image_needs_agreement\":false,\"profile\":{\"nickname\":\"김영빈\",\"thumbnail_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg\",\"profile_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg\",\"is_default_image\":true}}}";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
+    private static final String CODE = "CODE";
+    private static final String KAKAO_SOCIAL_ID = "1816688137";
+    private static final String BEARER = "bearer";
+    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN}";
+    private static final String EXPIRE_TIME = "43199";
+    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN}";
+    private static final String TOKEN_EXPIRE_TIME = "25184000";
+    private static final String SCOPE = "account_email profile";
 
     private KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
     private HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest;
@@ -36,7 +44,7 @@ class KakaoAuthorizationTest {
 
     @BeforeEach
     void beforeEach() {
-        kakaoTokenRequest = kakaoAuthorization.createTokenRequest("CODE", null);
+        kakaoTokenRequest = kakaoAuthorization.createTokenRequest(CODE, null);
         tokenResponse = ResponseEntity.ok(TOKEN_RESPONSE);
         profileResponse = ResponseEntity.ok(PROFILE_RESPONSE);
 
@@ -51,9 +59,9 @@ class KakaoAuthorizationTest {
     void requestProfile() {
         //given
         //when
-        UserInformation userInformation = kakaoAuthorization.requestProfile("CODE", null);
+        UserInformation userInformation = kakaoAuthorization.requestProfile(CODE, null);
         //then
-        assertThat(userInformation.getSocialId()).isEqualTo("1816688137");
+        assertThat(userInformation.getSocialId()).isEqualTo(KAKAO_SOCIAL_ID);
         assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
     }
 
@@ -62,14 +70,14 @@ class KakaoAuthorizationTest {
     void requestToken() {
         //given
         //when
-        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.requestToken("CODE", null);
+        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.requestToken(CODE, null);
         //then
-        assertThat(expected.getToken_type()).isEqualTo("bearer");
-        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
-        assertThat(expected.getExpires_in()).isEqualTo("43199");
-        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
-        assertThat(expected.getRefresh_token_expires_in()).isEqualTo("25184000");
-        assertThat(expected.getScope()).isEqualTo("account_email profile");
+        assertThat(expected.getToken_type()).isEqualTo(BEARER);
+        assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
+        assertThat(expected.getExpires_in()).isEqualTo(EXPIRE_TIME);
+        assertThat(expected.getRefresh_token()).isEqualTo(REFRESH_TOKEN);
+        assertThat(expected.getRefresh_token_expires_in()).isEqualTo(TOKEN_EXPIRE_TIME);
+        assertThat(expected.getScope()).isEqualTo(SCOPE);
     }
 
     @DisplayName("토큰 요청 테스트 - 실패")
@@ -92,12 +100,12 @@ class KakaoAuthorizationTest {
         //when
         KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.mapToOAuthToken(tokenResponse);
         //then
-        assertThat(expected.getToken_type()).isEqualTo("bearer");
-        assertThat(expected.getAccess_token()).isEqualTo("{ACCESS_TOKEN}");
-        assertThat(expected.getExpires_in()).isEqualTo("43199");
-        assertThat(expected.getRefresh_token()).isEqualTo("{REFRESH_TOKEN}");
-        assertThat(expected.getRefresh_token_expires_in()).isEqualTo("25184000");
-        assertThat(expected.getScope()).isEqualTo("account_email profile");
+        assertThat(expected.getToken_type()).isEqualTo(BEARER);
+        assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
+        assertThat(expected.getExpires_in()).isEqualTo(EXPIRE_TIME);
+        assertThat(expected.getRefresh_token()).isEqualTo(REFRESH_TOKEN);
+        assertThat(expected.getRefresh_token_expires_in()).isEqualTo(TOKEN_EXPIRE_TIME);
+        assertThat(expected.getScope()).isEqualTo(SCOPE);
     }
 
     @DisplayName("토큰 매핑 테스트 - 실패 - 올바르지 않은 토큰 Response인 경우")
@@ -118,7 +126,7 @@ class KakaoAuthorizationTest {
         //when
         UserInformation userInformation = kakaoAuthorization.parseProfile(kakaoAuthorization.mapToOAuthToken(tokenResponse));
         //then
-        assertThat(userInformation.getSocialId()).isEqualTo("1816688137");
+        assertThat(userInformation.getSocialId()).isEqualTo(KAKAO_SOCIAL_ID);
         assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
     }
 
@@ -143,7 +151,7 @@ class KakaoAuthorizationTest {
         //when
         SocialProfile socialProfile = kakaoAuthorization.mapToProfile(profileResponse);
         //then
-        assertThat(socialProfile.extractSocialId()).isEqualTo("1816688137");
+        assertThat(socialProfile.extractSocialId()).isEqualTo(KAKAO_SOCIAL_ID);
         assertThat(socialProfile.extractProfileUrl()).isEqualTo("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
     }
 

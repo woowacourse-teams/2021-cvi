@@ -36,6 +36,10 @@ import static org.mockito.BDDMockito.willThrow;
 class AuthServiceTest {
 
     private static final String NAVER_PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"naver.com/profile\"}}";
+    private static final String SOCIAL_CODE = "SOCIAL_CODE";
+    private static final String STATE = "STATE";
+    private static final String NAVER_ID = "NAVER_ID";
+    private static final String NAVER_PROFILE_URL = "naver.com/profile";
 
     @Autowired
     private AuthService authService;
@@ -57,13 +61,13 @@ class AuthServiceTest {
 
     @BeforeEach
     void beforeEach() throws JsonProcessingException {
-        authRequest = new AuthRequest(SocialProvider.NAVER, "SOCIAL_CODE", "STATE");
+        authRequest = new AuthRequest(SocialProvider.NAVER, SOCIAL_CODE, STATE);
         user = User.builder()
                 .id(1L)
                 .nickname("test_user")
                 .ageRange(AgeRange.TEENS)
-                .socialId("NAVER_ID")
-                .profileUrl("naver.com/profile")
+                .socialId(NAVER_ID)
+                .profileUrl(NAVER_PROFILE_URL)
                 .socialProvider(SocialProvider.NAVER)
                 .build();
         token = "naver_auth_token";
@@ -78,7 +82,7 @@ class AuthServiceTest {
     @Test
     void authenticateWhenUserIsExists() {
         //given
-        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
         willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
         //when
@@ -105,9 +109,9 @@ class AuthServiceTest {
     @Test
     void authenticateFailureWhenNotValidCode() {
         //given
-        AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, "INVALID_SOCIAL_CODE", "STATE");
+        AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, "INVALID_SOCIAL_CODE", STATE);
 
-        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
         willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
         //when
@@ -120,9 +124,9 @@ class AuthServiceTest {
     @Test
     void authenticateFailureWhenNotValidState() {
         //given
-        AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, "SOCIAL_CODE", "INVALID_STATE");
+        AuthRequest invalidRequest = new AuthRequest(SocialProvider.NAVER, SOCIAL_CODE, "INVALID_STATE");
 
-        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NAVER_ID");
+        willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
         willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
         //when

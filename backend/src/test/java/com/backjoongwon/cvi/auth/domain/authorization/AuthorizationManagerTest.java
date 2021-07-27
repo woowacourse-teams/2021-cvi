@@ -25,8 +25,8 @@ class AuthorizationManagerTest {
 
     private static final String NAVER_PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"naver.com/profile\"}}";
     private static final String KAKAO_PROFILE_RESPONSE = "{\"id\":1816688137,\"connected_at\":\"2021-07-22T05:43:16Z\",\"properties\":{\"nickname\":\"김영빈\"},\"kakao_account\":{\"profile_nickname_needs_agreement\":false,\"profile_image_needs_agreement\":false,\"profile\":{\"nickname\":\"김영빈\",\"thumbnail_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg\",\"profile_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg\",\"is_default_image\":true}}}";
-    public static final String STATE = "STATE";
-    public static final String SOCIAL_CODE = "CODE";
+    private static final String STATE = "STATE";
+    private static final String SOCIAL_CODE = "CODE";
 
     private Map<String, Authorization> authorizationMap = new HashMap<>();
     private AuthorizationManager authorizationManager = new AuthorizationManager(authorizationMap);
