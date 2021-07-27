@@ -110,8 +110,8 @@ public class UserServiceTest {
     void updateNicknameToSameNickname() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
-        //when
         UserRequest updateRequest = new UserRequest("인비", AgeRange.THIRTIES, null, null, null);
+        //when
         userService.update(signupResponse.getId(), updateRequest);
         //then
         User updatedUser = userRepository.findById(signupResponse.getId())
@@ -124,7 +124,7 @@ public class UserServiceTest {
     @Test
     void updateFailureWhenNicknameDuplicate() {
         //given
-        UserResponse signupResponse = userService.signup(userRequest);
+        UserResponse signupResponse1 = userService.signup(userRequest);
         UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
 
@@ -133,11 +133,10 @@ public class UserServiceTest {
                 .ageRange(AgeRange.FIFTIES)
                 .build();
         //when
-        //then
         assertThatThrownBy(() -> userService.update(signupResponse2.getId(), updateRequest))
                 .isInstanceOf(DuplicateException.class);
-
-        User notUpdatedUser1 = userRepository.findById(signupResponse.getId())
+        //then
+        User notUpdatedUser1 = userRepository.findById(signupResponse1.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(notUpdatedUser1.getNickname()).isEqualTo(userRequest.getNickname());
@@ -149,7 +148,6 @@ public class UserServiceTest {
         assertThat(notUpdatedUser2.getNickname()).isEqualTo(signUpRequest2.getNickname());
         assertThat(notUpdatedUser2.getAgeRange()).isSameAs(signUpRequest2.getAgeRange());
     }
-
 
     @DisplayName("사용자 수정 - 실패 - 존재하지 않는 User")
     @Test

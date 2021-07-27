@@ -11,8 +11,6 @@ import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +25,7 @@ public class UserService {
 
     @Transactional
     public UserResponse signup(UserRequest userRequest) {
-        validateNicknameDuplicate(userRequest.getNickname());
+        validateDuplicateNickname(userRequest.getNickname());
         User user = userRepository.save(userRequest.toEntity());
         String accessToken = jwtTokenProvider.createToken(user.getId());
         return UserResponse.of(user, accessToken);
@@ -62,12 +60,12 @@ public class UserService {
         User foundUser = findUserById(id);
         String nickname = foundUser.getNickname();
         if (!nickname.equals(userRequest.getNickname())) {
-            validateNicknameDuplicate(userRequest.getNickname());
+            validateDuplicateNickname(userRequest.getNickname());
         }
         foundUser.update(userRequest.toEntity());
     }
 
-    private void validateNicknameDuplicate(String nickname) {
+    private void validateDuplicateNickname(String nickname) {
         if (userRepository.existsByNickname(nickname)) {
             throw new DuplicateException("닉네임이 이미 사용중입니다.");
         }
