@@ -1,5 +1,7 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
@@ -59,6 +61,11 @@ public class PostService {
         Post foundPost = findPostByPostId(postId);
         foundPost.validateAuthor(user);
         postRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public CommentResponse createComment(Long postId, RequestUser user, CommentRequest commentRequest) {
+        return null;
     }
 
     private User findUserByUserId(Long id) {

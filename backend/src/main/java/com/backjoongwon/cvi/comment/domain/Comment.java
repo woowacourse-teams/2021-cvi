@@ -1,14 +1,15 @@
 package com.backjoongwon.cvi.comment.domain;
 
-
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -26,4 +27,12 @@ public class Comment extends BaseEntity {
 
     @Lob
     private String content;
+
+    @Builder
+    public Comment(Long id, LocalDateTime createdAt, Post post, User user, String content) {
+        super(id, createdAt);
+        this.post = post;
+        this.user = user;
+        this.content = content;
+    }
 }

@@ -3,7 +3,10 @@ package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -203,12 +206,34 @@ class PostControllerTest extends ApiDocument {
         게시글_타입별_조회_요청_성공함(response);
     }
 
+    @DisplayName("게시글 댓글 등록 - 성공")
+    @Test
+    void createComment() throws Exception {
+        //given
+        CommentResponse expectedResponse = new CommentResponse(1L, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
+        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
+        //then
+        댓글_등록_성공함(response, expectedResponse);
+    }
+
+    @DisplayName("게시글 댓글 등록 - 실패 - 비회원이 댓글을 작성할 때")
+    @Test
+    void createCommentFailureWhenWrongWriter() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
+        //then
+        댕글_등록_실패함(response);
+    }
+
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/posts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
-
     }
 
     private void 글_등록_성공함(ResultActions response, PostResponse postResponse) throws Exception {
@@ -307,5 +332,25 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType"));
+    }
+
+    private ResultActions 댓글_등록_요청(Long postId, CommentRequest request, String headerValue) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, headerValue));
+    }
+
+    private void 댓글_등록_성공함(ResultActions response, CommentResponse expectedResponse) throws Exception {
+        response.andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/v1/comments/" + expectedResponse.getId()))
+                .andDo(print())
+                .andDo(toDocument("comment-create"));
+    }
+
+    private void 댕글_등록_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-create-failure"));
     }
 }

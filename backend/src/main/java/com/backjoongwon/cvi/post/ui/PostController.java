@@ -1,5 +1,7 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -50,5 +52,16 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id, @AuthenticationPrincipal RequestUser user) {
         postService.delete(id, user);
+    }
+
+    @PostMapping("/{postId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentResponse createComment(@PathVariable Long postId,
+                                         @AuthenticationPrincipal RequestUser user,
+                                         @RequestBody CommentRequest commentRequest,
+                                         HttpServletResponse servletResponse) {
+        CommentResponse commentResponse = postService.createComment(postId, user, commentRequest);
+        servletResponse.setHeader("Location", "/api/v1/comments/" + commentResponse.getId());
+        return commentResponse;
     }
 }
