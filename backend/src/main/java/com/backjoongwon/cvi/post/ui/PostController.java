@@ -37,8 +37,8 @@ public class PostController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long id) {
-        return postService.findById(id);
+    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal RequestUser user) {
+        return postService.findById(id, user);
     }
 
     @PutMapping("/{id}")

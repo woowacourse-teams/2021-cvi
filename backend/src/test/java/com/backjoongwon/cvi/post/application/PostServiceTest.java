@@ -56,6 +56,7 @@ class PostServiceTest {
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
+        userRepository.save(user);
         post = Post.builder()
                 .content("Test Content111")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
@@ -96,7 +97,7 @@ class PostServiceTest {
     void findById() {
         //given
         //when
-        PostResponse response = postService.findById(post.getId());
+        PostResponse response = postService.findById(post.getId(), RequestUser.of(user.getId()));
         //then
         assertThat(response.getId()).isEqualTo(post.getId());
     }
@@ -107,7 +108,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.findById(0L))
+        assertThatThrownBy(() -> postService.findById(0L, RequestUser.of(user.getId())))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -135,7 +136,7 @@ class PostServiceTest {
         //given
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
         RequestUser requestUser = RequestUser.of(user.getId());
-        //when
+        //whenRequestUser.of(user.getId())
         postService.update(post.getId(), requestUser, changedRequest);
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
@@ -179,7 +180,7 @@ class PostServiceTest {
         //when
         postService.delete(post.getId(), requestUser);
         //then
-        assertThatThrownBy(() -> postService.findById(post.getId()))
+        assertThatThrownBy(() -> postService.findById(post.getId(), RequestUser.of(user.getId())))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 

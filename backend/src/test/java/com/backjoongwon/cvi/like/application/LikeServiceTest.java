@@ -2,7 +2,7 @@ package com.backjoongwon.cvi.like.application;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.like.domain.LikeRepository;
+import com.backjoongwon.cvi.like.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
@@ -43,11 +43,8 @@ class LikeServiceTest {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private LikeRepository likeRepository;
     private User user;
     private Post post;
-
 
     @BeforeEach
     void setUp() {
@@ -57,6 +54,7 @@ class LikeServiceTest {
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
+        userRepository.save(user);
         post = Post.builder()
                 .content("Test Content111")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
@@ -65,6 +63,9 @@ class LikeServiceTest {
                 .build();
         postRepository.save(post);
         postService.createLike(post.getId(), RequestUser.of(user.getId()));
+        em.flush();
+        em.clear();
+        em.close();
     }
 
     @DisplayName("게시글 좋아요 생성")
@@ -72,7 +73,8 @@ class LikeServiceTest {
     void createLike() {
         //given
         //when
-        postService.createLike(post.getId(), RequestUser.of(user.getId()));
+        LikeResponse like = postService.createLike(post.getId(), RequestUser.of(user.getId()));
+
         em.flush();
         em.clear();
         em.close();
@@ -82,7 +84,7 @@ class LikeServiceTest {
     }
 
     private Post getPost() {
-        return postRepository.findById(this.post.getId())
+        return postRepository.findWithLikesAndCommentsById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 }

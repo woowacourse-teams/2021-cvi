@@ -23,7 +23,7 @@ import java.util.Objects;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -34,7 +34,7 @@ public class Post extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
@@ -82,5 +82,12 @@ public class Post extends BaseEntity {
     public boolean hasLikedBy(User viewer) {
         return likes.stream()
                 .anyMatch(like -> like.isCreatedBy(viewer));
+    }
+
+    public void addLike(Like like) {
+         like.assignPost(this);
+        if (!likes.contains(like)) {
+            likes.add(like);
+        }
     }
 }

@@ -4,7 +4,6 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.like.dto.LikeRequest;
 import com.backjoongwon.cvi.like.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -100,7 +99,7 @@ class PostControllerTest extends ApiDocument {
     void find() throws Exception {
         //given
         PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, VaccinationType.PFIZER, LocalDateTime.now());
-        given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
+        given(postService.findById(any(Long.class), any(RequestUser.class))).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -111,7 +110,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).findById(any(Long.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).findById(any(Long.class), any(RequestUser.class));
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
