@@ -87,8 +87,7 @@ class NaverAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", STATE))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("토큰 정보를 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("토큰 매핑 테스트 - 성공")
@@ -111,8 +110,7 @@ class NaverAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.mapToOAuthToken(ResponseEntity.ok("NOT_VALID_TOKEN")))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("토큰 정보를 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 요청 테스트 - 성공")
@@ -136,8 +134,7 @@ class NaverAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.parseProfile(oAuthToken))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("프로필을 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 매핑 테스트 - 성공")
@@ -158,7 +155,6 @@ class NaverAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.mapToProfile(ResponseEntity.ok("NOT_VALID_PROFILE")))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("프로필을 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 }

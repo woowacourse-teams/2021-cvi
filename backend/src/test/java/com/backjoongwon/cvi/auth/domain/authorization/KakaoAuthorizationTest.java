@@ -89,8 +89,7 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.requestToken("INVALID_TOKEN", null))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("토큰 정보를 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("토큰 매핑 테스트 - 성공")
@@ -115,8 +114,7 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.mapToOAuthToken(ResponseEntity.ok("NOT_VALID_TOKEN")))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("토큰 정보를 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 요청 테스트 - 성공")
@@ -140,8 +138,7 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.parseProfile(oAuthToken))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("프로필을 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 매핑 테스트 - 성공")
@@ -162,7 +159,6 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.mapToProfile(ResponseEntity.ok("NOT_VALID_PROFILE")))
-                .isExactlyInstanceOf(MappingFailureException.class)
-                .hasMessage("프로필을 불러오는 데 실패했습니다.");
+                .isExactlyInstanceOf(MappingFailureException.class);
     }
 }
