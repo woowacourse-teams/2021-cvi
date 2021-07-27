@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.domain;
 
+import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -33,6 +34,9 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post")
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
