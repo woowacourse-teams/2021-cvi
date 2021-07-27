@@ -9,6 +9,7 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,8 +134,9 @@ class PostServiceTest {
     void update() {
         //given
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
+        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        postService.update(post.getId(), user.getId(), changedRequest);
+        postService.update(post.getId(), requestUser, changedRequest);
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
@@ -146,9 +148,10 @@ class PostServiceTest {
     void updateFailureWhenCannotFind() {
         //given
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
+        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(0L, user.getId(), changedContent))
+        assertThatThrownBy(() -> postService.update(0L, requestUser, changedContent))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -162,8 +165,9 @@ class PostServiceTest {
                 .build();
         //when
         userRepository.save(anotherUser);
+        RequestUser requestUser = RequestUser.of(anotherUser.getId());
         //then
-        assertThatThrownBy(() -> postService.update(post.getId(), anotherUser.getId(), changedContent))
+        assertThatThrownBy(() -> postService.update(post.getId(), requestUser, changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
@@ -171,8 +175,9 @@ class PostServiceTest {
     @Test
     void delete() {
         //given
+        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        postService.delete(post.getId(), user.getId());
+        postService.delete(post.getId(), requestUser);
         //then
         assertThatThrownBy(() -> postService.findById(post.getId()))
                 .isExactlyInstanceOf(NotFoundException.class);
@@ -182,9 +187,10 @@ class PostServiceTest {
     @Test
     void deleteFailureWhenPostIsNotExists() {
         //given
+        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.delete(0L, user.getId()))
+        assertThatThrownBy(() -> postService.delete(0L, requestUser))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -197,9 +203,10 @@ class PostServiceTest {
                 .nickname("어나더사용자")
                 .build();
         userRepository.save(anotherUser);
+        RequestUser requestUser = RequestUser.of(anotherUser.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post.getId(), anotherUser.getId(), postRequest))
+        assertThatThrownBy(() -> postService.update(post.getId(), requestUser, postRequest))
                 .isInstanceOf(InvalidOperationException.class);
     }
 

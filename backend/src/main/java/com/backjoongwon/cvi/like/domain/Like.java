@@ -22,4 +22,8 @@ public class Like extends BaseEntity  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public boolean createdBy(User user) {
+        return this.user.equals(user);
+    }
 }

@@ -8,8 +8,9 @@ import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
+import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,7 @@ class PostControllerTest extends ApiDocument {
     private PostService postService;
 
     @MockBean
-    private UserService userService;
+    private JwtTokenProvider jwtTokenProvider;
 
     private User user;
     private PostRequest request;
@@ -63,14 +64,16 @@ class PostControllerTest extends ApiDocument {
                 .build();
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
         userResponse = UserResponse.of(user, null);
+
+        given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
+        given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
     }
 
     @DisplayName("게시글 등록 - 성공")
     @Test
     void createPost() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, request.getVaccinationType(), LocalDateTime.now());
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(request);
@@ -82,7 +85,6 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPostFailure() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
         willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(Long.class), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(request);
@@ -94,7 +96,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, VaccinationType.PFIZER, LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, VaccinationType.PFIZER, LocalDateTime.now());
         given(postService.findById(any(Long.class))).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
@@ -120,8 +122,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         );
         willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
         //when
@@ -146,8 +148,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void updatePost() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        willDoNothing().given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
+        willDoNothing().given(postService).update(any(Long.class), any(RequestUser.class), any(PostRequest.class));
         //when
         ResultActions response = 글_수정_요청(POST_ID, request);
         //then
@@ -158,8 +159,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void updatePostFailure() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(Long.class), any(PostRequest.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(RequestUser.class), any(PostRequest.class));
         //when
         ResultActions response = 글_수정_요청(POST_ID, request);
         //then
@@ -170,8 +170,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deletePost() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        willDoNothing().given(postService).delete(any(Long.class), any(Long.class));
+        willDoNothing().given(postService).delete(any(Long.class), any(RequestUser.class));
         //when
         ResultActions response = 글_삭제_요청(POST_ID);
         //then
@@ -182,8 +181,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deletePostFailure() throws Exception {
         //given
-        given(userService.findUserByAccessToken(ACCESS_TOKEN)).willReturn(user);
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any(Long.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any(RequestUser.class));
         //when
         ResultActions response = 글_삭제_요청(POST_ID);
         //then
@@ -195,9 +193,9 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineType() throws Exception {
         //given
         willReturn(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
