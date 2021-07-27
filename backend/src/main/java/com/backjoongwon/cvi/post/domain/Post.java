@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -29,6 +30,9 @@ public class Post extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
+
+    @OneToMany(mappedBy = "post")
+    private List<Post> posts;
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {

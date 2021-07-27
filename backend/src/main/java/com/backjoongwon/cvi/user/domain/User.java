@@ -3,6 +3,8 @@ package com.backjoongwon.cvi.user.domain;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
+import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.post.domain.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +13,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
