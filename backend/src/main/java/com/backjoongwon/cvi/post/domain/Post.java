@@ -79,8 +79,8 @@ public class Post extends BaseEntity {
         return likes.size();
     }
 
-    public boolean hasLiked(User viewer) {
+    public boolean hasLikedBy(User viewer) {
         return likes.stream()
-                .anyMatch(like -> like.createdBy(viewer));
+                .anyMatch(like -> like.isCreatedBy(viewer));
     }
 }

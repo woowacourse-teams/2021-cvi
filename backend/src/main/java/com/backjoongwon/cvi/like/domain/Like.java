@@ -23,7 +23,7 @@ public class Like extends BaseEntity  {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public boolean createdBy(User user) {
+    public boolean isCreatedBy(User user) {
         return this.user.equals(user);
     }
 }

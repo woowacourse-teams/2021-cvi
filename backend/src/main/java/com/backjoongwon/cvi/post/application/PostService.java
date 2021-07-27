@@ -70,4 +70,8 @@ public class PostService {
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
+
+    public Long createLike(Long id, RequestUser user) {
+        return null;
+    }
 }
