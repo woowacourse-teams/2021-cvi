@@ -25,17 +25,10 @@ public class UserService {
 
     @Transactional
     public UserResponse signup(UserRequest userRequest) {
-        validateDuplicateNickname(userRequest);
+        validateDuplicateNickname(userRequest.getNickname());
         User user = userRepository.save(userRequest.toEntity());
         String accessToken = jwtTokenProvider.createToken(user.getId());
-
         return UserResponse.of(user, accessToken);
-    }
-
-    private void validateDuplicateNickname(UserRequest userRequest) {
-        if (userRepository.existsByNickname(userRequest.getNickname())) {
-            throw new DuplicateException("닉네임은 중복될 수 없습니다.");
-        }
     }
 
     public void validateAccessToken(String accessToken) {
@@ -64,9 +57,18 @@ public class UserService {
 
     @Transactional
     public void update(Long id, UserRequest userRequest) {
-        validateDuplicateNickname(userRequest);
         User foundUser = findUserById(id);
+        String nickname = foundUser.getNickname();
+        if (!nickname.equals(userRequest.getNickname())) {
+            validateDuplicateNickname(userRequest.getNickname());
+        }
         foundUser.update(userRequest.toEntity());
+    }
+
+    private void validateDuplicateNickname(String nickname) {
+        if (userRepository.existsByNickname(nickname)) {
+            throw new DuplicateException("닉네임이 이미 사용중입니다.");
+        }
     }
 
     @Transactional
