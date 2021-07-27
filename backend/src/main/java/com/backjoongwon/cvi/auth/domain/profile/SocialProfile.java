@@ -2,9 +2,7 @@ package com.backjoongwon.cvi.auth.domain.profile;
 
 public interface SocialProfile {
 
-    String getId();
+    String extractSocialId();
 
-    String getNickname();
-
-    String getProfileImage();
+    String extractProfileUrl();
 }

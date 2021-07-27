@@ -8,8 +8,12 @@ public class UserInformation {
     private final String socialId;
     private final String socialProfileUrl;
 
-    public UserInformation(String socialId, String socialProfileUrl) {
+    private UserInformation(String socialId, String socialProfileUrl) {
         this.socialId = socialId;
         this.socialProfileUrl = socialProfileUrl;
+    }
+
+    public static UserInformation of(SocialProfile socialProfile) {
+        return new UserInformation(socialProfile.extractSocialId(), socialProfile.extractProfileUrl());
     }
 }

@@ -34,11 +34,10 @@ public class AuthControllerTest extends ApiDocument {
     private static final SocialProvider SOCIAL_PROVIDER = SocialProvider.KAKAO;
     private static final String SOCIAL_ID = "{Unique ID received from social provider}";
     private static final String CODE = "{CODE received from social provider}";
-    private static final long ID = 1L;
+    private static final long USER_ID = 1L;
 
     @MockBean
     private AuthService authService;
-
     private User user;
     private UserResponse userResponse;
     private AuthRequest authRequest;
@@ -46,7 +45,7 @@ public class AuthControllerTest extends ApiDocument {
     @BeforeEach
     void beforeEach() {
         user = User.builder()
-                .id(ID)
+                .id(USER_ID)
                 .nickname(NICKNAME)
                 .ageRange(AgeRange.TWENTIES)
                 .socialProvider(SOCIAL_PROVIDER)

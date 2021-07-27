@@ -43,7 +43,6 @@ class PostServiceTest {
 
     @Autowired
     private PostService postService;
-
     private User user;
     private Post post;
     private PostRequest postRequest;
