@@ -1,5 +1,7 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -24,6 +26,7 @@ public class PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public PostResponse create(Long userId, PostRequest postRequest) {
@@ -65,7 +68,15 @@ public class PostService {
 
     @Transactional
     public CommentResponse createComment(Long postId, RequestUser user, CommentRequest commentRequest) {
-        return null;
+        User foundUser = findUserByUserId(user.getId());
+        Post foundPost = findPostByPostId(postId);
+
+        Comment comment = commentRequest.toEntity();
+        comment.assignUser(foundUser);
+
+        foundPost.addComment(comment);
+        postRepository.flush();
+        return CommentResponse.of(comment);
     }
 
     private User findUserByUserId(Long id) {

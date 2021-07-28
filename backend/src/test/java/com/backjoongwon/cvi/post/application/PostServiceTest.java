@@ -1,6 +1,10 @@
 package com.backjoongwon.cvi.post.application;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.domain.CommentRepository;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
@@ -40,6 +44,9 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -56,14 +63,17 @@ class PostServiceTest {
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
+        userRepository.save(user);
+
         post = Post.builder()
                 .content("Test Content111")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .build();
-        postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         postRepository.save(post);
+
+        postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
     }
 
     @DisplayName("게시글 생성 - 성공")
@@ -238,5 +248,19 @@ class PostServiceTest {
         assertThat(postResponses).filteredOn(
                 response -> response.getVaccinationType().equals(vaccinationType)
         );
+    }
+
+    @DisplayName("댓글 생성 - 성공")
+    @Test
+    void createComment() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        CommentRequest commentRequest = new CommentRequest("인비 부대찌개 먹고 건강 회복했어요");
+        //when
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        //then
+        assertThat(commentResponse.getContent()).isEqualTo(commentRequest.getContent());
+        assertThat(commentResponse.getWriter().getId()).isEqualTo(user.getId());
+        assertThat(post.getComments()).extracting("id").contains(commentResponse.getId());
     }
 }

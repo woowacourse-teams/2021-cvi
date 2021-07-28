@@ -12,7 +12,8 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "like_id"))
+@AttributeOverride(name = "id", column = @Column(name = "likes_id"))
+@Table(name = "likes")
 public class Like extends BaseEntity  {
 
     @ManyToOne(fetch = FetchType.LAZY)

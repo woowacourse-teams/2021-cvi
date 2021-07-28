@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.comment.dto;
 
+import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.Getter;
 
@@ -18,5 +19,9 @@ public class CommentResponse {
         this.writer = writer;
         this.content = content;
         this.createdAt = createdAt;
+    }
+
+    public static CommentResponse of(Comment comment) {
+        return new CommentResponse(comment.getId(), UserResponse.of(comment.getUser()), comment.getContent(), comment.getCreatedAt());
     }
 }

@@ -23,7 +23,7 @@ import java.util.Objects;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -37,7 +37,7 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
@@ -52,9 +52,11 @@ public class Post extends BaseEntity {
         if (Objects.isNull(user)) {
             throw new NotFoundException("작성자가 존재하지 않습니다.");
         }
+
         if (Objects.nonNull(this.user)) {
             throw new InvalidOperationException("작성자는 변경할 수 없습니다.");
         }
+
         this.user = user;
     }
 
@@ -82,5 +84,17 @@ public class Post extends BaseEntity {
     public boolean hasLiked(User viewer) {
         return likes.stream()
                 .anyMatch(like -> like.createdBy(viewer));
+    }
+
+    public void addComment(Comment comment) {
+        if (Objects.isNull(comment)) {
+            throw new NotFoundException("댓글이 존재하지 않습니다.");
+        }
+        comment.assignPost(this);
+
+        if (comments.contains(comment)) {
+            return;
+        }
+        comments.add(comment);
     }
 }
