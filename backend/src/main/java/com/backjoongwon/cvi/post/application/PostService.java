@@ -72,7 +72,7 @@ public class PostService {
     @Transactional
     public CommentResponse createComment(Long postId, RequestUser user, CommentRequest commentRequest) {
         User foundUser = findUserByUserId(user.getId());
-        Post foundPost = findPostByPostId(postId);
+        Post foundPost = findPostWithCommentsByPostId(postId);
 
         Comment comment = commentRequest.toEntity();
         comment.assignUser(foundUser);
@@ -85,14 +85,14 @@ public class PostService {
     @Transactional
     public void updateComment(Long postId, Long commentId, RequestUser requestUser, CommentRequest updateRequest) {
         User foundUser = findUserByUserId(requestUser.getId());
-        Post foundPost = findPostByPostId(postId);
+        Post foundPost = findPostWithCommentsByPostId(postId);
         foundPost.updateComment(commentId, updateRequest.toEntity(), foundUser);
     }
 
     @Transactional
     public void deleteComment(Long postId, Long commentId, RequestUser requestUser) {
         User foundUser = findUserByUserId(requestUser.getId());
-        Post foundPost = findPostByPostId(postId);
+        Post foundPost = findPostWithCommentsByPostId(postId);
         foundPost.deleteComment(commentId, foundUser);
     }
 
@@ -109,6 +109,12 @@ public class PostService {
     private Post findPostByPostId(Long id) {
         validateNull(id);
         return postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+    }
+
+    private Post findPostWithCommentsByPostId(Long id) {
+        validateNull(id);
+        return postRepository.findWithCommentsById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
