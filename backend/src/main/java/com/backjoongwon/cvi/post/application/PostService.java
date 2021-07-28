@@ -89,6 +89,13 @@ public class PostService {
         foundPost.updateComment(commentId, updateRequest.toEntity(), foundUser);
     }
 
+    @Transactional
+    public void deleteComment(Long postId, Long commentId, RequestUser requestUser) {
+        User foundUser = findUserByUserId(requestUser.getId());
+        Post foundPost = findPostByPostId(postId);
+        foundPost.deleteComment(commentId, foundUser);
+    }
+
     private User findUserByUserId(Long id) {
         validateNull(id);
         return userRepository.findById(id)
@@ -110,8 +117,5 @@ public class PostService {
             log.info("id는 null이 될 수 없습니다.");
             throw new NotFoundException("id는 null이 될 수 없습니다.");
         }
-    }
-
-    public void deleteComment(Long postId, Long commentId, RequestUser user) {
     }
 }

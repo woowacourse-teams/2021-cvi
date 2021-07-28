@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
@@ -39,7 +40,7 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
@@ -101,10 +102,23 @@ public class Post extends BaseEntity {
     }
 
     public void updateComment(Long commentId, Comment updateComment, User user) {
+        Comment foundComment = findComment(commentId);
+        foundComment.update(updateComment, user);
+    }
+
+    public void deleteComment(Long commentId, User user) {
+        Comment foundComment = findComment(commentId);
+        if (!foundComment.isOwner(user)) {
+            throw new UnAuthorizedException("다른 사용자의 게시글은 삭제할 수 없습니다.");
+        }
+        comments.remove(foundComment);
+    }
+
+    private Comment findComment(Long commentId) {
         Comment foundComment = comments.stream()
                 .filter(comment -> comment.getId().equals(commentId))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException("찾을 수 없는 comment입니다."));
-        foundComment.update(updateComment, user);
+                .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
+        return foundComment;
     }
 }

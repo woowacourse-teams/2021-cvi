@@ -7,6 +7,7 @@ import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -207,9 +209,24 @@ class PostServiceTest {
         RequestUser requestUser = RequestUser.of(user.getId());
         //when
         postService.delete(post.getId(), requestUser);
+        Optional<Post> foundPost = postRepository.findById(post.getId());
         //then
-        assertThatThrownBy(() -> postService.findById(post.getId()))
-                .isExactlyInstanceOf(NotFoundException.class);
+        assertThat(foundPost).isEmpty();
+    }
+
+    @DisplayName("게시글 삭제 - 성공 - 댓글도 함꼐 삭제 되는지 확인")
+    @Test
+    void deleteWithComments() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        //when
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        postService.delete(post.getId(), requestUser);
+        Optional<Post> foundPost = postRepository.findById(post.getId());
+        Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
+        //then
+        assertThat(foundPost).isEmpty();
+        assertThat(foundComment).isEmpty();
     }
 
     @DisplayName("게시글 삭제 - 실패 - 게시글이 존재하지 않는 경우")
@@ -299,20 +316,78 @@ class PostServiceTest {
         //then
         assertThat(comment.getContent()).isEqualTo(updateRequest.getContent());
     }
-/*
+
+    @DisplayName("댓글 수정 - 실패 - 댓글을 찾을 수 없음")
+    @Test
+    void updateCommentWhenNoComment() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+
+        CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
+        //when
+        //then
+        assertThatThrownBy(() -> postService.updateComment(post.getId(), 0L, requestUser, updateRequest))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("찾을 수 없는 댓글입니다.");
+    }
+
     @DisplayName("댓글 수정 - 실패 - 댓글 작성자가 아님")
     @Test
     void updateCommentWhenWrongUser() {
         //given
         RequestUser requestUser = RequestUser.of(user.getId());
-        RequestUser anotherRequestUser = RequestUser.of(user.getId());
+        RequestUser anotherRequestUser = RequestUser.of(anotherUser.getId());
 
         CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
         //then
-        assertThatThrownBy(() -> postService.updateComment(commentResponse.getId(), updateRequest, anotherRequestUser))
+        assertThatThrownBy(() -> postService.updateComment(post.getId(), commentResponse.getId(), anotherRequestUser, updateRequest))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.");
-    }*/
+    }
+
+    @DisplayName("댓글 삭제 - 성공")
+    @Test
+    void deleteComment() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        //when
+        postService.deleteComment(post.getId(), commentResponse.getId(), requestUser);
+        postRepository.flush();
+
+        Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
+        Post foundPost = postRepository.findById(this.post.getId()).get();
+        //then
+        assertThat(foundComment).isEmpty();
+        assertThat(foundPost.getComments()).extracting("id").doesNotContain(commentResponse.getId());
+    }
+
+    @DisplayName("댓글 삭제 - 실패 - 댓글을 찾을 수 없음")
+    @Test
+    void deleteCommentWhenNoComment() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        //when
+        //then
+        assertThatThrownBy(() -> postService.deleteComment(post.getId(), 0L, requestUser))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("찾을 수 없는 댓글입니다.");
+    }
+
+    @DisplayName("댓글 삭제 - 실패 - 댓글 작성자가 아님")
+    @Test
+    void deleteCommentWhenWrongUser() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        RequestUser anotherRequestUser = RequestUser.of(anotherUser.getId());
+
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        //when
+        //then
+        assertThatThrownBy(() -> postService.deleteComment(post.getId(), commentResponse.getId(), anotherRequestUser))
+                .isInstanceOf(UnAuthorizedException.class)
+                .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
+    }
 }
