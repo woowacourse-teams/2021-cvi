@@ -3,10 +3,10 @@ package com.backjoongwon.cvi.post.application;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
@@ -304,6 +304,28 @@ class PostServiceTest {
         Post actualPost = postRepository.findWithLikesById(this.post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         assertThat(actualPost.getLikes()).isEmpty();
+    }
+
+    @DisplayName("게시글 좋아요 삭제 - 실패 - 다른 유저인 경우 ")
+    @Test
+    void deleteLikeFailureWhenInvalidToken() {
+        //given
+        RequestUser requestUser = RequestUser.of(anotherUser.getId());
+        //when
+        //then
+        assertThatThrownBy(() -> postService.deleteLike(post.getId(), likeResponse.getId(), requestUser))
+                .isInstanceOf(InvalidOperationException.class);
+    }
+
+    @DisplayName("게시글 좋아요 삭제 - 실패 - 삭제 요청한 좋아요 해당 게시글에 없는 경우")
+    @Test
+    void deleteLikeFailureWhenLikeNotExists() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        //when
+        //then
+        assertThatThrownBy(() -> postService.deleteLike(post.getId(), likeResponse.getId() + 1L, requestUser))
+                .isInstanceOf(NotFoundException.class);
     }
 
     private void resetEntityManager() {

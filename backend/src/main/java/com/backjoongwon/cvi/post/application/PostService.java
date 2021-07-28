@@ -93,6 +93,6 @@ public class PostService {
         user.validateSignedin();
         Post post = postRepository.findWithLikesById(postId)
                         .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
-        post.removeLike(likeId);
+        post.removeLike(likeId, user.getId());
     }
 }

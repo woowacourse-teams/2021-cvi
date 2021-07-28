@@ -86,7 +86,7 @@ public class Post extends BaseEntity {
 
     public void addLike(Like like) {
         validateDuplicateLikes(like);
-         like.assignPost(this);
+        like.assignPost(this);
         if (!likes.contains(like)) {
             likes.add(like);
         }
@@ -103,11 +103,16 @@ public class Post extends BaseEntity {
                 .anyMatch(like -> like.isSameUser(newLike.getUser()));
     }
 
-    public void removeLike(Long likeId) {
-        Like likeToRemove = likes.stream()
+    public void removeLike(Long likeId, Long userId) {
+        Like likeToRemove = getLikeToRemove(likeId);
+        likeToRemove.validateSameUser(userId);
+        likes.remove(likeToRemove);
+    }
+
+    private Like getLikeToRemove(Long likeId) {
+        return likes.stream()
                 .filter(like -> like.getId().equals(likeId))
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("해당 id의 좋아요가 존재하지 않습니다."));
-        likes.remove(likeToRemove);
     }
 }

@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.like.domain;
 
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
+import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
@@ -48,5 +49,15 @@ public class Like extends BaseEntity  {
 
     public boolean isSameUser(User user) {
         return this.user.equals(user);
+    }
+
+    public void validateSameUser(Long userId) {
+        if (!isSameUser(userId)) {
+            throw new InvalidOperationException("다른 사용자의 좋아요 입니다.");
+        }
+    }
+
+    public boolean isSameUser(Long userId) {
+        return this.user.getId().equals(userId);
     }
 }
