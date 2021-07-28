@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.post.application;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -44,6 +45,9 @@ class PostServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
     private PostService postService;
@@ -154,7 +158,6 @@ class PostServiceTest {
         //given
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
         RequestUser requestUser = RequestUser.of(user.getId());
-        //whenRequestUser.of(user.getId())
         postService.update(post.getId(), requestUser, changedRequest);
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
@@ -200,6 +203,17 @@ class PostServiceTest {
         //then
         assertThatThrownBy(() -> postService.findById(post.getId(), RequestUser.of(user.getId())))
                 .isExactlyInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 삭제시 좋아요 삭제")
+    @Test
+    void deleteLikeWhenDeletePost() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        //when
+        postService.delete(post.getId(), requestUser);
+        //then
+        assertThat(likeRepository.findById(likeResponse.getId())).isEmpty();
     }
 
     @DisplayName("게시글 삭제 - 실패 - 게시글이 존재하지 않는 경우")
@@ -264,8 +278,7 @@ class PostServiceTest {
     void createLike() {
         //given
         //when
-        LikeResponse like = postService.createLike(post.getId(), RequestUser.of(anotherUser.getId()));
-
+        postService.createLike(post.getId(), RequestUser.of(anotherUser.getId()));
         resetEntityManager();
         //then
         Post post = getPost();
@@ -303,7 +316,7 @@ class PostServiceTest {
         //then
         Post actualPost = postRepository.findWithLikesById(this.post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
-        assertThat(actualPost.getLikes()).isEmpty();
+        assertThat(actualPost.getLikes().getLikes()).isEmpty();
     }
 
     @DisplayName("게시글 좋아요 삭제 - 실패 - 다른 유저인 경우 ")

@@ -35,10 +35,6 @@ public class Like extends BaseEntity  {
         this.user = user;
     }
 
-    public boolean isCreatedBy(User user) {
-        return this.user.equals(user);
-    }
-
     public void assignPost(Post post) {
         if (Objects.nonNull(this.post)) {
             return;
@@ -47,17 +43,13 @@ public class Like extends BaseEntity  {
         post.getLikes().add(this);
     }
 
-    public boolean isSameUser(User user) {
-        return this.user.equals(user);
+    public boolean isCreatedBy(Long userId) {
+        return this.user.getId().equals(userId);
     }
 
-    public void validateSameUser(Long userId) {
-        if (!isSameUser(userId)) {
+    public void validateOwner(Long userId) {
+        if (!isCreatedBy(userId)) {
             throw new InvalidOperationException("다른 사용자의 좋아요 입니다.");
         }
-    }
-
-    public boolean isSameUser(Long userId) {
-        return this.user.getId().equals(userId);
     }
 }

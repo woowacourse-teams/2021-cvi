@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.like.domain.Likes;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,8 +35,8 @@ public class Post extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes = new ArrayList<>();
+    @Embedded
+    private Likes likes = new Likes();
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -75,44 +76,24 @@ public class Post extends BaseEntity {
         }
     }
 
-    public int getLikesCount() {
-        return likes.size();
-    }
-
-    public boolean hasLikedBy(User viewer) {
-        return likes.stream()
-                .anyMatch(like -> like.isCreatedBy(viewer));
+    public boolean hasLikedBy(User user) {
+        if (Objects.isNull(user)) {
+            return false;
+        }
+        return likes.hasCreatedBy(user.getId());
     }
 
     public void addLike(Like like) {
-        validateDuplicateLikes(like);
+        likes.validateNotExistsLikeCreatedBy(like.getUser());
         like.assignPost(this);
-        if (!likes.contains(like)) {
-            likes.add(like);
-        }
-    }
-
-    private void validateDuplicateLikes(Like newLike) {
-        if (hasLikedBySameUser(newLike)) {
-            throw new InvalidOperationException("해당 게시글에 이미 좋아요를 누른 유저입니다.");
-        }
-    }
-
-    private boolean hasLikedBySameUser(Like newLike) {
-        return likes.stream()
-                .anyMatch(like -> like.isSameUser(newLike.getUser()));
+        likes.add(like);
     }
 
     public void removeLike(Long likeId, Long userId) {
-        Like likeToRemove = getLikeToRemove(likeId);
-        likeToRemove.validateSameUser(userId);
-        likes.remove(likeToRemove);
+        likes.remove(likeId, userId);
     }
 
-    private Like getLikeToRemove(Long likeId) {
-        return likes.stream()
-                .filter(like -> like.getId().equals(likeId))
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("해당 id의 좋아요가 존재하지 않습니다."));
+    public int getLikesCount() {
+        return likes.getSize();
     }
 }

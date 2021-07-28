@@ -211,13 +211,8 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createLike() throws Exception {
         //given
-        AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
-        UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
-                ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
-        PostResponse expectedPostResponse = new PostResponse(1L, userResponse, "내용", 1,
-                1, true, VaccinationType.PFIZER, LocalDateTime.now());
+        PostResponse expectedPostResponse = createPostResponse();
         LikeResponse likeResponse = new LikeResponse(1L, expectedPostResponse);
-
         willReturn(likeResponse).given(postService).createLike(any(Long.class), any(RequestUser.class));
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
@@ -229,12 +224,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createLikeFailureWhenPostNotExists() throws Exception {
         //given
-        AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
-        UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
-                ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
-        PostResponse expectedPostResponse = new PostResponse(1L, userResponse, "내용", 1,
-                1, true, VaccinationType.PFIZER, LocalDateTime.now());
-
+        PostResponse expectedPostResponse = createPostResponse();
         willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).createLike(any(Long.class), any(RequestUser.class));
         //when
         ResultActions response = 글_좋아요_생성_요청(expectedPostResponse.getId());
@@ -406,5 +396,14 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("like-delete-failure"));
+    }
+
+    private PostResponse createPostResponse() {
+        AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
+        UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
+                ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
+
+        return new PostResponse(1L, userResponse, "내용", 1,
+                1, true, VaccinationType.PFIZER, LocalDateTime.now());
     }
 }
