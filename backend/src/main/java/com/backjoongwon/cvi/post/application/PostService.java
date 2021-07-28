@@ -76,7 +76,7 @@ public class PostService {
     @Transactional
     public LikeResponse createLike(Long id, RequestUser requestUser) {
         User user = findUserByUserId(requestUser.getId());
-        Post post = postRepository.findWithLikesAndCommentsById(id)
+        Post post = postRepository.findWithLikesById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         Like like = Like.builder()
                 .user(user)

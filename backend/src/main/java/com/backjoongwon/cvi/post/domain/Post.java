@@ -85,9 +85,21 @@ public class Post extends BaseEntity {
     }
 
     public void addLike(Like like) {
+        validateDuplicateLikes(like);
          like.assignPost(this);
         if (!likes.contains(like)) {
             likes.add(like);
         }
+    }
+
+    private void validateDuplicateLikes(Like newLike) {
+        if (hasLikedBySameUser(newLike)) {
+            throw new InvalidOperationException("해당 게시글에 이미 좋아요를 누른 유저입니다.");
+        }
+    }
+
+    private boolean hasLikedBySameUser(Like newLike) {
+        return likes.stream()
+                .anyMatch(like -> like.isSameUser(newLike.getUser()));
     }
 }

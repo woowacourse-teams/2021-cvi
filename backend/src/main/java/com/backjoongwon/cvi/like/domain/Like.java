@@ -1,10 +1,12 @@
 package com.backjoongwon.cvi.like.domain;
 
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,5 +44,9 @@ public class Like extends BaseEntity  {
         }
         this.post = post;
         post.getLikes().add(this);
+    }
+
+    public boolean isSameUser(User user) {
+        return this.user.equals(user);
     }
 }

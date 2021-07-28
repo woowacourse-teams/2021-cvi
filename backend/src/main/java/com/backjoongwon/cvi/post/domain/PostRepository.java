@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDsl {
 
     @EntityGraph(attributePaths = {"likes"})
-    Optional<Post> findWithLikesAndCommentsById(Long id);
+    Optional<Post> findWithLikesById(Long id);
 
     void deleteAllByUserId(Long userId);
 }
