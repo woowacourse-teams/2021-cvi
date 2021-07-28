@@ -244,3 +244,18 @@ include::{snippets}/like-create-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/like-create-failure/http-response.adoc[]
+
+=== 게시글 좋아요 삭제
+==== 성공
+===== Request
+include::{snippets}/like-delete/http-request.adoc[]
+
+===== Response
+include::{snippets}/like-delete/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/like-delete-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/like-delete-failure/http-response.adoc[]
