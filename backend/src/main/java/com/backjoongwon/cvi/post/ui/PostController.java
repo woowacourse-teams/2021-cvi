@@ -64,4 +64,21 @@ public class PostController {
         servletResponse.setHeader("Location", "/api/v1/comments/" + commentResponse.getId());
         return commentResponse;
     }
+
+    @PutMapping("/{postId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateComment(@PathVariable Long postId,
+                              @PathVariable Long commentId,
+                              @AuthenticationPrincipal RequestUser user,
+                              @RequestBody CommentRequest commentRequest) {
+        postService.updateComment(postId, commentId, user, commentRequest);
+    }
+
+    @DeleteMapping("/{postId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@PathVariable Long postId,
+                              @PathVariable Long commentId,
+                              @AuthenticationPrincipal RequestUser user) {
+        postService.deleteComment(postId, commentId, user);
+    }
 }

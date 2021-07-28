@@ -1,10 +1,12 @@
 package com.backjoongwon.cvi.post.domain;
 
 import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -96,5 +98,13 @@ public class Post extends BaseEntity {
             return;
         }
         comments.add(comment);
+    }
+
+    public void updateComment(Long commentId, Comment updateComment, User user) {
+        Comment foundComment = comments.stream()
+                .filter(comment -> comment.getId().equals(commentId))
+                .findAny()
+                .orElseThrow(() -> new NotFoundException("찾을 수 없는 comment입니다."));
+        foundComment.update(updateComment, user);
     }
 }

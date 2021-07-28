@@ -7,7 +7,6 @@ import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -29,6 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -53,8 +53,19 @@ class PostServiceTest {
     @Autowired
     private PostService postService;
     private User user;
+    private User anotherUser;
     private Post post;
     private PostRequest postRequest;
+    private CommentRequest commentRequest;
+
+    static Stream<Arguments> findByVaccineType() {
+        return Stream.of(
+                Arguments.of(VaccinationType.PFIZER),
+                Arguments.of(VaccinationType.ASTRAZENECA),
+                Arguments.of(VaccinationType.MODERNA),
+                Arguments.of(VaccinationType.JANSSEN)
+        );
+    }
 
     @BeforeEach
     void init() {
@@ -64,7 +75,13 @@ class PostServiceTest {
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-        userRepository.save(user);
+        anotherUser = User.builder()
+                .nickname("다른테스트유저")
+                .ageRange(AgeRange.TWENTIES)
+                .profileUrl("")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
+        userRepository.saveAll(Arrays.asList(user, anotherUser));
 
         post = Post.builder()
                 .content("Test Content111")
@@ -75,6 +92,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
+        commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
     }
 
     @DisplayName("게시글 생성 - 성공")
@@ -221,15 +239,6 @@ class PostServiceTest {
                 .isInstanceOf(InvalidOperationException.class);
     }
 
-    static Stream<Arguments> findByVaccineType() {
-        return Stream.of(
-                Arguments.of(VaccinationType.PFIZER),
-                Arguments.of(VaccinationType.ASTRAZENECA),
-                Arguments.of(VaccinationType.MODERNA),
-                Arguments.of(VaccinationType.JANSSEN)
-        );
-    }
-
     @DisplayName("게시글 타입별 조회 - 성공")
     @ParameterizedTest
     @MethodSource
@@ -256,7 +265,6 @@ class PostServiceTest {
     void createComment() {
         //given
         RequestUser requestUser = RequestUser.of(user.getId());
-        CommentRequest commentRequest = new CommentRequest("인비 부대찌개 먹고 건강 회복했어요");
         //when
         CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
         //then
@@ -270,11 +278,41 @@ class PostServiceTest {
     void createCommentWhenNotLoginUser() {
         //given
         RequestUser requestUser = RequestUser.guest();
-        CommentRequest commentRequest = new CommentRequest("인비 부대찌개 먹고 건강 회복했어요");
         //when
         //then
         assertThatThrownBy(() -> postService.createComment(post.getId(), requestUser, commentRequest))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("id는 null이 될 수 없습니다.");
     }
+
+    @DisplayName("댓글 수정 - 성공")
+    @Test
+    void updateComment() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
+        //when
+        postService.updateComment(post.getId(), commentResponse.getId(), requestUser, updateRequest);
+        Comment comment = commentRepository.findById(commentResponse.getId()).get();
+        //then
+        assertThat(comment.getContent()).isEqualTo(updateRequest.getContent());
+    }
+/*
+    @DisplayName("댓글 수정 - 실패 - 댓글 작성자가 아님")
+    @Test
+    void updateCommentWhenWrongUser() {
+        //given
+        RequestUser requestUser = RequestUser.of(user.getId());
+        RequestUser anotherRequestUser = RequestUser.of(user.getId());
+
+        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
+        //when
+        //then
+        assertThatThrownBy(() -> postService.updateComment(commentResponse.getId(), updateRequest, anotherRequestUser))
+                .isInstanceOf(UnAuthorizedException.class)
+                .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.");
+    }*/
 }

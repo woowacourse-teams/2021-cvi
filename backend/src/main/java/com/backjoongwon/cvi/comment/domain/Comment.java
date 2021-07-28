@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.comment.domain;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
@@ -62,5 +63,12 @@ public class Comment extends BaseEntity {
         }
 
         this.user = user;
+    }
+
+    public void update(Comment updateComment, User user) {
+        if (!this.user.equals(user)) {
+            throw new UnAuthorizedException("다른 사용자의 게시글은 수정할 수 없습니다.");
+        }
+        this.content = updateComment.content;
     }
 }
