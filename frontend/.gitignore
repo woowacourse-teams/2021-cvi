@@ -6,3 +6,9 @@
 
 # misc
 .DS_Store
+
+# cypress
+cypress/results/*
+cypress/reports/*
+cypress/screenshots/*
+cypress/videos/*
