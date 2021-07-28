@@ -1,4 +1,4 @@
-package com.backjoongwon.cvi.like.dto;
+package com.backjoongwon.cvi.post.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;

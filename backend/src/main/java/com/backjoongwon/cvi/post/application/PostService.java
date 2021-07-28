@@ -2,7 +2,8 @@ package com.backjoongwon.cvi.post.application;
 
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.like.dto.LikeResponse;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -24,6 +25,7 @@ public class PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public PostResponse create(Long userId, PostRequest postRequest) {
@@ -74,14 +76,23 @@ public class PostService {
     }
 
     @Transactional
-    public LikeResponse createLike(Long id, RequestUser requestUser) {
+    public LikeResponse createLike(Long postId, RequestUser requestUser) {
         User user = findUserByUserId(requestUser.getId());
-        Post post = postRepository.findWithLikesById(id)
+        Post post = postRepository.findWithLikesById(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         Like like = Like.builder()
                 .user(user)
                 .build();
         post.addLike(like);
+        likeRepository.flush();
         return new LikeResponse(like.getId(), PostResponse.of(post, user));
+    }
+
+    @Transactional
+    public void deleteLike(Long postId, Long likeId, RequestUser user) {
+        user.validateSignedin();
+        Post post = postRepository.findWithLikesById(postId)
+                        .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        post.removeLike(likeId);
     }
 }

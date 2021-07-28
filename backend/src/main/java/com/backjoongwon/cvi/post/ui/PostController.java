@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.post.ui;
 
-import com.backjoongwon.cvi.like.dto.LikeResponse;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -53,11 +53,17 @@ public class PostController {
         postService.delete(id, user);
     }
 
-    @PostMapping("/{id}/likes")
+    @PostMapping("/{postId}/likes")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse createLike(@PathVariable Long id, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
-        LikeResponse likeResponse = postService.createLike(id, user);
+    public PostResponse createLike(@PathVariable Long postId, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
+        LikeResponse likeResponse = postService.createLike(postId, user);
         servletResponse.setHeader("Location", "/api/v1/likes/" + likeResponse.getId());
         return likeResponse.getPostResponse();
+    }
+
+    @DeleteMapping("/{postId}/likes/{likeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLike(@PathVariable Long postId, @PathVariable Long likeId, @AuthenticationPrincipal RequestUser user) {
+        postService.deleteLike(postId, likeId, user);
     }
 }

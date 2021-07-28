@@ -102,4 +102,12 @@ public class Post extends BaseEntity {
         return likes.stream()
                 .anyMatch(like -> like.isSameUser(newLike.getUser()));
     }
+
+    public void removeLike(Long likeId) {
+        Like likeToRemove = likes.stream()
+                .filter(like -> like.getId().equals(likeId))
+                .findAny()
+                .orElseThrow(() -> new NotFoundException("해당 id의 좋아요가 존재하지 않습니다."));
+        likes.remove(likeToRemove);
+    }
 }

@@ -4,9 +4,10 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.like.dto.LikeResponse;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
@@ -41,6 +42,7 @@ class PostControllerTest extends ApiDocument {
 
     private static final Long USER_ID = 1L;
     private static final Long POST_ID = 1L;
+    private static final Long LIKE_ID = 1L;
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
     private static final String BEARER = "Bearer ";
 
@@ -240,6 +242,29 @@ class PostControllerTest extends ApiDocument {
         글_좋아요_생성_실패(response);
     }
 
+    @DisplayName("게시글 좋아요 삭제 - 성공")
+    @Test
+    void deleteLike() throws Exception {
+        //given
+        willDoNothing().given(postService).delete(any(Long.class), any(RequestUser.class));
+        //when
+        ResultActions response = 글_좋아요_삭제_요청(LIKE_ID);
+        //then
+        글_좋아요_삭제_성공함(response);
+    }
+
+    @DisplayName("게시글 좋아요 삭제 - 실패 - 토큰이 유효하지 않은 경우")
+    @Test
+    void deleteLikeFailureWhenNotTokenValid() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다."))
+                .given(postService).deleteLike(any(Long.class), any(Long.class), any(RequestUser.class));
+        //when
+        ResultActions response = 글_좋아요_삭제_요청(LIKE_ID);
+        //then
+        글_좋아요_삭제_실패함(response);
+    }
+
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/posts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -345,8 +370,8 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findByVaccinationType"));
     }
 
-    private ResultActions 글_좋아요_생성_요청(Long id) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts/" + id + "/likes")
+    private ResultActions 글_좋아요_생성_요청(Long postId) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/{postId}/likes", postId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
@@ -363,5 +388,23 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("like-create-failure"));
+    }
+
+    private ResultActions 글_좋아요_삭제_요청(Long likeId) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes/{likeId}", POST_ID, likeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 글_좋아요_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("like-delete"));
+    }
+
+    private void 글_좋아요_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("like-delete-failure"));
     }
 }
