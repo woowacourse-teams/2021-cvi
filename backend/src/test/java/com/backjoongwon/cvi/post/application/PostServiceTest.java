@@ -7,6 +7,7 @@ import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -262,5 +263,18 @@ class PostServiceTest {
         assertThat(commentResponse.getContent()).isEqualTo(commentRequest.getContent());
         assertThat(commentResponse.getWriter().getId()).isEqualTo(user.getId());
         assertThat(post.getComments()).extracting("id").contains(commentResponse.getId());
+    }
+
+    @DisplayName("댓글 생성 - 실패 - 비회원 댓글 작성 시도")
+    @Test
+    void createCommentWhenNotLoginUser() {
+        //given
+        RequestUser requestUser = RequestUser.guest();
+        CommentRequest commentRequest = new CommentRequest("인비 부대찌개 먹고 건강 회복했어요");
+        //when
+        //then
+        assertThatThrownBy(() -> postService.createComment(post.getId(), requestUser, commentRequest))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("id는 null이 될 수 없습니다.");
     }
 }

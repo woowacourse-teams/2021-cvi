@@ -14,12 +14,15 @@ import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Transactional(readOnly = true)
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -80,12 +83,25 @@ public class PostService {
     }
 
     private User findUserByUserId(Long id) {
+        validateNull(id);
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> {
+                            log.info("해당 id의 사용자가 존재하지 않습니다.");
+                            return new NotFoundException("해당 id의 사용자가 존재하지 않습니다.");
+                        }
+                );
     }
 
     private Post findPostByPostId(Long id) {
+        validateNull(id);
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+    }
+
+    private void validateNull(Long id) {
+        if (Objects.isNull(id)) {
+            log.info("id는 null이 될 수 없습니다.");
+            throw new NotFoundException("id는 null이 될 수 없습니다.");
+        }
     }
 }
