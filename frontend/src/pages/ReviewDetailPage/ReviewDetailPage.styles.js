@@ -5,6 +5,10 @@ import { FONT_COLOR, PALETTE } from '../../constants';
 const Container = styled.div`
   margin-top: 4rem;
   padding: 2.5rem 8rem 6rem 8rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const FrameContent = styled.div`
