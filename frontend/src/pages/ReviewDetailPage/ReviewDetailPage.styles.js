@@ -20,6 +20,10 @@ const FrameContent = styled.div`
 
 const ButtonContainer = styled.div`
   padding: 2rem 2rem 0 1rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem 0;
+  }
 `;
 
 const TopContainer = styled.div`
@@ -27,6 +31,10 @@ const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem;
+  }
 `;
 
 const VaccinationInfo = styled.div`
@@ -76,6 +84,10 @@ const CreatedAt = styled.div`
 const Content = styled.div`
   min-height: 30rem;
   padding: 2rem 3rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem;
+  }
 `;
 
 const ViewCount = styled.div`
@@ -112,12 +124,20 @@ const BottomContainer = styled.div`
   display: flex;
   padding: 2rem 3rem;
   gap: 2rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem;
+  }
 `;
 
 const CommentCount = styled.div`
   font-size: 1.8rem;
   margin: 0 3rem;
   font-weight: 500;
+
+  @media screen and (max-width: 1024px) {
+    margin: 0 2rem;
+  }
 `;
 
 const CommentList = styled.div`
@@ -129,11 +149,19 @@ const CommentList = styled.div`
 
   & > * {
     padding: 2rem 3rem;
+
+    @media screen and (max-width: 1024px) {
+      padding: 2rem;
+    }
   }
 `;
 
 const CommentFormContainer = styled.div`
   padding: 2rem 3rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem;
+  }
 `;
 
 export {
