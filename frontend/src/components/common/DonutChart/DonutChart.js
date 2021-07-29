@@ -1,9 +1,18 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { THEME_COLOR } from '../../../constants';
-import { Container, Span } from './DonutChart.styles';
+import { Container, Span, Percent } from './DonutChart.styles';
 
-const DonutChart = ({ target, color, radius, thickness, fontSize }) => {
+const DonutChart = ({
+  target,
+  filledColor,
+  emptyColor,
+  fontColor,
+  fontSize,
+  percentSize,
+  radius,
+  thickness,
+}) => {
   const [currentNumber, setCurrentNumber] = useState(0);
 
   useEffect(() => {
@@ -15,9 +24,15 @@ const DonutChart = ({ target, color, radius, thickness, fontSize }) => {
   }, [currentNumber]);
 
   return (
-    <Container currentNumber={currentNumber} color={color} radius={radius}>
-      <Span radius={radius - thickness} fontSize={fontSize}>
-        {target}%
+    <Container
+      currentNumber={currentNumber}
+      filledColor={filledColor}
+      emptyColor={emptyColor}
+      radius={radius}
+    >
+      <Span radius={radius - thickness} fontSize={fontSize} fontColor={fontColor}>
+        {target}
+        <Percent percentSize={percentSize}>%</Percent>
       </Span>
     </Container>
   );
@@ -25,17 +40,23 @@ const DonutChart = ({ target, color, radius, thickness, fontSize }) => {
 
 DonutChart.propTypes = {
   target: PropTypes.number.isRequired,
-  color: PropTypes.string,
+  filledColor: PropTypes.string,
+  emptyColor: PropTypes.string,
+  fontColor: PropTypes.string,
+  fontSize: PropTypes.string,
+  percentSize: PropTypes.string,
   radius: PropTypes.number,
   thickness: PropTypes.number,
-  fontSize: PropTypes.string,
 };
 
 DonutChart.defaultProps = {
-  color: THEME_COLOR.PRIMARY,
+  filledColor: THEME_COLOR.PRIMARY,
+  emptyColor: '#EFF5F5',
+  fontColor: THEME_COLOR.PRIMARY,
+  fontSize: '2.4rem',
+  percentSize: '1.2rem',
   radius: 50,
   thickness: 16,
-  fontSize: '2rem',
 };
 
 export default DonutChart;

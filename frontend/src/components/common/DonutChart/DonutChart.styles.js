@@ -9,8 +9,8 @@ const Container = styled.div`
 
   width: ${({ radius }) => radius * 2}px;
   height: ${({ radius }) => radius * 2}px;
-  background: ${({ currentNumber, color }) =>
-    `conic-gradient(${color} 0% ${currentNumber}%, ${THEME_COLOR.WHITE} ${currentNumber}% 100%)`};
+  background: ${({ currentNumber, filledColor, emptyColor }) =>
+    `conic-gradient(${filledColor} 0% ${currentNumber}%, ${emptyColor} ${currentNumber}% 100%)`};
 `;
 
 const Span = styled.span`
@@ -22,10 +22,17 @@ const Span = styled.span`
   transform: translate(-50%, -50%);
   border-radius: 50%;
   text-align: center;
+  font-weight: 600;
 
   font-size: ${({ fontSize }) => fontSize && fontSize};
+  color: ${({ fontColor }) => fontColor && fontColor};
   width: ${({ radius }) => radius * 2}px;
   height: ${({ radius }) => radius * 2}px;
   line-height: ${({ radius }) => radius * 2}px;
 `;
-export { Container, Span };
+
+const Percent = styled.span`
+  font-size: ${({ percentSize }) => percentSize && percentSize};
+`;
+
+export { Container, Span, Percent };
