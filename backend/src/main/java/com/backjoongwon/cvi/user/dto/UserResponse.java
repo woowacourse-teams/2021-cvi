@@ -33,6 +33,11 @@ public class UserResponse {
         this.socialProfileUrl = socialProfileUrl;
     }
 
+    public static UserResponse of(User user) {
+        return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
+                user.isShotVerified(), null, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
+    }
+
     public static UserResponse of(User user, String token) {
         return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
                 user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());

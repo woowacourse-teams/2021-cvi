@@ -3,9 +3,9 @@ package com.backjoongwon.cvi.user.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
+import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
@@ -31,23 +31,17 @@ public class UserService {
         return UserResponse.of(user, accessToken);
     }
 
-    public void validateAccessToken(String accessToken) {
-        if (!jwtTokenProvider.validateToken(accessToken)) {
-            throw new UnAuthorizedException("유효하지 않은 토큰입니다.");
-        }
-    }
-
-    public User findUserByAccessToken(String accessToken) {
-        Long userId = Long.valueOf(jwtTokenProvider.getPayload(accessToken));
-        return findUserById(userId);
+    public boolean isValidAccessToken(String accessToken) {
+        return jwtTokenProvider.isValidToken(accessToken);
     }
 
     public UserResponse findById(Long id) {
         return UserResponse.of(findUserById(id), null);
     }
 
-    public UserResponse findMeById(Long id) {
-        return UserResponse.of(findUserById(id), null);
+    public UserResponse findUser(RequestUser user) {
+        user.validateSignedin();
+        return UserResponse.of(findUserById(user.getId()), null);
     }
 
     private User findUserById(Long id) {
@@ -56,8 +50,8 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, UserRequest userRequest) {
-        User foundUser = findUserById(id);
+    public void update(RequestUser user, UserRequest userRequest) {
+        User foundUser = findUserById(user.getId());
         String nickname = foundUser.getNickname();
         if (!nickname.equals(userRequest.getNickname())) {
             validateDuplicateNickname(userRequest.getNickname());
@@ -72,11 +66,11 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
+    public void delete(RequestUser user) {
+        if (!userRepository.existsById(user.getId())) {
             throw new NotFoundException("해당 id의 사용자가 없습니다.");
         }
-        postRepository.deleteAllByUserId(id);
-        userRepository.deleteById(id);
+        postRepository.deleteAllByUserId(user.getId());
+        userRepository.deleteById(user.getId());
     }
 }
