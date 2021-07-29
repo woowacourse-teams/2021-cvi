@@ -38,7 +38,7 @@ public class Post extends BaseEntity {
     private List<Like> likes = new ArrayList<>();
 
     @Embedded
-    private Comments comments = new Comments();
+    private final Comments comments = new Comments();
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {

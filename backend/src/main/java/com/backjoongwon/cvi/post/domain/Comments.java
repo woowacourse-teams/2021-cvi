@@ -42,7 +42,7 @@ public class Comments {
 
     public void delete(Long commentId, User user) {
         Comment foundComment = findById(commentId);
-        if (!foundComment.isOwner(user)) {
+        if (!foundComment.isSameUser(user)) {
             throw new UnAuthorizedException("다른 사용자의 게시글은 삭제할 수 없습니다.");
         }
         comments.remove(foundComment);
@@ -54,7 +54,7 @@ public class Comments {
 
     private Comment findById(Long commentId) {
         return comments.stream()
-                .filter(comment -> comment.isSameComment(commentId))
+                .filter(comment -> comment.isSameAs(commentId))
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
     }
