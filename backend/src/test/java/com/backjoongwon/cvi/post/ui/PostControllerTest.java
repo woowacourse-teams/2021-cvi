@@ -3,6 +3,8 @@ package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
@@ -44,6 +46,7 @@ class PostControllerTest extends ApiDocument {
     private static final Long POST_ID = 1L;
     private static final Long LIKE_ID = 1L;
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
+    private static final Long COMMENT_ID = 1L;
     private static final String BEARER = "Bearer ";
 
     @MockBean
@@ -255,6 +258,113 @@ class PostControllerTest extends ApiDocument {
         글_좋아요_삭제_실패함(response);
     }
 
+    @DisplayName("게시글 댓글 등록 - 성공")
+    @Test
+    void createComment() throws Exception {
+        //given
+        CommentResponse expectedResponse = new CommentResponse(1L, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
+        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
+        //then
+        댓글_등록_성공함(response, expectedResponse);
+    }
+
+    @DisplayName("게시글 댓글 등록 - 실패 - 비회원이 댓글을 작성할 때")
+    @Test
+    void createCommentFailureWhenWrongWriter() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
+        //then
+        댓글_등록_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 수정 - 성공")
+    @Test
+    void putComment() throws Exception {
+        //given
+        CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
+        willDoNothing().given(postService).updateComment(anyLong(), anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + ACCESS_TOKEN);
+        //then
+        댓글_수정_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 수정 - 실패 - 작성자가 아닌 사용자가 수정 요청")
+    @Test
+    void putCommentFailureWhenWrongUser() throws Exception {
+        //given
+        CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).updateComment(anyLong(), anyLong(),
+                any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
+        //then
+        댓글_수정_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 삭제 - 성공")
+    @Test
+    void deleteComment() throws Exception {
+        //given
+        willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        //when
+        ResultActions response = 댓글_삭제_요청(POST_ID,  COMMENT_ID, BEARER + ACCESS_TOKEN);
+        //then
+        댓글_삭제_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청 ")
+    @Test
+    void deleteCommentWhenWrongUser() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        //when
+        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + "another_user_token");
+        //then
+        댓글_삭제_실패함(response);
+    }
+
+    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, accessToken)
+        );
+    }
+
+    private void 댓글_수정_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-update"));
+    }
+
+    private void 댓글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-update-failure"));
+    }
+
+    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-delete"));
+    }
+
+    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-delete-failure"));
+    }
+
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/posts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -405,5 +515,25 @@ class PostControllerTest extends ApiDocument {
 
         return new PostResponse(1L, userResponse, "내용", 1,
                 1, true, VaccinationType.PFIZER, LocalDateTime.now());
+    }
+
+    private ResultActions 댓글_등록_요청(Long postId, CommentRequest request, String headerValue) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, headerValue));
+    }
+
+    private void 댓글_등록_성공함(ResultActions response, CommentResponse expectedResponse) throws Exception {
+        response.andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/v1/comments/" + expectedResponse.getId()))
+                .andDo(print())
+                .andDo(toDocument("comment-create"));
+    }
+
+    private void 댓글_등록_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-create-failure"));
     }
 }

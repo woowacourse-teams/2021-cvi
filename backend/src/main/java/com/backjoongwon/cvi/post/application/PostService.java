@@ -1,29 +1,37 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.domain.CommentRepository;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Transactional(readOnly = true)
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public PostResponse create(Long userId, PostRequest postRequest) {
@@ -63,12 +71,45 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    @Transactional
+    public CommentResponse createComment(Long postId, RequestUser user, CommentRequest commentRequest) {
+        User foundUser = findUserByUserId(user.getId());
+        Post foundPost = findPostWithCommentsByPostId(postId);
+
+        Comment comment = commentRequest.toEntity();
+        comment.assignUser(foundUser);
+
+        foundPost.assignComment(comment);
+        postRepository.flush();
+        return CommentResponse.of(comment);
+    }
+
+    @Transactional
+    public void updateComment(Long postId, Long commentId, RequestUser requestUser, CommentRequest updateRequest) {
+        User foundUser = findUserByUserId(requestUser.getId());
+        Post foundPost = findPostWithCommentsByPostId(postId);
+        foundPost.updateComment(commentId, updateRequest.toEntity(), foundUser);
+    }
+
+    @Transactional
+    public void deleteComment(Long postId, Long commentId, RequestUser requestUser) {
+        User foundUser = findUserByUserId(requestUser.getId());
+        Post foundPost = findPostWithCommentsByPostId(postId);
+        foundPost.deleteComment(commentId, foundUser);
+    }
+
     private User findUserByUserId(Long id) {
+        validateNotNull(id);
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> {
+                            log.info("해당 id의 사용자가 존재하지 않습니다.");
+                            return new NotFoundException("해당 id의 사용자가 존재하지 않습니다.");
+                        }
+                );
     }
 
     private Post findPostByPostId(Long id) {
+        validateNotNull(id);
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
@@ -95,5 +136,18 @@ public class PostService {
     private Post findPostWithLikesById(Long postId) {
         return postRepository.findWithLikesById(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+    }
+
+    private Post findPostWithCommentsByPostId(Long id) {
+        validateNotNull(id);
+        return postRepository.findWithCommentsById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+    }
+
+    private void validateNotNull(Long id) {
+        if (Objects.isNull(id)) {
+            log.info("id는 null이 될 수 없습니다.");
+            throw new NotFoundException("id는 null이 될 수 없습니다.");
+        }
     }
 }
