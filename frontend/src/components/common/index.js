@@ -8,5 +8,18 @@ import Tabs from './Tabs/Tabs';
 import Avatar from './Avatar/Avatar';
 import BaseLayout from './BaseLayout/BaseLayout';
 import SideBar from './SideBar/SideBar';
+import DonutChart from './DonutChart/DonutChart';
 
-export { Avatar, BaseLayout, Button, Frame, Input, Label, Modal, Selection, Tabs, SideBar };
+export {
+  Avatar,
+  BaseLayout,
+  Button,
+  Frame,
+  Input,
+  Label,
+  Modal,
+  Selection,
+  Tabs,
+  SideBar,
+  DonutChart,
+};
