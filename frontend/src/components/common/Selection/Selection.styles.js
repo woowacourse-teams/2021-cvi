@@ -13,6 +13,7 @@ const Container = styled.div`
   border-radius: 2.6rem;
   padding: 0 0.6rem;
   background-color: ${THEME_COLOR.WHITE};
+  overflow-x: auto;
 
   & > *:not(:last-child) {
     margin-right: 1.6rem;

@@ -11,6 +11,7 @@ const Container = styled.div`
   align-items: center;
   line-height: 1.5;
   padding: 0 3.2rem;
+  overflow-x: auto;
 `;
 
 const buttonStyles = css`

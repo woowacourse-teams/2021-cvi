@@ -14,6 +14,7 @@ import CloseIcon from './close.svg';
 import MyPageIcon from './mypage.svg';
 import CommentIcon from './comment.svg';
 import LikeIcon from './like.svg';
+import MenuIcon from './menu.svg';
 
 export {
   KakaoIcon,
@@ -32,4 +33,5 @@ export {
   MyPageIcon,
   CommentIcon,
   LikeIcon,
+  MenuIcon,
 };

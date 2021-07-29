@@ -4,18 +4,23 @@ import { Link, NavLink } from 'react-router-dom';
 import { FONT_COLOR, THEME_COLOR } from '../../../constants';
 
 const Container = styled.div`
-  height: inherit;
-  display: flex;
-  flex-direction: column;
-  padding: 6rem 0;
-  width: 28rem;
-  background-color: ${THEME_COLOR.PRIMARY};
+  display: none;
+  ${({ isOpenSideBar }) =>
+    isOpenSideBar &&
+    css`
+      display: flex;
+      flex-direction: column;
+      background-color: ${THEME_COLOR.PRIMARY};
+      width: 100vw;
+      height: 100vh;
+      padding: 1rem 0;
 
-  & > *:last-child {
-    margin-top: auto;
-  }
+      & > *:last-child {
+        margin-top: auto;
+      }
+    `}
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (min-width: 1025px) {
     display: none;
   }
 `;
@@ -35,11 +40,17 @@ const MenuContainer = styled.div`
   margin-top: 11rem;
 `;
 
+const CloseIconContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 1rem;
+`;
+
 const NavLinkElement = styled(NavLink)`
   display: flex;
   align-items: center;
   padding-left: 7.8rem;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
   gap: 0.8rem;
   color: ${FONT_COLOR.WHITE};
   width: 100%;
@@ -63,9 +74,17 @@ const LogoutButton = styled.button`
 const selectedNavStyles = {
   backgroundColor: THEME_COLOR.BACKGROUND,
   color: FONT_COLOR.BLACK,
-  borderTopLeftRadius: '1.6rem',
-  borderBottomLeftRadius: '1.6rem',
+  // borderTopLeftRadius: '1.6rem',
+  // borderBottomLeftRadius: '1.6rem',
   border: 'transparent',
 };
 
-export { Container, LogoContainer, MenuContainer, NavLinkElement, LogoutButton, selectedNavStyles };
+export {
+  Container,
+  LogoContainer,
+  MenuContainer,
+  CloseIconContainer,
+  NavLinkElement,
+  LogoutButton,
+  selectedNavStyles,
+};
