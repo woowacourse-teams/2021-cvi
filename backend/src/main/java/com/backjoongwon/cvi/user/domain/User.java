@@ -3,6 +3,8 @@ package com.backjoongwon.cvi.user.domain;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
+import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.post.domain.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,12 +13,14 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends BaseEntity {
+    public static final GuestUser GUEST_USER = new GuestUser();
 
     @Column(unique = true)
     private String nickname;
@@ -56,5 +60,16 @@ public class User extends BaseEntity {
 
     public void makeVerified() {
         this.shotVerified = true;
+    }
+
+    public boolean isGuestUser() {
+        return false;
+    }
+
+    private static class GuestUser extends User {
+        @Override
+        public boolean isGuestUser() {
+            return true;
+        }
     }
 }

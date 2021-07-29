@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.user.auth;
 
-import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class SigninInterceptor implements HandlerInterceptor {
 
-    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -27,6 +27,6 @@ public class SigninInterceptor implements HandlerInterceptor {
 
     private void validateAccessToken(HttpServletRequest request) {
         String accessToken = AuthorizationExtractor.extract(request);
-        userService.validateAccessToken(accessToken);
+        jwtTokenProvider.isValidToken(accessToken);
     }
 }
