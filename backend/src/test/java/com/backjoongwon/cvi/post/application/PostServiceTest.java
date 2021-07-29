@@ -287,7 +287,7 @@ class PostServiceTest {
         //then
         assertThat(commentResponse.getContent()).isEqualTo(commentRequest.getContent());
         assertThat(commentResponse.getWriter().getId()).isEqualTo(user.getId());
-        assertThat(post.getComments()).extracting("id").contains(commentResponse.getId());
+        assertThat(post.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
     }
 
     @DisplayName("댓글 생성 - 실패 - 비회원 댓글 작성 시도")
@@ -361,7 +361,7 @@ class PostServiceTest {
         Post foundPost = postRepository.findById(this.post.getId()).get();
         //then
         assertThat(foundComment).isEmpty();
-        assertThat(foundPost.getComments()).extracting("id").doesNotContain(commentResponse.getId());
+        assertThat(foundPost.getCommentsAsList()).extracting("id").doesNotContain(commentResponse.getId());
     }
 
     @DisplayName("댓글 삭제 - 실패 - 댓글을 찾을 수 없음")

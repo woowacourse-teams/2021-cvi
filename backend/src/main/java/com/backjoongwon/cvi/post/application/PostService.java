@@ -77,7 +77,7 @@ public class PostService {
         Comment comment = commentRequest.toEntity();
         comment.assignUser(foundUser);
 
-        foundPost.addComment(comment);
+        foundPost.assignComment(comment);
         postRepository.flush();
         return CommentResponse.of(comment);
     }

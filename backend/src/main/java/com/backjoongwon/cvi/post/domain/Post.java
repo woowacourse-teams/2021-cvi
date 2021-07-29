@@ -1,13 +1,10 @@
 package com.backjoongwon.cvi.post.domain;
 
 import com.backjoongwon.cvi.comment.domain.Comment;
-import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,8 +37,8 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    @Embedded
+    private Comments comments = new Comments();
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
@@ -89,36 +86,23 @@ public class Post extends BaseEntity {
                 .anyMatch(like -> like.createdBy(viewer));
     }
 
-    public void addComment(Comment comment) {
-        if (Objects.isNull(comment)) {
-            throw new NotFoundException("댓글이 존재하지 않습니다.");
-        }
-        comment.assignPost(this);
+    public void assignComment(Comment comment) {
+        comments.assignComment(comment, this);
+    }
 
-        if (comments.contains(comment)) {
-            return;
-        }
+    public void addComment(Comment comment) {
         comments.add(comment);
     }
 
     public void updateComment(Long commentId, Comment updateComment, User user) {
-        Comment foundComment = findComment(commentId);
-        foundComment.update(updateComment, user);
+        comments.update(commentId, updateComment, user);
     }
 
     public void deleteComment(Long commentId, User user) {
-        Comment foundComment = findComment(commentId);
-        if (!foundComment.isOwner(user)) {
-            throw new UnAuthorizedException("다른 사용자의 게시글은 삭제할 수 없습니다.");
-        }
-        comments.remove(foundComment);
+        comments.delete(commentId, user);
     }
 
-    private Comment findComment(Long commentId) {
-        Comment foundComment = comments.stream()
-                .filter(comment -> comment.getId().equals(commentId))
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
-        return foundComment;
+    public List<Comment> getCommentsAsList() {
+        return comments.getComments();
     }
 }

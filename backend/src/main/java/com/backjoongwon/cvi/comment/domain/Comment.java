@@ -41,23 +41,21 @@ public class Comment extends BaseEntity {
     }
 
     public void assignPost(Post post) {
+        if (Objects.isNull(post)) {
+            throw new NotFoundException("댓글에 할당하려는 게시글이 없습니다");
+        }
         if (Objects.nonNull(this.post)) {
             return;
         }
 
-        if (Objects.isNull(post)) {
-            throw new NotFoundException("댓글에 할당하려는 게시글이 없습니다");
-        }
-
         this.post = post;
-        post.getComments().add(this);
+        post.addComment(this);
     }
 
     public void assignUser(User user) {
         if (Objects.isNull(user)) {
             throw new NotFoundException("댓글을 작성하려는 사용자가 존재하지 않습니다.");
         }
-
         if (Objects.nonNull(this.user)) {
             throw new InvalidOperationException("한번 할당된 댓글 작성자는 변경할 수 없습니다.");
         }
@@ -66,7 +64,7 @@ public class Comment extends BaseEntity {
     }
 
     public void update(Comment updateComment, User user) {
-        if (!isOwner(user)) {
+        if (!this.user.equals(user)) {
             throw new UnAuthorizedException("다른 사용자의 게시글은 수정할 수 없습니다.");
         }
         this.content = updateComment.content;
