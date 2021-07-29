@@ -1,5 +1,8 @@
 package com.backjoongwon.cvi.user.ui;
 
+import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.Filter;
+import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
 import com.backjoongwon.cvi.user.domain.RequestUser;
@@ -10,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final PostService postService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,6 +35,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponse findMe(@AuthenticationPrincipal RequestUser user) {
         return userService.findUser(user);
+    }
+
+    @GetMapping("/me/posts")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> findMyPosts(@RequestParam(defaultValue = "NONE") Filter filter, @AuthenticationPrincipal RequestUser user) {
+        return postService.findByFilter(filter, user);
     }
 
     @GetMapping("/{id}")
