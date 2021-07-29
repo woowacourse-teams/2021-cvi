@@ -15,7 +15,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
   width: 100%;
 `;
 
@@ -24,6 +24,7 @@ const TopContainer = styled.div`
   gap: 0.6rem;
   justify-content: flex-end;
   padding: 2rem 8rem 0 0;
+  min-height: 5.6rem;
 `;
 
 const avatarStyles = css`

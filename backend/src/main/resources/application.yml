@@ -8,8 +8,12 @@ spring:
     console:
       enabled: false
 
+  flyway:
+    enabled: false
+
 server:
   shutdown: graceful
+
 ---
 spring:
   config:
