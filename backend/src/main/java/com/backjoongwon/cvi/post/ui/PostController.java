@@ -57,10 +57,9 @@ public class PostController {
 
     @PostMapping("/{postId}/likes")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse createLike(@PathVariable Long postId, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
+    public void createLike(@PathVariable Long postId, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
         LikeResponse likeResponse = postService.createLike(postId, user);
         servletResponse.setHeader("Location", "/api/v1/likes/" + likeResponse.getId());
-        return likeResponse.getPostResponse();
     }
 
     @DeleteMapping("/{postId}/likes/{likeId}")

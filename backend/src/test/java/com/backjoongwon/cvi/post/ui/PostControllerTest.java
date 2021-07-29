@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -55,21 +56,38 @@ class PostControllerTest extends ApiDocument {
     private JwtTokenProvider jwtTokenProvider;
 
     private User user;
+    private User anotherUser;
     private PostRequest request;
     private UserResponse userResponse;
+    private List<CommentResponse> commentResponses;
 
     @BeforeEach
     void setUp() {
         user = User.builder()
                 .id(USER_ID)
-                .ageRange(AgeRange.TEENS)
                 .nickname("user")
-                .socialProvider(SocialProvider.NAVER)
+                .ageRange(AgeRange.TEENS)
                 .profileUrl("naver.com/profile")
                 .socialId("{Unique ID received from social provider}")
+                .socialProvider(SocialProvider.NAVER)
                 .build();
+
+        anotherUser = User.builder()
+                .id(USER_ID + 1)
+                .nickname("another_user")
+                .ageRange(AgeRange.TWENTIES)
+                .profileUrl("kakao.com/profile")
+                .socialId("{Unique ID received from social provider}")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
+
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
         userResponse = UserResponse.of(user, null);
+
+        Comment comment = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
+        Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(anotherUser).createdAt(LocalDateTime.now()).build();
+
+        commentResponses = Arrays.asList(CommentResponse.of(comment), CommentResponse.of(comment2));
 
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
@@ -79,7 +97,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(request);
@@ -102,7 +120,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, VaccinationType.PFIZER, LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
         given(postService.findById(any(Long.class), any(RequestUser.class))).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
@@ -128,8 +146,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         );
         willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
         //when
@@ -199,9 +217,9 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineType() throws Exception {
         //given
         willReturn(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
@@ -214,12 +232,12 @@ class PostControllerTest extends ApiDocument {
     void createLike() throws Exception {
         //given
         PostResponse expectedPostResponse = createPostResponse();
-        LikeResponse likeResponse = new LikeResponse(1L, expectedPostResponse);
+        LikeResponse likeResponse = LikeResponse.from(1L);
         willReturn(likeResponse).given(postService).createLike(any(Long.class), any(RequestUser.class));
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
         //then
-        글_좋아요_생성_성공(actualResponse, expectedPostResponse, 1L);
+        글_좋아요_생성_성공(actualResponse, 1L);
     }
 
     @DisplayName("게시글 좋아요 생성 - 실패 - 게시글이 없는 경우")
@@ -311,7 +329,7 @@ class PostControllerTest extends ApiDocument {
         //given
         willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
         //when
-        ResultActions response = 댓글_삭제_요청(POST_ID,  COMMENT_ID, BEARER + ACCESS_TOKEN);
+        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + ACCESS_TOKEN);
         //then
         댓글_삭제_성공함(response);
     }
@@ -475,10 +493,9 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_좋아요_생성_성공(ResultActions actualResponse, PostResponse postResponse, Long likeId) throws Exception {
+    private void 글_좋아요_생성_성공(ResultActions actualResponse, Long likeId) throws Exception {
         actualResponse.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/likes/" + likeId))
-                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("like-create"));
     }
@@ -513,7 +530,7 @@ class PostControllerTest extends ApiDocument {
                 ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
 
         return new PostResponse(1L, userResponse, "내용", 1,
-                1, true, VaccinationType.PFIZER, LocalDateTime.now());
+                1, true, null, VaccinationType.PFIZER, LocalDateTime.now());
     }
 
     private ResultActions 댓글_등록_요청(Long postId, CommentRequest request, String headerValue) throws Exception {

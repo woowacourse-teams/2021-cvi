@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 public class LikeResponse {
 
     private Long id;
-    private PostResponse postResponse;
 
-    public LikeResponse(Long id, PostResponse postResponse) {
+    public LikeResponse(Long id) {
         this.id = id;
-        this.postResponse = postResponse;
     }
 
-    public static LikeResponse of(Long id, PostResponse postResponse) {
-        return new LikeResponse(id, postResponse);
+    public static LikeResponse from(Long id) {
+        return new LikeResponse(id);
     }
 }

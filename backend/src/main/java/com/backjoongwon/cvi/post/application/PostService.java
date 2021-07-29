@@ -123,7 +123,7 @@ public class PostService {
                 .build();
         post.addLike(like);
         postRepository.flush();
-        return LikeResponse.of(like.getId(), PostResponse.of(post, user));
+        return LikeResponse.from(like.getId());
     }
 
     @Transactional
