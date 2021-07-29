@@ -30,6 +30,7 @@ import {
   TextArea,
   ViewCount,
   editButtonStyles,
+  EditButtonContainer,
 } from './ReviewEditPage.styles';
 import toDate from '../../utils/toDate';
 import {
@@ -127,14 +128,16 @@ const ReviewEditPage = () => {
           </TextArea>
         </FrameContent>
       </Frame>
-      <Button
-        backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
-        sizeType={BUTTON_SIZE_TYPE.LARGE}
-        styles={editButtonStyles}
-        onClick={editReview}
-      >
-        수정하기
-      </Button>
+      <EditButtonContainer>
+        <Button
+          backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
+          styles={editButtonStyles}
+          onClick={editReview}
+        >
+          수정하기
+        </Button>
+      </EditButtonContainer>
     </Container>
   );
 };
