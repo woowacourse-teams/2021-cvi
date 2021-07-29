@@ -6,6 +6,10 @@ const Container = styled.li`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+
+  @media screen and (max-width: 801px) {
+    padding: 2rem;
+  }
 `;
 
 const Content = styled.div`
