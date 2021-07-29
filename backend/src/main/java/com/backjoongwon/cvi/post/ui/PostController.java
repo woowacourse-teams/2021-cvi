@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -36,8 +37,8 @@ public class PostController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long id) {
-        return postService.findById(id);
+    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal RequestUser user) {
+        return postService.findById(id, user);
     }
 
     @PutMapping("/{id}")
@@ -50,5 +51,19 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id, @AuthenticationPrincipal RequestUser user) {
         postService.delete(id, user);
+    }
+
+    @PostMapping("/{postId}/likes")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostResponse createLike(@PathVariable Long postId, @AuthenticationPrincipal RequestUser user, HttpServletResponse servletResponse) {
+        LikeResponse likeResponse = postService.createLike(postId, user);
+        servletResponse.setHeader("Location", "/api/v1/likes/" + likeResponse.getId());
+        return likeResponse.getPostResponse();
+    }
+
+    @DeleteMapping("/{postId}/likes/{likeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLike(@PathVariable Long postId, @PathVariable Long likeId, @AuthenticationPrincipal RequestUser user) {
+        postService.deleteLike(postId, likeId, user);
     }
 }

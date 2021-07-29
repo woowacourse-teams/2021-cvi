@@ -23,7 +23,7 @@ import java.util.Objects;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -34,8 +34,8 @@ public class Post extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
 
-    @OneToMany(mappedBy = "post")
-    private List<Like> likes = new ArrayList<>();
+    @Embedded
+    private final Likes likes = new Likes();
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -75,12 +75,24 @@ public class Post extends BaseEntity {
         }
     }
 
-    public int getLikesCount() {
-        return likes.size();
+    public boolean isAlreadyLikedBy(User user) {
+        if (Objects.isNull(user)) {
+            return false;
+        }
+        return likes.isAlreadyLikedBy(user.getId());
     }
 
-    public boolean hasLiked(User viewer) {
-        return likes.stream()
-                .anyMatch(like -> like.createdBy(viewer));
+    public void addLike(Like like) {
+        likes.validateNotExistsLikeCreatedBy(like.getUser());
+        like.assignPost(this);
+        likes.add(like);
+    }
+
+    public void deleteLike(Long likeId, Long userId) {
+        likes.delete(likeId, userId);
+    }
+
+    public int getLikesCount() {
+        return likes.getSize();
     }
 }
