@@ -4,7 +4,10 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.user.domain.*;
+import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
+import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,24 +78,23 @@ public class UserServiceTest {
     @Test
     void findUserByAccessToken() {
         //given
-        UserResponse signup = userService.signup(userRequest);
+        userService.signup(userRequest);
         willReturn("1").given(jwtTokenProvider).getPayload("VALID_ACCESS_TOKEN");
         //when
-        RequestUser requestUser = RequestUser.of(signup.getId());
-        UserResponse user = userService.findUser(requestUser);
+        User foundUser = userService.findUserByAccessToken("VALID_ACCESS_TOKEN");
         //then
-        assertThat(user.getNickname()).isEqualTo("인비");
-        assertThat(user.getAgeRange().getMeaning()).isEqualTo(AgeRange.TEENS.getMeaning());
+        assertThat(foundUser.getNickname()).isEqualTo("인비");
+        assertThat(foundUser.getAgeRange()).isEqualTo(AgeRange.TEENS);
     }
 
-    @DisplayName("토큰 검증 - 실패 - 유효하지 않은 토큰인 대우 예외를 던진다.")
+    @DisplayName("토큰 검증 - 실패 - 유효하지 않은 토큰인 경우 예외를 던진다.")
     @Test
     void validateAccessTokenFailure() {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(jwtTokenProvider).isValidToken("INVALID_ACCESS_TOKEN");
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(jwtTokenProvider).validateToken("INVALID_ACCESS_TOKEN");
         //when
         //then
-        assertThatThrownBy(() -> userService.isValidAccessToken("INVALID_ACCESS_TOKEN"))
+        assertThatThrownBy(() -> userService.validateAccessToken("INVALID_ACCESS_TOKEN"))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("유효하지 않은 토큰입니다.");
     }
@@ -124,12 +126,11 @@ public class UserServiceTest {
     void update() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(signupResponse.getId());
         //when
         UserRequest updateRequest = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
-        userService.update(requestUser, updateRequest);
+        userService.update(signupResponse.getId(), updateRequest);
         //then
-        User updatedUser = userRepository.findById(requestUser.getId())
+        User updatedUser = userRepository.findById(signupResponse.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
@@ -140,12 +141,11 @@ public class UserServiceTest {
     void updateNicknameToSameNickname() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(signupResponse.getId());
         UserRequest updateRequest = new UserRequest("인비", AgeRange.THIRTIES, null, null, null);
         //when
-        userService.update(requestUser, updateRequest);
+        userService.update(signupResponse.getId(), updateRequest);
         //then
-        User updatedUser = userRepository.findById(requestUser.getId())
+        User updatedUser = userRepository.findById(signupResponse.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getNickname()).isEqualTo(userRequest.getNickname());
@@ -156,20 +156,18 @@ public class UserServiceTest {
     void updateFailureWhenNicknameDuplicate() {
         //given
         UserResponse signupResponse1 = userService.signup(userRequest);
-        RequestUser requestUser1 = RequestUser.of(signupResponse1.getId());
         UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
-        RequestUser requestUser2 = RequestUser.of(signupResponse2.getId());
 
         UserRequest updateRequest = UserRequest.builder()
                 .nickname("인비")
                 .ageRange(AgeRange.FIFTIES)
                 .build();
         //when
-        assertThatThrownBy(() -> userService.update(requestUser2, updateRequest))
+        assertThatThrownBy(() -> userService.update(signupResponse2.getId(), updateRequest))
                 .isInstanceOf(DuplicateException.class);
         //then
-        User notUpdatedUser1 = userRepository.findById(requestUser1.getId())
+        User notUpdatedUser1 = userRepository.findById(signupResponse1.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(notUpdatedUser1.getNickname()).isEqualTo(userRequest.getNickname());
@@ -187,11 +185,10 @@ public class UserServiceTest {
     void updateFailureWhenNotExists() {
         //given
         Long lastIndex = getLastIndex();
-        RequestUser requestUser = RequestUser.of(lastIndex + 1L);
         //when
         UserRequest updateRequest = new UserRequest(null, null, null, null, null);
         //then
-        assertThatThrownBy(() -> userService.update(requestUser, updateRequest))
+        assertThatThrownBy(() -> userService.update(lastIndex + 1L, updateRequest))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -199,12 +196,11 @@ public class UserServiceTest {
     @Test
     void delete() {
         //given
-        UserResponse userResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(userResponse.getId());
+        UserResponse signupResponse = userService.signup(userRequest);
         //when
-        userService.delete(requestUser);
+        userService.delete(signupResponse.getId());
         //then
-        Optional<User> foundUser = userRepository.findById(requestUser.getId());
+        Optional<User> foundUser = userRepository.findById(signupResponse.getId());
         assertThat(foundUser).isEmpty();
     }
 
@@ -213,10 +209,9 @@ public class UserServiceTest {
     void deleteFailureWhenNotExists() {
         //given
         Long lastIndex = getLastIndex();
-        RequestUser requestUser = RequestUser.of(lastIndex + 1L);
         //when
         //then
-        assertThatThrownBy(() -> userService.delete(requestUser))
+        assertThatThrownBy(() -> userService.delete(lastIndex + 1L))
                 .isInstanceOf(NotFoundException.class);
     }
 
