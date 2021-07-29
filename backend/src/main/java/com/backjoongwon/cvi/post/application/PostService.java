@@ -97,7 +97,7 @@ public class PostService {
     }
 
     private User findUserByUserId(Long id) {
-        validateNull(id);
+        validateNotNull(id);
         return userRepository.findById(id)
                 .orElseThrow(() -> {
                             log.info("해당 id의 사용자가 존재하지 않습니다.");
@@ -107,18 +107,18 @@ public class PostService {
     }
 
     private Post findPostByPostId(Long id) {
-        validateNull(id);
+        validateNotNull(id);
         return postRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
     private Post findPostWithCommentsByPostId(Long id) {
-        validateNull(id);
+        validateNotNull(id);
         return postRepository.findWithCommentsById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
-    private void validateNull(Long id) {
+    private void validateNotNull(Long id) {
         if (Objects.isNull(id)) {
             log.info("id는 null이 될 수 없습니다.");
             throw new NotFoundException("id는 null이 될 수 없습니다.");

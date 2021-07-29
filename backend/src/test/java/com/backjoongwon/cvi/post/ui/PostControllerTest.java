@@ -227,7 +227,7 @@ class PostControllerTest extends ApiDocument {
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
         //then
-        댕글_등록_실패함(response);
+        댓글_등록_실패함(response);
     }
 
     @DisplayName("게시글 댓글 수정 - 성공")
@@ -252,7 +252,7 @@ class PostControllerTest extends ApiDocument {
         //when
         ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
         //then
-        댓굴_수정_실패함(response);
+        댓글_수정_실패함(response);
     }
 
     @DisplayName("게시글 댓글 삭제 - 성공")
@@ -291,7 +291,7 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("comment-update"));
     }
 
-    private void 댓굴_수정_실패함(ResultActions response) throws Exception {
+    private void 댓글_수정_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("comment-update-failure"));
@@ -433,7 +433,7 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("comment-create"));
     }
 
-    private void 댕글_등록_실패함(ResultActions response) throws Exception {
+    private void 댓글_등록_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("comment-create-failure"));

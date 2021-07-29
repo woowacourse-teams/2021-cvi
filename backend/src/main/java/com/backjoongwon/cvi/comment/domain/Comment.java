@@ -64,7 +64,7 @@ public class Comment extends BaseEntity {
     }
 
     public void update(Comment updateComment, User user) {
-        if (!this.user.equals(user)) {
+        if (isOwner(user)) {
             throw new UnAuthorizedException("다른 사용자의 게시글은 수정할 수 없습니다.");
         }
         this.content = updateComment.content;
@@ -72,5 +72,9 @@ public class Comment extends BaseEntity {
 
     public boolean isOwner(User user) {
         return this.user.equals(user);
+    }
+
+    public boolean isSameComment(Long id) {
+        return this.id.equals(id);
     }
 }

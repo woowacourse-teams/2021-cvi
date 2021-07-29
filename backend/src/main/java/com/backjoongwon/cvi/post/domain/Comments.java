@@ -36,19 +36,12 @@ public class Comments {
         comments.add(comment);
     }
 
-    public Comment find(Long commentId) {
-        return comments.stream()
-                .filter(comment -> comment.getId().equals(commentId))
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
-    }
-
     public void update(Long commentId, Comment updateComment, User user) {
-        find(commentId).update(updateComment, user);
+        findById(commentId).update(updateComment, user);
     }
 
     public void delete(Long commentId, User user) {
-        Comment foundComment = find(commentId);
+        Comment foundComment = findById(commentId);
         if (!foundComment.isOwner(user)) {
             throw new UnAuthorizedException("다른 사용자의 게시글은 삭제할 수 없습니다.");
         }
@@ -57,5 +50,12 @@ public class Comments {
 
     public List<Comment> getComments() {
         return new ArrayList<>(comments);
+    }
+
+    private Comment findById(Long commentId) {
+        return comments.stream()
+                .filter(comment -> comment.isSameComment(commentId))
+                .findAny()
+                .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
     }
 }
