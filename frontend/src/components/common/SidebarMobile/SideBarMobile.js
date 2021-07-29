@@ -117,12 +117,12 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
 
 SideBarMobile.propTypes = {
   isOpenSideBar: PropTypes.bool,
-  setIsOpenSideBar: PropTypes.bool,
+  setIsOpenSideBar: PropTypes.func,
 };
 
 SideBarMobile.defaultProps = {
   isOpenSideBar: false,
-  setIsOpenSideBar: false,
+  setIsOpenSideBar: () => {},
 };
 
 export default SideBarMobile;

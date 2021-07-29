@@ -10,7 +10,7 @@ import { useState } from 'react';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { css } from '@emotion/react';
-import SideBarMobile from '../SidebarMobile/SideBarMobile';
+import SideBarMobile from '../SideBarMobile/SideBarMobile';
 
 const BaseLayout = ({ children }) => {
   const history = useHistory();
