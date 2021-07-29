@@ -11,7 +11,4 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDsl 
     Optional<Post> findWithLikesById(Long id);
 
     void deleteAllByUserId(Long userId);
-
-    @EntityGraph(attributePaths = {"comments"})
-    Optional<Post> findWithCommentsById(Long aLong);
 }

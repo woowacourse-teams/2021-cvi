@@ -37,8 +37,8 @@ public class Post extends BaseEntity {
     @Embedded
     private final Likes likes = new Likes();
 
-    @Embedded
-    private final Comments comments = new Comments();
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
@@ -52,11 +52,9 @@ public class Post extends BaseEntity {
         if (Objects.isNull(user)) {
             throw new NotFoundException("작성자가 존재하지 않습니다.");
         }
-
         if (Objects.nonNull(this.user)) {
             throw new InvalidOperationException("작성자는 변경할 수 없습니다.");
         }
-
         this.user = user;
     }
 
@@ -96,25 +94,5 @@ public class Post extends BaseEntity {
 
     public int getLikesCount() {
         return likes.getSize();
-    }
-
-    public void assignComment(Comment comment) {
-        comments.assignComment(comment, this);
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
-
-    public void updateComment(Long commentId, Comment updateComment, User user) {
-        comments.update(commentId, updateComment, user);
-    }
-
-    public void deleteComment(Long commentId, User user) {
-        comments.delete(commentId, user);
-    }
-
-    public List<Comment> getCommentsAsList() {
-        return comments.getComments();
     }
 }
