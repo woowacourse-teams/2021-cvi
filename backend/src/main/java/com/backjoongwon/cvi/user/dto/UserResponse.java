@@ -1,8 +1,6 @@
 package com.backjoongwon.cvi.user.dto;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
-import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;

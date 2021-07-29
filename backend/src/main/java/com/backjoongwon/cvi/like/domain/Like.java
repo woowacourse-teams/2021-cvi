@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
-@Table(name = "likes")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "likes_id"))
+@Table(name = "likes")
 public class Like extends BaseEntity  {
 
     @ManyToOne(fetch = FetchType.LAZY)
