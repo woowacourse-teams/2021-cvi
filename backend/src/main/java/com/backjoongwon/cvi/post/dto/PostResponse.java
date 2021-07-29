@@ -41,7 +41,7 @@ public class PostResponse {
 
     public static PostResponse of(Post post, User viewer) {
         return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
-                post.getViewCount(), post.getLikesCount(), post.hasLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt());
+                post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt());
     }
 
     public static List<PostResponse> of(List<Post> posts, User viewer) {

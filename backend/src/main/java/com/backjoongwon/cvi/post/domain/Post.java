@@ -5,7 +5,6 @@ import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.like.domain.Likes;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,7 +35,7 @@ public class Post extends BaseEntity {
     private VaccinationType vaccinationType;
 
     @Embedded
-    private Likes likes = new Likes();
+    private final Likes likes = new Likes();
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -76,11 +75,11 @@ public class Post extends BaseEntity {
         }
     }
 
-    public boolean hasLikedBy(User user) {
+    public boolean isAlreadyLikedBy(User user) {
         if (Objects.isNull(user)) {
             return false;
         }
-        return likes.hasCreatedBy(user.getId());
+        return likes.isAlreadyLikedBy(user.getId());
     }
 
     public void addLike(Like like) {
@@ -89,8 +88,8 @@ public class Post extends BaseEntity {
         likes.add(like);
     }
 
-    public void removeLike(Long likeId, Long userId) {
-        likes.remove(likeId, userId);
+    public void deleteLike(Long likeId, Long userId) {
+        likes.delete(likeId, userId);
     }
 
     public int getLikesCount() {

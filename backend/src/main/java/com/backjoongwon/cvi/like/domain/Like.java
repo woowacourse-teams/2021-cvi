@@ -43,12 +43,12 @@ public class Like extends BaseEntity  {
         post.getLikes().add(this);
     }
 
-    public boolean isCreatedBy(Long userId) {
+    public boolean isSameUser(Long userId) {
         return this.user.getId().equals(userId);
     }
 
     public void validateOwner(Long userId) {
-        if (!isCreatedBy(userId)) {
+        if (!isSameUser(userId)) {
             throw new InvalidOperationException("다른 사용자의 좋아요 입니다.");
         }
     }

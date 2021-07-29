@@ -82,14 +82,14 @@ public class PostService {
                 .build();
         post.addLike(like);
         postRepository.flush();
-        return new LikeResponse(like.getId(), PostResponse.of(post, user));
+        return LikeResponse.of(like.getId(), PostResponse.of(post, user));
     }
 
     @Transactional
     public void deleteLike(Long postId, Long likeId, RequestUser user) {
         user.validateSignedin();
         Post post = findPostWithLikesById(postId);
-        post.removeLike(likeId, user.getId());
+        post.deleteLike(likeId, user.getId());
     }
 
     private Post findPostWithLikesById(Long postId) {
