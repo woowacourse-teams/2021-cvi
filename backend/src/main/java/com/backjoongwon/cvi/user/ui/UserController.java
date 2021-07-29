@@ -1,8 +1,8 @@
 package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.user.application.UserService;
-import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
-import com.backjoongwon.cvi.user.domain.RequestUser;
+import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ public class UserController {
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse findMe(@AuthenticationPrincipal RequestUser user) {
-        return userService.findUser(user);
+    public UserResponse findMe(@SigninUser User user) {
+        return userService.findMeById(user.getId());
     }
 
     @GetMapping("/{id}")
@@ -40,13 +40,13 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@AuthenticationPrincipal RequestUser user, @RequestBody UserRequest userRequest) {
-        userService.update(user, userRequest);
+    public void update(@SigninUser User user, @RequestBody UserRequest userRequest) {
+        userService.update(user.getId(), userRequest);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal RequestUser user) {
-        userService.delete(user);
+    public void delete(@SigninUser User user) {
+        userService.delete(user.getId());
     }
 }
