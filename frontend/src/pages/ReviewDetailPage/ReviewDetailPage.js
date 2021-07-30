@@ -57,7 +57,6 @@ const ReviewDetailPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
-  console.log(review);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -94,55 +93,51 @@ const ReviewDetailPage = () => {
       id: 1,
       writer: {
         id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
+        nickname: 'test_user1',
         ageRange: {
-          meaning: '60대 이상',
+          meaning: '10대',
+          minAge: 10,
+          maxAge: 20,
         },
         shotVerified: false,
+        accessToken: null,
+        socialProvider: 'NAVER',
+        socialId: '{Unique ID received from social provider}',
+        socialProfileUrl: user.socialProfileUrl,
       },
       content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
+      createdAt: '2021-07-29T19:23:38.959',
     },
     {
       id: 2,
       writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
+        id: 2,
+        nickname: 'test_user2',
         ageRange: {
-          meaning: '30대',
+          meaning: '20대',
+          minAge: 20,
+          maxAge: 30,
         },
         shotVerified: true,
+        accessToken: null,
+        socialProvider: 'KAKAO',
+        socialId: '{Unique ID received from social provider}',
+        socialProfileUrl: user.socialProfileUrl,
       },
       content:
         '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 ',
-      createdAt: '2021-07-26T14:36:37.929',
+      createdAt: '2021-07-29T19:23:38.959',
     },
     {
       id: 3,
       writer: {
         id: 1,
         socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
+        nickname: 'test_user3',
         ageRange: {
           meaning: '20대',
         },
         shotVerified: false,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-    {
-      id: 4,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
-        ageRange: {
-          meaning: '20대',
-        },
-        shotVerified: true,
       },
       content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
       createdAt: '2021-07-26T14:36:37.929',
@@ -225,12 +220,16 @@ const ReviewDetailPage = () => {
             </IconContainer>
           </BottomContainer>
           <Comment>
-            <CommentCount>댓글 12</CommentCount>
+            <CommentCount>댓글 {review?.comments?.length}</CommentCount>
             <CommentFormContainer>
-              <CommentForm nickname={user.nickname} socialProfileUrl={user.socialProfileUrl} />
+              <CommentForm
+                accessToken={accessToken}
+                nickname={user.nickname}
+                socialProfileUrl={user.socialProfileUrl}
+              />
             </CommentFormContainer>
             <CommentList>
-              {commentList.map((comment) => (
+              {review?.comments?.map((comment) => (
                 <CommentItem key={comment.id} comment={comment} />
               ))}
             </CommentList>

@@ -6,8 +6,10 @@ const ERROR_MESSAGE = {
 const ALERT_MESSAGE = {
   SUCCESS_TO_SIGNUP: '회원가입에 성공했습니다',
   FAIL_TO_LOGIN: '로그인에 실패했습니다. 알맞은 닉네임을 입력해주세요.',
+  FAIL_TO_CREATE_REVIEW: '후기를 작성할 수 없습니다.',
   FAIL_TO_EDIT_REVIEW: '후기를 수정할 수 없습니다.',
   FAIL_TO_DELETE_REVIEW: '후기를 삭제할 수 없습니다.',
+  FAIL_TO_CREATE_COMMENT: '댓글을 작성할 수 없습니다.',
   FAIL_TO_SERVER: '오류가 발생했습니다. 다시 한 번 시도해주세요.',
   FAIL_TO_EDIT_ACCOUNT: '내 정보를 수정할 수 없습니다.',
 };
@@ -15,10 +17,11 @@ const ALERT_MESSAGE = {
 const SNACKBAR_MESSAGE = {
   SUCCESS_TO_LOGIN: '로그인에 성공했습니다',
   SUCCESS_TO_LOGOUT: '로그아웃에 성공했습니다',
-  SUCCESS_TO_CREATE_REVIEW: '후기를 작성하였습니다',
+  SUCCESS_TO_CREATE_REVIEW: '후기를 작성했습니다',
   SUCCESS_TO_EDIT_REVIEW: '후기를 수정했습니다.',
   SUCCESS_TO_DELETE_REVIEW: '후기를 삭제했습니다.',
   SUCCESS_TO_EDIT_ACCOUNT: '내 정보를 수정했습니다.',
+  SUCCESS_TO_CREATE_COMMENT: '댓글을 작성했습니다.',
 };
 
 const CONFIRM_MESSAGE = {

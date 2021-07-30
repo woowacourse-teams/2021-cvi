@@ -73,6 +73,16 @@ const requestPutAccount = (accessToken, data) =>
     body: JSON.stringify(data),
   });
 
+const requestCreateComment = (accessToken, reviewId, data) =>
+  fetch(`${BASE_URL}/posts/${reviewId}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`, // 여기 잘못되면 'id는 null이 될 수 없습니다' 오는데 그게 맞는지?
+    },
+    body: JSON.stringify(data),
+  });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -84,4 +94,5 @@ export {
   requestPostOAuthLogin,
   requestGetMyInfo,
   requestPutAccount,
+  requestCreateComment,
 };
