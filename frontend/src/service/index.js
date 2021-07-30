@@ -9,6 +9,7 @@ import {
   requestPostSignup,
   requestPutAccount,
   requestPutReview,
+  requestDeleteComment,
 } from '../requests';
 
 const getAllReviewListAsync = async () => {
@@ -159,6 +160,22 @@ const postCommentAsync = async (accessToken, id, data) => {
   }
 };
 
+const deleteCommentAsync = async (accessToken, reviewId, commentId) => {
+  try {
+    const response = await requestDeleteComment(accessToken, reviewId, commentId);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
 export {
   getAllReviewListAsync,
   getSelectedReviewListAsync,
@@ -169,4 +186,5 @@ export {
   postOAuthLoginAsync,
   putAccountAsync,
   postCommentAsync,
+  deleteCommentAsync,
 };

@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR } from '../../constants';
 
@@ -14,10 +15,15 @@ const InfoContainer = styled.div`
   gap: 0.8rem;
 `;
 
+const UpdateButtonContainer = styled.div`
+  display: flex;
+`;
+
 const Info = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.2rem;
+  margin-right: auto;
 `;
 
 const Writer = styled.div`
@@ -39,4 +45,18 @@ const Content = styled.div`
   font-size: 1.4rem;
 `;
 
-export { Container, InfoContainer, Info, Writer, CreatedAt, ShotVerified, Content };
+const buttonStyles = css`
+  padding-right: 0;
+`;
+
+export {
+  Container,
+  InfoContainer,
+  UpdateButtonContainer,
+  Info,
+  Writer,
+  CreatedAt,
+  ShotVerified,
+  Content,
+  buttonStyles,
+};

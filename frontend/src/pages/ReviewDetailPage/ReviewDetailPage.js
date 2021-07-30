@@ -230,7 +230,7 @@ const ReviewDetailPage = () => {
             </CommentFormContainer>
             <CommentList>
               {review?.comments?.map((comment) => (
-                <CommentItem key={comment.id} comment={comment} />
+                <CommentItem key={comment.id} comment={comment} reviewId={id} />
               ))}
             </CommentList>
           </Comment>

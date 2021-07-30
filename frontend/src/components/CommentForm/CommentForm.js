@@ -62,4 +62,10 @@ CommentForm.propTypes = {
   socialProfileUrl: PropTypes.string.isRequired,
 };
 
+CommentForm.defaultProps = {
+  nickname: '',
+  reviewId: '',
+  socialProfileUrl: '',
+};
+
 export default CommentForm;

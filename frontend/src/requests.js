@@ -83,6 +83,15 @@ const requestCreateComment = (accessToken, reviewId, data) =>
     body: JSON.stringify(data),
   });
 
+const requestDeleteComment = (accessToken, reviewId, commentId) =>
+  fetch(`${BASE_URL}/posts/${reviewId}/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -95,4 +104,5 @@ export {
   requestGetMyInfo,
   requestPutAccount,
   requestCreateComment,
+  requestDeleteComment,
 };
