@@ -103,6 +103,16 @@ const requestCreateComment = (accessToken, reviewId, data) =>
     body: JSON.stringify(data),
   });
 
+const requestPutComment = (accessToken, reviewId, commentId, data) =>
+  fetch(`${BASE_URL}/posts/${reviewId}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(data),
+  });
+
 const requestDeleteComment = (accessToken, reviewId, commentId) =>
   fetch(`${BASE_URL}/posts/${reviewId}/comments/${commentId}`, {
     method: 'DELETE',
@@ -142,6 +152,7 @@ export {
   requestGetMyInfo,
   requestPutAccount,
   requestCreateComment,
+  requestPutComment,
   requestDeleteComment,
   requestPostLike,
   requestDeleteLike,

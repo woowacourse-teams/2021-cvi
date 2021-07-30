@@ -45,6 +45,10 @@ const Content = styled.div`
   font-size: 1.4rem;
 `;
 
+const TextArea = styled.textarea`
+  padding: 1rem 1.5rem;
+`;
+
 const buttonStyles = css`
   padding-right: 0;
 `;
@@ -58,5 +62,6 @@ export {
   CreatedAt,
   ShotVerified,
   Content,
+  TextArea,
   buttonStyles,
 };
