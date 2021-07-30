@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.backjoongwon.cvi.DummyData.DUMMY_DATA_10000;
 
@@ -62,7 +61,7 @@ public class DataLoader implements CommandLineRunner {
             Post 글5 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
             Post 글6 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
             Post 글7 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
-            postRepository.saveAll(Arrays.asList(글1,글2,글3,글4,글5,글6,글7));
+            postRepository.saveAll(Arrays.asList(글1, 글2, 글3, 글4, 글5, 글6, 글7));
 
             글1.addComment(댓글1);
             글2.addComment(댓글2);

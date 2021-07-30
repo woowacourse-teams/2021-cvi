@@ -3,6 +3,10 @@ import { PALETTE } from '../../constants';
 
 const Container = styled.div`
   padding: 2.5rem 8rem 6rem 8rem;
+
+  @media screen and (max-width: 801px) {
+    padding: 3rem 0;
+  }
 `;
 
 const Title = styled.h2`
@@ -27,6 +31,16 @@ const ReviewList = styled.ul`
 
   & > *:not(:last-child) {
     border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+  }
+
+  @media screen and (max-width: 801px) {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+
+    & > li:not(:last-child) {
+      border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+      border-right: none;
+    }
   }
 `;
 

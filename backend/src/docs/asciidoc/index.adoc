@@ -229,7 +229,6 @@ include::{snippets}/post-delete-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/post-delete-failure/http-response.adoc[]
 
-== 좋아요
 === 게시글 좋아요 생성
 ==== 성공
 ===== Request
@@ -259,3 +258,48 @@ include::{snippets}/like-delete-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/like-delete-failure/http-response.adoc[]
+
+=== 게시글 댓글 등록
+==== 성공
+===== Request
+include::{snippets}/comment-create/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-create/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/comment-create-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-create-failure/http-response.adoc[]
+
+=== 게시글 댓글 수정
+==== 성공
+===== Request
+include::{snippets}/comment-update/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-update/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/comment-update-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-update-failure/http-response.adoc[]
+
+=== 게시글 댓글 삭제
+==== 성공
+===== Request
+include::{snippets}/comment-delete/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-delete/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/comment-delete-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-delete-failure/http-response.adoc[]

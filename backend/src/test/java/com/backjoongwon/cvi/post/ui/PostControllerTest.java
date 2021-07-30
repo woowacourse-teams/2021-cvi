@@ -1,8 +1,10 @@
 package com.backjoongwon.cvi.post.ui;
 
-
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
@@ -44,6 +46,7 @@ class PostControllerTest extends ApiDocument {
     private static final Long POST_ID = 1L;
     private static final Long LIKE_ID = 1L;
     private static final String ACCESS_TOKEN = "{ACCESS TOKEN}";
+    private static final Long COMMENT_ID = 1L;
     private static final String BEARER = "Bearer ";
 
     @MockBean
@@ -53,21 +56,38 @@ class PostControllerTest extends ApiDocument {
     private JwtTokenProvider jwtTokenProvider;
 
     private User user;
+    private User anotherUser;
     private PostRequest request;
     private UserResponse userResponse;
+    private List<CommentResponse> commentResponses;
 
     @BeforeEach
     void setUp() {
         user = User.builder()
                 .id(USER_ID)
-                .ageRange(AgeRange.TEENS)
                 .nickname("user")
-                .socialProvider(SocialProvider.NAVER)
+                .ageRange(AgeRange.TEENS)
                 .profileUrl("naver.com/profile")
                 .socialId("{Unique ID received from social provider}")
+                .socialProvider(SocialProvider.NAVER)
                 .build();
+
+        anotherUser = User.builder()
+                .id(USER_ID + 1)
+                .nickname("another_user")
+                .ageRange(AgeRange.TWENTIES)
+                .profileUrl("kakao.com/profile")
+                .socialId("{Unique ID received from social provider}")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
+
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
         userResponse = UserResponse.of(user, null);
+
+        Comment comment = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
+        Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(anotherUser).createdAt(LocalDateTime.now()).build();
+
+        commentResponses = Arrays.asList(CommentResponse.of(comment), CommentResponse.of(comment2));
 
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
@@ -77,7 +97,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(request);
@@ -100,7 +120,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, VaccinationType.PFIZER, LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
         given(postService.findById(any(Long.class), any(RequestUser.class))).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
@@ -126,8 +146,8 @@ class PostControllerTest extends ApiDocument {
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
         List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         );
         willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
         //when
@@ -197,9 +217,9 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineType() throws Exception {
         //given
         willReturn(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(VaccinationType.PFIZER);
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
@@ -212,12 +232,12 @@ class PostControllerTest extends ApiDocument {
     void createLike() throws Exception {
         //given
         PostResponse expectedPostResponse = createPostResponse();
-        LikeResponse likeResponse = new LikeResponse(1L, expectedPostResponse);
+        LikeResponse likeResponse = LikeResponse.from(1L);
         willReturn(likeResponse).given(postService).createLike(any(Long.class), any(RequestUser.class));
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
         //then
-        글_좋아요_생성_성공(actualResponse, expectedPostResponse, 1L);
+        글_좋아요_생성_성공(actualResponse, 1L);
     }
 
     @DisplayName("게시글 좋아요 생성 - 실패 - 게시글이 없는 경우")
@@ -253,6 +273,113 @@ class PostControllerTest extends ApiDocument {
         ResultActions response = 글_좋아요_삭제_요청(LIKE_ID);
         //then
         글_좋아요_삭제_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 등록 - 성공")
+    @Test
+    void createComment() throws Exception {
+        //given
+        CommentResponse expectedResponse = new CommentResponse(1L, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
+        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
+        //then
+        댓글_등록_성공함(response, expectedResponse);
+    }
+
+    @DisplayName("게시글 댓글 등록 - 실패 - 비회원이 댓글을 작성할 때")
+    @Test
+    void createCommentFailureWhenWrongWriter() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
+        //then
+        댓글_등록_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 수정 - 성공")
+    @Test
+    void putComment() throws Exception {
+        //given
+        CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
+        willDoNothing().given(postService).updateComment(anyLong(), anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + ACCESS_TOKEN);
+        //then
+        댓글_수정_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 수정 - 실패 - 작성자가 아닌 사용자가 수정 요청")
+    @Test
+    void putCommentFailureWhenWrongUser() throws Exception {
+        //given
+        CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).updateComment(anyLong(), anyLong(),
+                any(RequestUser.class), any(CommentRequest.class));
+        //when
+        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
+        //then
+        댓글_수정_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 삭제 - 성공")
+    @Test
+    void deleteComment() throws Exception {
+        //given
+        willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        //when
+        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + ACCESS_TOKEN);
+        //then
+        댓글_삭제_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청 ")
+    @Test
+    void deleteCommentWhenWrongUser() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        //when
+        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + "another_user_token");
+        //then
+        댓글_삭제_실패함(response);
+    }
+
+    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, accessToken)
+        );
+    }
+
+    private void 댓글_수정_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-update"));
+    }
+
+    private void 댓글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-update-failure"));
+    }
+
+    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-delete"));
+    }
+
+    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-delete-failure"));
     }
 
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {
@@ -366,10 +493,9 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_좋아요_생성_성공(ResultActions actualResponse, PostResponse postResponse, Long likeId) throws Exception {
+    private void 글_좋아요_생성_성공(ResultActions actualResponse, Long likeId) throws Exception {
         actualResponse.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/api/v1/likes/" + likeId))
-                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("like-create"));
     }
@@ -404,6 +530,26 @@ class PostControllerTest extends ApiDocument {
                 ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
 
         return new PostResponse(1L, userResponse, "내용", 1,
-                1, true, VaccinationType.PFIZER, LocalDateTime.now());
+                1, true, null, VaccinationType.PFIZER, LocalDateTime.now());
+    }
+
+    private ResultActions 댓글_등록_요청(Long postId, CommentRequest request, String headerValue) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, headerValue));
+    }
+
+    private void 댓글_등록_성공함(ResultActions response, CommentResponse expectedResponse) throws Exception {
+        response.andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/v1/comments/" + expectedResponse.getId()))
+                .andDo(print())
+                .andDo(toDocument("comment-create"));
+    }
+
+    private void 댓글_등록_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-create-failure"));
     }
 }
