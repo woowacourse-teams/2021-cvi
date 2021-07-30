@@ -42,10 +42,11 @@ import {
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
+import { useLike } from '../../hooks';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -57,16 +58,18 @@ const ReviewDetailPage = () => {
   const [review, setReview] = useState({});
 
   const getReview = async () => {
-    const response = await getReviewAsync(id);
+    const response = await getReviewAsync(accessToken ? accessToken : '', id);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getReviewAsync');
 
       return;
     }
-
+    console.log(response.data);
     setReview(response.data);
   };
+
+  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -165,12 +168,19 @@ const ReviewDetailPage = () => {
           <Content>{review?.content}</Content>
           <BottomContainer>
             <IconContainer>
-              <LikeIcon width="26" height="26" stroke={FONT_COLOR.BLACK} fill={FONT_COLOR.BLACK} />
-              <div>37</div>
+              <ButtonLike
+                iconWidth="24"
+                iconHeight="24"
+                color={FONT_COLOR.BLACK}
+                likeCountSize="1.6rem"
+                hasLiked={review?.hasLiked}
+                likeCount={review?.likeCount}
+                onClickLike={onClickLike}
+              />
             </IconContainer>
             <IconContainer>
               <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-              <div>12</div>
+              <div>{review?.comments?.length}</div>
             </IconContainer>
           </BottomContainer>
           <Comment>

@@ -57,6 +57,11 @@ const IconContainer = styled.div`
   align-items: center;
 `;
 
+const CreatedAt = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export {
   Container,
   IconContainer,
@@ -67,4 +72,5 @@ export {
   TopContainer,
   BottomContainer,
   InfoContainer,
+  CreatedAt,
 };

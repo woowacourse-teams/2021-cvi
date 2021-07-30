@@ -2,9 +2,11 @@ import { RESPONSE_STATE } from '../constants';
 import {
   requestCreateComment,
   requestCreateReview,
+  requestDeleteLike,
   requestDeleteReview,
   requestGetAllReviewList,
   requestGetSelectedReviewList,
+  requestPostLike,
   requestPostOAuthLogin,
   requestPostSignup,
   requestPutAccount,
@@ -13,9 +15,9 @@ import {
   requestGetReview,
 } from '../requests';
 
-const getAllReviewListAsync = async () => {
+const getAllReviewListAsync = async (accessToken) => {
   try {
-    const response = await requestGetAllReviewList();
+    const response = await requestGetAllReviewList(accessToken);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -31,9 +33,9 @@ const getAllReviewListAsync = async () => {
   }
 };
 
-const getSelectedReviewListAsync = async (selectedVaccination) => {
+const getSelectedReviewListAsync = async (accessToken, selectedVaccination) => {
   try {
-    const response = await requestGetSelectedReviewList(selectedVaccination);
+    const response = await requestGetSelectedReviewList(accessToken, selectedVaccination);
 
     if (!response.ok) {
       // 에러 메시지 넣어달라고 하기
@@ -49,9 +51,9 @@ const getSelectedReviewListAsync = async (selectedVaccination) => {
   }
 };
 
-const getReviewAsync = async (id) => {
+const getReviewAsync = async (accessToken, id) => {
   try {
-    const response = await requestGetReview(id);
+    const response = await requestGetReview(accessToken, id);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -168,8 +170,23 @@ const postCommentAsync = async (accessToken, id, data) => {
     if (!response.ok) {
       throw new Error(await response.text());
     }
-
     return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const postLikeAsync = async (accessToken, postId) => {
+  try {
+    const response = await requestPostLike(accessToken, postId);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
   } catch (error) {
     console.error(JSON.parse(error.message).message);
 
@@ -180,6 +197,22 @@ const postCommentAsync = async (accessToken, id, data) => {
 const deleteCommentAsync = async (accessToken, reviewId, commentId) => {
   try {
     const response = await requestDeleteComment(accessToken, reviewId, commentId);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const deleteLikeAsync = async (accessToken, postId) => {
+  try {
+    const response = await requestDeleteLike(accessToken, postId);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -205,4 +238,6 @@ export {
   putAccountAsync,
   postCommentAsync,
   deleteCommentAsync,
+  postLikeAsync,
+  deleteLikeAsync,
 };

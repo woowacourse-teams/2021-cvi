@@ -1,11 +1,31 @@
 import { BASE_URL } from './constants';
 
-const requestGetAllReviewList = () => fetch(`${BASE_URL}/posts`);
+const requestGetAllReviewList = (accessToken) =>
+  fetch(`${BASE_URL}/posts`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-const requestGetSelectedReviewList = (vaccinationType) =>
-  fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`);
+const requestGetSelectedReviewList = (accessToken, vaccinationType) =>
+  fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-const requestGetReview = (id) => fetch(`${BASE_URL}/posts/${id}`);
+const requestGetReview = (accessToken, id) =>
+  fetch(`${BASE_URL}/posts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
 const requestCreateReview = (accessToken, data) =>
   fetch(`${BASE_URL}/posts`, {
@@ -92,6 +112,24 @@ const requestDeleteComment = (accessToken, reviewId, commentId) =>
     },
   });
 
+const requestPostLike = (accessToken, postId) =>
+  fetch(`${BASE_URL}/posts/${postId}/likes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestDeleteLike = (accessToken, postId) =>
+  fetch(`${BASE_URL}/posts/${postId}/likes`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -105,4 +143,6 @@ export {
   requestPutAccount,
   requestCreateComment,
   requestDeleteComment,
+  requestPostLike,
+  requestDeleteLike,
 };
