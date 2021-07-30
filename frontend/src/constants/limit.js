@@ -3,4 +3,8 @@ const LINE_LIMIT = {
   REVIEW_ITEM: 3,
 };
 
-export { LINE_LIMIT };
+const LENGTH_LIMIT = {
+  COMMENT: 300,
+};
+
+export { LINE_LIMIT, LENGTH_LIMIT };

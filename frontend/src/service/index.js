@@ -1,5 +1,6 @@
 import { RESPONSE_STATE } from '../constants';
 import {
+  requestCreateComment,
   requestCreateReview,
   requestDeleteReview,
   requestGetAllReviewList,
@@ -8,6 +9,8 @@ import {
   requestPostSignup,
   requestPutAccount,
   requestPutReview,
+  requestDeleteComment,
+  requestGetReview,
 } from '../requests';
 
 const getAllReviewListAsync = async () => {
@@ -41,6 +44,22 @@ const getSelectedReviewListAsync = async (selectedVaccination) => {
   } catch (error) {
     // console.error(JSON.parse(error.message).message);
     console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getReviewAsync = async (id) => {
+  try {
+    const response = await requestGetReview(id);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -142,13 +161,48 @@ const putAccountAsync = async (accessToken, data) => {
   }
 };
 
+const postCommentAsync = async (accessToken, id, data) => {
+  try {
+    const response = await requestCreateComment(accessToken, id, data);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const deleteCommentAsync = async (accessToken, reviewId, commentId) => {
+  try {
+    const response = await requestDeleteComment(accessToken, reviewId, commentId);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
 export {
   getAllReviewListAsync,
   getSelectedReviewListAsync,
+  getReviewAsync,
   postReviewAsync,
   putReviewAsync,
   deleteReviewAsync,
   postSignupAsync,
   postOAuthLoginAsync,
   putAccountAsync,
+  postCommentAsync,
+  deleteCommentAsync,
 };

@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Link, NavLink } from 'react-router-dom';
 import { FONT_COLOR, THEME_COLOR } from '../../../constants';
