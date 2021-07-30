@@ -21,7 +21,6 @@ import {
   IconContainer,
   BottomContainer,
   CommentCount,
-  CommentList,
   CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
@@ -48,6 +47,7 @@ import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
 import { useLike } from '../../hooks';
 
+// TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
@@ -58,14 +58,14 @@ const ReviewDetailPage = () => {
   const [review, setReview] = useState({});
 
   const getReview = async () => {
-    const response = await getReviewAsync(accessToken ? accessToken : '', id);
+    const response = await getReviewAsync(accessToken, id);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getReviewAsync');
 
       return;
     }
-    console.log(response.data);
+
     setReview(response.data);
   };
 
@@ -194,18 +194,16 @@ const ReviewDetailPage = () => {
                 getReview={getReview}
               />
             </CommentFormContainer>
-            <CommentList>
-              {review?.comments?.map((comment) => (
-                <CommentItem
-                  key={comment.id}
-                  accessToken={accessToken}
-                  userId={user.id}
-                  reviewId={id}
-                  comment={comment}
-                  getReview={getReview}
-                />
-              ))}
-            </CommentList>
+            {review?.comments?.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                accessToken={accessToken}
+                userId={user.id}
+                reviewId={id}
+                comment={comment}
+                getReview={getReview}
+              />
+            ))}
           </Comment>
         </FrameContent>
       </Frame>

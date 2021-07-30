@@ -15,11 +15,12 @@ import {
 import { toDate } from '../../utils';
 import {
   ALERT_MESSAGE,
+  COMMENT_LIMIT,
   CONFIRM_MESSAGE,
   FONT_COLOR,
-  LENGTH_LIMIT,
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
+  THEME_COLOR,
   TO_DATE_TYPE,
 } from '../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
@@ -51,6 +52,12 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
   };
 
   const editComment = async () => {
+    if (!editedContent.length) {
+      alert(ALERT_MESSAGE.FAIL_TO_FUIFILL_MIN_LENGTH);
+
+      return;
+    }
+
     const data = { content: editedContent };
     const response = await putCommentAsync(accessToken, reviewId, commentId, data);
 
@@ -62,6 +69,8 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
 
     setIsEditable(false);
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
+
+    getReview();
   };
 
   return (
@@ -83,16 +92,28 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
               styles={buttonStyles}
               onClick={() => setIsEditable(!isEditable)}
             >
-              수정
+              {isEditable ? '취소' : '수정'}
             </Button>
-            <Button
-              backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-              color={FONT_COLOR.GRAY}
-              styles={buttonStyles}
-              onClick={deleteComment}
-            >
-              삭제
-            </Button>
+
+            {isEditable ? (
+              <Button
+                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                color={THEME_COLOR.PRIMARY}
+                styles={buttonStyles}
+                onClick={editComment}
+              >
+                완료
+              </Button>
+            ) : (
+              <Button
+                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                color={FONT_COLOR.GRAY}
+                styles={buttonStyles}
+                onClick={deleteComment}
+              >
+                삭제
+              </Button>
+            )}
           </UpdateButtonContainer>
         )}
       </InfoContainer>
@@ -100,13 +121,13 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
         <>
           <TextArea
             value={editedContent}
-            maxLength={LENGTH_LIMIT.COMMENT}
+            minLength={COMMENT_LIMIT.MIN_LEGNTH}
+            maxLength={COMMENT_LIMIT.MAX_LEGNTH}
             onChange={(event) => setEditedContent(event.target.value)}
           />
-          <Button onClick={editComment}>수정 완료</Button>
         </>
       ) : (
-        <Content>{editedContent}</Content>
+        <Content>{content}</Content>
       )}
     </Container>
   );

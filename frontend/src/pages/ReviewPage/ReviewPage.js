@@ -39,7 +39,7 @@ const ReviewPage = () => {
 
   const getReviewList = async () => {
     if (selectedTab === '전체') {
-      const response = await getAllReviewListAsync(accessToken ? accessToken : '');
+      const response = await getAllReviewListAsync(accessToken);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getAllReviewListAsync');
@@ -50,10 +50,7 @@ const ReviewPage = () => {
       setReviewList(response.data);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedTab);
-      const response = await getSelectedReviewListAsync(
-        accessToken ? accessToken : '',
-        vaccinationType,
-      );
+      const response = await getSelectedReviewListAsync(accessToken, vaccinationType);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getSelectedReviewListAsync');
