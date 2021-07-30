@@ -4,7 +4,10 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.user.domain.*;
+import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
+import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,8 +81,7 @@ public class UserServiceTest {
         UserResponse signup = userService.signup(userRequest);
         willReturn("1").given(jwtTokenProvider).getPayload("VALID_ACCESS_TOKEN");
         //when
-        RequestUser requestUser = RequestUser.of(signup.getId());
-        UserResponse user = userService.findUser(requestUser);
+        User user = userService.findUserById(signup.getId());
         //then
         assertThat(user.getNickname()).isEqualTo("인비");
         assertThat(user.getAgeRange().getMeaning()).isEqualTo(AgeRange.TEENS.getMeaning());
@@ -124,12 +126,12 @@ public class UserServiceTest {
     void update() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(signupResponse.getId());
+        User user = userService.findUserById(signupResponse.getId());
         //when
         UserRequest updateRequest = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
-        userService.update(requestUser, updateRequest);
+        userService.update(Optional.of(user), updateRequest);
         //then
-        User updatedUser = userRepository.findById(requestUser.getId())
+        User updatedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
@@ -140,12 +142,12 @@ public class UserServiceTest {
     void updateNicknameToSameNickname() {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(signupResponse.getId());
+        User user = userService.findUserById(signupResponse.getId());
         UserRequest updateRequest = new UserRequest("인비", AgeRange.THIRTIES, null, null, null);
         //when
-        userService.update(requestUser, updateRequest);
+        userService.update(Optional.of(user), updateRequest);
         //then
-        User updatedUser = userRepository.findById(requestUser.getId())
+        User updatedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getNickname()).isEqualTo(userRequest.getNickname());
@@ -156,20 +158,20 @@ public class UserServiceTest {
     void updateFailureWhenNicknameDuplicate() {
         //given
         UserResponse signupResponse1 = userService.signup(userRequest);
-        RequestUser requestUser1 = RequestUser.of(signupResponse1.getId());
+        User user1 = userService.findUserById(signupResponse1.getId());
         UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
-        RequestUser requestUser2 = RequestUser.of(signupResponse2.getId());
+        User user2 = userService.findUserById(signupResponse2.getId());
 
         UserRequest updateRequest = UserRequest.builder()
                 .nickname("인비")
                 .ageRange(AgeRange.FIFTIES)
                 .build();
         //when
-        assertThatThrownBy(() -> userService.update(requestUser2, updateRequest))
+        assertThatThrownBy(() -> userService.update(Optional.of(user2), updateRequest))
                 .isInstanceOf(DuplicateException.class);
         //then
-        User notUpdatedUser1 = userRepository.findById(requestUser1.getId())
+        User notUpdatedUser1 = userRepository.findById(user1.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(notUpdatedUser1.getNickname()).isEqualTo(userRequest.getNickname());
@@ -187,12 +189,11 @@ public class UserServiceTest {
     void updateFailureWhenNotExists() {
         //given
         Long lastIndex = getLastIndex();
-        RequestUser requestUser = RequestUser.of(lastIndex + 1L);
         //when
         UserRequest updateRequest = new UserRequest(null, null, null, null, null);
         //then
-        assertThatThrownBy(() -> userService.update(requestUser, updateRequest))
-                .isInstanceOf(NotFoundException.class);
+        assertThatThrownBy(() -> userService.update(Optional.empty(), updateRequest))
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("사용자 삭제 - 성공")
@@ -200,11 +201,11 @@ public class UserServiceTest {
     void delete() {
         //given
         UserResponse userResponse = userService.signup(userRequest);
-        RequestUser requestUser = RequestUser.of(userResponse.getId());
+        User user = userService.findUserById(userResponse.getId());
         //when
-        userService.delete(requestUser);
+        userService.delete(Optional.of(user));
         //then
-        Optional<User> foundUser = userRepository.findById(requestUser.getId());
+        Optional<User> foundUser = userRepository.findById(user.getId());
         assertThat(foundUser).isEmpty();
     }
 
@@ -212,12 +213,10 @@ public class UserServiceTest {
     @Test
     void deleteFailureWhenNotExists() {
         //given
-        Long lastIndex = getLastIndex();
-        RequestUser requestUser = RequestUser.of(lastIndex + 1L);
         //when
         //then
-        assertThatThrownBy(() -> userService.delete(requestUser))
-                .isInstanceOf(NotFoundException.class);
+        assertThatThrownBy(() -> userService.delete(Optional.empty()))
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     private Long getLastIndex() {

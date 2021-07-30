@@ -22,22 +22,18 @@ import java.util.Objects;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
 
+    @Embedded
+    private final Likes likes = new Likes();
+    @Embedded
+    private final Comments comments = new Comments();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
     @Lob
     private String content;
     private int viewCount;
-
     @Enumerated(value = EnumType.STRING)
     private VaccinationType vaccinationType;
-
-    @Embedded
-    private final Likes likes = new Likes();
-
-    @Embedded
-    private final Comments comments = new Comments();
 
     @Builder
     public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
@@ -89,8 +85,8 @@ public class Post extends BaseEntity {
         likes.add(like);
     }
 
-    public void deleteLike(Long likeId, Long userId) {
-        likes.delete(likeId, userId);
+    public void deleteLike(Long userId) {
+        likes.delete(userId);
     }
 
     public int getLikesCount() {

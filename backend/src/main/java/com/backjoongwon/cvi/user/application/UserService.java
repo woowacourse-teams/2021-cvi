@@ -3,9 +3,9 @@ package com.backjoongwon.cvi.user.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
@@ -13,6 +13,8 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -39,24 +41,24 @@ public class UserService {
         return UserResponse.of(findUserById(id), null);
     }
 
-    public UserResponse findUser(RequestUser user) {
-        user.validateSignedin();
+    public UserResponse findUser(Optional<User> optionalUser) {
+        User user = validateSignedinAndGetUser(optionalUser);
         return UserResponse.of(findUserById(user.getId()), null);
     }
 
-    private User findUserById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
     }
 
     @Transactional
-    public void update(RequestUser user, UserRequest userRequest) {
-        User foundUser = findUserById(user.getId());
-        String nickname = foundUser.getNickname();
+    public void update(Optional<User> optionalUser, UserRequest userRequest) {
+        User user = validateSignedinAndGetUser(optionalUser);
+        String nickname = user.getNickname();
         if (!nickname.equals(userRequest.getNickname())) {
             validateDuplicateNickname(userRequest.getNickname());
         }
-        foundUser.update(userRequest.toEntity());
+        user.update(userRequest.toEntity());
     }
 
     private void validateDuplicateNickname(String nickname) {
@@ -66,11 +68,16 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(RequestUser user) {
+    public void delete(Optional<User> optionalUser) {
+        User user = validateSignedinAndGetUser(optionalUser);
         if (!userRepository.existsById(user.getId())) {
             throw new NotFoundException("해당 id의 사용자가 없습니다.");
         }
         postRepository.deleteAllByUserId(user.getId());
         userRepository.deleteById(user.getId());
+    }
+
+    private User validateSignedinAndGetUser(Optional<User> optionalUser) {
+        return optionalUser.orElseThrow(() -> new UnAuthorizedException("인증되지 않은 사용자입니다."));
     }
 }
