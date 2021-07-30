@@ -111,6 +111,8 @@ class PostServiceTest {
         likeResponse = postService.createLike(post.getId(), optionalUser);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
+        postService.createComment(post.getId(), optionalUser, commentRequest);
+        postService.createComment(post.getId(), optionalUser, commentRequest);
         resetEntityManager();
     }
 
@@ -304,7 +306,7 @@ class PostServiceTest {
         postService.createLike(post.getId(), optionalAnotherUser);
         resetEntityManager();
         //then
-        Post post = getPost();
+        Post post = getPostWithLikesById();
         assertThat(post.getLikesCount()).isEqualTo(2);
     }
 
@@ -367,7 +369,7 @@ class PostServiceTest {
         em.close();
     }
 
-    private Post getPost() {
+    private Post getPostWithLikesById() {
         return postRepository.findWithLikesById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
@@ -377,11 +379,15 @@ class PostServiceTest {
     void createComment() {
         //given
         //when
-        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
+        CommentRequest newCommentRequest = new CommentRequest("새로운 댓글 내용");
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalAnotherUser, newCommentRequest);
+        resetEntityManager();
+        Post foundPost = postRepository.findWithCommentsById(post.getId())
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
-        assertThat(commentResponse.getContent()).isEqualTo(commentRequest.getContent());
-        assertThat(commentResponse.getWriter().getId()).isEqualTo(user.getId());
-        assertThat(post.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
+        assertThat(commentResponse.getContent()).isEqualTo(newCommentRequest.getContent());
+        assertThat(commentResponse.getWriter().getId()).isEqualTo(anotherUser.getId());
+        assertThat(foundPost.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
     }
 
     @DisplayName("댓글 생성 - 실패 - 비회원 댓글 작성 시도")
