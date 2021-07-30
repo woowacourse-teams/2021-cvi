@@ -19,19 +19,16 @@ import {
   RESPONSE_STATE,
   TO_DATE_TYPE,
 } from '../../constants';
-import { useSelector } from 'react-redux';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import { deleteCommentAsync } from '../../service';
 
-const CommentItem = ({ reviewId, comment }) => {
-  const { id, writer, content, createdAt } = comment;
-  const user = useSelector((state) => state.authReducer.user);
-  const accessToken = useSelector((state) => state.authReducer.accessToken);
+const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
+  const { id: commentId, writer, content, createdAt } = comment;
 
   const deleteComment = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_COMMENT)) return;
 
-    const response = await deleteCommentAsync(accessToken, reviewId, id);
+    const response = await deleteCommentAsync(accessToken, reviewId, commentId);
 
     if (!response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_DELETE_COMMENT);
@@ -39,7 +36,7 @@ const CommentItem = ({ reviewId, comment }) => {
       return;
     }
 
-    location.reload();
+    getReview();
   };
 
   return (
@@ -53,7 +50,7 @@ const CommentItem = ({ reviewId, comment }) => {
           </Writer>
           <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
         </Info>
-        {user.id === writer.id && (
+        {userId === writer.id && (
           <UpdateButtonContainer>
             <Button
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
@@ -79,9 +76,11 @@ const CommentItem = ({ reviewId, comment }) => {
 };
 
 CommentItem.propTypes = {
-  // TODO: 풀어서 쓰기
-  comment: PropTypes.object.isRequired,
+  accessToken: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
   reviewId: PropTypes.string.isRequired,
+  comment: PropTypes.object.isRequired,
+  getReview: PropTypes.func.isRequired,
 };
 
 export default CommentItem;

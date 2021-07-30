@@ -11,17 +11,16 @@ import {
 } from '../../constants';
 import { useState } from 'react';
 import { postCommentAsync } from '../../service';
-import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-const CommentForm = ({ accessToken, nickname, socialProfileUrl }) => {
+// TODO: 댓글 최적화
+const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getReview }) => {
   const [content, setContent] = useState('');
-  const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
 
   const createComment = async () => {
     const data = { content };
-    const response = await postCommentAsync(accessToken, id, data);
+    const response = await postCommentAsync(accessToken, reviewId, data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_CREATE_COMMENT);
@@ -30,7 +29,8 @@ const CommentForm = ({ accessToken, nickname, socialProfileUrl }) => {
     }
 
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
-    location.reload();
+    getReview();
+    setContent('');
   };
 
   return (
@@ -57,6 +57,7 @@ const CommentForm = ({ accessToken, nickname, socialProfileUrl }) => {
 
 CommentForm.propTypes = {
   accessToken: PropTypes.string.isRequired,
+  getReview: PropTypes.func.isRequired,
   nickname: PropTypes.string.isRequired,
   reviewId: PropTypes.string.isRequired,
   socialProfileUrl: PropTypes.string.isRequired,

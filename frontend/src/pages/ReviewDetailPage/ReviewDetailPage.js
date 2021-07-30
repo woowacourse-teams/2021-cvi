@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import {
@@ -15,7 +16,6 @@ import {
   CreatedAt,
   Content,
   ViewCount,
-  Error,
   buttonStyles,
   Comment,
   IconContainer,
@@ -25,13 +25,10 @@ import {
   CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
-import { useFetch } from '../../hooks';
-import { requestGetReview } from '../../requests';
 import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
-  ERROR_MESSAGE,
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
@@ -46,7 +43,7 @@ import {
 } from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
-import { deleteReviewAsync } from '../../service';
+import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
 
@@ -56,7 +53,20 @@ const ReviewDetailPage = () => {
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
-  const { response: review, error } = useFetch({}, () => requestGetReview(id));
+
+  const [review, setReview] = useState({});
+
+  const getReview = async () => {
+    const response = await getReviewAsync(id);
+
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert('failure - getReviewAsync');
+
+      return;
+    }
+
+    setReview(response.data);
+  };
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -84,65 +94,9 @@ const ReviewDetailPage = () => {
     goReviewPage();
   };
 
-  if (error) {
-    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
-  }
-
-  const commentList = [
-    {
-      id: 1,
-      writer: {
-        id: 1,
-        nickname: 'test_user1',
-        ageRange: {
-          meaning: '10대',
-          minAge: 10,
-          maxAge: 20,
-        },
-        shotVerified: false,
-        accessToken: null,
-        socialProvider: 'NAVER',
-        socialId: '{Unique ID received from social provider}',
-        socialProfileUrl: user.socialProfileUrl,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-29T19:23:38.959',
-    },
-    {
-      id: 2,
-      writer: {
-        id: 2,
-        nickname: 'test_user2',
-        ageRange: {
-          meaning: '20대',
-          minAge: 20,
-          maxAge: 30,
-        },
-        shotVerified: true,
-        accessToken: null,
-        socialProvider: 'KAKAO',
-        socialId: '{Unique ID received from social provider}',
-        socialProfileUrl: user.socialProfileUrl,
-      },
-      content:
-        '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 ',
-      createdAt: '2021-07-29T19:23:38.959',
-    },
-    {
-      id: 3,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: 'test_user3',
-        ageRange: {
-          meaning: '20대',
-        },
-        shotVerified: false,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-  ];
+  useEffect(() => {
+    getReview();
+  }, []);
 
   return (
     <Container>
@@ -224,13 +178,22 @@ const ReviewDetailPage = () => {
             <CommentFormContainer>
               <CommentForm
                 accessToken={accessToken}
+                reviewId={id}
                 nickname={user.nickname}
                 socialProfileUrl={user.socialProfileUrl}
+                getReview={getReview}
               />
             </CommentFormContainer>
             <CommentList>
               {review?.comments?.map((comment) => (
-                <CommentItem key={comment.id} comment={comment} reviewId={id} />
+                <CommentItem
+                  key={comment.id}
+                  accessToken={accessToken}
+                  userId={user.id}
+                  reviewId={id}
+                  comment={comment}
+                  getReview={getReview}
+                />
               ))}
             </CommentList>
           </Comment>

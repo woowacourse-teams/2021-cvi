@@ -10,6 +10,7 @@ import {
   requestPutAccount,
   requestPutReview,
   requestDeleteComment,
+  requestGetReview,
 } from '../requests';
 
 const getAllReviewListAsync = async () => {
@@ -43,6 +44,22 @@ const getSelectedReviewListAsync = async (selectedVaccination) => {
   } catch (error) {
     // console.error(JSON.parse(error.message).message);
     console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getReviewAsync = async (id) => {
+  try {
+    const response = await requestGetReview(id);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
 
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
@@ -179,6 +196,7 @@ const deleteCommentAsync = async (accessToken, reviewId, commentId) => {
 export {
   getAllReviewListAsync,
   getSelectedReviewListAsync,
+  getReviewAsync,
   postReviewAsync,
   putReviewAsync,
   deleteReviewAsync,
