@@ -1,4 +1,5 @@
 import Button from './Button/Button';
+import ButtonLike from './ButtonLike/ButtonLike';
 import Frame from './Frame/Frame';
 import Input from './Input/Input';
 import Label from './Label/Label';
@@ -14,6 +15,7 @@ export {
   Avatar,
   BaseLayout,
   Button,
+  ButtonLike,
   Frame,
   Input,
   Label,

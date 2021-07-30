@@ -229,7 +229,8 @@ class UserControllerTest extends ApiDocument {
         //then
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
-//
+
+    //
 //    @DisplayName("내가 좋아요 한 글 조회 - 성공")
 //    @Test
 //    void findMyPostsWhenFilterIsLikes() throws Exception {

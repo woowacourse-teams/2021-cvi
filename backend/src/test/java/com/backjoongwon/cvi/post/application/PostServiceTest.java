@@ -154,6 +154,8 @@ class PostServiceTest {
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
 
+        postService.createComment(post1.getId(), optionalUser1, commentRequest);
+        postService.createComment(post1.getId(), optionalUser2, commentRequest);
         resetEntityManager();
     }
 
@@ -338,7 +340,7 @@ class PostServiceTest {
         //when
         postService.createLike(post1.getId(), optionalAnotherUser);
         //then
-        Post post = getPost1();
+        Post post = getPostWithLikesById(post1.getId());
         assertThat(post.getLikesCount()).isEqualTo(3);
     }
 
@@ -401,8 +403,8 @@ class PostServiceTest {
         em.close();
     }
 
-    private Post getPost1() {
-        return postRepository.findWithLikesById(post1.getId())
+    private Post getPostWithLikesById(Long id) {
+        return postRepository.findWithLikesById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
@@ -517,7 +519,7 @@ class PostServiceTest {
         assertThat(postResponses.get(1).getContent()).isEqualTo("Test Content111");
         assertThat(postResponses.get(1).getLikeCount()).isEqualTo(2);
 
-        assertThat(postResponses.get(1).getComments()).hasSize(2);
+        assertThat(postResponses.get(1).getComments()).hasSize(4);
         assertThat(postResponses.get(1).getComments().get(0).getId()).isEqualTo(comment1.getId());
     }
 
@@ -529,4 +531,24 @@ class PostServiceTest {
 //        List<PostResponse> byUserAndFilter = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
 //        //then
 //    }
+
+    @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
+    @Test
+    void hasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post1.getId(), optionalUser1);
+        //then
+        assertThat(postResponse.isHasLiked()).isTrue();
+    }
+
+    @DisplayName("게시글에 좋아요를 누르지 않은 사람이 해당 글을 조회하면 hasLiked값이 false로 조회된다.")
+    @Test
+    void notHasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post1.getId(), optionalAnotherUser);
+        //then
+        assertThat(postResponse.isHasLiked()).isFalse();
+    }
 }

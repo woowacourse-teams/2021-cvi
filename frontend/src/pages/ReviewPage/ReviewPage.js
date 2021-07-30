@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { VACCINATION, PATH, RESPONSE_STATE } from '../../constants';
+import { VACCINATION, PATH, RESPONSE_STATE, ALERT_MESSAGE } from '../../constants';
 import { Container, Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { ReviewItem, ReviewWritingModal } from '../../components';
 
 const ReviewPage = () => {
   const history = useHistory();
-  const isLogin = !!useSelector((state) => state.authReducer?.accessToken);
+  const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
@@ -28,20 +28,18 @@ const ReviewPage = () => {
   };
 
   const onClickButton = () => {
-    if (isLogin) {
+    if (accessToken) {
       setModalOpen(true);
     } else {
-      if (window.confirm('로그인이 필요합니다.')) {
-        goLoginPage();
-      } else {
-        return;
-      }
+      if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
+
+      goLoginPage();
     }
   };
 
   const getReviewList = async () => {
     if (selectedTab === '전체') {
-      const response = await getAllReviewListAsync();
+      const response = await getAllReviewListAsync(accessToken);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getAllReviewListAsync');
@@ -52,7 +50,7 @@ const ReviewPage = () => {
       setReviewList(response.data);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedTab);
-      const response = await getSelectedReviewListAsync(vaccinationType);
+      const response = await getSelectedReviewListAsync(accessToken, vaccinationType);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getSelectedReviewListAsync');
@@ -85,6 +83,8 @@ const ReviewPage = () => {
                 <ReviewItem
                   key={review.id}
                   review={review}
+                  accessToken={accessToken}
+                  getReviewList={getReviewList}
                   onClick={() => goReviewDetailPage(review.id)}
                 />
               ))}

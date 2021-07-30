@@ -16,6 +16,10 @@ const MyPageShotVerification = () => {
     formData.append('file', event.target.files[0]);
   };
 
+  const verifyShot = () => {
+    alert('준비 중인 서비스입니다.');
+  };
+
   return (
     <Container>
       <Title>접종 인증</Title>
@@ -26,7 +30,7 @@ const MyPageShotVerification = () => {
           <Input type="file" onChange={onChange} />
         </div>
       </Content>
-      <Button sizeType={BUTTON_SIZE_TYPE.LARGE} styles={buttonStyles}>
+      <Button sizeType={BUTTON_SIZE_TYPE.LARGE} styles={buttonStyles} onClick={verifyShot}>
         인증하기
       </Button>
     </Container>

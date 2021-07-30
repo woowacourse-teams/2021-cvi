@@ -171,7 +171,6 @@ include::{snippets}/user-update-failure/http-request.adoc[]
 include::{snippets}/user-update-failure/http-response.adoc[]
 
 
-
 === 사용자 삭제
 ==== 성공
 ===== Request
