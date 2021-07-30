@@ -1038,7 +1038,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/posts/1
 Content-Type: application/json
-Content-Length: 523
+Content-Length: 543
 
 {
   "id" : 1,
@@ -1060,8 +1060,9 @@ Content-Length: 523
   "viewCount" : 0,
   "likeCount" : 0,
   "hasLiked" : false,
+  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.663"
+  "createdAt" : "2021-07-30T12:37:45.893"
 }</code></pre>
 </div>
 </div>
@@ -1128,7 +1129,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1056
+Content-Length: 2035
 
 [ {
   "id" : 2,
@@ -1150,8 +1151,45 @@ Content-Length: 1056
   "viewCount" : 12,
   "likeCount" : 0,
   "hasLiked" : false,
+  "comments" : [ {
+    "id" : 1,
+    "writer" : {
+      "id" : 1,
+      "nickname" : "user",
+      "ageRange" : {
+        "meaning" : "10대",
+        "minAge" : 10,
+        "maxAge" : 20
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "NAVER",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "naver.com/profile"
+    },
+    "content" : "댓글1",
+    "createdAt" : "2021-07-30T10:58:26.067"
+  }, {
+    "id" : 2,
+    "writer" : {
+      "id" : 2,
+      "nickname" : "another_user",
+      "ageRange" : {
+        "meaning" : "20대",
+        "minAge" : 20,
+        "maxAge" : 30
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "KAKAO",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "kakao.com/profile"
+    },
+    "content" : "댓글2",
+    "createdAt" : "2021-07-30T10:58:26.067"
+  } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-07-29T16:20:50.293"
+  "createdAt" : "2021-07-30T10:58:26.068"
 }, {
   "id" : 1,
   "writer" : {
@@ -1172,8 +1210,9 @@ Content-Length: 1056
   "viewCount" : 55,
   "likeCount" : 5,
   "hasLiked" : true,
+  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-28T16:20:50.293"
+  "createdAt" : "2021-07-29T10:58:26.068"
 } ]</code></pre>
 </div>
 </div>
@@ -1231,7 +1270,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 523
+Content-Length: 1482
 
 {
   "id" : 1,
@@ -1253,8 +1292,45 @@ Content-Length: 523
   "viewCount" : 1,
   "likeCount" : 0,
   "hasLiked" : false,
+  "comments" : [ {
+    "id" : 1,
+    "writer" : {
+      "id" : 1,
+      "nickname" : "user",
+      "ageRange" : {
+        "meaning" : "10대",
+        "minAge" : 10,
+        "maxAge" : 20
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "NAVER",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "naver.com/profile"
+    },
+    "content" : "댓글1",
+    "createdAt" : "2021-07-30T10:58:26.211"
+  }, {
+    "id" : 2,
+    "writer" : {
+      "id" : 2,
+      "nickname" : "another_user",
+      "ageRange" : {
+        "meaning" : "20대",
+        "minAge" : 20,
+        "maxAge" : 30
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "KAKAO",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "kakao.com/profile"
+    },
+    "content" : "댓글2",
+    "createdAt" : "2021-07-30T10:58:26.211"
+  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.481"
+  "createdAt" : "2021-07-30T10:58:26.212"
 }</code></pre>
 </div>
 </div>
@@ -1313,75 +1389,9 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1625
+Content-Length: 3
 
-[ {
-  "id" : 1,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "user",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "NAVER",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "naver.com/profile"
-  },
-  "content" : "이건 내용입니다.",
-  "viewCount" : 100,
-  "likeCount" : 10,
-  "hasLiked" : true,
-  "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.558"
-}, {
-  "id" : 2,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "user",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "NAVER",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "naver.com/profile"
-  },
-  "content" : "이건 내용입니다.2",
-  "viewCount" : 200,
-  "likeCount" : 20,
-  "hasLiked" : false,
-  "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.558"
-}, {
-  "id" : 3,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "user",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "NAVER",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "naver.com/profile"
-  },
-  "content" : "이건 내용입니다.3",
-  "viewCount" : 300,
-  "likeCount" : 30,
-  "hasLiked" : true,
-  "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.558"
-} ]</code></pre>
+[ ]</code></pre>
 </div>
 </div>
 </div>
@@ -1547,33 +1557,7 @@ Host: localhost</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Location: /api/v1/likes/1
-Content-Type: application/json
-Content-Length: 501
-
-{
-  "id" : 1,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "인비",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : true,
-    "accessToken" : "{ACCESS TOKEN}",
-    "socialProvider" : "NAVER",
-    "socialId" : "naver_id",
-    "socialProfileUrl" : "http://naver_url.com"
-  },
-  "content" : "내용",
-  "viewCount" : 1,
-  "likeCount" : 1,
-  "hasLiked" : true,
-  "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T16:20:50.636"
-}</code></pre>
+Location: /api/v1/likes/1</code></pre>
 </div>
 </div>
 </div>
@@ -1718,7 +1702,7 @@ Content-Length: 464
     "socialProfileUrl" : "naver.com/profile"
   },
   "content" : "좋은 정보 공유 감사해요 ㅎㅎㅎ",
-  "createdAt" : "2021-07-29T16:20:50.226"
+  "createdAt" : "2021-07-30T12:37:45.252"
 }</code></pre>
 </div>
 </div>
@@ -1892,7 +1876,7 @@ Content-Length: 53
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-29 16:20:44 +0900
+Last updated 2021-07-30 11:31:18 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
