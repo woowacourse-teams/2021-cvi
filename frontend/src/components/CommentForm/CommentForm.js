@@ -33,6 +33,7 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
     setContent('');
   };
 
+  // TODO: 글자 수 300 넘어가면 alert
   return (
     <Container>
       <User>
