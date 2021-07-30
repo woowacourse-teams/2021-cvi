@@ -12,6 +12,7 @@ const Button = ({
   selectedStyles,
   styles,
   type,
+  disabled,
   onClick,
 }) => (
   <Container
@@ -23,6 +24,7 @@ const Button = ({
     selectedStyles={selectedStyles}
     styles={styles}
     type={type}
+    disabled={disabled}
     onClick={onClick}
   >
     {children}
@@ -39,6 +41,7 @@ Button.propTypes = {
   selectedStyles: PropTypes.object,
   styles: PropTypes.object,
   type: PropTypes.string,
+  disabled: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
@@ -51,6 +54,7 @@ Button.defaultProps = {
   selectedStyles: null,
   styles: null,
   type: 'submit',
+  disabled: false,
   onClick: () => {},
 };
 

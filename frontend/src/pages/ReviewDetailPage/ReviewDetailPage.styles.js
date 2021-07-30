@@ -120,18 +120,6 @@ const CommentCount = styled.div`
   font-weight: 500;
 `;
 
-const CommentList = styled.div`
-  border-top: 0.1rem solid ${PALETTE.NAVY100};
-
-  & > *:not(:last-child) {
-    border-bottom: 0.1rem solid ${PALETTE.NAVY100};
-  }
-
-  & > * {
-    padding: 2rem 3rem;
-  }
-`;
-
 const CommentFormContainer = styled.div`
   padding: 2rem 3rem;
 `;
@@ -157,6 +145,5 @@ export {
   IconContainer,
   BottomContainer,
   CommentCount,
-  CommentList,
   CommentFormContainer,
 };

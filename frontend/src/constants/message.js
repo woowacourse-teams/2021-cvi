@@ -14,6 +14,8 @@ const ALERT_MESSAGE = {
   FAIL_TO_DELETE_COMMENT: '댓글을 삭제할 수 없습니다.',
   FAIL_TO_SERVER: '오류가 발생했습니다. 다시 한 번 시도해주세요.',
   FAIL_TO_EDIT_ACCOUNT: '내 정보를 수정할 수 없습니다.',
+  FAIL_TO_FUIFILL_MIN_LENGTH: '최소 1자 이상 입력해야 합니다.',
+  NEED_LOGIN: '로그인이 필요한 서비스입니다.',
 };
 
 const SNACKBAR_MESSAGE = {

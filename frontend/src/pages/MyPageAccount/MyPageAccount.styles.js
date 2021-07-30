@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -49,4 +50,28 @@ const buttonStyles = css`
   border-radius: 2.6rem;
 `;
 
-export { Container, Title, ProfileImage, InfoContainer, Info, AgeRange, buttonStyles };
+const disabledStyles = css`
+  margin: 4rem auto;
+  width: 51.5rem;
+  height: 5.2rem;
+  border-radius: 2.6rem;
+  background-color: ${FONT_COLOR.LIGHT_GRAY};
+  border: 0.1rem solid ${FONT_COLOR.LIGHT_GRAY};
+  color: rgba(255, 255, 255, 0.6);
+
+  &:hover {
+    background-color: ${FONT_COLOR.LIGHT_GRAY};
+    border: 0.1rem solid ${FONT_COLOR.LIGHT_GRAY};
+  }
+`;
+
+export {
+  Container,
+  Title,
+  ProfileImage,
+  InfoContainer,
+  Info,
+  AgeRange,
+  buttonStyles,
+  disabledStyles,
+};

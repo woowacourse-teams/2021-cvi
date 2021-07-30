@@ -1,11 +1,13 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  border-top: 0.1rem solid ${PALETTE.NAVY100};
+  padding: 2rem 3rem;
 `;
 
 const InfoContainer = styled.div`

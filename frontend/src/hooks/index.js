@@ -1,3 +1,4 @@
 import useFetch from './useFetch';
+import useLike from './useLike';
 
-export { useFetch };
+export { useFetch, useLike };

@@ -21,7 +21,6 @@ import {
   IconContainer,
   BottomContainer,
   CommentCount,
-  CommentList,
   CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
@@ -42,11 +41,13 @@ import {
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
+import { useLike } from '../../hooks';
 
+// TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
@@ -57,7 +58,7 @@ const ReviewDetailPage = () => {
   const [review, setReview] = useState({});
 
   const getReview = async () => {
-    const response = await getReviewAsync(id);
+    const response = await getReviewAsync(accessToken, id);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getReviewAsync');
@@ -67,6 +68,8 @@ const ReviewDetailPage = () => {
 
     setReview(response.data);
   };
+
+  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -165,12 +168,19 @@ const ReviewDetailPage = () => {
           <Content>{review?.content}</Content>
           <BottomContainer>
             <IconContainer>
-              <LikeIcon width="26" height="26" stroke={FONT_COLOR.BLACK} fill={FONT_COLOR.BLACK} />
-              <div>37</div>
+              <ButtonLike
+                iconWidth="24"
+                iconHeight="24"
+                color={FONT_COLOR.BLACK}
+                likeCountSize="1.6rem"
+                hasLiked={review?.hasLiked}
+                likeCount={review?.likeCount}
+                onClickLike={onClickLike}
+              />
             </IconContainer>
             <IconContainer>
               <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-              <div>12</div>
+              <div>{review?.comments?.length}</div>
             </IconContainer>
           </BottomContainer>
           <Comment>
@@ -184,18 +194,16 @@ const ReviewDetailPage = () => {
                 getReview={getReview}
               />
             </CommentFormContainer>
-            <CommentList>
-              {review?.comments?.map((comment) => (
-                <CommentItem
-                  key={comment.id}
-                  accessToken={accessToken}
-                  userId={user.id}
-                  reviewId={id}
-                  comment={comment}
-                  getReview={getReview}
-                />
-              ))}
-            </CommentList>
+            {review?.comments?.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                accessToken={accessToken}
+                userId={user.id}
+                reviewId={id}
+                comment={comment}
+                getReview={getReview}
+              />
+            ))}
           </Comment>
         </FrameContent>
       </Frame>
