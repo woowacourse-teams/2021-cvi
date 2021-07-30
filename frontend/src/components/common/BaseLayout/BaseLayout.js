@@ -28,7 +28,7 @@ const BaseLayout = ({ children }) => {
     <Container>
       <SideBar />
       <SideBarMobile isOpenSideBar={isOpenSideBar} setIsOpenSideBar={setIsOpenSideBar} />
-      <NavBar isOpenSideBar={isOpenSideBar}>
+      <NavBar isOpenSideBar={false}>
         <Button
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
           styles={css`
@@ -39,7 +39,11 @@ const BaseLayout = ({ children }) => {
           <MenuIcon width="36" height="36" stroke={THEME_COLOR.PRIMARY} />
         </Button>
         <LogoIcon width="56" fill={THEME_COLOR.PRIMARY} />
-        {isLogin && <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />}
+        {isLogin ? (
+          <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+        ) : (
+          <div style={{ minWidth: '3.6rem' }} />
+        )}
       </NavBar>
       <MainContainer>
         {!location.pathname.includes(PATH.MY_PAGE) && (
