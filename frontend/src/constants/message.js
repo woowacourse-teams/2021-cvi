@@ -10,6 +10,7 @@ const ALERT_MESSAGE = {
   FAIL_TO_EDIT_REVIEW: '후기를 수정할 수 없습니다.',
   FAIL_TO_DELETE_REVIEW: '후기를 삭제할 수 없습니다.',
   FAIL_TO_CREATE_COMMENT: '댓글을 작성할 수 없습니다.',
+  FAIL_TO_EDIT_COMMENT: '댓글을 수정할 수 없습니다.',
   FAIL_TO_DELETE_COMMENT: '댓글을 삭제할 수 없습니다.',
   FAIL_TO_SERVER: '오류가 발생했습니다. 다시 한 번 시도해주세요.',
   FAIL_TO_EDIT_ACCOUNT: '내 정보를 수정할 수 없습니다.',
@@ -23,10 +24,11 @@ const SNACKBAR_MESSAGE = {
   SUCCESS_TO_DELETE_REVIEW: '후기를 삭제했습니다.',
   SUCCESS_TO_EDIT_ACCOUNT: '내 정보를 수정했습니다.',
   SUCCESS_TO_CREATE_COMMENT: '댓글을 작성했습니다.',
+  SUCCESS_TO_EDIT_COMMENT: '댓글을 수정했습니다.',
 };
 
 const CONFIRM_MESSAGE = {
-  DELETE_REVIEW: '리뷰를 삭제하시겠습니까?',
+  DELETE_REVIEW: '후기를 삭제하시겠습니까?',
   DELETE_COMMENT: '댓글을 삭제하시겠습니까?',
   GO_BACK: '현재 화면에서 나가시겠습니까? 변경사항이 저장되지 않을 수 있습니다.',
 };
