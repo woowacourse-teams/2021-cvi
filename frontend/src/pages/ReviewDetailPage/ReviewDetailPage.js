@@ -57,7 +57,6 @@ const ReviewDetailPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
   const { response: review, error } = useFetch({}, () => requestGetReview(id));
-  console.log(review);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;

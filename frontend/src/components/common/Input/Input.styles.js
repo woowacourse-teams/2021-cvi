@@ -5,6 +5,8 @@ const Label = styled.label`
   display: flex;
   flex-direction: column;
   font-size: 1.2rem;
+
+  ${({ labelStyles }) => labelStyles && labelStyles}
 `;
 
 const LabelText = styled.span`
@@ -26,6 +28,8 @@ const InputElement = styled.input`
   ::placeholder {
     color: ${FONT_COLOR.BLUE_GRAY};
   }
+
+  ${({ inputStyles }) => inputStyles && inputStyles}
 `;
 
 export { Label, LabelText, InputElement };
