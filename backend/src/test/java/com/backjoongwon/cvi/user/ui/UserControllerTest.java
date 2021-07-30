@@ -10,6 +10,7 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.Filter;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -211,21 +213,22 @@ class UserControllerTest extends ApiDocument {
         //then
         사용자_삭제_실패(response);
     }
-//
-//    @DisplayName("내가 작성한 게시글 조회 - 성공")
-//    @Test
-//    void findMyPostsWhenFilterIsNone() throws Exception {
-//        //given
-//        List<PostResponse> postResponses = Arrays.asList(
-//                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-//                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
-//        Filter filter = Filter.NONE;
-//        willReturn(postResponses).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
-//        //when
-//        ResultActions response = 내가_쓴_글_조회_요청();
-//        //then
-//        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
-//    }
+
+    @DisplayName("내가 작성한 게시글 조회 - 성공")
+    @Test
+    void findMyPostsWhenFilterIsNone() throws Exception {
+        //given
+        List<PostResponse> postResponses = Arrays.asList(
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
+                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now()));
+        Filter filter = Filter.NONE;
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        //when
+        ResultActions response = 내가_쓴_글_조회_요청();
+        //then
+        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+    }
 //
 //    @DisplayName("내가 좋아요 한 글 조회 - 성공")
 //    @Test
@@ -257,17 +260,17 @@ class UserControllerTest extends ApiDocument {
 //        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
 //    }
 //
-//    @DisplayName("내가 작성한 게시글 조회 - 실패")
-//    @Test
-//    void findMyPostsFailureWhenFilterIsNone() throws Exception {
-//        //given
-//        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
-//        Filter filter = Filter.NONE;
-//        //when
-//        ResultActions response = 내가_쓴_글_조회_요청();
-//        //then
-//        마이페이지_글_필터링_조회_요청_실패함(response, filter);
-//    }
+    @DisplayName("내가 작성한 게시글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsNone() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        Filter filter = Filter.NONE;
+        //when
+        ResultActions response = 내가_쓴_글_조회_요청();
+        //then
+        마이페이지_글_필터링_조회_요청_실패함(response, filter);
+    }
 //
 //    @DisplayName("내가 좋아요 한 글 조회 - 실패")
 //    @Test

@@ -6,6 +6,8 @@ import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
+import com.backjoongwon.cvi.post.domain.Filter;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -29,10 +31,12 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public PostResponse create(Optional<User> optionalUser, PostRequest postRequest) {
-        User writer = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User writer = optionalUser.get();
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
@@ -59,14 +63,16 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, Optional<User> optionalUser, PostRequest postRequest) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostByPostId(postId);
         post.update(postRequest.toEntity(), user);
     }
 
     @Transactional
     public void delete(Long postId, Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostByPostId(postId);
         post.validateAuthor(user);
         postRepository.deleteById(postId);
@@ -74,7 +80,8 @@ public class PostService {
 
     @Transactional
     public CommentResponse createComment(Long postId, Optional<User> optionalUser, CommentRequest commentRequest) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostWithCommentsByPostId(postId);
 
         Comment comment = commentRequest.toEntity();
@@ -87,14 +94,16 @@ public class PostService {
 
     @Transactional
     public void updateComment(Long postId, Long commentId, Optional<User> optionalUser, CommentRequest updateRequest) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostWithCommentsByPostId(postId);
         post.updateComment(commentId, updateRequest.toEntity(), user);
     }
 
     @Transactional
     public void deleteComment(Long postId, Long commentId, Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostWithCommentsByPostId(postId);
         post.deleteComment(commentId, user);
     }
@@ -107,7 +116,8 @@ public class PostService {
 
     @Transactional
     public LikeResponse createLike(Long postId, Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostWithLikesById(postId);
         Like like = Like.builder()
                 .user(user)
@@ -119,7 +129,8 @@ public class PostService {
 
     @Transactional
     public void deleteLike(Long postId, Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
         Post post = findPostWithLikesById(postId);
         post.deleteLike(user.getId());
     }
@@ -135,8 +146,10 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
-    private User validateSignedinAndGetUser(Optional<User> user) {
-        return user.orElseThrow(() -> new UnAuthorizedException("인증되지 않은 사용자입니다."));
+    private void validateSigned(Optional<User> user) {
+        if (!user.isPresent()) {
+            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
+        }
     }
 
     private void validateNotNull(Long id) {
@@ -145,17 +158,23 @@ public class PostService {
             throw new NotFoundException("id는 null이 될 수 없습니다.");
         }
     }
-//
-//    public List<PostResponse> findByUserAndFilter(RequestUser requestUser, Filter filter) {
-//        requestUser.validateSignedin();
-//        User foundUser = findUserByUserId(requestUser.getId());
-//        if (filter == Filter.LIKES) {
-//            return null;
-//        }
-//        if (filter == Filter.COMMENTS) {
-//            return null;
-//        }
-//        List<Post> posts = postRepository.findByUser(foundUser);
-//        return PostResponse.of(posts, foundUser);
-//    }
+
+    public List<PostResponse> findByUserAndFilter(Optional<User> optionalUser, Filter filter) {
+        validateSigned(optionalUser);
+        User user = optionalUser.get();
+        if (filter == Filter.LIKES) {
+            // likes 다대일로 post와 조인 (100-100)
+            // 배치사이즈로 1개 post에서 모든 like 조회
+            // List<Post> 돌며 아이디가 userId인 post만 선별
+            return null;
+        }
+        if (filter == Filter.COMMENTS) {
+            // comments 다대일로 post와 조인 (100-100)
+            // 배치사이즈로 1개 post에서 모든 comment 조회
+            // List<Post> 돌며 아이디가 userId인 post만 선별
+            return null;
+        }
+        List<Post> posts = postRepository.findByUser(user);
+        return PostResponse.of(posts, user);
+    }
 }
