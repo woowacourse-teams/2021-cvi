@@ -42,7 +42,8 @@ public class UserService {
     }
 
     public UserResponse findUser(Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
         return UserResponse.of(findUserById(user.getId()), null);
     }
 
@@ -53,7 +54,8 @@ public class UserService {
 
     @Transactional
     public void update(Optional<User> optionalUser, UserRequest userRequest) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
         String nickname = user.getNickname();
         if (!nickname.equals(userRequest.getNickname())) {
             validateDuplicateNickname(userRequest.getNickname());
@@ -69,7 +71,8 @@ public class UserService {
 
     @Transactional
     public void delete(Optional<User> optionalUser) {
-        User user = validateSignedinAndGetUser(optionalUser);
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
         if (!userRepository.existsById(user.getId())) {
             throw new NotFoundException("해당 id의 사용자가 없습니다.");
         }
@@ -77,7 +80,9 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    private User validateSignedinAndGetUser(Optional<User> optionalUser) {
-        return optionalUser.orElseThrow(() -> new UnAuthorizedException("인증되지 않은 사용자입니다."));
+    private void validateSignedin(Optional<User> optionalUser) {
+        if (!optionalUser.isPresent()) {
+            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
+        }
     }
 }
