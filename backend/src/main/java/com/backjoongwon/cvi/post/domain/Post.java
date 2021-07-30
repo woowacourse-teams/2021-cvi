@@ -89,8 +89,8 @@ public class Post extends BaseEntity {
         likes.add(like);
     }
 
-    public void deleteLike(Long likeId, Long userId) {
-        likes.delete(likeId, userId);
+    public void deleteLike(Long userId) {
+        likes.delete(userId);
     }
 
     public int getLikesCount() {

@@ -1,10 +1,10 @@
 package com.backjoongwon.cvi.post.application;
 
 import com.backjoongwon.cvi.comment.domain.Comment;
-import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
@@ -12,9 +12,7 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -29,13 +28,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
 
     @Transactional
-    public PostResponse create(Long userId, PostRequest postRequest) {
-        User writer = findUserByUserId(userId);
+    public PostResponse create(Optional<User> optionalUser, PostRequest postRequest) {
+        validateSignedin(optionalUser);
+        User writer = optionalUser.get();
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
@@ -43,69 +41,72 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse findById(Long id, RequestUser user) {
+    public PostResponse findById(Long id, Optional<User> optionalUser) {
         Post post = findPostByPostId(id);
         post.increaseViewCount();
+        return createPostResponse(optionalUser, post);
+    }
+
+    private PostResponse createPostResponse(Optional<User> optionalUser, Post post) {
+        if (optionalUser.isPresent()) {
+            return PostResponse.of(post, optionalUser.get());
+        }
         return PostResponse.of(post, null);
     }
 
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType) {
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType);
+        if (optionalUser.isPresent()) {
+            return PostResponse.of(posts, optionalUser.get());
+        }
         return PostResponse.of(posts, null);
     }
 
     @Transactional
-    public void update(Long postId, RequestUser requestUser, PostRequest postRequest) {
-        requestUser.validateSignedin();
-        User user = findUserByUserId(requestUser.getId());
-        Post post = findPostByPostId(postId);
-
+    public void update(Long id, Optional<User> optionalUser, PostRequest postRequest) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostByPostId(id);
         post.update(postRequest.toEntity(), user);
     }
 
     @Transactional
-    public void delete(Long postId, RequestUser requestUser) {
-        User user = findUserByUserId(requestUser.getId());
-        Post foundPost = findPostByPostId(postId);
-        foundPost.validateAuthor(user);
-        postRepository.deleteById(postId);
+    public void delete(Long id, Optional<User> optionalUser) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostByPostId(id);
+        post.validateAuthor(user);
+        postRepository.deleteById(id);
     }
 
     @Transactional
-    public CommentResponse createComment(Long postId, RequestUser user, CommentRequest commentRequest) {
-        User foundUser = findUserByUserId(user.getId());
-        Post foundPost = findPostWithCommentsByPostId(postId);
+    public CommentResponse createComment(Long id, Optional<User> optionalUser, CommentRequest commentRequest) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostWithCommentsById(id);
 
         Comment comment = commentRequest.toEntity();
-        comment.assignUser(foundUser);
+        comment.assignUser(user);
 
-        foundPost.assignComment(comment);
+        post.assignComment(comment);
         postRepository.flush();
         return CommentResponse.of(comment);
     }
 
     @Transactional
-    public void updateComment(Long postId, Long commentId, RequestUser requestUser, CommentRequest updateRequest) {
-        User foundUser = findUserByUserId(requestUser.getId());
-        Post foundPost = findPostWithCommentsByPostId(postId);
-        foundPost.updateComment(commentId, updateRequest.toEntity(), foundUser);
+    public void updateComment(Long id, Long commentId, Optional<User> optionalUser, CommentRequest updateRequest) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostWithCommentsById(id);
+        post.updateComment(commentId, updateRequest.toEntity(), user);
     }
 
     @Transactional
-    public void deleteComment(Long postId, Long commentId, RequestUser requestUser) {
-        User foundUser = findUserByUserId(requestUser.getId());
-        Post foundPost = findPostWithCommentsByPostId(postId);
-        foundPost.deleteComment(commentId, foundUser);
-    }
-
-    private User findUserByUserId(Long id) {
-        validateNotNull(id);
-        return userRepository.findById(id)
-                .orElseThrow(() -> {
-                            log.info("해당 id의 사용자가 존재하지 않습니다.");
-                            return new NotFoundException("해당 id의 사용자가 존재하지 않습니다.");
-                        }
-                );
+    public void deleteComment(Long postId, Long commentId, Optional<User> optionalUser) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostWithCommentsById(postId);
+        post.deleteComment(commentId, user);
     }
 
     private Post findPostByPostId(Long id) {
@@ -115,9 +116,10 @@ public class PostService {
     }
 
     @Transactional
-    public LikeResponse createLike(Long postId, RequestUser requestUser) {
-        User user = findUserByUserId(requestUser.getId());
-        Post post = findPostWithLikesById(postId);
+    public LikeResponse createLike(Long id, Optional<User> optionalUser) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostWithLikesById(id);
         Like like = Like.builder()
                 .user(user)
                 .build();
@@ -127,21 +129,28 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteLike(Long postId, Long likeId, RequestUser user) {
-        user.validateSignedin();
-        Post post = findPostWithLikesById(postId);
-        post.deleteLike(likeId, user.getId());
+    public void deleteLike(Long id, Optional<User> optionalUser) {
+        validateSignedin(optionalUser);
+        User user = optionalUser.get();
+        Post post = findPostWithLikesById(id);
+        post.deleteLike(user.getId());
     }
 
-    private Post findPostWithLikesById(Long postId) {
-        return postRepository.findWithLikesById(postId)
+    private Post findPostWithLikesById(Long id) {
+        return postRepository.findWithLikesById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
-    private Post findPostWithCommentsByPostId(Long id) {
+    private Post findPostWithCommentsById(Long id) {
         validateNotNull(id);
         return postRepository.findWithCommentsById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+    }
+
+    private void validateSignedin(Optional<User> user) {
+        if (!user.isPresent()) {
+            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
+        }
     }
 
     private void validateNotNull(Long id) {
