@@ -407,7 +407,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 글_단일_조회_요청(Long id) throws Exception {
         return mockMvc.perform(get("/api/v1/posts/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 글_단일_조회_성공함(ResultActions response, PostResponse postResponse) throws Exception {
@@ -424,7 +425,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 글_전체_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponses) throws Exception {
@@ -480,7 +482,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
-                .queryParam("vaccinationType", vaccinationType.name()));
+                .queryParam("vaccinationType", vaccinationType.name())
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
