@@ -111,6 +111,7 @@ class PostServiceTest {
         likeResponse = postService.createLike(post.getId(), optionalUser);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
+        resetEntityManager();
     }
 
     @DisplayName("게시글 생성 - 성공")
@@ -468,5 +469,25 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.deleteComment(post.getId(), commentResponse.getId(), optionalAnotherUser))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
+    }
+
+    @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
+    @Test
+    void hasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalUser);
+        //then
+        assertThat(postResponse.isHasLiked()).isTrue();
+    }
+
+    @DisplayName("게시글에 좋아요를 누르지 않은 사람이 해당 글을 조회하면 hasLiked값이 false로 조회된다.")
+    @Test
+    void notHasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalAnotherUser);
+        //then
+        assertThat(postResponse.isHasLiked()).isFalse();
     }
 }
