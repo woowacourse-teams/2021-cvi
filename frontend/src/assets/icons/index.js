@@ -14,6 +14,7 @@ import CloseIcon from './close.svg';
 import MyPageIcon from './mypage.svg';
 import CommentIcon from './comment.svg';
 import LikeIcon from './like.svg';
+import LikeTrueIcon from './like-true.svg';
 import MenuIcon from './menu.svg';
 
 export {
@@ -33,5 +34,6 @@ export {
   MyPageIcon,
   CommentIcon,
   LikeIcon,
+  LikeTrueIcon,
   MenuIcon,
 };
