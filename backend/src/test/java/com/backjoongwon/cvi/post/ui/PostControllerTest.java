@@ -12,9 +12,9 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.AgeRangeResponse;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -53,6 +53,9 @@ class PostControllerTest extends ApiDocument {
     private PostService postService;
 
     @MockBean
+    private UserService userService;
+
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
     private User user;
@@ -71,7 +74,6 @@ class PostControllerTest extends ApiDocument {
                 .socialId("{Unique ID received from social provider}")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-
         anotherUser = User.builder()
                 .id(USER_ID + 1)
                 .nickname("another_user")
@@ -91,6 +93,7 @@ class PostControllerTest extends ApiDocument {
 
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
+        given(userService.findUserById(any(Long.class))).willReturn(user);
     }
 
     @DisplayName("게시글 등록 - 성공")
@@ -98,7 +101,7 @@ class PostControllerTest extends ApiDocument {
     void createPost() throws Exception {
         //given
         PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
-        given(postService.create(any(Long.class), any(PostRequest.class))).willReturn(expectedResponse);
+        given(postService.create(any(), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(request);
         //then
@@ -109,7 +112,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(Long.class), any(PostRequest.class));
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(request);
         //then
@@ -121,7 +124,7 @@ class PostControllerTest extends ApiDocument {
     void find() throws Exception {
         //given
         PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
-        given(postService.findById(any(Long.class), any(RequestUser.class))).willReturn(expectedPostResponse);
+        given(postService.findById(any(Long.class), any())).willReturn(expectedPostResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -132,7 +135,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).findById(any(Long.class), any(RequestUser.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).findById(any(Long.class), any());
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
@@ -149,7 +152,7 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         );
-        willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
@@ -161,7 +164,7 @@ class PostControllerTest extends ApiDocument {
     void findAllWhenPostsIsEmpty() throws Exception {
         //given
         List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(VaccinationType.ALL);
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
@@ -172,7 +175,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void updatePost() throws Exception {
         //given
-        willDoNothing().given(postService).update(any(Long.class), any(RequestUser.class), any(PostRequest.class));
+        willDoNothing().given(postService).update(any(Long.class), any(), any(PostRequest.class));
         //when
         ResultActions response = 글_수정_요청(POST_ID, request);
         //then
@@ -183,7 +186,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void updatePostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(RequestUser.class), any(PostRequest.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(), any(PostRequest.class));
         //when
         ResultActions response = 글_수정_요청(POST_ID, request);
         //then
@@ -194,7 +197,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deletePost() throws Exception {
         //given
-        willDoNothing().given(postService).delete(any(Long.class), any(RequestUser.class));
+        willDoNothing().given(postService).delete(any(Long.class), any());
         //when
         ResultActions response = 글_삭제_요청(POST_ID);
         //then
@@ -205,7 +208,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deletePostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any(RequestUser.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).delete(any(Long.class), any());
         //when
         ResultActions response = 글_삭제_요청(POST_ID);
         //then
@@ -220,7 +223,7 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
-        )).given(postService).findByVaccineType(VaccinationType.PFIZER);
+        )).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
@@ -233,7 +236,7 @@ class PostControllerTest extends ApiDocument {
         //given
         PostResponse expectedPostResponse = createPostResponse();
         LikeResponse likeResponse = LikeResponse.from(1L);
-        willReturn(likeResponse).given(postService).createLike(any(Long.class), any(RequestUser.class));
+        willReturn(likeResponse).given(postService).createLike(any(Long.class), any());
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
         //then
@@ -245,7 +248,7 @@ class PostControllerTest extends ApiDocument {
     void createLikeFailureWhenPostNotExists() throws Exception {
         //given
         PostResponse expectedPostResponse = createPostResponse();
-        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).createLike(any(Long.class), any(RequestUser.class));
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).createLike(any(Long.class), any());
         //when
         ResultActions response = 글_좋아요_생성_요청(expectedPostResponse.getId());
         //then
@@ -256,9 +259,9 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deleteLike() throws Exception {
         //given
-        willDoNothing().given(postService).delete(any(Long.class), any(RequestUser.class));
+        willDoNothing().given(postService).delete(any(Long.class), any());
         //when
-        ResultActions response = 글_좋아요_삭제_요청(LIKE_ID);
+        ResultActions response = 글_좋아요_삭제_요청();
         //then
         글_좋아요_삭제_성공함(response);
     }
@@ -268,9 +271,9 @@ class PostControllerTest extends ApiDocument {
     void deleteLikeFailureWhenNotTokenValid() throws Exception {
         //given
         willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다."))
-                .given(postService).deleteLike(any(Long.class), any(Long.class), any(RequestUser.class));
+                .given(postService).deleteLike(any(Long.class), any());
         //when
-        ResultActions response = 글_좋아요_삭제_요청(LIKE_ID);
+        ResultActions response = 글_좋아요_삭제_요청();
         //then
         글_좋아요_삭제_실패함(response);
     }
@@ -280,7 +283,7 @@ class PostControllerTest extends ApiDocument {
     void createComment() throws Exception {
         //given
         CommentResponse expectedResponse = new CommentResponse(1L, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
-        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
         //then
@@ -291,7 +294,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createCommentFailureWhenWrongWriter() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
         //then
@@ -303,7 +306,7 @@ class PostControllerTest extends ApiDocument {
     void putComment() throws Exception {
         //given
         CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
-        willDoNothing().given(postService).updateComment(anyLong(), anyLong(), any(RequestUser.class), any(CommentRequest.class));
+        willDoNothing().given(postService).updateComment(anyLong(), anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + ACCESS_TOKEN);
         //then
@@ -316,7 +319,7 @@ class PostControllerTest extends ApiDocument {
         //given
         CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
         willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).updateComment(anyLong(), anyLong(),
-                any(RequestUser.class), any(CommentRequest.class));
+                any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
         //then
@@ -327,7 +330,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deleteComment() throws Exception {
         //given
-        willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any());
         //when
         ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + ACCESS_TOKEN);
         //then
@@ -338,7 +341,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void deleteCommentWhenWrongUser() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).deleteComment(anyLong(), anyLong(), any(RequestUser.class));
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).deleteComment(anyLong(), anyLong(), any());
         //when
         ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + "another_user_token");
         //then
@@ -404,12 +407,12 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 글_단일_조회_요청(Long id) throws Exception {
         return mockMvc.perform(get("/api/v1/posts/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 글_단일_조회_성공함(ResultActions response, PostResponse postResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("post-find"));
     }
@@ -422,7 +425,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 글_전체_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponses) throws Exception {
@@ -478,7 +482,8 @@ class PostControllerTest extends ApiDocument {
 
     private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
-                .queryParam("vaccinationType", vaccinationType.name()));
+                .queryParam("vaccinationType", vaccinationType.name())
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
@@ -506,8 +511,8 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("like-create-failure"));
     }
 
-    private ResultActions 글_좋아요_삭제_요청(Long likeId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes/{likeId}", POST_ID, likeId)
+    private ResultActions 글_좋아요_삭제_요청() throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes", POST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }

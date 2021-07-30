@@ -14,6 +14,7 @@ import {
   Info,
   buttonStyles,
   inputStyles,
+  disabledStyles,
   AgeRange,
 } from './MyPageAccount.styles';
 
@@ -47,6 +48,8 @@ const MyPageAccount = () => {
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
   };
 
+  const isDisableButton = nickname === user.nickname && ageRange === user.ageRange?.meaning;
+
   useEffect(() => {
     setNickname(user.nickname);
     setAgeRange(user.ageRange?.meaning);
@@ -77,7 +80,12 @@ const MyPageAccount = () => {
             )}
           </Info>
         </InfoContainer>
-        <Button type="submit" sizeType={BUTTON_SIZE_TYPE.LARGE} styles={buttonStyles}>
+        <Button
+          type="submit"
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
+          styles={isDisableButton ? disabledStyles : buttonStyles}
+          disabled={isDisableButton}
+        >
           수정하기
         </Button>
       </form>

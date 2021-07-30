@@ -23,16 +23,15 @@ public class Likes {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Like> likes = new ArrayList<>();
 
-    private Like findLikeById(Long id) {
+    private Like findLikeByUserId(Long userId) {
         return likes.stream()
-                .filter(like -> like.getId().equals(id))
+                .filter(like -> like.isSameUser(userId))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException("해당 id의 좋아요가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 사용자의 좋아요가 글에 존재하지 않습니다."));
     }
 
-    public void delete(Long likeId, Long userId) {
-        Like like = findLikeById(likeId);
-        like.validateOwner(userId);
+    public void delete(Long userId) {
+        Like like = findLikeByUserId(userId);
         likes.remove(like);
     }
 
