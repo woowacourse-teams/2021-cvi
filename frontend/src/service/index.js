@@ -11,6 +11,7 @@ import {
   requestPutReview,
   requestDeleteComment,
   requestGetReview,
+  requestPutComment,
 } from '../requests';
 
 const getAllReviewListAsync = async () => {
@@ -177,6 +178,22 @@ const postCommentAsync = async (accessToken, id, data) => {
   }
 };
 
+const putCommentAsync = async (accessToken, reviewId, commentId, data) => {
+  try {
+    const response = await requestPutComment(accessToken, reviewId, commentId, data);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: null };
+  } catch (error) {
+    console.error(JSON.parse(error.message).message);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
 const deleteCommentAsync = async (accessToken, reviewId, commentId) => {
   try {
     const response = await requestDeleteComment(accessToken, reviewId, commentId);
@@ -205,4 +222,5 @@ export {
   putAccountAsync,
   postCommentAsync,
   deleteCommentAsync,
+  putCommentAsync,
 };
