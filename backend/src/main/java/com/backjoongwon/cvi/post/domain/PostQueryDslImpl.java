@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.domain;
 
 import com.backjoongwon.cvi.user.domain.QUser;
+import com.backjoongwon.cvi.user.domain.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,5 +34,18 @@ public class PostQueryDslImpl implements PostQueryDsl {
             return post.vaccinationType.eq(vaccinationType);
         }
         return null;
+    }
+
+    @Override
+    public List<Post> findByUser(User user) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(userEq(user))
+                .orderBy(post.createdAt.desc())
+                .fetch();
+    }
+
+    private BooleanExpression userEq(User user) {
+        return QUser.user.eq(user);
     }
 }

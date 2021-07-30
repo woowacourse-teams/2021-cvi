@@ -152,7 +152,16 @@ public class PostService {
         }
     }
 
-    public List<PostResponse> findByFilter(Filter filter, RequestUser user) {
-        return null;
+    public List<PostResponse> findByUserAndFilter(RequestUser requestUser, Filter filter) {
+        requestUser.validateSignedin();
+        User foundUser = findUserByUserId(requestUser.getId());
+        if (filter == Filter.LIKES) {
+            return null;
+        }
+        if (filter == Filter.COMMENTS) {
+            return null;
+        }
+        List<Post> posts = postRepository.findByUser(foundUser);
+        return PostResponse.of(posts, foundUser);
     }
 }

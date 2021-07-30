@@ -224,7 +224,7 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
                 new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
         Filter filter = Filter.NONE;
-        willReturn(postResponses).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         //when
         ResultActions response = 내가_쓴_글_조회_요청();
         //then
@@ -239,7 +239,7 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
                 new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
         Filter filter = Filter.LIKES;
-        willReturn(postResponses).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
@@ -254,7 +254,7 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
                 new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()));
         Filter filter = Filter.COMMENTS;
-        willReturn(postResponses).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
@@ -265,7 +265,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsNone() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         Filter filter = Filter.NONE;
         //when
         ResultActions response = 내가_쓴_글_조회_요청();
@@ -277,7 +277,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsLikes() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         Filter filter = Filter.LIKES;
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
@@ -289,7 +289,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsComments() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByFilter(any(Filter.class), any(RequestUser.class));
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
         Filter filter = Filter.COMMENTS;
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);

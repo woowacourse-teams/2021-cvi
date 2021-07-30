@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/me/posts")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findMyPosts(@RequestParam(defaultValue = "NONE") Filter filter, @AuthenticationPrincipal RequestUser user) {
-        return postService.findByFilter(filter, user);
+        return postService.findByUserAndFilter(user, filter);
     }
 
     @GetMapping("/{id}")
