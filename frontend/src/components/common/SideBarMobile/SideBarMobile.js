@@ -107,7 +107,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
                 <ShorVerificationMenuIcon width="22" height="22" stroke="currentColor" />
                 접종 인증
               </MyPageLink>
-              <MyPageLink to={PATH.MY_PAGE_REVIEWS} onClick={() => setIsOpenSideBar(false)}>
+              <MyPageLink onClick={() => alert('준비 중인 서비스입니다')}>
                 <MyReviewMenuIcon width="22" height="22" stroke="currentColor" />
                 내가 쓴 글
               </MyPageLink>

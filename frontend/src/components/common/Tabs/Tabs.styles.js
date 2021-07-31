@@ -11,10 +11,10 @@ const Container = styled.div`
   align-items: center;
   line-height: 1.5;
   padding: 0 3.2rem;
-  overflow-x: auto;
 
   @media screen and (max-width: 801px) {
     padding: 0 1rem;
+    overflow-x: auto;
   }
 `;
 
