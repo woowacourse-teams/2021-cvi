@@ -13,6 +13,7 @@ import {
   InfoContainer,
   Info,
   buttonStyles,
+  inputStyles,
   disabledStyles,
   AgeRange,
 } from './MyPageAccount.styles';
@@ -65,6 +66,8 @@ const MyPageAccount = () => {
               width="51.5rem"
               labelText="닉네임"
               value={nickname}
+              labelStyles={inputStyles}
+              inputStyles={inputStyles}
               onChange={(event) => setNickname(event.target.value)}
             />
             <AgeRange>나이대</AgeRange>

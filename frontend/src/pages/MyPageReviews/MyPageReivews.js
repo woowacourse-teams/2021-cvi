@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
 import { Frame } from '../../components/common';
@@ -17,7 +18,8 @@ const MyPageReviews = () => {
 
   return (
     <Container>
-      <Title>내가 쓴 글</Title>
+      <div>준비 중입니다</div>
+      {/* <Title>내가 쓴 글</Title>
       <Frame>
         <MyReviewList>
           {myReviewList?.map((myReview) => (
@@ -33,7 +35,7 @@ const MyPageReviews = () => {
             // </MyReview>
           ))}
         </MyReviewList>
-      </Frame>
+      </Frame> */}
     </Container>
   );
 };

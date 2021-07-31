@@ -32,6 +32,10 @@ const TextArea = styled.textarea`
   &::placeholder {
     color: ${THEME_COLOR.PLACEHOLDER};
   }
+
+  @media screen and (max-width: 1024px) {
+    margin: 1.6rem;
+  }
 `;
 
 const BottomContainer = styled.div`

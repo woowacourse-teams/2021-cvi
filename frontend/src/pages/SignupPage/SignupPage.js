@@ -50,7 +50,7 @@ const SignupPage = () => {
 
   return (
     <Container>
-      <Frame showShadow={true} styles={frameStyles}>
+      <Frame width="60rem" widthshowShadow={true} styles={frameStyles}>
         <Title>회원 가입</Title>
         <SelectionContainer>
           <SelectionTitle>나이대를 선택해주세요</SelectionTitle>

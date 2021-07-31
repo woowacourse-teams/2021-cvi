@@ -3,17 +3,34 @@ import styled from '@emotion/styled';
 import { Link, NavLink } from 'react-router-dom';
 import { FONT_COLOR, THEME_COLOR } from '../../../constants';
 
-const Container = styled.div`
-  display: none;
+const Dimmer = styled.div`
   ${({ isOpenSideBar }) =>
     isOpenSideBar &&
     css`
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    `}
+`;
+
+const Container = styled.div`
+  display: none;
+
+  ${({ isOpenSideBar }) =>
+    isOpenSideBar &&
+    css`
+      position: absolute;
+      z-index: 3;
       display: flex;
       flex-direction: column;
-      background-color: ${THEME_COLOR.PRIMARY};
-      width: 100vw;
+      width: 80%;
       height: 100vh;
-      padding: 1rem 0;
+      padding: 1rem 0 6rem 0;
+      background-color: ${THEME_COLOR.WHITE};
 
       & > *:last-child {
         margin-top: auto;
@@ -25,66 +42,80 @@ const Container = styled.div`
   }
 `;
 
-const LogoContainer = styled(Link)`
-  margin: 0 auto;
-  padding-right: 1.6rem;
-
-  @media screen and (max-width: 1024px) {
-    padding: 1rem 0;
-  }
-`;
-
 const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 11rem;
+  padding-top: 1.2rem;
 `;
 
 const CloseIconContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
-  padding-right: 1rem;
+  justify-content: flex-start;
+  padding: 0.4rem 0 0 1rem;
 `;
 
 const NavLinkElement = styled(NavLink)`
   display: flex;
   align-items: center;
-  padding-left: 7.8rem;
-  /* margin-left: 1rem; */
-  gap: 0.8rem;
-  color: ${FONT_COLOR.WHITE};
+  padding-left: 4rem;
+  gap: 1.2rem;
+  color: ${FONT_COLOR.BLACK};
   width: 100%;
-  height: 5.6rem;
-  font-size: 1.8rem;
+  height: 4.4rem;
+  font-size: 1.6rem;
 `;
 
 const LogoutButton = styled.button`
   display: flex;
   font-size: 1.6rem;
   align-items: center;
-  margin-left: 1rem;
-  padding-left: 7.8rem;
+  padding-left: 4rem;
   gap: 0.8rem;
-  color: ${FONT_COLOR.WHITE};
+  color: ${FONT_COLOR.BLACK};
   width: 100%;
-  height: 5.2rem;
-  font-size: 1.8rem;
+  height: 4.4rem;
+  font-size: 1.6rem;
 `;
 
-const selectedNavStyles = {
-  backgroundColor: THEME_COLOR.BACKGROUND,
-  color: FONT_COLOR.BLACK,
-  // borderTopLeftRadius: '1.6rem',
-  // borderBottomLeftRadius: '1.6rem',
-  border: 'transparent',
-};
+const MyPageMenuContainer = styled(Link)`
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.GRAY};
+  padding: 1.2rem 0 0 4rem;
+`;
+
+const MyPageLink = styled(Link)`
+  font-size: 1.6rem;
+  color: ${FONT_COLOR.BLACK};
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  height: 4.4rem;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+`;
+
+const User = styled.div`
+  margin-top: 1.2rem;
+  font-size: 1.8rem;
+  color: ${FONT_COLOR.BLACK};
+`;
 
 export {
+  Dimmer,
   Container,
-  LogoContainer,
+  MyPageMenuContainer,
   MenuContainer,
   CloseIconContainer,
   NavLinkElement,
   LogoutButton,
-  selectedNavStyles,
+  MyPageLink,
+  ProfileContainer,
+  User,
 };

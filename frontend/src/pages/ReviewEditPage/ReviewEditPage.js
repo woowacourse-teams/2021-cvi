@@ -30,6 +30,7 @@ import {
   TextArea,
   ViewCount,
   editButtonStyles,
+  EditButtonContainer,
 } from './ReviewEditPage.styles';
 import toDate from '../../utils/toDate';
 import {
@@ -48,7 +49,7 @@ const ReviewEditPage = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [content, setContent] = useState('');
-  const { response: review, error } = useFetch({}, () => requestGetReview(id));
+  const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -106,7 +107,7 @@ const ReviewEditPage = () => {
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
             <WriterInfo>
-              <Avatar />
+              <Avatar src={review?.writer?.socialProfileUrl} />
               <Writer>
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>
@@ -127,14 +128,16 @@ const ReviewEditPage = () => {
           </TextArea>
         </FrameContent>
       </Frame>
-      <Button
-        backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
-        sizeType={BUTTON_SIZE_TYPE.LARGE}
-        styles={editButtonStyles}
-        onClick={editReview}
-      >
-        수정하기
-      </Button>
+      <EditButtonContainer>
+        <Button
+          backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
+          styles={editButtonStyles}
+          onClick={editReview}
+        >
+          수정하기
+        </Button>
+      </EditButtonContainer>
     </Container>
   );
 };

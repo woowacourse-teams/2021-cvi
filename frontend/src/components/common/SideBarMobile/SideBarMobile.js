@@ -3,26 +3,34 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import {
+  Dimmer,
   Container,
-  LogoContainer,
+  MyPageMenuContainer,
   MenuContainer,
   CloseIconContainer,
   NavLinkElement,
   LogoutButton,
-  selectedNavStyles,
+  MyPageLink,
+  ProfileContainer,
+  User,
 } from './SideBarMobile.styles';
-import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../../constants';
+import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
 import {
   HomeIcon,
   LoginIcon,
-  LogoIcon,
   LogoutIcon,
   ReviewIcon,
   MyPageIcon,
+  CloseIcon,
+  MyReviewMenuIcon,
+  ShorVerificationMenuIcon,
 } from '../../../assets/icons';
 import Button from '../Button/Button';
 import { css } from '@emotion/react';
+import { AVATAR_SIZE_TYPE } from '../Avatar/Avatar.styles';
+import Avatar from '../Avatar/Avatar';
+import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 
 const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
   const dispatch = useDispatch();
@@ -38,13 +46,11 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
     setIsOpenSideBar(false);
   };
 
-  const isRelatedMyPage = (pathname) =>
-    [
-      PATH.MY_PAGE,
-      PATH.MY_PAGE_ACCOUNT,
-      PATH.MY_PAGE_REVIEWS,
-      PATH.MY_PAGE_SHOT_VERIFICATION,
-    ].includes(pathname);
+  const closeSideBar = (event) => {
+    if (event.target !== event.currentTarget) return;
+
+    setIsOpenSideBar(false);
+  };
 
   useEffect(() => {
     const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
@@ -55,63 +61,71 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
   }, []);
 
   return (
-    <Container isOpenSideBar={isOpenSideBar}>
-      <CloseIconContainer>
-        <Button
-          styles={css`
-            padding: 0;
-          `}
-          onClick={() => setIsOpenSideBar(false)}
-        >
-          <HomeIcon width="32" height="32" stroke="white" />
-        </Button>
-      </CloseIconContainer>
-      <LogoContainer to={PATH.HOME}>
-        <LogoIcon width="112" fill={THEME_COLOR.WHITE} />
-      </LogoContainer>
-      <MenuContainer>
-        <NavLinkElement
-          exact
-          to={PATH.HOME}
-          activeStyle={selectedNavStyles}
-          onClick={() => setIsOpenSideBar(false)}
-        >
-          <HomeIcon width="20" height="20" stroke="currentColor" /> 홈
-        </NavLinkElement>
-        <NavLinkElement
-          to={PATH.REVIEW}
-          activeStyle={selectedNavStyles}
-          onClick={() => setIsOpenSideBar(false)}
-        >
-          <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
-        </NavLinkElement>
-        {!!Object.keys(user).length && (
-          <NavLinkElement
-            to={PATH.MY_PAGE_SHOT_VERIFICATION}
-            activeStyle={selectedNavStyles}
-            isActive={(_, { pathname }) => isRelatedMyPage(pathname)}
+    <Dimmer isOpenSideBar={isOpenSideBar} onClick={closeSideBar}>
+      <Container isOpenSideBar={isOpenSideBar}>
+        <CloseIconContainer>
+          <Button
+            backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+            styles={css`
+              padding: 0;
+            `}
             onClick={() => setIsOpenSideBar(false)}
           >
-            <MyPageIcon width="20" height="20" stroke="currentColor" fill="currentColor" />{' '}
-            마이페이지
+            <CloseIcon width="32" height="32" stroke={FONT_COLOR.BLACK} />
+          </Button>
+        </CloseIconContainer>
+        {Object.keys(user).length ? (
+          <ProfileContainer>
+            <Avatar sizeType={AVATAR_SIZE_TYPE.LARGE} src={user.socialProfileUrl} />
+            <User>
+              {user.nickname} · {user.ageRange?.meaning}
+            </User>
+            <div>{user.shotVerified ? '접종인증 완료' : '접종인증 미완료'}</div>
+          </ProfileContainer>
+        ) : (
+          <div style={{ height: '24.2rem' }} />
+        )}
+
+        <MenuContainer>
+          <NavLinkElement exact to={PATH.HOME} onClick={() => setIsOpenSideBar(false)}>
+            <HomeIcon width="22" height="22" stroke="currentColor" /> 홈
+          </NavLinkElement>
+          <NavLinkElement to={PATH.REVIEW} onClick={() => setIsOpenSideBar(false)}>
+            <ReviewIcon width="23" height="23" stroke="currentColor" /> 접종후기
+          </NavLinkElement>
+          {!!Object.keys(user).length && (
+            <MyPageMenuContainer>
+              마이페이지
+              <MyPageLink to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
+                <MyPageIcon width="22" height="22" stroke="currentColor" fill="currentColor" />내
+                정보 관리
+              </MyPageLink>
+              <MyPageLink
+                to={PATH.MY_PAGE_SHOT_VERIFICATION}
+                onClick={() => setIsOpenSideBar(false)}
+              >
+                <ShorVerificationMenuIcon width="22" height="22" stroke="currentColor" />
+                접종 인증
+              </MyPageLink>
+              <MyPageLink onClick={() => alert('준비 중인 서비스입니다')}>
+                <MyReviewMenuIcon width="22" height="22" stroke="currentColor" />
+                내가 쓴 글
+              </MyPageLink>
+            </MyPageMenuContainer>
+          )}
+        </MenuContainer>
+
+        {Object.keys(user).length ? (
+          <LogoutButton onClick={logout}>
+            <LogoutIcon width="28" height="28" stroke="currentColor" /> 로그아웃
+          </LogoutButton>
+        ) : (
+          <NavLinkElement to={PATH.LOGIN} onClick={() => setIsOpenSideBar(false)}>
+            <LoginIcon width="28" height="28" stroke="currentColor" /> 로그인
           </NavLinkElement>
         )}
-      </MenuContainer>
-
-      {Object.keys(user).length ? (
-        <LogoutButton onClick={logout}>
-          <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
-        </LogoutButton>
-      ) : (
-        <NavLinkElement
-          to={PATH.LOGIN}
-          activeStyle={selectedNavStyles}
-          onClick={() => setIsOpenSideBar(false)}
-        >
-          <LoginIcon width="24" height="24" stroke="currentColor" /> 로그인
-        </NavLinkElement>
-      )}
-    </Container>
+      </Container>
+    </Dimmer>
   );
 };
 

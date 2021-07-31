@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
-import { Container, buttonSelectedStyles, defaultButtonStyles } from './Selection.styles';
+import {
+  Container,
+  buttonSelectedStyles,
+  defaultButtonStyles,
+  buttonStyles,
+} from './Selection.styles';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../Button/Button.styles';
 import { PALETTE } from '../../../constants';
@@ -15,6 +20,7 @@ const Selection = ({ selectionList, selectedItem, setSelectedItem }) => (
         isSelected={selectedItem === selectionItem}
         selectedStyles={buttonSelectedStyles[selectionItem] || defaultButtonStyles}
         type="button"
+        styles={buttonStyles}
         onClick={() => setSelectedItem(selectionItem)}
       >
         {selectionItem}

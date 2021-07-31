@@ -41,7 +41,7 @@ const MyPage = ({ children }) => {
           <MenuItem>
             <MenuTitle>글 관리</MenuTitle>
             <div>
-              <Link to={PATH.MY_PAGE_REVIEWS}>내가 쓴 글</Link>
+              <Link onClick={() => alert('준비 중인 서비스입니다')}>내가 쓴 글</Link>
             </div>
           </MenuItem>
         </MenuContainer>
