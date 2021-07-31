@@ -13,9 +13,19 @@ const Container = styled.div`
   border-radius: 2.6rem;
   padding: 0 0.6rem;
   background-color: ${THEME_COLOR.WHITE};
+  overflow-x: auto;
 
   & > *:not(:last-child) {
     margin-right: 1.6rem;
+  }
+
+  @media screen and (max-width: 801px) {
+    display: grid;
+    border-radius: 1.6rem;
+    grid-template-columns: repeat(2, 1fr);
+    height: fit-content;
+    padding: 1rem;
+    width: 100%;
   }
 `;
 
@@ -43,4 +53,11 @@ const defaultButtonStyles = css`
   color: ${PALETTE.WHITE};
 `;
 
-export { Container, buttonSelectedStyles, defaultButtonStyles };
+const buttonStyles = css`
+  @media screen and (max-width: 801px) {
+    border-radius: 1.2rem;
+    width: 100%;
+  }
+`;
+
+export { Container, buttonSelectedStyles, defaultButtonStyles, buttonStyles };

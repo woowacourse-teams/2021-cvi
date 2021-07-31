@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { PALETTE, THEME_COLOR } from '../../constants';
+import { PALETTE } from '../../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -9,12 +9,22 @@ const Container = styled.div`
   flex-direction: column;
   height: inherit;
   overflow-y: auto;
+  align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    padding: 3rem 0 0 0;
+  }
 `;
 
 const Title = styled.div`
   font-size: 2.8rem;
   margin-bottom: 6.8rem;
   font-weight: 600;
+
+  @media screen and (max-width: 1024px) {
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+  }
 `;
 
 const MyReviewList = styled.div`

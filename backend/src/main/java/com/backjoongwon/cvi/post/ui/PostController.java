@@ -1,10 +1,13 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
+import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,33 +26,74 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse create(@SigninUser User user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
-        PostResponse postResponse = postService.create(user.getId(), postRequest);
+    public PostResponse create(@AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
+        PostResponse postResponse = postService.create(user, postRequest);
         servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
         return postResponse;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineType(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType) {
-        return postService.findByVaccineType(vaccinationType);
+    public List<PostResponse> findByVaccineType(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType, @AuthenticationPrincipal Optional<User> user) {
+        return postService.findByVaccineType(vaccinationType, user);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long id) {
-        return postService.findById(id);
+    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
+        return postService.findById(id, user);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @SigninUser User user, @RequestBody PostRequest postRequest) {
-        postService.update(id, user.getId(), postRequest);
+    public void update(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest) {
+        postService.update(id, user, postRequest);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id, @SigninUser User user) {
-        postService.delete(id, user.getId());
+    public void delete(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
+        postService.delete(id, user);
+    }
+
+    @PostMapping("/{postId}/likes")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createLike(@PathVariable Long postId, @AuthenticationPrincipal Optional<User> user, HttpServletResponse servletResponse) {
+        LikeResponse likeResponse = postService.createLike(postId, user);
+        servletResponse.setHeader("Location", "/api/v1/likes/" + likeResponse.getId());
+    }
+
+    @DeleteMapping("/{postId}/likes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLike(@PathVariable Long postId, @AuthenticationPrincipal Optional<User> user) {
+        postService.deleteLike(postId, user);
+    }
+
+    @PostMapping("/{postId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentResponse createComment(@PathVariable Long postId,
+                                         @AuthenticationPrincipal Optional<User> user,
+                                         @RequestBody CommentRequest commentRequest,
+                                         HttpServletResponse servletResponse) {
+        CommentResponse commentResponse = postService.createComment(postId, user, commentRequest);
+        servletResponse.setHeader("Location", "/api/v1/comments/" + commentResponse.getId());
+        return commentResponse;
+    }
+
+    @PutMapping("/{postId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateComment(@PathVariable Long postId,
+                              @PathVariable Long commentId,
+                              @AuthenticationPrincipal Optional<User> user,
+                              @RequestBody CommentRequest commentRequest) {
+        postService.updateComment(postId, commentId, user, commentRequest);
+    }
+
+    @DeleteMapping("/{postId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@PathVariable Long postId,
+                              @PathVariable Long commentId,
+                              @AuthenticationPrincipal Optional<User> user) {
+        postService.deleteComment(postId, commentId, user);
     }
 }

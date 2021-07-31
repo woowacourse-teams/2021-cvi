@@ -6,6 +6,10 @@ const Container = styled.li`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+
+  @media screen and (max-width: 801px) {
+    padding: 2rem;
+  }
 `;
 
 const Content = styled.div`
@@ -57,6 +61,11 @@ const IconContainer = styled.div`
   align-items: center;
 `;
 
+const CreatedAt = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export {
   Container,
   IconContainer,
@@ -67,4 +76,5 @@ export {
   TopContainer,
   BottomContainer,
   InfoContainer,
+  CreatedAt,
 };

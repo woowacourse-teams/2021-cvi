@@ -3,18 +3,26 @@ import { CloseIcon } from '../../../assets/icons';
 import Frame from '../Frame/Frame';
 import { Container, modalFrameStyles, CloseButton } from './Modal.styles';
 
-const Modal = ({ children, showCloseButton, showShadow, onClickClose }) => (
-  <Container>
-    <Frame styles={modalFrameStyles} showShadow={showShadow}>
-      {showCloseButton && (
-        <CloseButton onClick={onClickClose}>
-          <CloseIcon />
-        </CloseButton>
-      )}
-      {children}
-    </Frame>
-  </Container>
-);
+const Modal = ({ children, showCloseButton, showShadow, onClickClose }) => {
+  const closeModal = (event) => {
+    if (event.target !== event.currentTarget) return;
+
+    onClickClose();
+  };
+
+  return (
+    <Container onClick={closeModal}>
+      <Frame styles={modalFrameStyles} showShadow={showShadow}>
+        {showCloseButton && (
+          <CloseButton onClick={onClickClose}>
+            <CloseIcon />
+          </CloseButton>
+        )}
+        {children}
+      </Frame>
+    </Container>
+  );
+};
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,

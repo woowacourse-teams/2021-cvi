@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import {
@@ -15,23 +16,18 @@ import {
   CreatedAt,
   Content,
   ViewCount,
-  Error,
   buttonStyles,
   Comment,
   IconContainer,
   BottomContainer,
   CommentCount,
-  CommentList,
   CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
-import { useFetch } from '../../hooks';
-import { requestGetReview } from '../../requests';
 import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
-  ERROR_MESSAGE,
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
@@ -45,19 +41,35 @@ import {
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon, LikeIcon } from '../../assets/icons';
-import { deleteReviewAsync } from '../../service';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
+import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
+import { useLike } from '../../hooks';
 
+// TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
-  const { response: review, error } = useFetch({}, () => requestGetReview(id));
-  console.log(review);
+
+  const [review, setReview] = useState({});
+
+  const getReview = async () => {
+    const response = await getReviewAsync(accessToken, id);
+
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert('failure - getReviewAsync');
+
+      return;
+    }
+
+    setReview(response.data);
+  };
+
+  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -85,69 +97,9 @@ const ReviewDetailPage = () => {
     goReviewPage();
   };
 
-  if (error) {
-    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
-  }
-
-  const commentList = [
-    {
-      id: 1,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
-        ageRange: {
-          meaning: '60대 이상',
-        },
-        shotVerified: false,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-    {
-      id: 2,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
-        ageRange: {
-          meaning: '30대',
-        },
-        shotVerified: true,
-      },
-      content:
-        '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳아니 이거 글이 너무 ',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-    {
-      id: 3,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
-        ageRange: {
-          meaning: '20대',
-        },
-        shotVerified: false,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-    {
-      id: 4,
-      writer: {
-        id: 1,
-        socialProfileUrl: user.socialProfileUrl,
-        nickname: user.nickname,
-        ageRange: {
-          meaning: '20대',
-        },
-        shotVerified: true,
-      },
-      content: '아니 이거 글이 너무 좋네요!!하하하하하하하하하하하하하하핳',
-      createdAt: '2021-07-26T14:36:37.929',
-    },
-  ];
+  useEffect(() => {
+    getReview();
+  }, []);
 
   return (
     <Container>
@@ -216,24 +168,42 @@ const ReviewDetailPage = () => {
           <Content>{review?.content}</Content>
           <BottomContainer>
             <IconContainer>
-              <LikeIcon width="26" height="26" stroke={FONT_COLOR.BLACK} fill={FONT_COLOR.BLACK} />
-              <div>37</div>
+              <ButtonLike
+                iconWidth="24"
+                iconHeight="24"
+                color={FONT_COLOR.BLACK}
+                likeCountSize="1.6rem"
+                hasLiked={review?.hasLiked}
+                likeCount={review?.likeCount}
+                onClickLike={onClickLike}
+              />
             </IconContainer>
             <IconContainer>
               <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-              <div>12</div>
+              <div>{review?.comments?.length}</div>
             </IconContainer>
           </BottomContainer>
           <Comment>
-            <CommentCount>댓글 12</CommentCount>
+            <CommentCount>댓글 {review?.comments?.length}</CommentCount>
             <CommentFormContainer>
-              <CommentForm nickname={user.nickname} socialProfileUrl={user.socialProfileUrl} />
+              <CommentForm
+                accessToken={accessToken}
+                reviewId={id}
+                nickname={user.nickname}
+                socialProfileUrl={user.socialProfileUrl}
+                getReview={getReview}
+              />
             </CommentFormContainer>
-            <CommentList>
-              {commentList.map((comment) => (
-                <CommentItem key={comment.id} comment={comment} />
-              ))}
-            </CommentList>
+            {review?.comments?.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                accessToken={accessToken}
+                userId={user.id}
+                reviewId={id}
+                comment={comment}
+                getReview={getReview}
+              />
+            ))}
           </Comment>
         </FrameContent>
       </Frame>

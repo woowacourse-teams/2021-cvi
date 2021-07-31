@@ -1,8 +1,6 @@
 package com.backjoongwon.cvi.user.dto;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
-import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,6 +29,11 @@ public class UserResponse {
         this.socialProvider = socialProvider;
         this.socialId = socialId;
         this.socialProfileUrl = socialProfileUrl;
+    }
+
+    public static UserResponse of(User user) {
+        return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
+                user.isShotVerified(), null, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
 
     public static UserResponse of(User user, String token) {
