@@ -6,5 +6,7 @@
       "root": "#root"
     },
     "EXTERNAL_API": "https://jsonplaceholder.typicode.com/"
-  }
+  },
+  "viewportWidth": 1025,
+  "viewportHeight": 660
 }

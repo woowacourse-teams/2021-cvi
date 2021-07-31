@@ -117,11 +117,11 @@ describe('After Login Test', () => {
 
     cy.waitForReact();
 
-    cy.react('Button').eq(0).click();
+    cy.react('Button').eq(2).click();
 
     createReview();
     cy.get('textarea').eq(0).type('모더나를 맞았어요. 별로 안 아프더라구요.');
-    cy.get('Button').eq(11).click();
+    cy.contains('button', '제출하기').click();
 
     getNewReviewList();
     cy.visit('/review');
@@ -138,11 +138,11 @@ describe('After Login Test', () => {
     cy.react('ReviewItem').eq(0).click();
     cy.url().should('include', '/review/7');
 
-    cy.react('Button').eq(1).click();
+    cy.contains('button', '수정').click();
     cy.url().should('include', '/review/7/edit');
 
     cy.get('textarea').type('다음날 되니 좀 아픈것 같아요 ㅠ ㅠ');
-    cy.react('Button').eq(0).click();
+    cy.contains('button', '수정하기').click();
 
     getEditedReview();
     cy.visit('/review/7');
@@ -152,7 +152,7 @@ describe('After Login Test', () => {
   it('내가 쓴 후기를 삭제한다.', () => {
     cy.waitForReact();
 
-    cy.react('Button').eq(2).click();
+    cy.contains('button', '삭제').click();
     getReviewList();
 
     cy.visit('/review');

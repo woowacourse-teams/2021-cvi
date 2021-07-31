@@ -1,6 +1,6 @@
 [
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 1,
     "vaccinationType": "MODERNA",
@@ -21,7 +21,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",
@@ -42,7 +42,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",
@@ -63,7 +63,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",
@@ -84,7 +84,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",
@@ -105,7 +105,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",
@@ -126,7 +126,7 @@
     }
   },
   {
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "content": "test",
     "createdAt": "2021-07-27T14:56:43.633",
     "id": 2,
     "vaccinationType": "MODERNA",

@@ -83,7 +83,7 @@ describe('Before Login Test', () => {
     cy.contains('button', '후기 작성').click();
 
     cy.on('window:confirm', (text) => {
-      expect(text).to.equal('로그인이 필요합니다.');
+      expect(text).to.equal('로그인이 필요한 서비스입니다.');
     });
     cy.on('window:confirm', () => false);
   });
