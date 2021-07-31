@@ -49,7 +49,7 @@ const ReviewEditPage = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [content, setContent] = useState('');
-  const { response: review, error } = useFetch({}, () => requestGetReview(id));
+  const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -107,7 +107,7 @@ const ReviewEditPage = () => {
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
             <WriterInfo>
-              <Avatar />
+              <Avatar src={review?.writer?.socialProfileUrl} />
               <Writer>
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>

@@ -13,7 +13,7 @@ const Dimmer = styled.div`
       right: 0;
       bottom: 0;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1;
+      z-index: 2;
     `}
 `;
 
@@ -24,7 +24,7 @@ const Container = styled.div`
     isOpenSideBar &&
     css`
       position: absolute;
-      z-index: 2;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       width: 80%;
