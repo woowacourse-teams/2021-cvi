@@ -1,6 +1,11 @@
 {
   "plugins": ["prettier"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:cypress/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module",
