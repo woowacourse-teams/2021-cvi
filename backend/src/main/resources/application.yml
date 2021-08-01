@@ -4,6 +4,7 @@ spring:
       prod:
         - db
         - jwt
+        - client-secret
   h2:
     console:
       enabled: false

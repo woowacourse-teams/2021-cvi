@@ -42,7 +42,7 @@ public class KakaoAuthorization implements Authorization {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "1a06cf63be2ce0a6ebd8f49cd534e1c9");
-        params.add("redirect_uri", "http://localhost:9000/auth/kakao/callback");
+        params.add("redirect_uri", "https://www.cvi.p-e.kr/auth/kakao/callback");
         params.add("code", code);
 
         HttpHeaders headers = new HttpHeaders();
