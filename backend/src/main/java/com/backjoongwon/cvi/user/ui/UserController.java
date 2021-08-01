@@ -1,7 +1,7 @@
 package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.user.application.UserService;
-import com.backjoongwon.cvi.user.auth.SigninUser;
+import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,8 +29,8 @@ public class UserController {
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse findMe(@SigninUser User user) {
-        return userService.findMeById(user.getId());
+    public UserResponse findMe(@AuthenticationPrincipal Optional<User> user) {
+        return userService.findUser(user);
     }
 
     @GetMapping("/{id}")
@@ -40,13 +41,13 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@SigninUser User user, @RequestBody UserRequest userRequest) {
-        userService.update(user.getId(), userRequest);
+    public void update(@AuthenticationPrincipal Optional<User> user, @RequestBody UserRequest userRequest) {
+        userService.update(user, userRequest);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@SigninUser User user) {
-        userService.delete(user.getId());
+    public void delete(@AuthenticationPrincipal Optional<User> user) {
+        userService.delete(user);
     }
 }

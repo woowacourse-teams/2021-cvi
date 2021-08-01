@@ -4,6 +4,12 @@ import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   margin-top: 4rem;
+  padding: 2.5rem 8rem 6rem 8rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 0;
+    margin-top: 0;
+  }
 `;
 
 const FrameContent = styled.div`
@@ -15,6 +21,10 @@ const FrameContent = styled.div`
 
 const ButtonContainer = styled.div`
   padding: 2rem 2rem 0 1rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem 0;
+  }
 `;
 
 const Info = styled.div`
@@ -22,6 +32,10 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+
+  @media screen and (max-width: 1024px) {
+    padding: 2rem;
+  }
 `;
 
 const VaccinationInfo = styled.div`
@@ -70,6 +84,11 @@ const TextArea = styled.textarea`
   padding: 2rem 3rem;
   font-size: 1.6rem;
   color: ${FONT_COLOR.BLACK};
+
+  @media screen and (max-width: 1024px) {
+    margin: 2rem;
+    padding: 2rem;
+  }
 `;
 
 const ViewCount = styled.div`
@@ -83,6 +102,12 @@ const editButtonStyles = css`
   width: 100%;
   margin-top: 2.6rem;
   height: 4.8rem;
+`;
+
+const EditButtonContainer = styled.div`
+  @media screen and (max-width: 1024px) {
+    padding: 0 2rem;
+  }
 `;
 
 export {
@@ -100,4 +125,5 @@ export {
   TextArea,
   ViewCount,
   editButtonStyles,
+  EditButtonContainer,
 };

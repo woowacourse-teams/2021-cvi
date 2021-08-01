@@ -2,14 +2,12 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { RESPONSE_STATE, SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
-import Modal from '../Modal/Modal';
-import Selection from '../Selection/Selection';
-import Button from '../Button/Button';
+import { ALERT_MESSAGE, RESPONSE_STATE, SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
 import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritingModal.styles';
-import { BUTTON_SIZE_TYPE } from '../Button/Button.styles';
+import { BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
 import { postReviewAsync } from '../../service';
 import { findKey } from '../../utils';
+import { Button, Modal, Selection } from '../common';
 
 const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
@@ -26,7 +24,7 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
     const response = await postReviewAsync(accessToken, data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
-      alert('리뷰 작성 실패 - createReview');
+      alert(ALERT_MESSAGE.FAIL_TO_CREATE_REVIEW);
 
       return;
     }

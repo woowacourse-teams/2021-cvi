@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE } from '../../components/Button/Button.styles';
-import Frame from '../../components/Frame/Frame';
-import Input from '../../components/Input/Input';
-import Selection from '../../components/Selection/Selection';
+import { useSnackbar } from 'notistack';
+import { Button, Frame, Input, Selection } from '../../components/common';
+import { BUTTON_BACKGROUND_TYPE } from '../../components/common/Button/Button.styles';
 import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';
@@ -25,6 +23,7 @@ const SignupPage = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
@@ -45,13 +44,13 @@ const SignupPage = () => {
 
     dispatch(getMyInfoAsync(response.data.accessToken));
 
-    alert(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
+    enqueueSnackbar(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
     goHomePage();
   };
 
   return (
     <Container>
-      <Frame showShadow={true} styles={frameStyles}>
+      <Frame width="60rem" widthshowShadow={true} styles={frameStyles}>
         <Title>회원 가입</Title>
         <SelectionContainer>
           <SelectionTitle>나이대를 선택해주세요</SelectionTitle>
@@ -64,6 +63,7 @@ const SignupPage = () => {
         <Input
           placeholder="닉네임을 입력해주세요"
           width="100%"
+          value={nickname}
           onChange={(event) => setNickname(event.target.value)}
         />
         <Button styles={signupButtonStyles} onClick={signup}>

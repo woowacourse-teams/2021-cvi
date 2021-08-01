@@ -6,12 +6,10 @@ const Container = styled.li`
   display: flex;
   flex-direction: column;
   cursor: pointer;
-`;
 
-const ViewCountContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  @media screen and (max-width: 801px) {
+    padding: 2rem;
+  }
 `;
 
 const Content = styled.div`
@@ -22,6 +20,7 @@ const Content = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: ${LINE_LIMIT.REVIEW_ITEM};
   -webkit-box-orient: vertical;
+  height: 7.2rem;
   overflow: hidden;
 `;
 
@@ -35,11 +34,8 @@ const ShotVerified = styled.div`
 `;
 
 const ViewCount = styled.div`
-  margin-left: 0.5rem;
-  padding-bottom: 0.1rem;
+  margin-left: 0.4rem;
 `;
-
-const Date = styled.div``;
 
 const TopContainer = styled.div`
   display: flex;
@@ -51,17 +47,34 @@ const BottomContainer = styled.div`
   justify-content: space-between;
   color: ${FONT_COLOR.LIGHT_GRAY};
   font-size: 1.4rem;
-  margin-top: 0.4rem;
+  margin-top: 0.6rem;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  gap: 1.6rem;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const CreatedAt = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export {
   Container,
-  ViewCountContainer,
+  IconContainer,
   Content,
   Writer,
   ShotVerified,
   ViewCount,
-  Date,
   TopContainer,
   BottomContainer,
+  InfoContainer,
+  CreatedAt,
 };

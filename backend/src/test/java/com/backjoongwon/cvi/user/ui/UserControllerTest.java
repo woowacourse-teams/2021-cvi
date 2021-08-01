@@ -8,6 +8,7 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
@@ -41,6 +42,9 @@ class UserControllerTest extends ApiDocument {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+
     private User user;
     private UserRequest signinRequest;
     private UserRequest updateRequest;
@@ -63,8 +67,9 @@ class UserControllerTest extends ApiDocument {
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
 
-        given(userService.findUserByAccessToken(ACCESS_TOKEN))
-                .willReturn(user);
+        given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
+        given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
+        given(userService.findUserById(any(Long.class))).willReturn(user);
     }
 
     @DisplayName("사용자 가입 - 성공")
@@ -93,7 +98,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMe() throws Exception {
         //given
-        willReturn(userMeResponse).given(userService).findMeById(any(Long.class));
+        willReturn(userMeResponse).given(userService).findUser(any());
         //when
         ResultActions response = 사용자_내_정보_조회_요청();
         //then
@@ -104,7 +109,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMeFailure() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).findMeById(any(Long.class));
+        willThrow(new UnAuthorizedException("존재하지 않는 사용자입니다.")).given(userService).findUser(any());
         //when
         ResultActions response = 사용자_내_정보_조회_요청();
         //then
@@ -145,7 +150,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void update() throws Exception {
         //given
-        willDoNothing().given(userService).update(any(Long.class), any(UserRequest.class));
+        willDoNothing().given(userService).update(any(), any(UserRequest.class));
         //when
         ResultActions response = 사용자_업데이트_요청(updateRequest);
         //then
@@ -156,8 +161,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void updateFailure() throws Exception {
         //given
-        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다.")).given(userService).update(any(Long.class),
-                any(UserRequest.class));
+        willThrow(new InvalidInputException("중복된 닉네임이 존재합니다."))
+                .given(userService).update(any(), any(UserRequest.class));
         //when
         ResultActions response = 사용자_업데이트_요청(updateRequest);
         //then
@@ -168,7 +173,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteUser() throws Exception {
         //given
-        willDoNothing().given(userService).delete(any(Long.class));
+        willDoNothing().given(userService).delete(any());
         //when
         ResultActions response = 사용자_삭제_요청();
         //then
@@ -179,7 +184,7 @@ class UserControllerTest extends ApiDocument {
     @Test
     void deleteFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).delete(any(Long.class));
+        willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(userService).delete(any());
         //when
         ResultActions response = 사용자_삭제_요청();
         //then

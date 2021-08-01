@@ -1,13 +1,44 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import Frame from '../Frame/Frame';
-import { Container, Title } from './VaccinationState.styles';
+import {
+  Container,
+  Title,
+  FrameContent,
+  PrimaryState,
+  Info,
+  InfoTitle,
+} from './VaccinationState.styles';
+import { Frame, DonutChart } from '../common';
 
 const VaccinationState = ({ title }) => (
   <Container>
     {title && <Title>{title}</Title>}
     <Frame width="100%" showShadow={true}>
-      <div style={{ display: 'flex', alignItems: 'center', height: '12rem' }}>준비 중입니다</div>
+      <FrameContent>
+        <PrimaryState>
+          <DonutChart target="35.8" />
+          <Info>
+            <InfoTitle>국내 1차 접종</InfoTitle>
+            <div>누적 18,382,137</div>
+            <div>신규 477,853</div>
+          </Info>
+        </PrimaryState>
+        <PrimaryState>
+          <DonutChart target="13.7" />
+          <Info>
+            <InfoTitle>국내 완전 접종</InfoTitle>
+            <div>누적 7,018,654</div>
+            <div>신규 40,086</div>
+          </Info>
+        </PrimaryState>
+        <PrimaryState>
+          <DonutChart target="14.6" />
+          <Info>
+            <InfoTitle>세계 완전 접종</InfoTitle>
+            <div>누적 1,096,011,434</div>
+            {/* <div>신규 40,086</div> */}
+          </Info>
+        </PrimaryState>
+      </FrameContent>
     </Frame>
   </Container>
 );

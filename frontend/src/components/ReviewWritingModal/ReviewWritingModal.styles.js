@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2rem 0 0 0;
+  width: 100%;
 `;
 
 const TextArea = styled.textarea`

@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import {
   Container,
   FrameContent,
   ButtonContainer,
-  Info,
+  TopContainer,
   VaccinationInfo,
   ReviewInfo,
   ShotVerified,
@@ -15,19 +16,18 @@ import {
   CreatedAt,
   Content,
   ViewCount,
-  Error,
   buttonStyles,
+  Comment,
+  IconContainer,
+  BottomContainer,
+  CommentCount,
+  CommentFormContainer,
 } from './ReviewDetailPage.styles';
-import Frame from '../../components/Frame/Frame';
 import { useHistory, useParams } from 'react-router-dom';
-import { useFetch } from '../../hooks';
-import { requestGetReview } from '../../requests';
-import Label from '../../components/Label/Label';
-import { LABEL_SIZE_TYPE } from '../../components/Label/Label.styles';
+import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
-  ERROR_MESSAGE,
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
@@ -36,13 +36,18 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import Button from '../../components/Button/Button';
-import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../../components/Button/Button.styles';
-import Avatar from '../../components/Avatar/Avatar';
+import {
+  BUTTON_BACKGROUND_TYPE,
+  BUTTON_SIZE_TYPE,
+} from '../../components/common/Button/Button.styles';
 import { toDate } from '../../utils';
-import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
-import { deleteReviewAsync } from '../../service';
+import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
+import { deleteReviewAsync, getReviewAsync } from '../../service';
+import { Avatar, Button, Frame, Label } from '../../components/common';
+import { CommentForm, CommentItem } from '../../components';
+import { useLike } from '../../hooks';
 
+// TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
   const history = useHistory();
   const { id } = useParams();
@@ -50,7 +55,21 @@ const ReviewDetailPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { response: review, error } = useFetch({}, () => requestGetReview(id));
+  const [review, setReview] = useState({});
+
+  const getReview = async () => {
+    const response = await getReviewAsync(accessToken, id);
+
+    if (response.state === RESPONSE_STATE.FAILURE) {
+      alert('failure - getReviewAsync');
+
+      return;
+    }
+
+    setReview(response.data);
+  };
+
+  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -78,9 +97,9 @@ const ReviewDetailPage = () => {
     goReviewPage();
   };
 
-  if (error) {
-    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW}</Error>;
-  }
+  useEffect(() => {
+    getReview();
+  }, []);
 
   return (
     <Container>
@@ -98,7 +117,7 @@ const ReviewDetailPage = () => {
               <div>목록 보기</div>
             </Button>
           </ButtonContainer>
-          <Info>
+          <TopContainer>
             <VaccinationInfo>
               <Label
                 backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
@@ -110,7 +129,7 @@ const ReviewDetailPage = () => {
               <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
             </VaccinationInfo>
             <WriterInfo>
-              <Avatar />
+              <Avatar src={review?.writer?.socialProfileUrl} />
               <Writer>
                 {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
               </Writer>
@@ -145,8 +164,47 @@ const ReviewDetailPage = () => {
                 </UpdateButtonContainer>
               )}
             </InfoBottom>
-          </Info>
+          </TopContainer>
           <Content>{review?.content}</Content>
+          <BottomContainer>
+            <IconContainer>
+              <ButtonLike
+                iconWidth="24"
+                iconHeight="24"
+                color={FONT_COLOR.BLACK}
+                likeCountSize="1.6rem"
+                hasLiked={review?.hasLiked}
+                likeCount={review?.likeCount}
+                onClickLike={onClickLike}
+              />
+            </IconContainer>
+            <IconContainer>
+              <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
+              <div>{review?.comments?.length}</div>
+            </IconContainer>
+          </BottomContainer>
+          <Comment>
+            <CommentCount>댓글 {review?.comments?.length}</CommentCount>
+            <CommentFormContainer>
+              <CommentForm
+                accessToken={accessToken}
+                reviewId={id}
+                nickname={user.nickname}
+                socialProfileUrl={user.socialProfileUrl}
+                getReview={getReview}
+              />
+            </CommentFormContainer>
+            {review?.comments?.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                accessToken={accessToken}
+                userId={user.id}
+                reviewId={id}
+                comment={comment}
+                getReview={getReview}
+              />
+            ))}
+          </Comment>
         </FrameContent>
       </Frame>
     </Container>

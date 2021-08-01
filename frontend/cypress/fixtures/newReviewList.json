@@ -1,0 +1,170 @@
+[
+  {
+    "id": 7,
+    "writer": {
+      "id": 1,
+      "nickname": "nickname",
+      "ageRange": {
+        "meaning": "10대",
+        "minAge": 10,
+        "maxAge": 20
+      },
+      "shotVerified": false,
+      "accessToken": null,
+      "socialProvider": "NAVER",
+      "socialId": "{Unique ID received from social provider}",
+      "socialProfileUrl": "naver.com/profile"
+    },
+    "content": "모더나를 맞았어요. 별로 안 아프더라구요.",
+    "viewCount": 0,
+    "vaccinationType": "MODERNA",
+    "createdAt": "2021-07-27T14:56:19.036"
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 1,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscin",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 2,
+    "vaccinationType": "MODERNA",
+    "viewCount": 0,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "shotVerified": true,
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  }
+]

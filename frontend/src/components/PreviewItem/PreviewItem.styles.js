@@ -5,6 +5,10 @@ const Container = styled.div`
   padding: 1.2rem;
   width: 100%;
   cursor: pointer;
+
+  @media screen and (max-width: 801px) {
+    padding: 2rem;
+  }
 `;
 
 const TopContainer = styled.div`

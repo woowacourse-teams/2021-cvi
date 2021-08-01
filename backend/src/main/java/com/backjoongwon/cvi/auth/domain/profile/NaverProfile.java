@@ -8,24 +8,19 @@ public class NaverProfile implements SocialProfile {
 
     private String resultcode;
     private String message;
-    private Response response;
+    private NaverAccount response;
 
     @Override
-    public String getId() {
+    public String extractSocialId() {
         return response.id;
     }
 
     @Override
-    public String getNickname() {
-        return response.nickname;
-    }
-
-    @Override
-    public String getProfileImage() {
+    public String extractProfileUrl() {
         return response.profile_image;
     }
 
-    static class Response {
+    private static class NaverAccount {
 
         public String id;
         public String nickname;

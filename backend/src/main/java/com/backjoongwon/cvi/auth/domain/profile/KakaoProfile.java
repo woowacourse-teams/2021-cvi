@@ -11,28 +11,23 @@ public class KakaoProfile implements SocialProfile {
     public KakaoAccount kakao_account;
 
     @Override
-    public String getId() {
+    public String extractSocialId() {
         return id;
     }
 
     @Override
-    public String getNickname() {
-        return getNickname();
-    }
-
-    @Override
-    public String getProfileImage() {
+    public String extractProfileUrl() {
         return this.kakao_account.profile.profile_image_url;
     }
 
-    static class Properties {
+    private static class Properties {
 
         public String nickname;
         public String profile_image;
         public String thumbnail_image;
     }
 
-    static class KakaoAccount {
+    private static class KakaoAccount {
 
         public Boolean profile_needs_agreement;
         public Profile profile;
@@ -51,7 +46,7 @@ public class KakaoProfile implements SocialProfile {
         public Boolean profile_image_needs_agreement;
     }
 
-    static class Profile {
+    private static class Profile {
 
         public String nickname;
         public String thumbnail_image_url;

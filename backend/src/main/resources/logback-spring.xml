@@ -11,7 +11,7 @@
     <property name="MAX_FILE_SIZE" value="100MB"/>
     <property name="MAX_HISTORY" value="30"/>
 
-    <springProfile name="local">
+    <springProfile name="local|test">
         <include resource="console-appender.xml"/>
 
         <root level="INFO">

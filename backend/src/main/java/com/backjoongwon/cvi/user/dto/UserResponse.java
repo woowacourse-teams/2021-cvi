@@ -31,14 +31,18 @@ public class UserResponse {
         this.socialProfileUrl = socialProfileUrl;
     }
 
+    public static UserResponse of(User user) {
+        return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
+                user.isShotVerified(), null, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
+    }
+
     public static UserResponse of(User user, String token) {
         return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
                 user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
 
-    public static UserResponse of(Long id, String nickname, AgeRangeResponse ageRange, boolean shotVerified, String accessToken,
-                                  SocialProvider socialProvider, String socialId, String socialProfileUrl) {
-        return new UserResponse(id, nickname, ageRange,
-                shotVerified, accessToken, socialProvider, socialId, socialProfileUrl);
+    public static UserResponse newUser(SocialProvider socialProvider, String socialId, String socialProfileUrl) {
+        return new UserResponse(null, null, null, false,
+                null, socialProvider, socialId, socialProfileUrl);
     }
 }
