@@ -15,6 +15,15 @@ spring:
 server:
   shutdown: graceful
 
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000
+  auth:
+    naver:
+      client-secret: client-secret
+
 ---
 spring:
   config:
@@ -41,15 +50,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-
-security:
-  jwt:
-    token:
-      secret-key: cvi_secret_key
-      expire-length: 3600000
-  auth:
-    naver:
-      client-secret: R_zN6l1A3V
 ---
 spring:
   config:
