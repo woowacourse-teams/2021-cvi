@@ -8,6 +8,7 @@ import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Component
+@Slf4j
 public class NaverAuthorization implements Authorization {
 
     @Value("${security.auth.naver.client-secret}")
@@ -61,6 +63,7 @@ public class NaverAuthorization implements Authorization {
         try {
             return objectMapper.readValue(response.getBody(), NaverOAuthToken.class);
         } catch (JsonProcessingException e) {
+            log.info("토근 정보를 매핑하는데 실패했습니다. {}", response.getBody());
             throw new MappingFailureException("토큰 정보를 매핑하는데 실패했습니다.");
         }
     }
