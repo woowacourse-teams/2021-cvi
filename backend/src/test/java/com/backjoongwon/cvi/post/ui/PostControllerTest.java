@@ -220,9 +220,9 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineType() throws Exception {
         //given
         willReturn(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         )).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
