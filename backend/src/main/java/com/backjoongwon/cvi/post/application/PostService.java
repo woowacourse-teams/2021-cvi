@@ -15,15 +15,12 @@ import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -40,7 +37,7 @@ public class PostService {
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
-        return PostResponse.of(post, writer);
+        return PostResponse.toList(post, writer);
     }
 
     @Transactional
@@ -51,17 +48,17 @@ public class PostService {
     }
 
     private PostResponse createPostResponse(Optional<User> optionalUser, Post post) {
-        return PostResponse.of(post, optionalUser.orElse(null));
+        return PostResponse.toList(post, optionalUser.orElse(null));
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType);
-        return PostResponse.of(posts, optionalUser.orElse(null));
+        return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size);
-        return PostResponse.of(posts, optionalUser.orElse(null));
+        return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
     @Transactional
