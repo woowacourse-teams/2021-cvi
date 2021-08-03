@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  VACCINATION,
-  PATH,
-  RESPONSE_STATE,
-  ALERT_MESSAGE,
-  SNACKBAR_MESSAGE,
-} from '../../constants';
+import { VACCINATION, PATH, RESPONSE_STATE, ALERT_MESSAGE } from '../../constants';
 import { Container, Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
@@ -14,7 +8,6 @@ import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service
 import { findKey } from '../../utils';
 import { Button, Frame, Tabs } from '../../components/common';
 import { ReviewItem, ReviewWritingModal } from '../../components';
-import { useSnackBar } from '../../hooks';
 
 const ReviewPage = () => {
   const history = useHistory();
@@ -23,8 +16,6 @@ const ReviewPage = () => {
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
-
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
 
   const tabList = ['전체', ...Object.values(VACCINATION)];
 
@@ -104,11 +95,9 @@ const ReviewPage = () => {
       {isModalOpen && (
         <ReviewWritingModal
           getReviewList={getReviewList}
-          openSnackBar={openSnackBar}
           onClickClose={() => setModalOpen(false)}
         />
       )}
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW}</SnackBar>}
     </>
   );
 };

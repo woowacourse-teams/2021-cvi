@@ -27,6 +27,7 @@ const SNACKBAR_MESSAGE = {
   SUCCESS_TO_EDIT_ACCOUNT: '내 정보를 수정했습니다.',
   SUCCESS_TO_CREATE_COMMENT: '댓글을 작성했습니다.',
   SUCCESS_TO_EDIT_COMMENT: '댓글을 수정했습니다.',
+  SUCCESS_TO_DELETE_COMMENT: '댓글을 삭제했습니다.',
 };
 
 const CONFIRM_MESSAGE = {

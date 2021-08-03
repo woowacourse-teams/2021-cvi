@@ -49,7 +49,7 @@ const ReviewEditPage = () => {
   const [content, setContent] = useState('');
 
   const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -75,73 +75,70 @@ const ReviewEditPage = () => {
       return;
     }
 
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
     goReviewDetailPage();
   };
 
   return (
-    <>
-      <Container>
-        <Frame width="100%" showShadow={true}>
-          <FrameContent>
-            <ButtonContainer>
-              <Button
-                sizeType={BUTTON_SIZE_TYPE.LARGE}
-                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                color={FONT_COLOR.BLACK}
-                withIcon={true}
-                onClick={goBack}
+    <Container>
+      <Frame width="100%" showShadow={true}>
+        <FrameContent>
+          <ButtonContainer>
+            <Button
+              sizeType={BUTTON_SIZE_TYPE.LARGE}
+              backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+              color={FONT_COLOR.BLACK}
+              withIcon={true}
+              onClick={goBack}
+            >
+              <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
+              <div>뒤로 가기</div>
+            </Button>
+          </ButtonContainer>
+          <Info>
+            <VaccinationInfo>
+              <Label
+                backgroundColor={VACCINATION_COLOR[review.vaccinationType]}
+                sizeType={LABEL_SIZE_TYPE.MEDIUM}
+                fontColor={labelFontColor}
               >
-                <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
-                <div>뒤로 가기</div>
-              </Button>
-            </ButtonContainer>
-            <Info>
-              <VaccinationInfo>
-                <Label
-                  backgroundColor={VACCINATION_COLOR[review.vaccinationType]}
-                  sizeType={LABEL_SIZE_TYPE.MEDIUM}
-                  fontColor={labelFontColor}
-                >
-                  {VACCINATION[review.vaccinationType]}
-                </Label>
-                <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
-              </VaccinationInfo>
-              <WriterInfo>
-                <Avatar src={review?.writer?.socialProfileUrl} />
-                <Writer>
-                  {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
-                </Writer>
-              </WriterInfo>
-              <InfoBottom>
-                <ReviewInfo>
-                  <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-                  {review.createdAt && (
-                    <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
-                  )}
-                  <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
-                  <ViewCount>{review?.viewCount}</ViewCount>
-                </ReviewInfo>
-              </InfoBottom>
-            </Info>
-            <TextArea onChange={(event) => setContent(event.target.value)}>
-              {review?.content}
-            </TextArea>
-          </FrameContent>
-        </Frame>
-        <EditButtonContainer>
-          <Button
-            backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
-            sizeType={BUTTON_SIZE_TYPE.LARGE}
-            styles={editButtonStyles}
-            onClick={editReview}
-          >
-            수정하기
-          </Button>
-        </EditButtonContainer>
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT}</SnackBar>}
-    </>
+                {VACCINATION[review.vaccinationType]}
+              </Label>
+              <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
+            </VaccinationInfo>
+            <WriterInfo>
+              <Avatar src={review?.writer?.socialProfileUrl} />
+              <Writer>
+                {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
+              </Writer>
+            </WriterInfo>
+            <InfoBottom>
+              <ReviewInfo>
+                <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
+                {review.createdAt && (
+                  <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
+                )}
+                <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+                <ViewCount>{review?.viewCount}</ViewCount>
+              </ReviewInfo>
+            </InfoBottom>
+          </Info>
+          <TextArea onChange={(event) => setContent(event.target.value)}>
+            {review?.content}
+          </TextArea>
+        </FrameContent>
+      </Frame>
+      <EditButtonContainer>
+        <Button
+          backgroundType={BUTTON_BACKGROUND_TYPE.FILLED}
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
+          styles={editButtonStyles}
+          onClick={editReview}
+        >
+          수정하기
+        </Button>
+      </EditButtonContainer>
+    </Container>
   );
 };
 

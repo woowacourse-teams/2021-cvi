@@ -35,7 +35,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
 
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const deleteComment = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_COMMENT)) return;
@@ -48,6 +48,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
       return;
     }
 
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_COMMENT);
     getReview();
   };
 
@@ -68,70 +69,67 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
     }
 
     setIsEditable(false);
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
     getReview();
   };
 
   return (
-    <>
-      <Container>
-        <InfoContainer>
-          <Avatar src={writer.socialProfileUrl} />
-          <Info>
-            <Writer>
-              {writer.nickname} · {writer.ageRange.meaning}
-              {writer.shotVerified && <ShotVerified>접종 확인</ShotVerified>}
-            </Writer>
-            <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
-          </Info>
-          {userId === writer.id && (
-            <UpdateButtonContainer>
+    <Container>
+      <InfoContainer>
+        <Avatar src={writer.socialProfileUrl} />
+        <Info>
+          <Writer>
+            {writer.nickname} · {writer.ageRange.meaning}
+            {writer.shotVerified && <ShotVerified>접종 확인</ShotVerified>}
+          </Writer>
+          <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
+        </Info>
+        {userId === writer.id && (
+          <UpdateButtonContainer>
+            <Button
+              backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+              color={FONT_COLOR.GRAY}
+              styles={buttonStyles}
+              onClick={() => setIsEditable(!isEditable)}
+            >
+              {isEditable ? '취소' : '수정'}
+            </Button>
+
+            {isEditable ? (
+              <Button
+                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                color={THEME_COLOR.PRIMARY}
+                styles={buttonStyles}
+                onClick={editComment}
+              >
+                완료
+              </Button>
+            ) : (
               <Button
                 backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
                 color={FONT_COLOR.GRAY}
                 styles={buttonStyles}
-                onClick={() => setIsEditable(!isEditable)}
+                onClick={deleteComment}
               >
-                {isEditable ? '취소' : '수정'}
+                삭제
               </Button>
-
-              {isEditable ? (
-                <Button
-                  backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                  color={THEME_COLOR.PRIMARY}
-                  styles={buttonStyles}
-                  onClick={editComment}
-                >
-                  완료
-                </Button>
-              ) : (
-                <Button
-                  backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                  color={FONT_COLOR.GRAY}
-                  styles={buttonStyles}
-                  onClick={deleteComment}
-                >
-                  삭제
-                </Button>
-              )}
-            </UpdateButtonContainer>
-          )}
-        </InfoContainer>
-        {isEditable ? (
-          <>
-            <TextArea
-              value={editedContent}
-              minLength={COMMENT_LIMIT.MIN_LEGNTH}
-              maxLength={COMMENT_LIMIT.MAX_LEGNTH}
-              onChange={(event) => setEditedContent(event.target.value)}
-            />
-          </>
-        ) : (
-          <Content>{content}</Content>
+            )}
+          </UpdateButtonContainer>
         )}
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT}</SnackBar>}
-    </>
+      </InfoContainer>
+      {isEditable ? (
+        <>
+          <TextArea
+            value={editedContent}
+            minLength={COMMENT_LIMIT.MIN_LEGNTH}
+            maxLength={COMMENT_LIMIT.MAX_LEGNTH}
+            onChange={(event) => setEditedContent(event.target.value)}
+          />
+        </>
+      ) : (
+        <Content>{content}</Content>
+      )}
+    </Container>
   );
 };
 

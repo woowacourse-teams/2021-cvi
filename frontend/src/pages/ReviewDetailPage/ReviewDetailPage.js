@@ -68,7 +68,7 @@ const ReviewDetailPage = () => {
   };
 
   const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -92,7 +92,7 @@ const ReviewDetailPage = () => {
       return;
     }
 
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
     goReviewPage();
   };
 
@@ -101,115 +101,112 @@ const ReviewDetailPage = () => {
   }, []);
 
   return (
-    <>
-      <Container>
-        <Frame width="100%" showShadow={true}>
-          <FrameContent>
-            <ButtonContainer>
-              <Button
-                sizeType={BUTTON_SIZE_TYPE.LARGE}
-                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                color={FONT_COLOR.BLACK}
-                withIcon={true}
-                onClick={goReviewPage}
+    <Container>
+      <Frame width="100%" showShadow={true}>
+        <FrameContent>
+          <ButtonContainer>
+            <Button
+              sizeType={BUTTON_SIZE_TYPE.LARGE}
+              backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+              color={FONT_COLOR.BLACK}
+              withIcon={true}
+              onClick={goReviewPage}
+            >
+              <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
+              <div>목록 보기</div>
+            </Button>
+          </ButtonContainer>
+          <TopContainer>
+            <VaccinationInfo>
+              <Label
+                backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
+                sizeType={LABEL_SIZE_TYPE.MEDIUM}
+                fontColor={labelFontColor}
               >
-                <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
-                <div>목록 보기</div>
-              </Button>
-            </ButtonContainer>
-            <TopContainer>
-              <VaccinationInfo>
-                <Label
-                  backgroundColor={VACCINATION_COLOR[review?.vaccinationType]}
-                  sizeType={LABEL_SIZE_TYPE.MEDIUM}
-                  fontColor={labelFontColor}
-                >
-                  {VACCINATION[review?.vaccinationType]}
-                </Label>
-                <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
-              </VaccinationInfo>
-              <WriterInfo>
-                <Avatar src={review?.writer?.socialProfileUrl} />
-                <Writer>
-                  {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
-                </Writer>
-              </WriterInfo>
-              <InfoBottom>
-                <ReviewInfo>
-                  <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-                  {review.createdAt && (
-                    <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
-                  )}
-                  <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
-                  <ViewCount>{review?.viewCount}</ViewCount>
-                </ReviewInfo>
-                {user.id === review?.writer?.id && (
-                  <UpdateButtonContainer>
-                    <Button
-                      backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                      color={FONT_COLOR.GRAY}
-                      styles={buttonStyles}
-                      onClick={goReviewEditPage}
-                    >
-                      수정
-                    </Button>
-                    <Button
-                      backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
-                      color={FONT_COLOR.GRAY}
-                      styles={buttonStyles}
-                      onClick={deleteReview}
-                    >
-                      삭제
-                    </Button>
-                  </UpdateButtonContainer>
+                {VACCINATION[review?.vaccinationType]}
+              </Label>
+              <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
+            </VaccinationInfo>
+            <WriterInfo>
+              <Avatar src={review?.writer?.socialProfileUrl} />
+              <Writer>
+                {review?.writer?.nickname} · {review?.writer?.ageRange?.meaning}
+              </Writer>
+            </WriterInfo>
+            <InfoBottom>
+              <ReviewInfo>
+                <ClockIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
+                {review.createdAt && (
+                  <CreatedAt>{toDate(TO_DATE_TYPE.TIME, review.createdAt)}</CreatedAt>
                 )}
-              </InfoBottom>
-            </TopContainer>
-            <Content>{review?.content}</Content>
-            <BottomContainer>
-              <IconContainer>
-                <ButtonLike
-                  iconWidth="24"
-                  iconHeight="24"
-                  color={FONT_COLOR.BLACK}
-                  likeCountSize="1.6rem"
-                  hasLiked={review?.hasLiked}
-                  likeCount={review?.likeCount}
-                  onClickLike={onClickLike}
-                />
-              </IconContainer>
-              <IconContainer>
-                <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-                <div>{review?.comments?.length}</div>
-              </IconContainer>
-            </BottomContainer>
-            <Comment>
-              <CommentCount>댓글 {review?.comments?.length}</CommentCount>
-              <CommentFormContainer>
-                <CommentForm
-                  accessToken={accessToken}
-                  reviewId={id}
-                  nickname={user.nickname}
-                  socialProfileUrl={user.socialProfileUrl}
-                  getReview={getReview}
-                />
-              </CommentFormContainer>
-              {review?.comments?.map((comment) => (
-                <CommentItem
-                  key={comment.id}
-                  accessToken={accessToken}
-                  userId={user.id}
-                  reviewId={id}
-                  comment={comment}
-                  getReview={getReview}
-                />
-              ))}
-            </Comment>
-          </FrameContent>
-        </Frame>
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW}</SnackBar>}
-    </>
+                <EyeIcon width="18" height="18" stroke={FONT_COLOR.LIGHT_GRAY} />
+                <ViewCount>{review?.viewCount}</ViewCount>
+              </ReviewInfo>
+              {user.id === review?.writer?.id && (
+                <UpdateButtonContainer>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    styles={buttonStyles}
+                    onClick={goReviewEditPage}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                    color={FONT_COLOR.GRAY}
+                    styles={buttonStyles}
+                    onClick={deleteReview}
+                  >
+                    삭제
+                  </Button>
+                </UpdateButtonContainer>
+              )}
+            </InfoBottom>
+          </TopContainer>
+          <Content>{review?.content}</Content>
+          <BottomContainer>
+            <IconContainer>
+              <ButtonLike
+                iconWidth="24"
+                iconHeight="24"
+                color={FONT_COLOR.BLACK}
+                likeCountSize="1.6rem"
+                hasLiked={review?.hasLiked}
+                likeCount={review?.likeCount}
+                onClickLike={onClickLike}
+              />
+            </IconContainer>
+            <IconContainer>
+              <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
+              <div>{review?.comments?.length}</div>
+            </IconContainer>
+          </BottomContainer>
+          <Comment>
+            <CommentCount>댓글 {review?.comments?.length}</CommentCount>
+            <CommentFormContainer>
+              <CommentForm
+                accessToken={accessToken}
+                reviewId={id}
+                nickname={user.nickname}
+                socialProfileUrl={user.socialProfileUrl}
+                getReview={getReview}
+              />
+            </CommentFormContainer>
+            {review?.comments?.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                accessToken={accessToken}
+                userId={user.id}
+                reviewId={id}
+                comment={comment}
+                getReview={getReview}
+              />
+            ))}
+          </Comment>
+        </FrameContent>
+      </Frame>
+    </Container>
   );
 };
 

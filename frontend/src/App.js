@@ -15,8 +15,11 @@ import {
   MyPageReviews,
 } from './pages';
 import { BaseLayout } from './components/common';
+import { useSnackBar } from './hooks';
 
 const App = () => {
+  const { isSnackBarOpen, SnackBar } = useSnackBar();
+
   return (
     <>
       <GlobalStyles />
@@ -63,6 +66,7 @@ const App = () => {
           </Switch>
         </BaseLayout>
       </BrowserRouter>
+      {isSnackBarOpen && <SnackBar />}
     </>
   );
 };

@@ -26,7 +26,7 @@ import { useSnackBar } from '../../hooks';
 const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getReview }) => {
   const [content, setContent] = useState('');
 
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const createComment = async () => {
     if (!content.length) {
@@ -44,49 +44,46 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
       return;
     }
 
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
     getReview();
     setContent('');
   };
 
   // TODO: Form으로 변경
   return (
-    <>
-      <Container>
-        {accessToken ? (
-          <>
-            <User>
-              <Avatar src={socialProfileUrl} sizeType={AVATAR_SIZE_TYPE.SMALL} />
-              <div>{nickname}</div>
-            </User>
-            <TextArea
-              value={content}
-              placeholder={PLACEHOLDER.COMMENT_FORM}
-              minLength={COMMENT_LIMIT.MIN_LENGTH}
-              maxLength={COMMENT_LIMIT.MAX_LEGNTH}
-              readOnly={!accessToken}
-              isLogin={accessToken}
-              onChange={(event) => setContent(event.target.value)}
-            />
-            <BottomContainer>
-              <div>
-                {content.length} <CommentMaxCount>/ {COMMENT_LIMIT.MAX_LEGNTH}</CommentMaxCount>
-              </div>
-              <Button onClick={createComment}>댓글 작성</Button>
-            </BottomContainer>
-          </>
-        ) : (
-          <NeedLogin>
-            댓글을 작성하려면
-            <LoginLink exact to={PATH.LOGIN}>
-              로그인
-            </LoginLink>
-            해주세요
-          </NeedLogin>
-        )}
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT}</SnackBar>}
-    </>
+    <Container>
+      {accessToken ? (
+        <>
+          <User>
+            <Avatar src={socialProfileUrl} sizeType={AVATAR_SIZE_TYPE.SMALL} />
+            <div>{nickname}</div>
+          </User>
+          <TextArea
+            value={content}
+            placeholder={PLACEHOLDER.COMMENT_FORM}
+            minLength={COMMENT_LIMIT.MIN_LENGTH}
+            maxLength={COMMENT_LIMIT.MAX_LEGNTH}
+            readOnly={!accessToken}
+            isLogin={accessToken}
+            onChange={(event) => setContent(event.target.value)}
+          />
+          <BottomContainer>
+            <div>
+              {content.length} <CommentMaxCount>/ {COMMENT_LIMIT.MAX_LEGNTH}</CommentMaxCount>
+            </div>
+            <Button onClick={createComment}>댓글 작성</Button>
+          </BottomContainer>
+        </>
+      ) : (
+        <NeedLogin>
+          댓글을 작성하려면
+          <LoginLink exact to={PATH.LOGIN}>
+            로그인
+          </LoginLink>
+          해주세요
+        </NeedLogin>
+      )}
+    </Container>
   );
 };
 

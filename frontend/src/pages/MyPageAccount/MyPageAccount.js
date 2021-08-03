@@ -26,7 +26,7 @@ const MyPageAccount = () => {
   const [nickname, setNickname] = useState('');
   const [ageRange, setAgeRange] = useState('');
 
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const editAccount = async (event) => {
     event.preventDefault();
@@ -47,7 +47,7 @@ const MyPageAccount = () => {
 
     dispatch(getMyInfoAsync(accessToken));
 
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
   };
 
   const isDisableButton = nickname === user.nickname && ageRange === user.ageRange?.meaning;
@@ -58,43 +58,40 @@ const MyPageAccount = () => {
   }, [user.nickname, user.ageRange?.meaning]);
 
   return (
-    <>
-      <Container>
-        <Title>내 정보 관리</Title>
-        <form onSubmit={(event) => editAccount(event)}>
-          <InfoContainer>
-            <ProfileImage src={user.socialProfileUrl} />
-            <Info>
-              <Input
-                width="51.5rem"
-                labelText="닉네임"
-                value={nickname}
-                labelStyles={inputStyles}
-                inputStyles={inputStyles}
-                onChange={(event) => setNickname(event.target.value)}
+    <Container>
+      <Title>내 정보 관리</Title>
+      <form onSubmit={(event) => editAccount(event)}>
+        <InfoContainer>
+          <ProfileImage src={user.socialProfileUrl} />
+          <Info>
+            <Input
+              width="51.5rem"
+              labelText="닉네임"
+              value={nickname}
+              labelStyles={inputStyles}
+              inputStyles={inputStyles}
+              onChange={(event) => setNickname(event.target.value)}
+            />
+            <AgeRange>나이대</AgeRange>
+            {ageRange && (
+              <Selection
+                selectionList={Object.keys(AGE_RANGE)}
+                selectedItem={ageRange}
+                setSelectedItem={setAgeRange}
               />
-              <AgeRange>나이대</AgeRange>
-              {ageRange && (
-                <Selection
-                  selectionList={Object.keys(AGE_RANGE)}
-                  selectedItem={ageRange}
-                  setSelectedItem={setAgeRange}
-                />
-              )}
-            </Info>
-          </InfoContainer>
-          <Button
-            type="submit"
-            sizeType={BUTTON_SIZE_TYPE.LARGE}
-            styles={isDisableButton ? disabledStyles : buttonStyles}
-            disabled={isDisableButton}
-          >
-            수정하기
-          </Button>
-        </form>
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT}</SnackBar>}
-    </>
+            )}
+          </Info>
+        </InfoContainer>
+        <Button
+          type="submit"
+          sizeType={BUTTON_SIZE_TYPE.LARGE}
+          styles={isDisableButton ? disabledStyles : buttonStyles}
+          disabled={isDisableButton}
+        >
+          수정하기
+        </Button>
+      </form>
+    </Container>
   );
 };
 

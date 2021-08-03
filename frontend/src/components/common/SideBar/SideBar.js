@@ -24,13 +24,13 @@ const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
 
-  const { isSnackBarOpen, openSnackBar, SnackBar } = useSnackBar();
+  const { openSnackBar } = useSnackBar();
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     dispatch(logoutAction());
 
-    openSnackBar();
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
   };
 
   const isRelatedMyPage = (pathname) =>
@@ -50,42 +50,39 @@ const SideBar = () => {
   }, []);
 
   return (
-    <>
-      <Container>
-        <LogoContainer to={PATH.HOME}>
-          <LogoIcon width="112" fill={THEME_COLOR.WHITE} />
-        </LogoContainer>
-        <MenuContainer>
-          <NavLinkElement exact to={PATH.HOME} activeStyle={selectedNavStyles}>
-            <HomeIcon width="20" height="20" stroke="currentColor" /> 홈
-          </NavLinkElement>
-          <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
-            <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
-          </NavLinkElement>
-          {!!Object.keys(user).length && (
-            <NavLinkElement
-              to={PATH.MY_PAGE_SHOT_VERIFICATION}
-              activeStyle={selectedNavStyles}
-              isActive={(_, { pathname }) => isRelatedMyPage(pathname)}
-            >
-              <MyPageIcon width="20" height="20" stroke="currentColor" fill="currentColor" />{' '}
-              마이페이지
-            </NavLinkElement>
-          )}
-        </MenuContainer>
-
-        {Object.keys(user).length ? (
-          <LogoutButton onClick={logout}>
-            <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
-          </LogoutButton>
-        ) : (
-          <NavLinkElement to={PATH.LOGIN} activeStyle={selectedNavStyles}>
-            <LoginIcon width="24" height="24" stroke="currentColor" /> 로그인
+    <Container>
+      <LogoContainer to={PATH.HOME}>
+        <LogoIcon width="112" fill={THEME_COLOR.WHITE} />
+      </LogoContainer>
+      <MenuContainer>
+        <NavLinkElement exact to={PATH.HOME} activeStyle={selectedNavStyles}>
+          <HomeIcon width="20" height="20" stroke="currentColor" /> 홈
+        </NavLinkElement>
+        <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
+          <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
+        </NavLinkElement>
+        {!!Object.keys(user).length && (
+          <NavLinkElement
+            to={PATH.MY_PAGE_SHOT_VERIFICATION}
+            activeStyle={selectedNavStyles}
+            isActive={(_, { pathname }) => isRelatedMyPage(pathname)}
+          >
+            <MyPageIcon width="20" height="20" stroke="currentColor" fill="currentColor" />{' '}
+            마이페이지
           </NavLinkElement>
         )}
-      </Container>
-      {isSnackBarOpen && <SnackBar>{SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT}</SnackBar>}
-    </>
+      </MenuContainer>
+
+      {Object.keys(user).length ? (
+        <LogoutButton onClick={logout}>
+          <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
+        </LogoutButton>
+      ) : (
+        <NavLinkElement to={PATH.LOGIN} activeStyle={selectedNavStyles}>
+          <LoginIcon width="24" height="24" stroke="currentColor" /> 로그인
+        </NavLinkElement>
+      )}
+    </Container>
   );
 };
 
