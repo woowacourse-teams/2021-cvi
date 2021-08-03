@@ -31,6 +31,16 @@ public class PostQueryDslImpl implements PostQueryDsl {
                 .fetch();
     }
 
+    @Override
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(vaccinationTypeEq(vaccinationType), post.id.lt(lastPostId))
+                .limit(size)
+                .orderBy(post.createdAt.desc())
+                .fetch();
+    }
+
     private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
         if (Objects.nonNull(vaccinationType) && !vaccinationType.equals(VaccinationType.ALL)) {
             return post.vaccinationType.eq(vaccinationType);

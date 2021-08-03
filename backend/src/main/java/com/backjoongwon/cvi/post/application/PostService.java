@@ -15,12 +15,15 @@ import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -60,6 +63,13 @@ public class PostService {
             return PostResponse.of(posts, optionalUser.get());
         }
         return PostResponse.of(posts, null);
+    }
+
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Optional<User> optionalUser) {
+        return postRepository.findByVaccineType(vaccinationType, lastPostId, size)
+                .stream()
+                .map(post -> PostResponse.from(post))
+                .collect(Collectors.toList());
     }
 
     @Transactional
