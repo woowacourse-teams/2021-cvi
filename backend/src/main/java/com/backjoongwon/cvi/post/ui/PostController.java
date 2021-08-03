@@ -44,7 +44,7 @@ public class PostController {
         return postService.findById(id, user);
     }
 
-    @GetMapping("/scroll")
+    @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
                                                          @RequestParam Long lastPostId, @RequestParam int size, @AuthenticationPrincipal Optional<User> user) {

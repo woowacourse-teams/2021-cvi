@@ -470,6 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_게시글_전체_조회">게시글 전체 조회</a></li>
 <li><a href="#_게시글_단일_조회">게시글 단일 조회</a></li>
 <li><a href="#_게시글_타입별_조회">게시글 타입별 조회</a></li>
+<li><a href="#_게시글_타입별_페이징_조회">게시글 타입별 페이징 조회</a></li>
 <li><a href="#_게시글_수정">게시글 수정</a></li>
 <li><a href="#_게시글_삭제">게시글 삭제</a></li>
 <li><a href="#_게시글_좋아요_생성">게시글 좋아요 생성</a></li>
@@ -1038,7 +1039,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/posts/1
 Content-Type: application/json
-Content-Length: 543
+Content-Length: 546
 
 {
   "id" : 1,
@@ -1062,7 +1063,7 @@ Content-Length: 543
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-30T19:18:10.922"
+  "createdAt" : "2021-08-03T17:27:09.049154"
 }</code></pre>
 </div>
 </div>
@@ -1130,7 +1131,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2035
+Content-Length: 2047
 
 [ {
   "id" : 2,
@@ -1169,7 +1170,7 @@ Content-Length: 2035
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-07-30T19:18:10.516"
+    "createdAt" : "2021-08-03T17:27:08.577964"
   }, {
     "id" : 2,
     "writer" : {
@@ -1187,10 +1188,10 @@ Content-Length: 2035
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-07-30T19:18:10.516"
+    "createdAt" : "2021-08-03T17:27:08.577982"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-07-30T19:18:10.517"
+  "createdAt" : "2021-08-03T17:27:08.581309"
 }, {
   "id" : 1,
   "writer" : {
@@ -1213,7 +1214,7 @@ Content-Length: 2035
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-29T19:18:10.518"
+  "createdAt" : "2021-08-02T17:27:08.581375"
 } ]</code></pre>
 </div>
 </div>
@@ -1273,7 +1274,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1482
+Content-Length: 1491
 
 {
   "id" : 1,
@@ -1312,7 +1313,7 @@ Content-Length: 1482
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-07-30T19:18:10.708"
+    "createdAt" : "2021-08-03T17:27:08.815068"
   }, {
     "id" : 2,
     "writer" : {
@@ -1330,10 +1331,10 @@ Content-Length: 1482
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-07-30T19:18:10.708"
+    "createdAt" : "2021-08-03T17:27:08.815097"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-30T19:18:10.711"
+  "createdAt" : "2021-08-03T17:27:08.816996"
 }</code></pre>
 </div>
 </div>
@@ -1394,7 +1395,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2624
+Content-Length: 2638
 
 [ {
   "id" : 1,
@@ -1433,7 +1434,7 @@ Content-Length: 2624
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-07-30T19:18:10.796"
+    "createdAt" : "2021-08-03T17:27:08.927141"
   }, {
     "id" : 2,
     "writer" : {
@@ -1451,10 +1452,10 @@ Content-Length: 2624
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-07-30T19:18:10.796"
+    "createdAt" : "2021-08-03T17:27:08.92716"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-30T19:18:10.796"
+  "createdAt" : "2021-08-03T17:27:08.928295"
 }, {
   "id" : 2,
   "writer" : {
@@ -1477,7 +1478,7 @@ Content-Length: 2624
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-30T19:18:10.796"
+  "createdAt" : "2021-08-03T17:27:08.928316"
 }, {
   "id" : 3,
   "writer" : {
@@ -1500,7 +1501,143 @@ Content-Length: 2624
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-07-30T19:18:10.796"
+  "createdAt" : "2021-08-03T17:27:08.928324"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_타입별_페이징_조회">게시글 타입별 페이징 조회</h3>
+<div class="sect3">
+<h4 id="_성공_11">성공</h4>
+<div class="sect4">
+<h5 id="_request_20">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/paging?vaccinationType=PFIZER&amp;lastPostId=39&amp;size=3 HTTP/1.1
+Authorization: Bearer {ACCESS TOKEN}
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_20">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 2641
+
+[ {
+  "id" : 37,
+  "writer" : {
+    "id" : 1,
+    "nickname" : "user",
+    "ageRange" : {
+      "meaning" : "10대",
+      "minAge" : 10,
+      "maxAge" : 20
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "NAVER",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "naver.com/profile"
+  },
+  "content" : "이건 내용입니다.",
+  "viewCount" : 100,
+  "likeCount" : 10,
+  "hasLiked" : true,
+  "comments" : [ {
+    "id" : 1,
+    "writer" : {
+      "id" : 1,
+      "nickname" : "user",
+      "ageRange" : {
+        "meaning" : "10대",
+        "minAge" : 10,
+        "maxAge" : 20
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "NAVER",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "naver.com/profile"
+    },
+    "content" : "댓글1",
+    "createdAt" : "2021-08-03T17:27:08.973352"
+  }, {
+    "id" : 2,
+    "writer" : {
+      "id" : 2,
+      "nickname" : "another_user",
+      "ageRange" : {
+        "meaning" : "20대",
+        "minAge" : 20,
+        "maxAge" : 30
+      },
+      "shotVerified" : false,
+      "accessToken" : null,
+      "socialProvider" : "KAKAO",
+      "socialId" : "{Unique ID received from social provider}",
+      "socialProfileUrl" : "kakao.com/profile"
+    },
+    "content" : "댓글2",
+    "createdAt" : "2021-08-03T17:27:08.97338"
+  } ],
+  "vaccinationType" : "PFIZER",
+  "createdAt" : "2021-08-03T17:27:08.975297"
+}, {
+  "id" : 38,
+  "writer" : {
+    "id" : 1,
+    "nickname" : "user",
+    "ageRange" : {
+      "meaning" : "10대",
+      "minAge" : 10,
+      "maxAge" : 20
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "NAVER",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "naver.com/profile"
+  },
+  "content" : "이건 내용입니다.2",
+  "viewCount" : 200,
+  "likeCount" : 20,
+  "hasLiked" : false,
+  "comments" : [ ],
+  "vaccinationType" : "PFIZER",
+  "createdAt" : "2021-08-03T17:27:08.975631"
+}, {
+  "id" : 39,
+  "writer" : {
+    "id" : 1,
+    "nickname" : "user",
+    "ageRange" : {
+      "meaning" : "10대",
+      "minAge" : 10,
+      "maxAge" : 20
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "NAVER",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "naver.com/profile"
+  },
+  "content" : "이건 내용입니다.3",
+  "viewCount" : 300,
+  "likeCount" : 30,
+  "hasLiked" : true,
+  "comments" : [ ],
+  "vaccinationType" : "PFIZER",
+  "createdAt" : "2021-08-03T17:27:08.975647"
 } ]</code></pre>
 </div>
 </div>
@@ -1510,45 +1647,7 @@ Content-Length: 2624
 <div class="sect2">
 <h3 id="_게시글_수정">게시글 수정</h3>
 <div class="sect3">
-<h4 id="_성공_11">성공</h4>
-<div class="sect4">
-<h5 id="_request_20">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Authorization: Bearer {ACCESS TOKEN}
-Content-Length: 62
-Host: localhost
-
-{
-  "content" : "글 내용",
-  "vaccinationType" : "PFIZER"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_20">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>게시글 수정 요청 시, 백신 타입을 바꿔서 보내면 에러가 발생하지 않지만 변경이 반영되지 않는다.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_9">실패</h4>
+<h4 id="_성공_12">성공</h4>
 <div class="sect4">
 <h5 id="_request_21">Request</h5>
 <div class="listingblock">
@@ -1570,6 +1669,44 @@ Host: localhost
 <h5 id="_response_21">Response</h5>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>게시글 수정 요청 시, 백신 타입을 바꿔서 보내면 에러가 발생하지 않지만 변경이 반영되지 않는다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_9">실패</h4>
+<div class="sect4">
+<h5 id="_request_22">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer {ACCESS TOKEN}
+Content-Length: 62
+Host: localhost
+
+{
+  "content" : "글 내용",
+  "vaccinationType" : "PFIZER"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_22">Response</h5>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -1588,32 +1725,7 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_삭제">게시글 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_12">성공</h4>
-<div class="sect4">
-<h5 id="_request_22">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Authorization: Bearer {ACCESS TOKEN}
-Host: localhost</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_22">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_10">실패</h4>
+<h4 id="_성공_13">성공</h4>
 <div class="sect4">
 <h5 id="_request_23">Request</h5>
 <div class="listingblock">
@@ -1627,6 +1739,31 @@ Host: localhost</code></pre>
 </div>
 <div class="sect4">
 <h5 id="_response_23">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_10">실패</h4>
+<div class="sect4">
+<h5 id="_request_24">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer {ACCESS TOKEN}
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_24">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -1647,9 +1784,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_좋아요_생성">게시글 좋아요 생성</h3>
 <div class="sect3">
-<h4 id="_성공_13">성공</h4>
+<h4 id="_성공_14">성공</h4>
 <div class="sect4">
-<h5 id="_request_24">Request</h5>
+<h5 id="_request_25">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/likes HTTP/1.1
@@ -1660,7 +1797,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_24">Response</h5>
+<h5 id="_response_25">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1675,7 +1812,7 @@ Location: /api/v1/likes/1</code></pre>
 <div class="sect3">
 <h4 id="_실패_11">실패</h4>
 <div class="sect4">
-<h5 id="_request_25">Request</h5>
+<h5 id="_request_26">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/likes HTTP/1.1
@@ -1686,7 +1823,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_25">Response</h5>
+<h5 id="_response_26">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -1707,32 +1844,7 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_좋아요_삭제">게시글 좋아요 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_14">성공</h4>
-<div class="sect4">
-<h5 id="_request_26">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/likes HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Authorization: Bearer {ACCESS TOKEN}
-Host: localhost</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_26">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_실패_12">실패</h4>
+<h4 id="_성공_15">성공</h4>
 <div class="sect4">
 <h5 id="_request_27">Request</h5>
 <div class="listingblock">
@@ -1746,6 +1858,31 @@ Host: localhost</code></pre>
 </div>
 <div class="sect4">
 <h5 id="_response_27">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_12">실패</h4>
+<div class="sect4">
+<h5 id="_request_28">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/likes HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer {ACCESS TOKEN}
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_28">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1766,9 +1903,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_게시글_댓글_등록">게시글 댓글 등록</h3>
 <div class="sect3">
-<h4 id="_성공_15">성공</h4>
+<h4 id="_성공_16">성공</h4>
 <div class="sect4">
-<h5 id="_request_28">Request</h5>
+<h5 id="_request_29">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/comments HTTP/1.1
@@ -1784,7 +1921,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_28">Response</h5>
+<h5 id="_response_29">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1793,7 +1930,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/comments/1
 Content-Type: application/json
-Content-Length: 464
+Content-Length: 467
 
 {
   "id" : 1,
@@ -1812,7 +1949,7 @@ Content-Length: 464
     "socialProfileUrl" : "naver.com/profile"
   },
   "content" : "좋은 정보 공유 감사해요 ㅎㅎㅎ",
-  "createdAt" : "2021-07-30T19:18:10.459"
+  "createdAt" : "2021-08-03T17:27:08.510577"
 }</code></pre>
 </div>
 </div>
@@ -1821,7 +1958,7 @@ Content-Length: 464
 <div class="sect3">
 <h4 id="_실패_13">실패</h4>
 <div class="sect4">
-<h5 id="_request_29">Request</h5>
+<h5 id="_request_30">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/comments HTTP/1.1
@@ -1837,7 +1974,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_29">Response</h5>
+<h5 id="_response_30">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1858,9 +1995,9 @@ Content-Length: 53
 <div class="sect2">
 <h3 id="_게시글_댓글_수정">게시글 댓글 수정</h3>
 <div class="sect3">
-<h4 id="_성공_16">성공</h4>
+<h4 id="_성공_17">성공</h4>
 <div class="sect4">
-<h5 id="_request_30">Request</h5>
+<h5 id="_request_31">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/comments/1 HTTP/1.1
@@ -1876,7 +2013,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_30">Response</h5>
+<h5 id="_response_31">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -1890,7 +2027,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_14">실패</h4>
 <div class="sect4">
-<h5 id="_request_31">Request</h5>
+<h5 id="_request_32">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/comments/1 HTTP/1.1
@@ -1906,7 +2043,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_31">Response</h5>
+<h5 id="_response_32">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1927,9 +2064,9 @@ Content-Length: 53
 <div class="sect2">
 <h3 id="_게시글_댓글_삭제">게시글 댓글 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_17">성공</h4>
+<h4 id="_성공_18">성공</h4>
 <div class="sect4">
-<h5 id="_request_32">Request</h5>
+<h5 id="_request_33">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/comments/1 HTTP/1.1
@@ -1939,7 +2076,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_32">Response</h5>
+<h5 id="_response_33">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -1953,7 +2090,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_15">실패</h4>
 <div class="sect4">
-<h5 id="_request_33">Request</h5>
+<h5 id="_request_34">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/comments/1 HTTP/1.1
@@ -1963,7 +2100,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_33">Response</h5>
+<h5 id="_response_34">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1986,7 +2123,7 @@ Content-Length: 53
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-30 15:58:19 +0900
+Last updated 2021-08-03 17:22:16 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

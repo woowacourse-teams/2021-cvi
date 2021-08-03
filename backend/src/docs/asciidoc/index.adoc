@@ -196,6 +196,14 @@ include::{snippets}/post-findByVaccinationType/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findByVaccinationType/http-response.adoc[]
 
+=== 게시글 타입별 페이징 조회
+==== 성공
+===== Request
+include::{snippets}/post-findByVaccinationType-paging/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType-paging/http-response.adoc[]
+
 === 게시글 수정
 ==== 성공
 ===== Request

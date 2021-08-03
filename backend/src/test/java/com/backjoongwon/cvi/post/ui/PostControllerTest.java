@@ -230,6 +230,21 @@ class PostControllerTest extends ApiDocument {
         게시글_타입별_조회_요청_성공함(response);
     }
 
+    @DisplayName("게시글 타입별 조회 페이징 - 성공")
+    @Test
+    void findByVaccineTypePaging() throws Exception {
+        //given
+        willReturn(Arrays.asList(
+                new PostResponse(39L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(38L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        )).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
+        //when
+        ResultActions response = 게시글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
+        //then
+        게시글_타입별_페이징_조회_요청_성공함(response);
+    }
+
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
     void createLike() throws Exception {
@@ -490,6 +505,20 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType"));
+    }
+
+    private ResultActions 게시글_타입별_페이징_조회_요청(VaccinationType vaccinationType, Long lastPostId, int size) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/paging")
+                .queryParam("vaccinationType", vaccinationType.name())
+                .queryParam("lastPostId", String.valueOf(lastPostId))
+                .queryParam("size", String.valueOf(size))
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 게시글_타입별_페이징_조회_요청_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging"));
     }
 
     private ResultActions 글_좋아요_생성_요청(Long postId) throws Exception {
