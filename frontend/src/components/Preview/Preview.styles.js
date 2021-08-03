@@ -13,6 +13,10 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   margin: 2rem 1.5rem;
+
+  @media screen and (max-width: 801px) {
+    margin: 2rem 0;
+  }
 `;
 
 const ButtonContainer = styled.div`

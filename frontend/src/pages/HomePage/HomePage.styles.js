@@ -8,8 +8,8 @@ const Container = styled.div`
   gap: 7.2rem;
 
   @media screen and (max-width: 1024px) {
-    /* padding: 0 1rem; */
-    padding: 0;
+    padding: 2.4rem 0 0 0;
+    gap: 3rem;
   }
 `;
 

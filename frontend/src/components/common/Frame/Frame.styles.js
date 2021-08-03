@@ -12,7 +12,7 @@ const Container = styled.div`
 
   ${({ styles }) => styles};
 
-  @media screen and (max-width: 801px) {
+  @media screen and (max-width: 540px) {
     border-radius: 0;
   }
 `;

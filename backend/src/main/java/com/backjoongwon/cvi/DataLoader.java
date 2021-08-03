@@ -63,12 +63,12 @@ public class DataLoader implements CommandLineRunner {
             Post 글7 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
             postRepository.saveAll(Arrays.asList(글1, 글2, 글3, 글4, 글5, 글6, 글7));
 
-            글1.addComment(댓글1);
-            글2.addComment(댓글2);
-            글3.addComment(댓글3);
-            글4.addComment(댓글4);
-            글5.addComment(댓글5);
-            글6.addComment(댓글6);
+            글1.assignComment(댓글1);
+            글2.assignComment(댓글2);
+            글3.assignComment(댓글3);
+            글4.assignComment(댓글4);
+            글5.assignComment(댓글5);
+            글6.assignComment(댓글6);
 
             글1.addLike(좋아요1);
             글2.addLike(좋아요2);

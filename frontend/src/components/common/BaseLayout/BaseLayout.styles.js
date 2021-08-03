@@ -21,8 +21,10 @@ const NavBar = styled.div`
   justify-content: space-between;
   height: 6rem;
   padding: 0 1.2rem 0 1rem;
+  background-color: ${THEME_COLOR.WHITE};
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
   ${({ isOpenSideBar }) => isOpenSideBar && 'display: none;'}
+  z-index:1;
 
   @media screen and (min-width: 1025px) {
     display: none;

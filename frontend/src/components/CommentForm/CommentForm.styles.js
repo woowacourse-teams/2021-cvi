@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 import { FONT_COLOR, THEME_COLOR } from '../../constants';
 
 const Container = styled.div`
@@ -25,11 +26,15 @@ const TextArea = styled.textarea`
   resize: none;
 
   &:focus {
-    border: 0.1rem solid ${THEME_COLOR.PRIMARY};
+    border: ${({ isLogin }) => (isLogin ? `0.1rem solid ${THEME_COLOR.PRIMARY}` : '')};
   }
 
   &::placeholder {
     color: ${THEME_COLOR.PLACEHOLDER};
+  }
+
+  @media screen and (max-width: 1024px) {
+    margin: 1.6rem;
   }
 `;
 
@@ -46,4 +51,22 @@ const CommentMaxCount = styled.span`
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
 
-export { Container, User, TextArea, BottomContainer, CommentMaxCount };
+const NeedLogin = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+  height: 6rem;
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.GRAY};
+`;
+
+const LoginLink = styled(Link)`
+  margin-left: 0.4rem;
+  border-bottom: 0.1rem solid ${FONT_COLOR.GRAY};
+  height: 2.1rem;
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.GRAY};
+`;
+
+export { Container, User, TextArea, BottomContainer, CommentMaxCount, NeedLogin, LoginLink };

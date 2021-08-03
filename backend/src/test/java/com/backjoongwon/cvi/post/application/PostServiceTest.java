@@ -7,8 +7,8 @@ import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -16,7 +16,6 @@ import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.RequestUser;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,6 +66,8 @@ class PostServiceTest {
 
     private User user;
     private User anotherUser;
+    private Optional<User> optionalUser;
+    private Optional<User> optionalAnotherUser;
     private Post post;
     private PostRequest postRequest;
     private LikeResponse likeResponse;
@@ -89,8 +90,6 @@ class PostServiceTest {
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-        userRepository.save(user);
-
         anotherUser = User.builder()
                 .nickname("다른테스트유저")
                 .ageRange(AgeRange.TWENTIES)
@@ -98,6 +97,8 @@ class PostServiceTest {
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
         userRepository.saveAll(Arrays.asList(user, anotherUser));
+        optionalUser = Optional.of(user);
+        optionalAnotherUser = Optional.of(anotherUser);
 
         post = Post.builder()
                 .content("Test Content111")
@@ -107,9 +108,12 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
 
-        likeResponse = postService.createLike(post.getId(), RequestUser.of(user.getId()));
+        likeResponse = postService.createLike(post.getId(), optionalUser);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
+        postService.createComment(post.getId(), optionalUser, commentRequest);
+        postService.createComment(post.getId(), optionalUser, commentRequest);
+        resetEntityManager();
     }
 
     @DisplayName("게시글 생성 - 성공")
@@ -117,7 +121,7 @@ class PostServiceTest {
     void create() {
         //given
         //when
-        PostResponse postResponse = postService.create(user.getId(), postRequest);
+        PostResponse postResponse = postService.create(optionalUser, postRequest);
         Post foundPost = postRepository.findById(postResponse.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
@@ -133,8 +137,8 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.create(0L, postRequest))
-                .isExactlyInstanceOf(NotFoundException.class);
+        assertThatThrownBy(() -> postService.create(Optional.empty(), postRequest))
+                .isExactlyInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("게시글 단일 조회 - 성공")
@@ -142,7 +146,7 @@ class PostServiceTest {
     void findById() {
         //given
         //when
-        PostResponse response = postService.findById(post.getId(), RequestUser.of(user.getId()));
+        PostResponse response = postService.findById(post.getId(), optionalUser);
         //then
         assertThat(response.getId()).isEqualTo(post.getId());
     }
@@ -153,7 +157,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.findById(0L, RequestUser.of(user.getId())))
+        assertThatThrownBy(() -> postService.findById(0L, optionalUser))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -169,7 +173,7 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
         //when
-        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL);
+        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser);
         //then
         assertThat(response).hasSize(2);
         assertThat(response.get(0).getContent()).isEqualTo("Last Content");
@@ -180,8 +184,7 @@ class PostServiceTest {
     void update() {
         //given
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
-        RequestUser requestUser = RequestUser.of(user.getId());
-        postService.update(post.getId(), requestUser, changedRequest);
+        postService.update(post.getId(), optionalUser, changedRequest);
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
@@ -193,10 +196,9 @@ class PostServiceTest {
     void updateFailureWhenCannotFind() {
         //given
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(0L, requestUser, changedContent))
+        assertThatThrownBy(() -> postService.update(0L, optionalUser, changedContent))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -210,9 +212,8 @@ class PostServiceTest {
                 .build();
         //when
         userRepository.save(anotherUser);
-        RequestUser requestUser = RequestUser.of(anotherUser.getId());
         //then
-        assertThatThrownBy(() -> postService.update(post.getId(), requestUser, changedContent))
+        assertThatThrownBy(() -> postService.update(post.getId(), optionalAnotherUser, changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
@@ -220,9 +221,8 @@ class PostServiceTest {
     @Test
     void delete() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        postService.delete(post.getId(), requestUser);
+        postService.delete(post.getId(), optionalUser);
         Optional<Post> foundPost = postRepository.findById(post.getId());
         //then
         assertThat(foundPost).isEmpty();
@@ -232,10 +232,9 @@ class PostServiceTest {
     @Test
     void deleteWithComments() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
-        postService.delete(post.getId(), requestUser);
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
+        postService.delete(post.getId(), optionalUser);
         Optional<Post> foundPost = postRepository.findById(post.getId());
         Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
         //then
@@ -247,9 +246,8 @@ class PostServiceTest {
     @Test
     void deleteLikeWhenDeletePost() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        postService.delete(post.getId(), requestUser);
+        postService.delete(post.getId(), optionalUser);
         //then
         assertThat(likeRepository.findById(likeResponse.getId())).isEmpty();
     }
@@ -258,10 +256,9 @@ class PostServiceTest {
     @Test
     void deleteFailureWhenPostIsNotExists() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.delete(0L, requestUser))
+        assertThatThrownBy(() -> postService.delete(0L, optionalUser))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -274,10 +271,9 @@ class PostServiceTest {
                 .nickname("어나더사용자")
                 .build();
         userRepository.save(anotherUser);
-        RequestUser requestUser = RequestUser.of(anotherUser.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post.getId(), requestUser, postRequest))
+        assertThatThrownBy(() -> postService.update(post.getId(), optionalAnotherUser, postRequest))
                 .isInstanceOf(InvalidOperationException.class);
     }
 
@@ -295,7 +291,7 @@ class PostServiceTest {
 
         postRepository.save(post);
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUser);
         //then
         assertThat(postResponses).filteredOn(
                 response -> response.getVaccinationType().equals(vaccinationType)
@@ -307,10 +303,10 @@ class PostServiceTest {
     void createLike() {
         //given
         //when
-        postService.createLike(post.getId(), RequestUser.of(anotherUser.getId()));
+        postService.createLike(post.getId(), optionalAnotherUser);
         resetEntityManager();
         //then
-        Post post = getPost();
+        Post post = getPostWithLikesById();
         assertThat(post.getLikesCount()).isEqualTo(2);
     }
 
@@ -320,7 +316,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createLike(post.getId() + 1L, RequestUser.of(anotherUser.getId())))
+        assertThatThrownBy(() -> postService.createLike(post.getId() + 1L, optionalAnotherUser))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -330,7 +326,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createLike(post.getId(), RequestUser.of(user.getId())))
+        assertThatThrownBy(() -> postService.createLike(post.getId(), optionalUser))
                 .isInstanceOf(InvalidOperationException.class);
     }
 
@@ -338,9 +334,8 @@ class PostServiceTest {
     @Test
     void deleteLike() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        postService.deleteLike(post.getId(), likeResponse.getId(), requestUser);
+        postService.deleteLike(post.getId(), optionalUser);
         resetEntityManager();
         //then
         Post actualPost = postRepository.findWithLikesById(this.post.getId())
@@ -352,21 +347,19 @@ class PostServiceTest {
     @Test
     void deleteLikeFailureWhenInvalidToken() {
         //given
-        RequestUser requestUser = RequestUser.of(anotherUser.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteLike(post.getId(), likeResponse.getId(), requestUser))
-                .isInstanceOf(InvalidOperationException.class);
+        assertThatThrownBy(() -> postService.deleteLike(post.getId(), optionalAnotherUser))
+                .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("게시글 좋아요 삭제 - 실패 - 삭제 요청한 좋아요 해당 게시글에 없는 경우")
+    @DisplayName("게시글 좋아요 삭제 - 실패 - 삭제 요청한 좋아요가 해당 게시글에 없는 경우")
     @Test
     void deleteLikeFailureWhenLikeNotExists() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteLike(post.getId(), likeResponse.getId() + 1L, requestUser))
+        assertThatThrownBy(() -> postService.deleteLike(post.getId() + 1, optionalUser))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -376,7 +369,7 @@ class PostServiceTest {
         em.close();
     }
 
-    private Post getPost() {
+    private Post getPostWithLikesById() {
         return postRepository.findWithLikesById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
@@ -385,37 +378,36 @@ class PostServiceTest {
     @Test
     void createComment() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentRequest newCommentRequest = new CommentRequest("새로운 댓글 내용");
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalAnotherUser, newCommentRequest);
+        resetEntityManager();
+        Post foundPost = postRepository.findWithCommentsById(post.getId())
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
-        assertThat(commentResponse.getContent()).isEqualTo(commentRequest.getContent());
-        assertThat(commentResponse.getWriter().getId()).isEqualTo(user.getId());
-        assertThat(post.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
+        assertThat(commentResponse.getContent()).isEqualTo(newCommentRequest.getContent());
+        assertThat(commentResponse.getWriter().getId()).isEqualTo(anotherUser.getId());
+        assertThat(foundPost.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
     }
 
     @DisplayName("댓글 생성 - 실패 - 비회원 댓글 작성 시도")
     @Test
     void createCommentWhenNotLoginUser() {
         //given
-        RequestUser requestUser = RequestUser.guest();
         //when
         //then
-        assertThatThrownBy(() -> postService.createComment(post.getId(), requestUser, commentRequest))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("id는 null이 될 수 없습니다.");
+        assertThatThrownBy(() -> postService.createComment(post.getId(), Optional.empty(), commentRequest))
+                .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("댓글 수정 - 성공")
     @Test
     void updateComment() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
-
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
-        postService.updateComment(post.getId(), commentResponse.getId(), requestUser, updateRequest);
+        postService.updateComment(post.getId(), commentResponse.getId(), optionalUser, updateRequest);
         Comment comment = commentRepository.findById(commentResponse.getId()).get();
         //then
         assertThat(comment.getContent()).isEqualTo(updateRequest.getContent());
@@ -425,12 +417,10 @@ class PostServiceTest {
     @Test
     void updateCommentWhenNoComment() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
-
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
         //then
-        assertThatThrownBy(() -> postService.updateComment(post.getId(), 0L, requestUser, updateRequest))
+        assertThatThrownBy(() -> postService.updateComment(post.getId(), 0L, optionalUser, updateRequest))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
@@ -439,14 +429,11 @@ class PostServiceTest {
     @Test
     void updateCommentWhenWrongUser() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
-        RequestUser anotherRequestUser = RequestUser.of(anotherUser.getId());
-
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
         //then
-        assertThatThrownBy(() -> postService.updateComment(post.getId(), commentResponse.getId(), anotherRequestUser, updateRequest))
+        assertThatThrownBy(() -> postService.updateComment(post.getId(), commentResponse.getId(), optionalAnotherUser, updateRequest))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.");
     }
@@ -455,10 +442,9 @@ class PostServiceTest {
     @Test
     void deleteComment() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
         //when
-        postService.deleteComment(post.getId(), commentResponse.getId(), requestUser);
+        postService.deleteComment(post.getId(), commentResponse.getId(), optionalUser);
         postRepository.flush();
 
         Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
@@ -472,10 +458,9 @@ class PostServiceTest {
     @Test
     void deleteCommentWhenNoComment() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteComment(post.getId(), 0L, requestUser))
+        assertThatThrownBy(() -> postService.deleteComment(post.getId(), 0L, optionalUser))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
@@ -484,14 +469,31 @@ class PostServiceTest {
     @Test
     void deleteCommentWhenWrongUser() {
         //given
-        RequestUser requestUser = RequestUser.of(user.getId());
-        RequestUser anotherRequestUser = RequestUser.of(anotherUser.getId());
-
-        CommentResponse commentResponse = postService.createComment(post.getId(), requestUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteComment(post.getId(), commentResponse.getId(), anotherRequestUser))
+        assertThatThrownBy(() -> postService.deleteComment(post.getId(), commentResponse.getId(), optionalAnotherUser))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
+    }
+
+    @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
+    @Test
+    void hasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalUser);
+        //then
+        assertThat(postResponse.isHasLiked()).isTrue();
+    }
+
+    @DisplayName("게시글에 좋아요를 누르지 않은 사람이 해당 글을 조회하면 hasLiked값이 false로 조회된다.")
+    @Test
+    void notHasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalAnotherUser);
+        //then
+        assertThat(postResponse.isHasLiked()).isFalse();
     }
 }

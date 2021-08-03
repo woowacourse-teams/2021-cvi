@@ -1,0 +1,21 @@
+{
+  "id": 7,
+  "writer": {
+    "id": 8,
+    "nickname": "nickname",
+    "ageRange": {
+      "meaning": "10대",
+      "minAge": 10,
+      "maxAge": 20
+    },
+    "shotVerified": false,
+    "accessToken": null,
+    "socialProvider": "NAVER",
+    "socialId": "{Unique ID received from social provider}",
+    "socialProfileUrl": "naver.com/profile"
+  },
+  "content": "다음날 되니 좀 아픈것 같아요 ㅠ ㅠ",
+  "viewCount": 0,
+  "vaccinationType": "MODERNA",
+  "createdAt": "2021-07-27T14:56:19.036"
+}
