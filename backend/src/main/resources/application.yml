@@ -4,6 +4,8 @@ spring:
       prod:
         - db
         - jwt
+        - client-secret
+
   jpa:
     properties:
       hibernate.default_batch_fetch_size: 500
@@ -49,9 +51,6 @@ security:
     token:
       secret-key: cvi_secret_key
       expire-length: 3600000
-  auth:
-    naver:
-      client-secret: R_zN6l1A3V
 ---
 spring:
   config:
