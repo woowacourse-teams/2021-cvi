@@ -18,12 +18,10 @@ import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,7 +33,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,21 +66,61 @@ class PostServiceTest {
     private Optional<User> optionalUser;
     private Optional<User> optionalAnotherUser;
     private Post post;
+    private Post post1;
+    private Post post2;
+    private Post post3;
+    private Post post4;
     private PostRequest postRequest;
     private LikeResponse likeResponse;
     private CommentRequest commentRequest;
 
-    static Stream<Arguments> findByVaccineType() {
-        return Stream.of(
-                Arguments.of(VaccinationType.PFIZER),
-                Arguments.of(VaccinationType.ASTRAZENECA),
-                Arguments.of(VaccinationType.MODERNA),
-                Arguments.of(VaccinationType.JANSSEN)
-        );
-    }
-
     @BeforeEach
     void init() {
+        initUser();
+        initPost();
+        likeResponse = postService.createLike(post.getId(), optionalUser);
+        postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
+        commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
+        postService.createComment(post.getId(), optionalUser, commentRequest);
+        postService.createComment(post.getId(), optionalUser, commentRequest);
+    }
+
+    private void initPost() {
+        post = Post.builder()
+                .content("Test 0")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post1 = Post.builder()
+                .content("Test 1")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post2 = Post.builder()
+                .content("Test 2")
+                .vaccinationType(VaccinationType.PFIZER)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post3 = Post.builder()
+                .content("Test 3")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post4 = Post.builder()
+                .content("Test 4")
+                .vaccinationType(VaccinationType.JANSSEN)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        postRepository.saveAll(Arrays.asList(post, post1, post2, post3, post4));
+    }
+
+    private void initUser() {
         user = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
@@ -99,21 +136,6 @@ class PostServiceTest {
         userRepository.saveAll(Arrays.asList(user, anotherUser));
         optionalUser = Optional.of(user);
         optionalAnotherUser = Optional.of(anotherUser);
-
-        post = Post.builder()
-                .content("Test Content111")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .build();
-        postRepository.save(post);
-
-        likeResponse = postService.createLike(post.getId(), optionalUser);
-        postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
-        commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
-        postService.createComment(post.getId(), optionalUser, commentRequest);
-        postService.createComment(post.getId(), optionalUser, commentRequest);
-        resetEntityManager();
     }
 
     @DisplayName("게시글 생성 - 성공")
@@ -175,7 +197,7 @@ class PostServiceTest {
         //when
         List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser);
         //then
-        assertThat(response).hasSize(2);
+        assertThat(response).hasSize(6);
         assertThat(response.get(0).getContent()).isEqualTo("Last Content");
     }
 
@@ -207,11 +229,7 @@ class PostServiceTest {
     void updateFailureWhenOthersPost() {
         //given
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
-        User anotherUser = User.builder()
-                .nickname("어나더사용자")
-                .build();
         //when
-        userRepository.save(anotherUser);
         //then
         assertThatThrownBy(() -> postService.update(post.getId(), optionalAnotherUser, changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
@@ -267,10 +285,6 @@ class PostServiceTest {
     void deletePostFailureWhenNotAuthor() {
         //given
         PostRequest postRequest = new PostRequest("변경할 내용", VaccinationType.MODERNA);
-        User anotherUser = User.builder()
-                .nickname("어나더사용자")
-                .build();
-        userRepository.save(anotherUser);
         //when
         //then
         assertThatThrownBy(() -> postService.update(post.getId(), optionalAnotherUser, postRequest))
@@ -278,24 +292,33 @@ class PostServiceTest {
     }
 
     @DisplayName("게시글 타입별 조회 - 성공")
-    @ParameterizedTest
-    @MethodSource
-    void findByVaccineType(VaccinationType vaccinationType) {
+    @Test
+    void findByVaccineType() {
         //given
-        post = Post.builder()
-                .content("Test Content222")
-                .vaccinationType(vaccinationType)
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        postRepository.save(post);
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ASTRAZENECA, optionalUser);
         //then
         assertThat(postResponses).filteredOn(
-                response -> response.getVaccinationType().equals(vaccinationType)
+                response -> response.getVaccinationType().equals(VaccinationType.ASTRAZENECA)
         );
+    }
+
+    @DisplayName("게시글 타입별 페이징 조회 - 성공")
+    @Test
+    void findByVaccineTypePaging() {
+        //given
+        //when
+        List<PostResponse> postResponses1 = postService.findByVaccineType(VaccinationType.ASTRAZENECA, Long.MAX_VALUE, 10, optionalUser);
+        List<PostResponse> postResponses2 = postService.findByVaccineType(VaccinationType.ASTRAZENECA, Long.MAX_VALUE, 2, optionalUser);
+        List<PostResponse> postResponses3 = postService.findByVaccineType(VaccinationType.JANSSEN, Long.MAX_VALUE, 5, optionalUser);
+        List<PostResponse> postResponses4 = postService.findByVaccineType(VaccinationType.PFIZER, Long.MAX_VALUE, 5, optionalUser);
+        List<PostResponse> postResponses5 = postService.findByVaccineType(VaccinationType.ALL, Long.MAX_VALUE, 3, optionalUser);
+        //then
+        assertThat(postResponses1).size().isEqualTo(3);
+        assertThat(postResponses2).size().isEqualTo(2);
+        assertThat(postResponses3).size().isEqualTo(1);
+        assertThat(postResponses4).size().isEqualTo(1);
+        assertThat(postResponses5).size().isEqualTo(3);
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
@@ -303,10 +326,10 @@ class PostServiceTest {
     void createLike() {
         //given
         //when
-        postService.createLike(post.getId(), optionalAnotherUser);
-        resetEntityManager();
+        Long postId = post.getId();
+        postService.createLike(postId, optionalAnotherUser);
+        Post post = postRepository.findWithLikesById(postId).get();
         //then
-        Post post = getPostWithLikesById();
         assertThat(post.getLikesCount()).isEqualTo(2);
     }
 
@@ -316,7 +339,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createLike(post.getId() + 1L, optionalAnotherUser))
+        assertThatThrownBy(() -> postService.createLike(Long.MAX_VALUE, optionalAnotherUser))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -336,10 +359,9 @@ class PostServiceTest {
         //given
         //when
         postService.deleteLike(post.getId(), optionalUser);
-        resetEntityManager();
-        //then
         Post actualPost = postRepository.findWithLikesById(this.post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        //then
         assertThat(actualPost.getLikes().getLikes()).isEmpty();
     }
 
@@ -363,17 +385,6 @@ class PostServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    private void resetEntityManager() {
-        em.flush();
-        em.clear();
-        em.close();
-    }
-
-    private Post getPostWithLikesById() {
-        return postRepository.findWithLikesById(post.getId())
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
-    }
-
     @DisplayName("댓글 생성 - 성공")
     @Test
     void createComment() {
@@ -381,7 +392,6 @@ class PostServiceTest {
         //when
         CommentRequest newCommentRequest = new CommentRequest("새로운 댓글 내용");
         CommentResponse commentResponse = postService.createComment(post.getId(), optionalAnotherUser, newCommentRequest);
-        resetEntityManager();
         Post foundPost = postRepository.findWithCommentsById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
