@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -167,10 +168,11 @@ public class PostService {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
         if (filter == Filter.LIKES) {
-            // likes 다대일로 post와 조인 (100-100)
-            // 배치사이즈로 1개 post에서 모든 like 조회
-            // List<Post> 돌며 아이디가 userId인 post만 선별
-            return null;
+            List<Like> likes = likeRepository.findByUser(user);
+            List<Post> posts = likes.stream()
+                    .map(Like::getPost)
+                    .collect(Collectors.toList());
+            return PostResponse.of(posts, user);
         }
         if (filter == Filter.COMMENTS) {
             // comments 다대일로 post와 조인 (100-100)

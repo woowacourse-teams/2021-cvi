@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -514,23 +515,25 @@ class PostServiceTest {
         //when
         List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user1), Filter.NONE);
         //then
-        assertThat(postResponses).hasSize(2);
-        assertThat(postResponses.get(1).getWriter().getId()).isEqualTo(user1.getId());
-        assertThat(postResponses.get(1).getContent()).isEqualTo("Test Content111");
-        assertThat(postResponses.get(1).getLikeCount()).isEqualTo(2);
-
-        assertThat(postResponses.get(1).getComments()).hasSize(4);
-        assertThat(postResponses.get(1).getComments().get(0).getId()).isEqualTo(comment1.getId());
+        List<Long> userIds = postResponses.stream()
+                .map(postResponse -> postResponse.getWriter().getId())
+                .distinct()
+                .collect(Collectors.toList());
+        assertThat(userIds).containsExactly(user1.getId());
     }
 
-//    @DisplayName("내가 좋아요 한 게시글 조회 - 성공")
-//    @Test
-//    void findByUserAndFilterLikes() {
-//        //given
-//        //when
-//        List<PostResponse> byUserAndFilter = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
-//        //then
-//    }
+    @DisplayName("내가 좋아요 한 게시글 조회 - 성공")
+    @Test
+    void findByUserAndFilterLikes() {
+        //given
+        //when
+        List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
+        //then
+        List<Long> postIds = postResponses.stream()
+                .map(PostResponse::getId)
+                .collect(Collectors.toList());
+        assertThat(postIds).containsExactly(post1.getId());
+    }
 
     @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
     @Test
