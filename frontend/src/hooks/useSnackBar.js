@@ -1,35 +1,38 @@
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { SnackBar as SnackBarComponent } from '../components/common';
-import { useEffect, useState } from 'react';
+import {
+  openSnackBar as openSnackBarAction,
+  closeSnackBar as closeSnackBarAction,
+} from '../redux/snackbarSlice';
 
 const useSnackBar = () => {
-  const [isSnackBarOpen, setIsSnackbarOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { isSnackBarOpen, message } = useSelector((state) => state.snackbarReducer);
 
   const SnackbarPortal = ({ children }) =>
     ReactDOM.createPortal(children, document.getElementById('snackbar'));
 
-  const SnackBar = ({ children }) => (
+  const SnackBar = () => (
     <SnackbarPortal>
-      <SnackBarComponent>{children}</SnackBarComponent>
+      <SnackBarComponent>{message}</SnackBarComponent>
     </SnackbarPortal>
   );
 
-  const openSnackBar = () => setIsSnackbarOpen(true);
+  const openSnackBar = (message) => {
+    dispatch(openSnackBarAction(message));
+  };
 
   useEffect(() => {
     if (!isSnackBarOpen) return;
 
     const intervalId = setInterval(() => {
-      setIsSnackbarOpen(false);
-    }, 3000);
+      dispatch(closeSnackBarAction());
+    }, 1500);
 
     return () => clearInterval(intervalId);
   }, [isSnackBarOpen]);
-
-  SnackBar.propTypes = {
-    children: PropTypes.string.isRequired,
-  };
 
   return { isSnackBarOpen, openSnackBar, SnackBar };
 };
