@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.asciidoctor.convert' version '1.5.8'
+    id 'jacoco'
 }
 
 group = 'com.backjoongwon'
@@ -52,13 +53,82 @@ task cleanGeneatedDir(type: Delete) { // 인텔리제이 annotation processor �
     delete file('src/main/generated')
 }
 
-ext {
-    snippetsDir = file('build/generated-snippets')
+/**
+* jacoco 관련 설정
+*/
+jacoco {
+    toolVersion = '0.8.7'
 }
 
-test {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
+jacocoTestReport {
+    dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
+    reports {
+        html.enabled true
+        csv.enabled true
+        xml.enabled false
+    }
+
+    def Qdomains = []
+    for(qPattern in "**/QA" .. "**/QZ") {
+        Qdomains.add(qPattern+"*")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
+                    exclude: ['**/DataLoader*',
+                              '**/CviApplication*',
+                              '**/DummyData*',
+                              '**/KakaoProfile*',
+                              '**/NaverProfile*'] + Qdomains)
+        }))
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
+    def Qdomains = []
+
+    for (qPattern in "*.QA".."*.QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
+    violationRules { // 위반 규칙
+        rule {
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0.85
+            }
+
+            excludes = [
+                    // 커버리지 제외할 클래스
+                    '*.DataLoader*',
+                    '*.CviApplication*',
+                    '*.DummyData*',
+                    '*.KakaoProfile*',
+                    '*.NaverProfile*'
+            ] + Qdomains
+        }
+    }
+}
+
+task testCoverage(type: Test) {
+    group 'verification'
+    description 'Runs the unit tests with coverage'
+
+    dependsOn(':test',
+            ':jacocoTestReport',
+            ':jacocoTestCoverageVerification')
+
+    tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+    tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+}
+
+// spring rest docs 관련 설정 부분
+ext {
+    snippetsDir = file('build/generated-snippets')
 }
 
 asciidoctor {
@@ -71,4 +141,11 @@ bootJar {
     from("${asciidoctor.outputDir}/html5") {
         into 'static/docs'
     }
+}
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+
+    finalizedBy 'jacocoTestReport' // 테스트가 먼저 실행되고 리포트가 작동된다.
 }
