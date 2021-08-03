@@ -111,7 +111,7 @@ const ReviewDetailPage = () => {
               backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
               color={FONT_COLOR.BLACK}
               withIcon={true}
-              onClick={goReviewPage}
+              onClick={() => history.goBack()}
             >
               <LeftArrowIcon width="18" height="18" stroke={FONT_COLOR.BLACK} />
               <div>목록 보기</div>

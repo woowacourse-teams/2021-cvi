@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
@@ -16,6 +17,10 @@ const Container = styled.div`
   }
 `;
 
+const MyCommentReviewListContainer = styled.div`
+  width: 100%;
+`;
+
 const Title = styled.div`
   font-size: 2.8rem;
   margin-bottom: 6.8rem;
@@ -27,12 +32,14 @@ const Title = styled.div`
   }
 `;
 
-const MyReviewList = styled.div`
-  & > *:not(:last-child) {
-    border-bottom: 0.15rem solid ${PALETTE.NAVY100};
-  }
+const MyCommentReviewList = styled.div`
+  width: 100%;
+  border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+  padding: 2.4rem 3.2rem;
 `;
 
-const MyReview = styled.div``;
+const frameStyle = css`
+  width: 100%;
+`;
 
-export { Container, Title, MyReviewList, MyReview };
+export { Container, MyCommentReviewListContainer, Title, MyCommentReviewList, frameStyle };

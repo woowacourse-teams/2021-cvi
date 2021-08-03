@@ -37,10 +37,10 @@ const SideBar = () => {
     [
       PATH.MY_PAGE,
       PATH.MY_PAGE_ACCOUNT,
-      PATH.MY_PAGE_REVIEWS,
+      PATH.MY_PAGE_REVIEW,
       PATH.MY_PAGE_SHOT_VERIFICATION,
-      PATH.MY_PAGE_COMMENT_REVIEWS,
-      PATH.MY_PAGE_LIKE_REVIEWS,
+      PATH.MY_PAGE_COMMENT_REVIEW,
+      PATH.MY_PAGE_LIKE_REVIEW,
     ].includes(pathname);
 
   useEffect(() => {

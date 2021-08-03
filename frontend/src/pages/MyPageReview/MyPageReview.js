@@ -1,16 +1,19 @@
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
 import { Frame } from '../../components/common';
 import { PATH } from '../../constants';
 import { useFetch } from '../../hooks';
-import { requestGetAllReviewList } from '../../requests';
-import { Container, Title, MyReviewList, MyReview } from './MyPageReviews.styles';
+import { Container, Title, MyReviewList, frameStyle } from './MyPageReview.styles';
+import myReviewList from '../../fixtures/reviewList.json';
 
-const MyPageReviews = () => {
+const MyPageReview = () => {
   const history = useHistory();
+  const accessToken = useSelector((state) => state.authReducer.accessToken);
 
-  const { response: myReviewList } = useFetch([], requestGetAllReviewList);
+  // const { response: myReviewList, error: reviewError } = useFetch([], function () {
+  //   return requestGetMyReviewList(accessToken);
+  // });
 
   const goReviewDetailPage = (id) => {
     history.push(`${PATH.REVIEW}/${id}`);
@@ -18,21 +21,16 @@ const MyPageReviews = () => {
 
   return (
     <Container>
-      <div>MyPageReviews</div>
       <Title>내가 쓴 글</Title>
-      <Frame>
+      <Frame styles={frameStyle}>
         <MyReviewList>
           {myReviewList?.map((myReview) => (
-            // 1안
             <ReviewItem
               key={myReview.id}
               review={myReview}
+              accessToken={accessToken}
               onClick={() => goReviewDetailPage(myReview.id)}
             />
-            // 2안
-            // <MyReview key={myReview.id}>
-            //   <div>{myReview.content}</div>
-            // </MyReview>
           ))}
         </MyReviewList>
       </Frame>
@@ -40,4 +38,4 @@ const MyPageReviews = () => {
   );
 };
 
-export default MyPageReviews;
+export default MyPageReview;
