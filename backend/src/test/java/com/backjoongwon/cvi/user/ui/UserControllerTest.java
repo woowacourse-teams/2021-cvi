@@ -230,22 +230,23 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
+
+    @DisplayName("내가 좋아요 한 글 조회 - 성공")
+    @Test
+    void findMyPostsWhenFilterIsLikes() throws Exception {
+        //given
+        List<PostResponse> postResponses = Arrays.asList(
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
+                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
+        Filter filter = Filter.LIKES;
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        //when
+        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
+        //then
+        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+    }
+
     //
-//    @DisplayName("내가 좋아요 한 글 조회 - 성공")
-//    @Test
-//    void findMyPostsWhenFilterIsLikes() throws Exception {
-//        //given
-//        List<PostResponse> postResponses = Arrays.asList(
-//                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-//                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
-//        Filter filter = Filter.LIKES;
-//        willReturn(postResponses).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
-//        //when
-//        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
-//        //then
-//        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
-//    }
-//
 //    @DisplayName("내가 댓글을 단 게시글 조회 - 성공")
 //    @Test
 //    void findMyPostsWhenFilterIsComments() throws Exception {
@@ -272,18 +273,18 @@ class UserControllerTest extends ApiDocument {
         //then
         마이페이지_글_필터링_조회_요청_실패함(response, filter);
     }
-//
-//    @DisplayName("내가 좋아요 한 글 조회 - 실패")
-//    @Test
-//    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
-//        //given
-//        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(RequestUser.class), any(Filter.class));
-//        Filter filter = Filter.LIKES;
-//        //when
-//        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
-//        //then
-//        마이페이지_글_필터링_조회_요청_실패함(response, filter);
-//    }
+
+    @DisplayName("내가 좋아요 한 글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        Filter filter = Filter.LIKES;
+        //when
+        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
+        //then
+        마이페이지_글_필터링_조회_요청_실패함(response, filter);
+    }
 //
 //    @DisplayName("내가 댓글을 단 게시글 조회 - 실패")
 //    @Test
