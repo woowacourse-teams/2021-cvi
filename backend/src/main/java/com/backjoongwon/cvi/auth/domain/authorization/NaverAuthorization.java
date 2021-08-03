@@ -23,6 +23,7 @@ public class NaverAuthorization implements Authorization {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Value("${security.auth.naver.client-secret}")
     private String clientSecret;
 
