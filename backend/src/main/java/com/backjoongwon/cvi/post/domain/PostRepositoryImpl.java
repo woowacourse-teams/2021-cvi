@@ -15,11 +15,11 @@ import java.util.Optional;
 
 import static com.backjoongwon.cvi.post.domain.QPost.post;
 
-public class PostQueryDslImpl implements PostQueryDsl {
+public class PostRepositoryImpl implements PostQueryDsl {
 
     private final JPQLQueryFactory queryFactory;
 
-    public PostQueryDslImpl(EntityManager em) {
+    public PostRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -52,6 +52,7 @@ public class PostQueryDslImpl implements PostQueryDsl {
         return QUser.user.eq(user);
     }
 
+    @Override
     public Optional<Post> findWithLikesById(Long id) {
         Post post = queryFactory.selectFrom(QPost.post)
                 .leftJoin(QPost.post.likes.likes, QLike.like).fetchJoin()
