@@ -11,6 +11,7 @@ import BaseLayout from './BaseLayout/BaseLayout';
 import SideBar from './SideBar/SideBar';
 import SideBarMobile from './SideBarMobile/SideBarMobile';
 import DonutChart from './DonutChart/DonutChart';
+import SnackBar from './SnackBar/SnackBar';
 
 export {
   Avatar,
@@ -26,4 +27,5 @@ export {
   SideBar,
   SideBarMobile,
   DonutChart,
+  SnackBar,
 };
