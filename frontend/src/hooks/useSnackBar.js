@@ -29,7 +29,7 @@ const useSnackBar = () => {
 
     const intervalId = setInterval(() => {
       dispatch(closeSnackBarAction());
-    }, 1500);
+    }, 3000);
 
     return () => clearInterval(intervalId);
   }, [isSnackBarOpen]);

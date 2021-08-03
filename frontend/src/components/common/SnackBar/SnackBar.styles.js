@@ -17,6 +17,46 @@ const Container = styled.div`
   bottom: 1.6rem;
   left: 50%;
   transform: translateX(-50%);
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+      bottom: 0;
+    }
+    25% {
+      opacity: 1;
+      bottom: 1.6rem;
+    }
+    50% {
+      opacity: 1;
+      bottom: 1.6rem;
+    }
+    100% {
+      opacity: 0;
+      bottom: 0;
+    }
+  }
+  @-webkit-keyframes fade {
+    0% {
+      opacity: 0;
+      bottom: 0;
+    }
+    25% {
+      opacity: 1;
+      bottom: 1.6rem;
+    }
+    50% {
+      opacity: 1;
+      bottom: 1.6rem;
+    }
+    100% {
+      opacity: 0;
+      bottom: 0;
+    }
+  }
+
+  animation: fade 3s;
+  -webkit-animation: fade 3s;
 `;
 
 export { Container };
