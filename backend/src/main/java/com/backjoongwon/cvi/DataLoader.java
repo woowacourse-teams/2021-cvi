@@ -61,7 +61,60 @@ public class DataLoader implements CommandLineRunner {
             Post 글5 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
             Post 글6 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
             Post 글7 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
-            postRepository.saveAll(Arrays.asList(글1, 글2, 글3, 글4, 글5, 글6, 글7));
+            Post 글8 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글9 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글10 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글11 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글12 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글13 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글14 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글15 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글16 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글17 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글18 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글19 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글20 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글21 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글22 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글23 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글24 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글25 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글26 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글27 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글28 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글29 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글30 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글31 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글32 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글33 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글34 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글35 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글36 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글37 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글38 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글39 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글40 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글41 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글42 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글43 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글44 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글45 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글46 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글47 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글48 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글49 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글50 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글51 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
+            Post 글52 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
+            Post 글53 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
+            Post 글54 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글55 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
+            Post 글56 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
+
+            postRepository.saveAll(Arrays.asList(글1, 글2, 글3, 글4, 글5, 글6, 글7, 글8, 글9, 글10, 글11, 글12, 글13, 글14
+                    , 글15, 글16, 글17, 글18, 글19, 글20, 글21, 글22, 글23, 글24, 글25, 글26, 글27, 글28, 글29, 글30, 글31, 글32, 글33, 글34,
+                    글35, 글36, 글37, 글38, 글39, 글40, 글41, 글42, 글43, 글44, 글45, 글46, 글47, 글48, 글49, 글50, 글51, 글52, 글53,
+                    글54, 글55, 글56));
 
             글1.assignComment(댓글1);
             글2.assignComment(댓글2);
