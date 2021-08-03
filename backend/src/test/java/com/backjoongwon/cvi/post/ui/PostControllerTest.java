@@ -228,9 +228,21 @@ class PostControllerTest extends ApiDocument {
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
-        ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
+        ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
-        게시글_타입별_조회_요청_성공함(response);
+        글_타입별_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 타입별 조회 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void findByVaccineTypeWhenPostsIsEmpty() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        //when
+        ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
+        //then
+        글_타입별_조회_성공함_게시글없음(response, postResponses);
     }
 
     @DisplayName("게시글 타입별 조회 페이징 - 성공")
@@ -244,9 +256,21 @@ class PostControllerTest extends ApiDocument {
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
         //when
-        ResultActions response = 게시글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
         //then
-        게시글_타입별_페이징_조회_요청_성공함(response);
+        글_타입별_페이징_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 타입별 페이징 조회 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
+        //when
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0L, 3);
+        //then
+        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
@@ -499,19 +523,26 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-delete-failure"));
     }
 
-    private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
+    private ResultActions 글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
                 .queryParam("vaccinationType", vaccinationType.name())
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
+    private void 글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType"));
     }
 
-    private ResultActions 게시글_타입별_페이징_조회_요청(VaccinationType vaccinationType, Long lastPostId, int size) throws Exception {
+    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-when-empty"));
+    }
+
+    private ResultActions 글_타입별_페이징_조회_요청(VaccinationType vaccinationType, Long lastPostId, int size) throws Exception {
         return mockMvc.perform(get("/api/v1/posts/paging")
                 .queryParam("vaccinationType", vaccinationType.name())
                 .queryParam("lastPostId", String.valueOf(lastPostId))
@@ -519,10 +550,17 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 게시글_타입별_페이징_조회_요청_성공함(ResultActions response) throws Exception {
+    private void 글_타입별_페이징_조회_요청_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-paging"));
+    }
+
+    private void 글_타입별_페이징_조회_요청_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging-when-empty"));
     }
 
     private ResultActions 글_좋아요_생성_요청(Long postId) throws Exception {
