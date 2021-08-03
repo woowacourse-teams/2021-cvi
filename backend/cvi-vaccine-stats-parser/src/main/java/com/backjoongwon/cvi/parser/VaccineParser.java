@@ -4,16 +4,17 @@ import com.backjoongwon.cvi.dto.VaccineParserResponse;
 import com.backjoongwon.cvi.util.JsonMapper;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.temporal.TemporalAccessor;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VaccineParser {
 
     private static final String DATA_URL = "https://api.odcloud.kr/api/15077756/v1/vaccine-stat";
-    private static final LocalDate START_DATE = LocalDate.of(2021,3,11);
+    private static final LocalDateTime START_DATE = LocalDateTime.of(2021, 3, 11, 0, 0, 0);
+    public static final int UPDATE_HOURS = 10;
 
     private final Parser parser;
 
@@ -21,32 +22,37 @@ public class VaccineParser {
         this.parser = parser;
     }
 
-    public VaccineParserResponse parseToPublicData(String targetDate, String apiSecretKey) {
-        LocalDate localDate = LocalDate.parse(targetDate);
-        if (localDate.isBefore(START_DATE)) {
+    public VaccineParserResponse parseToPublicData(LocalDateTime targetDateTime, String apiSecretKey) {
+        if (targetDateTime.isBefore(START_DATE)) {
             return VaccineParserResponse.empty();
         }
-        if (localDate.isAfter(LocalDate.now())) {
+        if (targetDateTime.isAfter(LocalDateTime.now())) {
             return VaccineParserResponse.empty();
         }
-        if (LocalTime.now().isBefore(LocalTime.of(10, 0))) {
+        if (targetDateTime.toLocalDate().isEqual(LocalDate.now()) && targetDateTime.getHour() < UPDATE_HOURS) {
             return VaccineParserResponse.empty();
         }
-        return JsonMapper.toObject(getRawData(targetDate, apiSecretKey), VaccineParserResponse.class);
+        return JsonMapper.toObject(getRawData(targetDateTime, apiSecretKey), VaccineParserResponse.class);
     }
 
-    private String getRawData(String targetDate, String apiSecretKey) {
-        Map<String, String> parameters = makeParameters(targetDate, apiSecretKey);
+    private String getRawData(LocalDateTime targetDateTime, String apiSecretKey) {
+        Map<String, String> parameters = makeParameters(targetDateTime, apiSecretKey);
         String params = ParameterStringBuilder.getParamsString(parameters);
         return parser.parse(DATA_URL + "?" + params);
     }
 
-    private Map<String, String> makeParameters(String targetDate, String apiSecretKey) {
+    private Map<String, String> makeParameters(LocalDateTime targetDateTime, String apiSecretKey) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("page", "1");
         parameters.put("perPage", "20");
         parameters.put("serviceKey", apiSecretKey);
-        parameters.put("cond[baseDate::EQ]", targetDate + " 00:00:00");
+        parameters.put("cond[baseDate::EQ]", toRequestDateTime(targetDateTime));
         return parameters;
+    }
+
+    private String toRequestDateTime(LocalDateTime targetDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        targetDateTime = targetDateTime.truncatedTo(ChronoUnit.DAYS);
+        return targetDateTime.format(formatter);
     }
 }
