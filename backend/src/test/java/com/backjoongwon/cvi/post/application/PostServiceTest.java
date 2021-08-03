@@ -537,7 +537,7 @@ class PostServiceTest {
 
     @DisplayName("내가 댓글을 단 게시글 조회 - 성공")
     @Test
-    void findByUserAndFilterLikes() {
+    void findByUserAndFilterComments() {
         //given
         //when
         List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser1, Filter.COMMENTS);

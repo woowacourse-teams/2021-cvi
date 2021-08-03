@@ -230,7 +230,6 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
-
     @DisplayName("내가 좋아요 한 글 조회 - 성공")
     @Test
     void findMyPostsWhenFilterIsLikes() throws Exception {
@@ -378,7 +377,6 @@ class UserControllerTest extends ApiDocument {
                 .andDo(print())
                 .andDo(toDocument("user-find-failure"));
     }
-
 
     private ResultActions 사용자_업데이트_요청(UserRequest request) throws Exception {
         return mockMvc.perform(put("/api/v1/users")
