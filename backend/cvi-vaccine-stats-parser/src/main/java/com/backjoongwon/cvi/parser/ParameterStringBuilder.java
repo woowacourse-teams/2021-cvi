@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class ParameterStringBuilder {
+
     public static String getParamsString(Map<String, String> params) {
         try {
             StringBuilder result = new StringBuilder();

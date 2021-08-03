@@ -2,10 +2,14 @@ package com.backjoongwon.cvi.parser;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.util.JsonMapper;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedStatic;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,8 +19,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @DisplayName("공공 데이터 api 요청 테스트")
 class VaccineParserTest {
@@ -26,6 +30,8 @@ class VaccineParserTest {
             "울산광역시", "경기도", "강원도", "세종특별자치시", "충청북도", "충청남도",
             "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
+    private MockedStatic<JsonMapper> mockJsonMapper;
+
     private static Stream<Arguments> parseToPublicDataToBeforeTenAndAnyDate() {
         return Stream.of(
                 Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0))),
@@ -34,15 +40,32 @@ class VaccineParserTest {
         );
     }
 
+    private static Stream<Arguments> parseToPublicDataWhenNotUpdate() {
+        return Stream.of(
+                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 59, 59))),
+                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 10), LocalTime.MAX)),
+                Arguments.of(LocalDateTime.now().plusDays(1))
+        );
+    }
+
+    @BeforeEach
+    void init() {
+        mockJsonMapper = mockStatic(JsonMapper.class);
+    }
+
+    @AfterEach
+    void close() {
+        mockJsonMapper.close();
+    }
+
     @DisplayName("백신 접종 데이터 가져오기 - 성공 - 10시 이후의 오늘 날짜 및 2021-03-10이후의 날짜")
     @ParameterizedTest
     @MethodSource
     void parseToPublicDataToBeforeTenAndAnyDate(LocalDateTime targetDateTime) {
         //given
-        VaccineParser mockVaccineParser = mock(VaccineParser.class);
-        //when
         VaccineParserResponse vaccineParserResponse = toVaccineParserResponse(targetDateTime);
-        willReturn(vaccineParserResponse).given(mockVaccineParser).parseToPublicData(targetDateTime, API_SECRET_KEY);
+        //when
+        when(JsonMapper.toObject(anyString(), any())).thenReturn(vaccineParserResponse);
         List<RegionVaccinationData> regionVaccinationData = vaccineParserResponse.getData();
         //then
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedFirstCnt)
@@ -61,14 +84,6 @@ class VaccineParserTest {
                 .isNotEmpty();
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getTotalSecondCnt)
                 .isNotEmpty();
-    }
-
-    private static Stream<Arguments> parseToPublicDataWhenNotUpdate() {
-        return Stream.of(
-                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 59, 59))),
-                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 10), LocalTime.MAX)),
-                Arguments.of(LocalDateTime.now().plusDays(1))
-        );
     }
 
     @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")

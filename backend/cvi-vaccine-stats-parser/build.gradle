@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-core'
     }
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.11.2'
+    testImplementation 'org.mockito:mockito-inline:3.11.2'
 }
 
 test {
