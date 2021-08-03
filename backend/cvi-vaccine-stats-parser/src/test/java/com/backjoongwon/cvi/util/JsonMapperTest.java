@@ -39,9 +39,9 @@ class JsonMapperTest {
         assertThat(vaccineParserResponse.getData()).isNotEmpty();
     }
 
-    @DisplayName("매핑 - 실패")
+    @DisplayName("매핑 - 실패 - 잘못된 json 데이터 입력")
     @Test
-    void toObjectWhenWrongData() {
+    void toObjectFailureWhenWrongData() {
         //given
         String rawData = "Strange Data";
         //when
