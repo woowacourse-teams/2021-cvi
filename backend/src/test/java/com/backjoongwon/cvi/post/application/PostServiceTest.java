@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -531,6 +532,19 @@ class PostServiceTest {
 //        List<PostResponse> byUserAndFilter = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
 //        //then
 //    }
+
+    @DisplayName("내가 댓글을 단 게시글 조회 - 성공")
+    @Test
+    void findByUserAndFilterLikes() {
+        //given
+        //when
+        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser1, Filter.COMMENTS);
+        List<Long> postIds = postResponses.stream()
+                .map(PostResponse::getId)
+                .collect(Collectors.toList());
+        //then
+        assertThat(postIds).containsExactly(post1.getId());
+    }
 
     @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
     @Test

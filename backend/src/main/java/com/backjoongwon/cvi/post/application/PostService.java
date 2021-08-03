@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.application;
 
 import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -32,6 +34,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public PostResponse create(Optional<User> optionalUser, PostRequest postRequest) {
@@ -173,10 +176,12 @@ public class PostService {
             return null;
         }
         if (filter == Filter.COMMENTS) {
-            // comments 다대일로 post와 조인 (100-100)
-            // 배치사이즈로 1개 post에서 모든 comment 조회
-            // List<Post> 돌며 아이디가 userId인 post만 선별
-            return null;
+            List<Comment> comments = commentRepository.findByUser(user);
+            List<Post> posts = comments.stream()
+                    .map(Comment::getPost)
+                    .distinct()
+                    .collect(Collectors.toList());
+            return PostResponse.of(posts, user);
         }
         List<Post> posts = postRepository.findByUser(user);
         return PostResponse.of(posts, user);
