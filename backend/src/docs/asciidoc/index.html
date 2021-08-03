@@ -1063,7 +1063,7 @@ Content-Length: 546
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:09.049154"
+  "createdAt" : "2021-08-03T17:56:48.795372"
 }</code></pre>
 </div>
 </div>
@@ -1170,7 +1170,7 @@ Content-Length: 2047
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-03T17:27:08.577964"
+    "createdAt" : "2021-08-03T17:56:48.270094"
   }, {
     "id" : 2,
     "writer" : {
@@ -1188,10 +1188,10 @@ Content-Length: 2047
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-03T17:27:08.577982"
+    "createdAt" : "2021-08-03T17:56:48.270122"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-03T17:27:08.581309"
+  "createdAt" : "2021-08-03T17:56:48.273374"
 }, {
   "id" : 1,
   "writer" : {
@@ -1214,7 +1214,7 @@ Content-Length: 2047
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-02T17:27:08.581375"
+  "createdAt" : "2021-08-02T17:56:48.273467"
 } ]</code></pre>
 </div>
 </div>
@@ -1256,13 +1256,9 @@ Content-Length: 3
 <h4 id="_성공_9">성공</h4>
 <div class="sect4">
 <h5 id="_request_17">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Authorization: Bearer {ACCESS TOKEN}
-Host: localhost</code></pre>
-</div>
+<div class="paragraph">
+<p>include::/Users/hoony/Desktop/woowacourse/2021-cvi/backend/build/generated-snippets/post-find
+/http-request.adoc[]</p>
 </div>
 </div>
 <div class="sect4">
@@ -1274,7 +1270,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1491
+Content-Length: 1489
 
 {
   "id" : 1,
@@ -1313,7 +1309,7 @@ Content-Length: 1491
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-03T17:27:08.815068"
+    "createdAt" : "2021-08-03T17:56:48.527766"
   }, {
     "id" : 2,
     "writer" : {
@@ -1331,10 +1327,10 @@ Content-Length: 1491
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-03T17:27:08.815097"
+    "createdAt" : "2021-08-03T17:56:48.5278"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.816996"
+  "createdAt" : "2021-08-03T17:56:48.529597"
 }</code></pre>
 </div>
 </div>
@@ -1398,7 +1394,7 @@ Content-Type: application/json
 Content-Length: 2638
 
 [ {
-  "id" : 1,
+  "id" : 3,
   "writer" : {
     "id" : 1,
     "nickname" : "user",
@@ -1434,7 +1430,7 @@ Content-Length: 2638
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-03T17:27:08.927141"
+    "createdAt" : "2021-08-03T17:56:48.635915"
   }, {
     "id" : 2,
     "writer" : {
@@ -1452,10 +1448,10 @@ Content-Length: 2638
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-03T17:27:08.92716"
+    "createdAt" : "2021-08-03T17:56:48.635941"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.928295"
+  "createdAt" : "2021-08-03T17:56:48.63805"
 }, {
   "id" : 2,
   "writer" : {
@@ -1478,9 +1474,9 @@ Content-Length: 2638
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.928316"
+  "createdAt" : "2021-08-03T17:56:48.638079"
 }, {
-  "id" : 3,
+  "id" : 1,
   "writer" : {
     "id" : 1,
     "nickname" : "user",
@@ -1501,7 +1497,7 @@ Content-Length: 2638
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.928324"
+  "createdAt" : "2021-08-03T17:56:48.638092"
 } ]</code></pre>
 </div>
 </div>
@@ -1521,6 +1517,13 @@ Authorization: Bearer {ACCESS TOKEN}
 Host: localhost</code></pre>
 </div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>클라이언트 쪽에서 처음 페이징 요청시 Number.MAX_SAFE_INTEGER 를 실어 보내준다.</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_response_20">Response</h5>
@@ -1531,10 +1534,10 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2641
+Content-Length: 2642
 
 [ {
-  "id" : 37,
+  "id" : 39,
   "writer" : {
     "id" : 1,
     "nickname" : "user",
@@ -1570,7 +1573,7 @@ Content-Length: 2641
       "socialProfileUrl" : "naver.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-03T17:27:08.973352"
+    "createdAt" : "2021-08-03T17:56:48.711806"
   }, {
     "id" : 2,
     "writer" : {
@@ -1588,10 +1591,10 @@ Content-Length: 2641
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-03T17:27:08.97338"
+    "createdAt" : "2021-08-03T17:56:48.711834"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.975297"
+  "createdAt" : "2021-08-03T17:56:48.713815"
 }, {
   "id" : 38,
   "writer" : {
@@ -1614,9 +1617,9 @@ Content-Length: 2641
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.975631"
+  "createdAt" : "2021-08-03T17:56:48.713848"
 }, {
-  "id" : 39,
+  "id" : 37,
   "writer" : {
     "id" : 1,
     "nickname" : "user",
@@ -1637,7 +1640,7 @@ Content-Length: 2641
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T17:27:08.975647"
+  "createdAt" : "2021-08-03T17:56:48.713859"
 } ]</code></pre>
 </div>
 </div>
@@ -1949,7 +1952,7 @@ Content-Length: 467
     "socialProfileUrl" : "naver.com/profile"
   },
   "content" : "좋은 정보 공유 감사해요 ㅎㅎㅎ",
-  "createdAt" : "2021-08-03T17:27:08.510577"
+  "createdAt" : "2021-08-03T17:56:48.190266"
 }</code></pre>
 </div>
 </div>
@@ -2123,7 +2126,7 @@ Content-Length: 53
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-03 17:22:16 +0900
+Last updated 2021-08-03 17:55:24 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

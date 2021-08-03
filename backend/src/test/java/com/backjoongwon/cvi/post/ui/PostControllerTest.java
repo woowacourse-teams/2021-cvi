@@ -25,11 +25,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.hypermedia.Link;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -148,10 +150,10 @@ class PostControllerTest extends ApiDocument {
         //given
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
-        List<PostResponse> postResponses = Arrays.asList(
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
-        );
+        ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
@@ -219,11 +221,12 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineType() throws Exception {
         //given
-        willReturn(Arrays.asList(
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
-        )).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
@@ -234,11 +237,12 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineTypePaging() throws Exception {
         //given
-        willReturn(Arrays.asList(
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(39L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(38L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(37L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
-        )).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
         //when
         ResultActions response = 게시글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
         //then
