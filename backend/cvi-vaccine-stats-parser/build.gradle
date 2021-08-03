@@ -18,9 +18,15 @@ dependencies {
     testImplementation(group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.2')
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
 
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation('ch.qos.logback:logback-classic:1.2.3') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+        exclude group: 'ch.qos.logback', module: 'logback-core'
+    }
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.11.2'
 }
 
 test {
     useJUnitPlatform()
 }
-

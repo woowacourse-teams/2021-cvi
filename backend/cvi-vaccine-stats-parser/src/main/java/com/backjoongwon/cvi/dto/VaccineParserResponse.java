@@ -1,80 +1,54 @@
 package com.backjoongwon.cvi.dto;
 
+import java.util.Collections;
 import java.util.List;
 
 public class VaccineParserResponse {
 
-    private long currentCount;
-    private List<DataByRegion> data;
-    private long matchCount;
-    private long page;
-    private long perPage;
-    private long totalCount;
+    private int currentCount;
+    private List<RegionVaccinationData> data;
+    private int matchCount;
+    private int page;
+    private int perPage;
+    private int totalCount;
 
-    public long getCurrentCount() {
+    public VaccineParserResponse() {
+    }
+
+    public VaccineParserResponse(int currentCount, List<RegionVaccinationData> data, int matchCount, int page, int perPage, int totalCount) {
+        this.currentCount = currentCount;
+        this.data = data;
+        this.matchCount = matchCount;
+        this.page = page;
+        this.perPage = perPage;
+        this.totalCount = totalCount;
+    }
+
+    public static VaccineParserResponse empty() {
+        return new VaccineParserResponse(0, Collections.emptyList(), 0, 1, 20, 0);
+    }
+
+    public int getCurrentCount() {
         return currentCount;
     }
 
-    public List<DataByRegion> getData() {
+    public List<RegionVaccinationData> getData() {
         return data;
     }
 
-    public long getMatchCount() {
+    public int getMatchCount() {
         return matchCount;
     }
 
-    public long getPage() {
+    public int getPage() {
         return page;
     }
 
-    public long getPerPage() {
+    public int getPerPage() {
         return perPage;
     }
 
-    public long getTotalCount() {
+    public int getTotalCount() {
         return totalCount;
-    }
-
-    private static class DataByRegion{
-        private long accumulatedFirstCnt;
-        private long accumulatedSecondCnt;
-        private String baseDate;
-        private long firstCnt;
-        private long secondCnt;
-        private String sido;
-        private long totalFirstCnt;
-        private long totalSecondCnt;
-
-        public long getAccumulatedFirstCnt() {
-            return accumulatedFirstCnt;
-        }
-
-        public long getAccumulatedSecondCnt() {
-            return accumulatedSecondCnt;
-        }
-
-        public String getBaseDate() {
-            return baseDate;
-        }
-
-        public long getFirstCnt() {
-            return firstCnt;
-        }
-
-        public long getSecondCnt() {
-            return secondCnt;
-        }
-
-        public String getSido() {
-            return sido;
-        }
-
-        public long getTotalFirstCnt() {
-            return totalFirstCnt;
-        }
-
-        public long getTotalSecondCnt() {
-            return totalSecondCnt;
-        }
     }
 }

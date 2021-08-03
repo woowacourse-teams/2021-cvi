@@ -1,5 +1,8 @@
 package com.backjoongwon.cvi.parser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -7,7 +10,8 @@ import java.net.URL;
 
 public class Parser {
 
-    public static final String GET_METHOD = "GET";
+    private static final String GET_METHOD = "GET";
+    private static final Logger LOG = LoggerFactory.getLogger(Parser.class);
 
     public String parse(String url) {
         try {
@@ -27,6 +31,7 @@ public class Parser {
             con.disconnect();
             return content.toString();
         } catch (Exception e) {
+            LOG.info("api 호출 예외입니다");
             throw new IllegalStateException("api 호출 예외입니다");
         }
     }
