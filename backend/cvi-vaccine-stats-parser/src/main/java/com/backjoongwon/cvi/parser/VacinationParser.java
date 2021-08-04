@@ -1,12 +1,11 @@
 package com.backjoongwon.cvi.parser;
 
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.util.DateConverter;
 import com.backjoongwon.cvi.util.JsonMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,13 +45,7 @@ public class VacinationParser {
         parameters.put("page", "1");
         parameters.put("perPage", "20");
         parameters.put("serviceKey", apiSecretKey);
-        parameters.put("cond[baseDate::EQ]", toRequestDateTime(targetDateTime));
+        parameters.put("cond[baseDate::EQ]", DateConverter.withZeroTime(targetDateTime));
         return parameters;
-    }
-
-    private String toRequestDateTime(LocalDateTime targetDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        targetDateTime = targetDateTime.truncatedTo(ChronoUnit.DAYS);
-        return targetDateTime.format(formatter);
     }
 }

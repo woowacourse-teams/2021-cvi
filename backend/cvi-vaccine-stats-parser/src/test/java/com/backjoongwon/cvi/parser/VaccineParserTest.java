@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.parser;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.util.DateConverter;
 import com.backjoongwon.cvi.util.JsonMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +74,7 @@ class VaccineParserTest {
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getBaseDate)
-                .contains(targetDateTime.toLocalDate().toString() + " 00:00:00");
+                .contains(DateConverter.withZeroTime(targetDateTime));
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getSido)
                 .containsAll(REGIONS);
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getFirstCnt)
@@ -104,7 +105,7 @@ class VaccineParserTest {
     }
 
     private VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = targetDateTime.toLocalDate().toString() + " 00:00:00";
+        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),
