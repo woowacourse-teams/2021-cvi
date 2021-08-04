@@ -60,10 +60,6 @@ public class User extends BaseEntity {
         this.profileUrl = updateUser.profileUrl;
     }
 
-    public void makeVerified() {
-        this.shotVerified = true;
-    }
-
     public boolean isGuestUser() {
         return false;
     }

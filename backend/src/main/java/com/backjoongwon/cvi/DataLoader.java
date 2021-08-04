@@ -36,8 +36,20 @@ public class DataLoader implements CommandLineRunner {
             User 유저4 = User.builder().nickname("엘라").ageRange(AgeRange.FORTIES).build();
             User 유저5 = User.builder().nickname("주모").ageRange(AgeRange.FIFTIES).build();
             User 유저6 = User.builder().nickname("똥강아지").ageRange(AgeRange.OVER_SIXTIES).build();
-            유저1.makeVerified();
-            유저3.makeVerified();
+            User 유저1_shotVerified = User.builder()
+                    .nickname(유저1.getNickname())
+                    .ageRange(유저1.getAgeRange())
+                    .shotVerified(true)
+                    .profileUrl(유저1.getProfileUrl())
+                    .build();
+            유저1.update(유저1_shotVerified);
+            User 유저3_shotVerified = User.builder()
+                    .nickname(유저3.getNickname())
+                    .ageRange(유저3.getAgeRange())
+                    .shotVerified(true)
+                    .profileUrl(유저3.getProfileUrl())
+                    .build();
+            유저3.update(유저3_shotVerified);
             userRepository.saveAll(Arrays.asList(유저1, 유저2, 유저3, 유저4, 유저5, 유저6));
 
             Comment 댓글1 = Comment.builder().content("댓글1").user(유저1).build();
