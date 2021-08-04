@@ -18,6 +18,7 @@ import java.util.List;
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccinationRateResponse;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,18 @@ class PublicDataControllerTest extends ApiDocument {
     private JwtTokenProvider jwtTokenProvider;
 
 
+    @DisplayName("백신 접종률 저장 - 성공")
+    @Test
+    void saveVaccinationRate() throws Exception {
+        //given
+        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(targetDateTime);
+        //when
+        willReturn(vaccinationRateResponses).given(publicDataService).saveVaccinationRates(targetDateTime.toLocalDate());
+        ResultActions response = 백신_접종률_저장_요청(targetDateTime.toLocalDate());
+        //then
+        백신_접종률_저장_성공함(response);
+    }
+
     @DisplayName("백신 접종률 조회 - 성공")
     @Test
     void findVaccinationRate() throws Exception {
@@ -41,25 +54,36 @@ class PublicDataControllerTest extends ApiDocument {
         List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(targetDateTime);
         //when
         willReturn(vaccinationRateResponses).given(publicDataService).findVaccinationRates(targetDateTime.toLocalDate());
-        ResultActions response = 백신_정보률_조회_요청(targetDateTime.toLocalDate());
+        ResultActions response = 백신_접종률_조회_요청(targetDateTime.toLocalDate());
         //then
         백신_접종률_조회_성공함(response);
     }
 
     @DisplayName("백신 접종률 조회 - 성공 - 요청 후 api 데이터가 없을 때")
     @Test
-    void findVaccinationRateEmtpy() throws Exception {
+    void findVaccinationRateEmpty() throws Exception {
         //given
         //when
         willReturn(Collections.emptyList()).given(publicDataService).findVaccinationRates(targetDateTime.toLocalDate());
-        ResultActions response = 백신_정보률_조회_요청(targetDateTime.toLocalDate());
+        ResultActions response = 백신_접종률_조회_요청(targetDateTime.toLocalDate());
         //then
         백신_접종률_없데이트전_조회_성공함(response);
     }
 
-    private ResultActions 백신_정보률_조회_요청(LocalDate targetDate) throws Exception {
+    private ResultActions 백신_접종률_저장_요청(LocalDate targetDate) throws Exception {
+        return mockMvc.perform(post("/api/v1/publicdatas/vaccinations")
+                .param("targetDate", targetDate.toString()));
+    }
+
+    private void 백신_접종률_저장_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(toDocument("publicdata-vaccination-save"));
+    }
+
+    private ResultActions 백신_접종률_조회_요청(LocalDate targetDate) throws Exception {
         return mockMvc.perform(get("/api/v1/publicdatas/vaccinations")
-                .param("targetDate", LocalDate.now().toString()));
+                .param("targetDate", targetDate.toString()));
     }
 
     private void 백신_접종률_조회_성공함(ResultActions response) throws Exception {

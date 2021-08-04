@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.REGIONS;
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccineParserResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,10 +32,6 @@ import static org.mockito.Mockito.mock;
 @DisplayName("공공데이터 요청 서비스 테스트")
 @Transactional
 class PublicDataServiceTest {
-
-    public static final List<String> REGIONS = Arrays.asList("전국", "부산광역시", "대구광역시", "대전광역시", "인천광역시", "광주광역시",
-            "울산광역시", "경기도", "강원도", "세종특별자치시", "충청북도", "충청남도",
-            "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
     @Autowired
     private VaccinationRateRepository vaccinationRateRepository;
@@ -93,6 +89,8 @@ class PublicDataServiceTest {
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getTotalSecondCnt)
                 .isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getTotalSecondCnt)
+                .isNotEmpty();
+        assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulateRate)
                 .isNotEmpty();
     }
 

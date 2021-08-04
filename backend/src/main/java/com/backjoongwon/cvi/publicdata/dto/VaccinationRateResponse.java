@@ -47,7 +47,7 @@ public class VaccinationRateResponse {
         return new VaccinationRateResponse(vaccinationRate.getAccumulatedFirstCnt(), vaccinationRate.getAccumulatedSecondCnt(),
                 vaccinationRate.getBaseDate(), vaccinationRate.getFirstCnt(), vaccinationRate.getSecondCnt(),
                 vaccinationRate.getSido(), vaccinationRate.getTotalFirstCnt(), vaccinationRate.getTotalSecondCnt(),
-                calculatePercent(vaccinationRate.getAccumulatedFirstCnt()));
+                vaccinationRate.getAccumulateRate());
     }
 
     private static int calculatePercent(int accumulatedFirstCnt) {
