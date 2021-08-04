@@ -10,7 +10,6 @@ const Container = styled.div`
   flex-direction: column;
   height: inherit;
   overflow-y: auto;
-  align-items: center;
 
   @media screen and (max-width: 1024px) {
     padding: 3rem 0 0 0;

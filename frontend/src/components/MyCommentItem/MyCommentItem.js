@@ -23,21 +23,19 @@ const MyCommentItem = ({ myCommentReview, myComment, onClick }) => {
       <CreatedAt>{toDate(TO_DATE_TYPE.TIME, myComment.createdAt)}</CreatedAt>
       <CommentContent>{myComment.content}</CommentContent>
       <ReviewContainer>
-        <Frame showShadow={true} styles={frameStyle}>
-          <TopContainer>
-            <Label
-              fontColor={labelFontColor}
-              backgroundColor={VACCINATION_COLOR[myCommentReview.vaccinationType]}
-            >
-              {VACCINATION[myCommentReview.vaccinationType]}
-            </Label>
-            <ShotVerified>{myCommentReview.writer.shotVerified && '접종 확인'}</ShotVerified>
-          </TopContainer>
-          <ReviewContent>{myCommentReview.content}</ReviewContent>
-          <Writer>
-            {myCommentReview.writer.nickname} · {myCommentReview.writer.ageRange.meaning}
-          </Writer>
-        </Frame>
+        <TopContainer>
+          <Label
+            fontColor={labelFontColor}
+            backgroundColor={VACCINATION_COLOR[myCommentReview.vaccinationType]}
+          >
+            {VACCINATION[myCommentReview.vaccinationType]}
+          </Label>
+          <ShotVerified>{myCommentReview.writer.shotVerified && '접종 확인'}</ShotVerified>
+        </TopContainer>
+        <ReviewContent>{myCommentReview.content}</ReviewContent>
+        <Writer>
+          {myCommentReview.writer.nickname} · {myCommentReview.writer.ageRange.meaning}
+        </Writer>
       </ReviewContainer>
     </Container>
   );
