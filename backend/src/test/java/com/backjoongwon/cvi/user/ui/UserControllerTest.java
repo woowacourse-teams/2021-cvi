@@ -441,7 +441,7 @@ class UserControllerTest extends ApiDocument {
     }
 
     private ResultActions 사용자_업데이트_요청(UserRequest request) throws Exception {
-        return mockMvc.perform(put("/api/v1/users")
+        return mockMvc.perform(put("/api/v1/users/me")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request))
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));

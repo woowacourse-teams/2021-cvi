@@ -17,6 +17,7 @@ const FrameContent = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 60rem;
+  position: relative;
 `;
 
 const ButtonContainer = styled.div`

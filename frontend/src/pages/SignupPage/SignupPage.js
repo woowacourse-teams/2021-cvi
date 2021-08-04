@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { Button, Frame, Input, Selection } from '../../components/common';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/common/Button/Button.styles';
-import { AGE_RANGE, ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../../constants';
+import {
+  AGE_RANGE,
+  ALERT_MESSAGE,
+  PATH,
+  RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
+  NICKNAME_LIMIT,
+  REGEX,
+} from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';
 import {
@@ -18,21 +25,40 @@ import {
   LoginContainer,
   Span,
 } from './SignupPage.styles';
+import { useSnackBar } from '../../hooks';
 
 const SignupPage = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
+
+  const { openSnackBar } = useSnackBar();
 
   const goHomePage = () => {
     history.push(`${PATH.HOME}`);
   };
 
-  const signup = async () => {
+  const goLoginPage = () => {
+    history.push(`${PATH.LOGIN}`);
+  };
+
+  const isValidNickname = (nickname) =>
+    nickname.length > NICKNAME_LIMIT.MIN_LENGTH &&
+    !REGEX.INCLUDE_BLANK.test(nickname) &&
+    !REGEX.INCLUDE_SPECIAL_CHARACTER.test(nickname);
+
+  const signup = async (event) => {
+    event.preventDefault();
+
+    if (!isValidNickname(nickname)) {
+      alert(ALERT_MESSAGE.FAIL_TO_LOGIN);
+
+      return;
+    }
+
     const data = { nickname, ageRange: AGE_RANGE[selectedAgeRange], ...location.state };
     const response = await postSignupAsync(data);
 
@@ -44,7 +70,7 @@ const SignupPage = () => {
 
     dispatch(getMyInfoAsync(response.data.accessToken));
 
-    enqueueSnackbar(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);
     goHomePage();
   };
 
@@ -60,21 +86,24 @@ const SignupPage = () => {
             setSelectedItem={setSelectedAgeRange}
           />
         </SelectionContainer>
-        <Input
-          placeholder="닉네임을 입력해주세요"
-          width="100%"
-          value={nickname}
-          onChange={(event) => setNickname(event.target.value)}
-        />
-        <Button styles={signupButtonStyles} onClick={signup}>
-          회원가입하기
-        </Button>
+        <form onSubmit={signup}>
+          <Input
+            placeholder="닉네임을 입력해주세요"
+            width="100%"
+            value={nickname}
+            minLength={NICKNAME_LIMIT.MIN_LENGTH}
+            maxLength={NICKNAME_LIMIT.MAX_LENGTH}
+            required={true}
+            onChange={(event) => setNickname(event.target.value)}
+          />
+          <Button styles={signupButtonStyles}>회원가입하기</Button>
+        </form>
         <LoginContainer>
           <Span>이미 회원이신가요?</Span>
           <Button
             backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
             styles={goLoginStyles}
-            onClick={goHomePage}
+            onClick={goLoginPage}
           >
             로그인 하기
           </Button>

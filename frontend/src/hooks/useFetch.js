@@ -3,8 +3,11 @@ import { useState, useEffect } from 'react';
 const useFetch = (defaultValue, callback) => {
   const [response, setResponse] = useState(defaultValue);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
+
     try {
       const response = await callback();
 
@@ -18,6 +21,8 @@ const useFetch = (defaultValue, callback) => {
     } catch (error) {
       console.error(error);
       setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,7 +30,7 @@ const useFetch = (defaultValue, callback) => {
     fetchData();
   }, []);
 
-  return { response, error };
+  return { response, error, loading };
 };
 
 export default useFetch;

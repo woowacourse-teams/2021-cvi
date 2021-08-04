@@ -23,7 +23,7 @@ import static org.mockito.Mockito.spy;
 @DisplayName("Naver Authorization 도메인 테스트")
 class NaverAuthorizationTest {
 
-    private static final String TOKEN_RESPONSE = "{\"access_token\":\"{ACCESS_TOKEN}\",\"refresh_token\":\"{REFRESH_TOKEN}\",\"token_type\":\"bearer\",\"expires_in\":\"3600\"}";
+    private static final String TOKEN_RESPONSE = "{\"access_token\":\"{ACCESS_TOKEN received from Social Provider}\",\"refresh_token\":\"{REFRESH_TOKEN received from Social Provider}\",\"token_type\":\"bearer\",\"expires_in\":\"3600\"}";
     private static final String PROFILE_RESPONSE = "{\"resultcode\":\"00\",\"message\":\"success\",\"response\":{\"id\":\"NAVER_ID\",\"nickname\":\"yon\",\"profile_image\":\"http://www.naver.com/profile\"}}";
     private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
     private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
@@ -32,8 +32,8 @@ class NaverAuthorizationTest {
     private static final String NAVER_ID = "NAVER_ID";
     private static final String NAVER_PROFILE_URL = "http://www.naver.com/profile";
     private static final String BEARER = "bearer";
-    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN}";
-    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN}";
+    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN received from Social Provider}";
+    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN received from Social Provider}";
     private static final String EXPIRE_TIME = "3600";
 
     private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());

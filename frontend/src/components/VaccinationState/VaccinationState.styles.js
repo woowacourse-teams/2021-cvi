@@ -7,6 +7,10 @@ const Container = styled.div`
 
 const Title = styled.h3`
   margin-bottom: 1rem;
+
+  @media screen and (max-width: 801px) {
+    margin: 1rem 1.4rem;
+  }
 `;
 
 const FrameContent = styled.div`
@@ -14,11 +18,23 @@ const FrameContent = styled.div`
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
   margin: 2.4rem 2.7rem;
+  padding: 0 0.6rem;
+
+  @media screen and (max-width: 801px) {
+    margin: 2rem 0rem;
+    display: grid;
+    gap: 1rem;
+  }
 `;
 
 const PrimaryState = styled.div`
   display: flex;
   margin-right: auto;
+
+  @media screen and (max-width: 801px) {
+    margin: 0 auto;
+    flex-direction: column;
+  }
 `;
 
 const Info = styled.div`
@@ -26,6 +42,11 @@ const Info = styled.div`
   margin: 1.2rem 0 1.2rem 2.4rem;
   font-size: 1.4rem;
   font-weight: 500;
+
+  @media screen and (max-width: 801px) {
+    margin: 0;
+    font-size: 1.2rem;
+  }
 `;
 
 const InfoTitle = styled.div`
@@ -33,6 +54,11 @@ const InfoTitle = styled.div`
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1.6rem;
+
+  @media screen and (max-width: 801px) {
+    font-size: 1.6rem;
+    margin-top: 2rem;
+  }
 `;
 
 export { Container, Title, FrameContent, PrimaryState, Info, InfoTitle };

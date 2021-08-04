@@ -23,16 +23,16 @@ import static org.mockito.Mockito.spy;
 @DisplayName("Kakao Authorization 도메인 테스트")
 class KakaoAuthorizationTest {
 
-    private static final String TOKEN_RESPONSE = "{\"token_type\":\"bearer\",\"access_token\":\"{ACCESS_TOKEN}\",\"expires_in\":\"43199\",\"refresh_token\":\"{REFRESH_TOKEN}\",\"refresh_token_expires_in\":\"25184000\",\"scope\":\"account_email profile\"}";
+    private static final String TOKEN_RESPONSE = "{\"token_type\":\"bearer\",\"access_token\":\"{ACCESS_TOKEN received from Social Provider}\",\"expires_in\":\"43199\",\"refresh_token\":\"{REFRESH_TOKEN received from Social Provider}\",\"refresh_token_expires_in\":\"25184000\",\"scope\":\"account_email profile\"}";
     private static final String PROFILE_RESPONSE = "{\"id\":1816688137,\"connected_at\":\"2021-07-22T05:43:16Z\",\"properties\":{\"nickname\":\"김영빈\"},\"kakao_account\":{\"profile_nickname_needs_agreement\":false,\"profile_image_needs_agreement\":false,\"profile\":{\"nickname\":\"김영빈\",\"thumbnail_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg\",\"profile_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg\",\"is_default_image\":true}}}";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String CODE = "CODE";
     private static final String KAKAO_SOCIAL_ID = "1816688137";
     private static final String BEARER = "bearer";
-    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN}";
+    private static final String ACCESS_TOKEN = "{ACCESS_TOKEN received from Social Provider}";
     private static final String EXPIRE_TIME = "43199";
-    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN}";
+    private static final String REFRESH_TOKEN = "{REFRESH_TOKEN received from Social Provider}";
     private static final String TOKEN_EXPIRE_TIME = "25184000";
     private static final String SCOPE = "account_email profile";
 

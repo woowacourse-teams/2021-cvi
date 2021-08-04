@@ -39,7 +39,7 @@ const DonutChart = ({
 };
 
 DonutChart.propTypes = {
-  target: PropTypes.number.isRequired,
+  target: PropTypes.string.isRequired,
   filledColor: PropTypes.string,
   emptyColor: PropTypes.string,
   fontColor: PropTypes.string,

@@ -9,13 +9,14 @@ const Label = ({ children, sizeType, backgroundColor, fontColor }) => (
 );
 
 Label.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   sizeType: PropTypes.string,
   backgroundColor: PropTypes.string,
   fontColor: PropTypes.string,
 };
 
 Label.defaultProps = {
+  children: '',
   sizeType: LABEL_SIZE_TYPE.SMALL,
   backgroundColor: VACCINATION_COLOR.PFIZER,
   fontColor: PALETTE.WHITE,

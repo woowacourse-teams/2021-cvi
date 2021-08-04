@@ -9,7 +9,10 @@ import Tabs from './Tabs/Tabs';
 import Avatar from './Avatar/Avatar';
 import BaseLayout from './BaseLayout/BaseLayout';
 import SideBar from './SideBar/SideBar';
+import SideBarMobile from './SideBarMobile/SideBarMobile';
 import DonutChart from './DonutChart/DonutChart';
+import SnackBar from './SnackBar/SnackBar';
+import Loading from './Loading/Loading';
 
 export {
   Avatar,
@@ -23,5 +26,8 @@ export {
   Selection,
   Tabs,
   SideBar,
+  SideBarMobile,
   DonutChart,
+  SnackBar,
+  Loading,
 };
