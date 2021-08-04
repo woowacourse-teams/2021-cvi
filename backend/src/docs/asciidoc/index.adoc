@@ -303,3 +303,20 @@ include::{snippets}/comment-delete-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/comment-delete-failure/http-response.adoc[]
+
+
+== PublicData (공공데이터)
+=== 백신 접종률 조회
+==== 성공
+===== Request
+include::{snippets}/publicdata-vaccination-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-vaccination-find/http-response.adoc[]
+
+==== 성공 - 요청 후 api 데이터가 없을 때
+===== Request
+include::{snippets}/publicdata-vaccination-nodata-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-vaccination-nodata-find/http-response.adoc[]
