@@ -315,10 +315,24 @@ class PostServiceTest {
         List<PostResponse> postResponses5 = postService.findByVaccineType(VaccinationType.ALL, Long.MAX_VALUE, 3, optionalUser);
         //then
         assertThat(postResponses1).size().isEqualTo(3);
+        assertThat(postResponses1).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 3", "Test 1", "Test 0"));
+        assertThat(postResponses1).extracting("vaccinationType").containsOnly(VaccinationType.ASTRAZENECA);
+
         assertThat(postResponses2).size().isEqualTo(2);
+        assertThat(postResponses2).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 3", "Test 1"));
+        assertThat(postResponses2).extracting("vaccinationType").containsOnly(VaccinationType.ASTRAZENECA);
+
         assertThat(postResponses3).size().isEqualTo(1);
+        assertThat(postResponses3).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4"));
+        assertThat(postResponses3).extracting("vaccinationType").containsOnly(VaccinationType.JANSSEN);
+
         assertThat(postResponses4).size().isEqualTo(1);
+        assertThat(postResponses4).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 2"));
+        assertThat(postResponses4).extracting("vaccinationType").containsOnly(VaccinationType.PFIZER);
+
         assertThat(postResponses5).size().isEqualTo(3);
+        assertThat(postResponses5).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
+        assertThat(postResponses5).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
