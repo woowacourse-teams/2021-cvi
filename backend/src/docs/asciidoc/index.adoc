@@ -124,6 +124,21 @@ include::{snippets}/user-me-posts-filter-likes-failure/http-request.adoc[]
 
 include::{snippets}/user-me-posts-filter-likes-failure/http-response.adoc[]
 
+=== 사용자 내가 좋아요 한 게시글 페이징 조회
+==== 성공
+===== Request
+include::{snippets}/user-me-posts-paging-likes/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-paging-likes/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-me-posts-paging-likes-failure/http-request.adoc[]
+===== Response
+
+include::{snippets}/user-me-posts-paging-likes-failure/http-response.adoc[]
+
 === 사용자 내가 댓글을 단 게시글 조회
 ==== 성공
 ===== Request

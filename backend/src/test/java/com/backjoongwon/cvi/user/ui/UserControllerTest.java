@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -230,18 +231,6 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
-    @DisplayName("내가 작성한 게시글 조회 - 실패")
-    @Test
-    void findMyPostsFailureWhenFilterIsNone() throws Exception {
-        //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
-        Filter filter = Filter.NONE;
-        //when
-        ResultActions response = 내가_쓴_글_조회_요청();
-        //then
-        마이페이지_글_필터링_조회_요청_실패함(response, filter);
-    }
-
     @DisplayName("내가 좋아요 한 글 조회 - 성공")
     @Test
     void findMyPostsWhenFilterIsLikes() throws Exception {
@@ -257,14 +246,14 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
-    @DisplayName("내가 좋아요 한 글 조회 - 실패")
+    @DisplayName("내가 작성한 게시글 조회 - 실패")
     @Test
-    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
+    void findMyPostsFailureWhenFilterIsNone() throws Exception {
         //given
         willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
-        Filter filter = Filter.LIKES;
+        Filter filter = Filter.NONE;
         //when
-        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
+        ResultActions response = 내가_쓴_글_조회_요청();
         //then
         마이페이지_글_필터링_조회_요청_실패함(response, filter);
     }
@@ -282,6 +271,47 @@ class UserControllerTest extends ApiDocument {
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+    }
+
+    @DisplayName("내가 좋아요 한 글 조회 페이징 - 성공")
+    @Test
+    void findMyPostsWhenFilterIsLikesPaging() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
+                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+        ));
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
+        Filter filter = Filter.LIKES;
+        //when
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
+        //then
+        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
+    }
+
+    @DisplayName("내가 좋아요 한 글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsLikesPaging() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
+        Filter filter = Filter.LIKES;
+        //when
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
+        //then
+        마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
+    }
+
+    @DisplayName("내가 좋아요 한 글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        Filter filter = Filter.LIKES;
+        //when
+        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
+        //then
+        마이페이지_글_필터링_조회_요청_실패함(response, filter);
     }
 
     @DisplayName("내가 댓글을 단 게시글 조회 - 실패")
@@ -399,6 +429,27 @@ class UserControllerTest extends ApiDocument {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .queryParam("filter", filter.name()));
+    }
+
+    private ResultActions 마이페이지_글_타입별_페이징_조회_요청(Filter filter, Long lastPostId, int size) throws Exception {
+        return mockMvc.perform(get("/api/v1/users/me/posts/paging")
+                .queryParam("filter", filter.name())
+                .queryParam("lastPostId", String.valueOf(lastPostId))
+                .queryParam("size", String.valueOf(size))
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 마이페이지_글_타입별_페이징_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase()));
+    }
+
+    private void 마이페이지_글_타입별_페이징_조회_요청_실패함(ResultActions response, Filter filter) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase() + "-failure"));
     }
 
     private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {

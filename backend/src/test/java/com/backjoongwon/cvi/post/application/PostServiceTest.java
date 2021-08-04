@@ -80,6 +80,8 @@ class PostServiceTest {
         initUser();
         initPost();
         likeResponse = postService.createLike(post1.getId(), optionalUser1);
+        postService.createLike(post3.getId(), optionalUser1);
+        postService.createLike(post5.getId(), optionalUser1);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
         postService.createComment(post2.getId(), optionalUser1, commentRequest);
@@ -332,11 +334,11 @@ class PostServiceTest {
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses1 = postService.findByVaccineType(vaccinationType, Long.MAX_VALUE, size, optionalUser1);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, Long.MAX_VALUE, size, optionalUser1);
         //then
-        assertThat(postResponses1).size().isEqualTo(contentResult.size());
-        assertThat(postResponses1).extracting("content").containsExactlyElementsOf(contentResult);
-        assertThat(postResponses1).extracting("vaccinationType").containsOnly(vaccinationType);
+        assertThat(postResponses).size().isEqualTo(contentResult.size());
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(postResponses).extracting("vaccinationType").containsOnly(vaccinationType);
     }
 
     static Stream<Arguments> findByVaccineTypePaging() {
@@ -345,6 +347,25 @@ class PostServiceTest {
                 Arguments.of(VaccinationType.ASTRAZENECA, 2, Arrays.asList("Test 3", "Test 1")),
                 Arguments.of(VaccinationType.JANSSEN, 5, Arrays.asList("Test 4")),
                 Arguments.of(VaccinationType.PFIZER, 5, Arrays.asList("Test 2"))
+        );
+    }
+
+    @DisplayName("내가 좋아요 한 글 페이징 첫 페이지 조회 - 성공")
+    @ParameterizedTest
+    @MethodSource
+    void findLikedPostsPagingFirstPage(Long lastPostId, int size, List<String> expectedContents) {
+        //given
+        Filter filter = Filter.LIKES;
+        //when
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, lastPostId, size, optionalUser1);
+        //then
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
+    }
+
+    static Stream<Arguments> findLikedPostsPagingFirstPage() {
+        return Stream.of(
+                Arguments.of(Long.MAX_VALUE, 4, Arrays.asList("Test 4", "Test 2", "Test 0")),
+                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 2"))
         );
     }
 
@@ -408,7 +429,7 @@ class PostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteLike(post2.getId() + 1, optionalUser1))
+        assertThatThrownBy(() -> postService.deleteLike(post5.getId() + 1, optionalUser1))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -536,7 +557,7 @@ class PostServiceTest {
         List<Long> postIds = postResponses.stream()
                 .map(PostResponse::getId)
                 .collect(Collectors.toList());
-        assertThat(postIds).containsExactly(post1.getId());
+        assertThat(postIds).containsExactly(post5.getId(), post3.getId(), post1.getId());
     }
 
     @DisplayName("내가 댓글을 단 게시글 조회 - 성공")
