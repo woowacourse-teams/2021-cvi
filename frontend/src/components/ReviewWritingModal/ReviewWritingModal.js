@@ -9,7 +9,7 @@ import { postReviewAsync } from '../../service';
 import { findKey } from '../../utils';
 import { Button, Modal, Selection } from '../common';
 
-const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
+const ReviewWritingModal = ({ getReviewList, showLoading, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -32,6 +32,7 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
     onClickClose();
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
+    showLoading();
     getReviewList();
   };
 
@@ -56,6 +57,7 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
 
 ReviewWritingModal.propTypes = {
   getReviewList: PropTypes.func.isRequired,
+  showLoading: PropTypes.func.isRequired,
   onClickClose: PropTypes.func.isRequired,
 };
 

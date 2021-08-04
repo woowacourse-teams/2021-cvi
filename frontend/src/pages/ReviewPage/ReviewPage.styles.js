@@ -32,6 +32,8 @@ const ButtonWrapper = styled.div`
 const ReviewList = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  position: relative;
+  min-height: 60vh;
 
   & > li:nth-of-type(2n + 1) {
     border-right: 0.15rem solid ${PALETTE.NAVY100};
