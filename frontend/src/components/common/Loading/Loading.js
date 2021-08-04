@@ -16,8 +16,8 @@ Loading.propTypes = {
 };
 
 Loading.defaultProps = {
-  width: '12rem',
-  height: '12rem',
+  width: '6rem',
+  height: '6rem',
   backgroundColor: 'none',
 };
 
