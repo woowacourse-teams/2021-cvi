@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,20 +25,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = PublicDataController.class)
 class PublicDataControllerTest extends ApiDocument {
 
+    private static final LocalDateTime targetDateTime = LocalDateTime.now();
+
     @MockBean
     public PublicDataService publicDataService;
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
+
     @DisplayName("백신 접종률 조회 - 성공")
     @Test
     void findVaccinationRate() throws Exception {
         //given
-        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(LocalDateTime.now());
+        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(targetDateTime);
         //when
-        willReturn(vaccinationRateResponses).given(publicDataService).findVaccinationRates();
-        ResultActions response = 백신_정봉률_조회_요청();
+        willReturn(vaccinationRateResponses).given(publicDataService).findVaccinationRates(targetDateTime.toLocalDate());
+        ResultActions response = 백신_정보률_조회_요청(targetDateTime.toLocalDate());
         //then
         백신_접종률_조회_성공함(response);
     }
@@ -48,14 +51,15 @@ class PublicDataControllerTest extends ApiDocument {
     void findVaccinationRateEmtpy() throws Exception {
         //given
         //when
-        willReturn(Collections.emptyList()).given(publicDataService).findVaccinationRates();
-        ResultActions response = 백신_정봉률_조회_요청();
+        willReturn(Collections.emptyList()).given(publicDataService).findVaccinationRates(targetDateTime.toLocalDate());
+        ResultActions response = 백신_정보률_조회_요청(targetDateTime.toLocalDate());
         //then
         백신_접종률_없데이트전_조회_성공함(response);
     }
 
-    private ResultActions 백신_정봉률_조회_요청() throws Exception {
-        return mockMvc.perform(get("/api/v1/publicdatas/vaccinations"));
+    private ResultActions 백신_정보률_조회_요청(LocalDate targetDate) throws Exception {
+        return mockMvc.perform(get("/api/v1/publicdatas/vaccinations")
+                .param("targetDate", String.valueOf(LocalDate.now())));
     }
 
     private void 백신_접종률_조회_성공함(ResultActions response) throws Exception {

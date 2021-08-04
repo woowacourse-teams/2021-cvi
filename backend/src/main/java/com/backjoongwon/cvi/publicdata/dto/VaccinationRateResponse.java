@@ -2,13 +2,15 @@ package com.backjoongwon.cvi.publicdata.dto;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationRate;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Getter
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationRateResponse {
-    private static final int KOREA_POPULATION =  51_821_669;
+
+    private static final int KOREA_POPULATION = 51_821_669;
 
     private int accumulatedFirstCnt;
     private int accumulatedSecondCnt;
@@ -47,7 +49,6 @@ public class VaccinationRateResponse {
                 vaccinationRate.getSido(), vaccinationRate.getTotalFirstCnt(), vaccinationRate.getTotalSecondCnt(),
                 calculatePercent(vaccinationRate.getAccumulatedFirstCnt()));
     }
-
 
     private static int calculatePercent(int accumulatedFirstCnt) {
         return accumulatedFirstCnt * 100 / KOREA_POPULATION;

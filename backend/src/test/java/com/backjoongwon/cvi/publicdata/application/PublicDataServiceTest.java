@@ -2,9 +2,10 @@ package com.backjoongwon.cvi.publicdata.application;
 
 import com.backjoongwon.cvi.parser.VacinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
-import com.backjoongwon.cvi.publicdata.domain.PublicDataRepository;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationRate;
+import com.backjoongwon.cvi.publicdata.domain.VaccinationRateRepository;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +37,7 @@ class PublicDataServiceTest {
             "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
     @Autowired
-    private PublicDataRepository publicDataRepository;
+    private VaccinationRateRepository vaccinationRateRepository;
     @Autowired
     private PublicDataProperties publicDataProperties;
 
@@ -46,17 +48,27 @@ class PublicDataServiceTest {
     @BeforeEach
     void init() {
         vacinationParser = mock(VacinationParser.class);
-        publicDataService = new PublicDataService(vacinationParser, publicDataRepository, publicDataProperties);
+        publicDataService = new PublicDataService(vacinationParser, vaccinationRateRepository, publicDataProperties);
+        willReturn(toVaccineParserResponse(LocalDateTime.now())).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+
+        LocalDateTime targetDateTime = LocalDateTime.now();
+        willReturn(toVaccineParserResponse(targetDateTime)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        publicDataService.saveVaccinationRates(targetDateTime.toLocalDate());
+        willReturn(toVaccineParserResponse(targetDateTime)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        publicDataService.saveVaccinationRates(targetDateTime.minusDays(1).toLocalDate());
+    }
+
+    @AfterEach
+    void clear() {
+        vaccinationRateRepository.deleteAll();
     }
 
     @DisplayName("백신 정종률 데이터 조회 - 성공")
     @Test
-    void saveVaccinationRates() {
+    void findVaccinationRates() {
         //given
-        LocalDateTime targetDate = LocalDateTime.now();
         //when
-        willReturn(toVaccineParserResponse(targetDate)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates();
+        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(LocalDate.now());
         //then
         assertThat(vaccinationRates).isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulatedFirstCnt)
@@ -81,13 +93,10 @@ class PublicDataServiceTest {
 
     @DisplayName("백신 정종률 데이터 저장 - 성공")
     @Test
-    void findVaccinationRates() {
+    void saveVaccinationRates() {
         //given
-        LocalDateTime targetDate = LocalDateTime.now();
         //when
-        willReturn(toVaccineParserResponse(targetDate)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        publicDataService.saveVaccinationRates();
-        List<VaccinationRate> publicData = publicDataRepository.findByBaseDate(targetDate.toLocalDate() + " 00:00:00");
+        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(LocalDateTime.now().toLocalDate() + " 00:00:00");
         //then
         assertThat(publicData).extracting("sido")
                 .containsAll(REGIONS);
