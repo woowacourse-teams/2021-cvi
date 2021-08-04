@@ -169,22 +169,34 @@ public class PostService {
     public List<PostResponse> findByUserAndFilter(Optional<User> optionalUser, Filter filter) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
+        return createPostsResponseByFilter(filter, user);
+    }
+
+    private List<PostResponse> createPostsResponseByFilter(Filter filter, User user) {
         if (filter == Filter.LIKES) {
-            List<Like> likes = likeRepository.findByUser(user);
-            List<Post> posts = likes.stream()
-                    .map(Like::getPost)
-                    .collect(Collectors.toList());
-            return PostResponse.of(posts, user);
+            return createResponsesFilteredByLikes(user);
         }
         if (filter == Filter.COMMENTS) {
-            List<Comment> comments = commentRepository.findByUser(user);
-            List<Post> posts = comments.stream()
-                    .map(Comment::getPost)
-                    .distinct()
-                    .collect(Collectors.toList());
-            return PostResponse.of(posts, user);
+            return createResponsesFilteredByComments(user);
         }
-        List<Post> posts = postRepository.findByUser(user);
+        List<Post> posts = postRepository.findByUser(user.getId());
+        return PostResponse.of(posts, user);
+    }
+
+    private List<PostResponse> createResponsesFilteredByComments(User user) {
+        List<Comment> comments = commentRepository.findByUser(user.getId());
+        List<Post> posts = comments.stream()
+                .map(Comment::getPost)
+                .distinct()
+                .collect(Collectors.toList());
+        return PostResponse.of(posts, user);
+    }
+
+    private List<PostResponse> createResponsesFilteredByLikes(User user) {
+        List<Like> likes = likeRepository.findByUser(user.getId());
+        List<Post> posts = likes.stream()
+                .map(Like::getPost)
+                .collect(Collectors.toList());
         return PostResponse.of(posts, user);
     }
 }

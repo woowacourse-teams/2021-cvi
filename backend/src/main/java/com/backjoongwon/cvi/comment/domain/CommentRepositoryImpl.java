@@ -1,14 +1,13 @@
 package com.backjoongwon.cvi.comment.domain;
 
 import com.backjoongwon.cvi.user.domain.QUser;
-import com.backjoongwon.cvi.user.domain.User;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.backjoongwon.cvi.comment.domain.QComment.*;
+import static com.backjoongwon.cvi.comment.domain.QComment.comment;
 
 public class CommentRepositoryImpl implements CommentQueryDsl {
 
@@ -19,10 +18,10 @@ public class CommentRepositoryImpl implements CommentQueryDsl {
     }
 
     @Override
-    public List<Comment> findByUser(User user) {
+    public List<Comment> findByUser(Long id) {
         return queryFactory.selectFrom(comment)
                 .leftJoin(comment.user, QUser.user).fetchJoin()
-                .where(comment.user.eq(user))
+                .where(comment.user.id.eq(id))
                 .orderBy(comment.createdAt.desc())
                 .fetch();
     }

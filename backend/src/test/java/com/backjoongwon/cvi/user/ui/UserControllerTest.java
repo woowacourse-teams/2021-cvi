@@ -230,6 +230,18 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
+    @DisplayName("내가 작성한 게시글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsNone() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        Filter filter = Filter.NONE;
+        //when
+        ResultActions response = 내가_쓴_글_조회_요청();
+        //then
+        마이페이지_글_필터링_조회_요청_실패함(response, filter);
+    }
+
     @DisplayName("내가 좋아요 한 글 조회 - 성공")
     @Test
     void findMyPostsWhenFilterIsLikes() throws Exception {
@@ -243,6 +255,18 @@ class UserControllerTest extends ApiDocument {
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+    }
+
+    @DisplayName("내가 좋아요 한 글 조회 - 실패")
+    @Test
+    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        Filter filter = Filter.LIKES;
+        //when
+        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
+        //then
+        마이페이지_글_필터링_조회_요청_실패함(response, filter);
     }
 
     @DisplayName("내가 댓글을 단 게시글 조회 - 성공")
@@ -260,30 +284,6 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
     }
 
-    @DisplayName("내가 작성한 게시글 조회 - 실패")
-    @Test
-    void findMyPostsFailureWhenFilterIsNone() throws Exception {
-        //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
-        Filter filter = Filter.NONE;
-        //when
-        ResultActions response = 내가_쓴_글_조회_요청();
-        //then
-        마이페이지_글_필터링_조회_요청_실패함(response, filter);
-    }
-
-    @DisplayName("내가 좋아요 한 글 조회 - 실패")
-    @Test
-    void findMyPostsFailureWhenFilterIsLikes() throws Exception {
-        //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
-        Filter filter = Filter.LIKES;
-        //when
-        ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
-        //then
-        마이페이지_글_필터링_조회_요청_실패함(response, filter);
-    }
-
     @DisplayName("내가 댓글을 단 게시글 조회 - 실패")
     @Test
     void findMyPostsFailureWhenFilterIsComments() throws Exception {
@@ -294,32 +294,6 @@ class UserControllerTest extends ApiDocument {
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
         마이페이지_글_필터링_조회_요청_실패함(response, filter);
-    }
-
-    private ResultActions 내가_쓴_글_조회_요청() throws Exception {
-        return mockMvc.perform(get("/api/v1/users/me/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
-    }
-
-    private ResultActions 마이페이지_글_필터링_조회_요청(Filter filter) throws Exception {
-        return mockMvc.perform(get("/api/v1/users/me/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .queryParam("filter", filter.name()));
-    }
-
-    private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {
-        response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase()));
-    }
-
-    private void 마이페이지_글_필터링_조회_요청_실패함(ResultActions response, Filter filter) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase() + "-failure"));
     }
 
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
@@ -412,5 +386,31 @@ class UserControllerTest extends ApiDocument {
         response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("user-delete-failure"));
+    }
+
+    private ResultActions 내가_쓴_글_조회_요청() throws Exception {
+        return mockMvc.perform(get("/api/v1/users/me/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private ResultActions 마이페이지_글_필터링_조회_요청(Filter filter) throws Exception {
+        return mockMvc.perform(get("/api/v1/users/me/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .queryParam("filter", filter.name()));
+    }
+
+    private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase()));
+    }
+
+    private void 마이페이지_글_필터링_조회_요청_실패함(ResultActions response, Filter filter) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase() + "-failure"));
     }
 }

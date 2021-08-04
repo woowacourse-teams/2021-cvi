@@ -1,7 +1,6 @@
 package com.backjoongwon.cvi.like.domain;
 
 import com.backjoongwon.cvi.user.domain.QUser;
-import com.backjoongwon.cvi.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
@@ -18,10 +17,10 @@ public class LikeRepositoryImpl implements LikeQueryDsl {
     }
 
     @Override
-    public List<Like> findByUser(User user) {
+    public List<Like> findByUser(Long id) {
         return queryFactory.selectFrom(like)
                 .leftJoin(like.user, QUser.user).fetchJoin()
-                .where(like.user.eq(user))
+                .where(like.user.id.eq(id))
                 .orderBy(like.createdAt.desc())
                 .fetch();
     }

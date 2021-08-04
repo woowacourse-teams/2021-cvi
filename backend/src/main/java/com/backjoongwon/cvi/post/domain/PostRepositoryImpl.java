@@ -3,7 +3,6 @@ package com.backjoongwon.cvi.post.domain;
 import com.backjoongwon.cvi.comment.domain.QComment;
 import com.backjoongwon.cvi.like.domain.QLike;
 import com.backjoongwon.cvi.user.domain.QUser;
-import com.backjoongwon.cvi.user.domain.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,16 +39,12 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByUser(User user) {
+    public List<Post> findByUser(Long id) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, QUser.user).fetchJoin()
-                .where(userEq(user))
+                .where(post.user.id.eq(id))
                 .orderBy(post.createdAt.desc())
                 .fetch();
-    }
-
-    private BooleanExpression userEq(User user) {
-        return QUser.user.eq(user);
     }
 
     @Override

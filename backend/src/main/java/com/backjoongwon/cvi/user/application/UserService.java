@@ -81,8 +81,6 @@ public class UserService {
     }
 
     private void validateSignedin(Optional<User> optionalUser) {
-        if (!optionalUser.isPresent()) {
-            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
-        }
+        optionalUser.orElseThrow(() -> new UnAuthorizedException("인증되지 않은 사용자입니다."));
     }
 }
