@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -19,15 +19,15 @@ public class PublicDataController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/vaccinations")
-    public List<VaccinationRateResponse> findVaccinationRate(@RequestParam(name = "targetDate")
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate targetDate) {
-        return publicDataService.findVaccinationRates(targetDate);
+    public List<VaccinationRateResponse> findVaccinationRate(@RequestParam(name = "targetDate", required = false, defaultValue = "#{T(java.time.LocalDateTime).now()}")
+                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
+        return publicDataService.findVaccinationRates(targetDateTime);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/vaccinations")
-    public List<VaccinationRateResponse> saveVaccinationRate(@RequestParam(name = "targetDate")
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate targetDate) {
-        return publicDataService.saveVaccinationRates(targetDate);
+    public List<VaccinationRateResponse> saveVaccinationRate(@RequestParam(name = "targetDate", required = false, defaultValue = "#{T(java.time.LocalDateTime).now()}")
+                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
+        return publicDataService.saveVaccinationRates(targetDateTime);
     }
 }

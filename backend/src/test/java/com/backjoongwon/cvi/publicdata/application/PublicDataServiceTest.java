@@ -11,14 +11,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.REGIONS;
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccineParserResponse;
@@ -44,21 +48,10 @@ class PublicDataServiceTest {
     private PublicDataService publicDataService;
     private VacinationParser vacinationParser;
 
-    private LocalDate targetDate;
-
     @BeforeEach
     void init() {
         vacinationParser = mock(VacinationParser.class);
         publicDataService = new PublicDataService(vacinationParser, vaccinationRateRepository, publicDataProperties);
-        targetDate = LocalDate.now();
-
-        willReturn(toVaccineParserResponse(DateConverter.toLocalDateTime(targetDate)))
-                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        publicDataService.saveVaccinationRates(targetDate);
-
-        willReturn(toVaccineParserResponse(DateConverter.toLocalDateTime(targetDate.minusDays(1))))
-                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        publicDataService.saveVaccinationRates(targetDate.minusDays(1));
     }
 
     @AfterEach
@@ -66,24 +59,37 @@ class PublicDataServiceTest {
         vaccinationRateRepository.deleteAll();
     }
 
-    @DisplayName("백신 정종률 데이터 저장 - 성공")
-    @Test
-    void saveVaccinationRates() {
+    public static Stream<Arguments> saveVaccinationRates() {
+        return Stream.of(
+                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59))),
+                Arguments.of(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 59, 59))),
+                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 11), LocalTime.MIN))
+        );
+    }
+
+    @DisplayName("백신 정종률 데이터 저장 - 성공 - 당일 오전 10시 후 or 오늘 이전 날짜로 요청시 성공")
+    @ParameterizedTest
+    @MethodSource
+    void saveVaccinationRates(LocalDateTime targetDateTime) {
         //given
         //when
-        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(targetDate));
+        System.out.println("LocalDateTime.now() = " + LocalDateTime.now());
+        백신_접종률_저장되어_있음(targetDateTime);
+        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(targetDateTime));
         //then
-        assertThat(publicData).extracting("sido")
-                .containsAll(REGIONS);
+        assertThat(publicData).extracting("baseDate")
+                .contains(DateConverter.withZeroTime(targetDateTime));
     }
 
     @DisplayName("백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
     @Test
     void saveVaccinationRatesFailureWhenAlreadySaved() {
         //given
+        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
         //when
+        백신_접종률_저장되어_있음(targetDateTime);
         //then
-        assertThatThrownBy(() -> publicDataService.saveVaccinationRates(targetDate))
+        assertThatThrownBy(() -> publicDataService.saveVaccinationRates(targetDateTime))
                 .isInstanceOf(DuplicateException.class);
     }
 
@@ -91,8 +97,10 @@ class PublicDataServiceTest {
     @Test
     void findVaccinationRates() {
         //given
+        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
         //when
-        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(targetDate);
+        백신_접종률_저장되어_있음(targetDateTime);
+        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(targetDateTime);
         //then
         assertThat(vaccinationRates).isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulatedFirstCnt)
@@ -100,7 +108,7 @@ class PublicDataServiceTest {
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getBaseDate)
-                .contains(DateConverter.withZeroTime(targetDate));
+                .contains(DateConverter.withZeroTime(targetDateTime));
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getSido)
                 .containsAll(REGIONS);
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getFirstCnt)
@@ -115,5 +123,39 @@ class PublicDataServiceTest {
                 .isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulateRate)
                 .isNotEmpty();
+    }
+
+    @DisplayName("백신 정종률 데이터 조회 - 성공 - 당일 오전 10시 전, 당일 데이터 요청일 시 전날 데이터 요청")
+    @Test
+    void findVaccinationRatesWhenTodayBeforeTen() {
+        //given
+        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 59, 59));
+        //when
+        백신_접종률_저장되어_있음(targetDateTime.minusDays(1));
+        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(targetDateTime);
+        //then
+        assertThat(vaccinationRates).isNotEmpty();
+        assertThat(vaccinationRates).extracting(VaccinationRateResponse::getBaseDate)
+                .contains(DateConverter.withZeroTime(targetDateTime.minusDays(1)));
+    }
+
+    @DisplayName("백신 정종률 데이터 조회 - 성공 - 전일 오전 10시 전, 전일 데이터 요청일 시 해당 일 데이터 요청")
+    @Test
+    void findVaccinationRatesWhenYesterdayBeforeTen() {
+        //given
+        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 59, 59));
+        //when
+        백신_접종률_저장되어_있음(targetDateTime);
+        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(targetDateTime);
+        //then
+        assertThat(vaccinationRates).isNotEmpty();
+        assertThat(vaccinationRates).extracting(VaccinationRateResponse::getBaseDate)
+                .contains(DateConverter.withZeroTime(targetDateTime));
+    }
+
+    private void 백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
+        willReturn(toVaccineParserResponse(targetDateTime))
+                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        publicDataService.saveVaccinationRates(targetDateTime);
     }
 }

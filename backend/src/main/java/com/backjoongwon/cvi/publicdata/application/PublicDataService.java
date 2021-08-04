@@ -29,36 +29,35 @@ public class PublicDataService {
     private final PublicDataProperties publicDataProperties;
 
     @Transactional(readOnly = true)
-    public List<VaccinationRateResponse> findVaccinationRates(LocalDate targetDate) {
-        List<VaccinationRate> vaccinationRates = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(modifyDate(targetDate)));
+    public List<VaccinationRateResponse> findVaccinationRates(LocalDateTime targetDateTime) {
+        List<VaccinationRate> vaccinationRates = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(modifyDate(targetDateTime)));
         return vaccinationRates.stream()
                 .map(VaccinationRateResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<VaccinationRateResponse> saveVaccinationRates(LocalDate targetDate) {
-        targetDate = modifyDate(targetDate);
-        validateExists(targetDate);
+    public List<VaccinationRateResponse> saveVaccinationRates(LocalDateTime targetDateTime) {
+        targetDateTime = modifyDate(targetDateTime);
+        validateExists(targetDateTime);
 
         VaccineParserResponse vaccineParserResponse = vacinationparser.parseToPublicData(
-                DateConverter.toLocalDateTime(targetDate),
-                publicDataProperties.getVaccination());
+                targetDateTime,
+                publicDataProperties.getVaccination()
+        );
 
         List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponses(vaccineParserResponse);
         vaccinationRateResponses.forEach(response -> vaccinationRateRepository.save(response.toEntity()));
         return vaccinationRateResponses;
     }
 
-    private LocalDate modifyDate(LocalDate targetDate) {
-        LocalDateTime nowDateTime = LocalDateTime.now();
-
-        if (targetDate.isEqual(nowDateTime.toLocalDate()) &&
-                nowDateTime.toLocalTime().isBefore(LocalTime.of(10, 0))) {
+    private LocalDateTime modifyDate(LocalDateTime targetDateTime) {
+        if (targetDateTime.toLocalDate().isEqual(LocalDate.now()) &&
+                targetDateTime.toLocalTime().isBefore(LocalTime.of(10, 0))) {
             log.info("데이터가 업데이트 되기 전입니다. 전날 기준으로 로직을 실행합니다.");
-            return targetDate.minusDays(1);
+            return targetDateTime.minusDays(1);
         }
-        return targetDate;
+        return targetDateTime;
     }
 
     private List<VaccinationRateResponse> toVaccinationRateResponses(VaccineParserResponse vaccineParserResponse) {
@@ -68,8 +67,8 @@ public class PublicDataService {
                 .collect(Collectors.toList());
     }
 
-    private void validateExists(LocalDate targetDate) {
-        if (vaccinationRateRepository.existsByBaseDate(DateConverter.withZeroTime(targetDate))) {
+    private void validateExists(LocalDateTime targetDateTime) {
+        if (vaccinationRateRepository.existsByBaseDate(DateConverter.withZeroTime(targetDateTime))) {
             log.info("이미 존재하는 날짜의 데이터입니다.");
             throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
         }

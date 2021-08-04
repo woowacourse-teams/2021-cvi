@@ -14,6 +14,18 @@ spring:
 server:
   shutdown: graceful
 
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000
+  auth:
+    naver:
+      client-secret: client-secret
+  public:
+    data:
+      vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
+
 ---
 spring:
   config:
@@ -40,19 +52,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-
-security:
-  jwt:
-    token:
-      secret-key: cvi_secret_key
-      expire-length: 3600000
-  auth:
-    naver:
-      client-secret: client-secret
-  public:
-    data:
-      vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
-
 ---
 spring:
   config:
