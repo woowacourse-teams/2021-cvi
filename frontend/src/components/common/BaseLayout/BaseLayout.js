@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import Avatar from '../Avatar/Avatar';
 import SideBar from '../SideBar/SideBar';
-import { Container, MainContainer, TopContainer, avatarStyles, NavBar } from './BaseLayout.styles';
+import {
+  Container,
+  MainContainer,
+  TopContainer,
+  avatarStyles,
+  NavBar,
+  LogoContainer,
+} from './BaseLayout.styles';
 import { useSelector } from 'react-redux';
 import { LogoIcon, MenuIcon } from '../../../assets/icons';
 import { PATH, THEME_COLOR } from '../../../constants';
@@ -24,6 +31,10 @@ const BaseLayout = ({ children }) => {
     history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
   };
 
+  const goHomePage = () => {
+    history.push(PATH.HOME);
+  };
+
   return (
     <Container>
       <SideBar />
@@ -38,7 +49,9 @@ const BaseLayout = ({ children }) => {
         >
           <MenuIcon width="36" height="36" stroke={THEME_COLOR.PRIMARY} />
         </Button>
-        <LogoIcon width="56" fill={THEME_COLOR.PRIMARY} />
+        <LogoContainer onClick={goHomePage}>
+          <LogoIcon width="56" fill={THEME_COLOR.PRIMARY} />
+        </LogoContainer>
         {isLogin ? (
           <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
         ) : (
