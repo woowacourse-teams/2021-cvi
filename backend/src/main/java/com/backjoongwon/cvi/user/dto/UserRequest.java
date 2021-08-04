@@ -14,23 +14,27 @@ public class UserRequest {
 
     private String nickname;
     private AgeRange ageRange;
+    private boolean shotVerified;
     private SocialProvider socialProvider;
     private String socialId;
     private String socialProfileUrl;
 
     @Builder
-    public UserRequest(String nickname, AgeRange ageRange, SocialProvider socialProvider, String socialId, String profileUrl) {
+    public UserRequest(String nickname, AgeRange ageRange, boolean shotVerified,
+                       SocialProvider socialProvider, String socialId, String socialProfileUrl) {
         this.nickname = nickname;
         this.ageRange = ageRange;
+        this.shotVerified = shotVerified;
         this.socialProvider = socialProvider;
         this.socialId = socialId;
-        this.socialProfileUrl = profileUrl;
+        this.socialProfileUrl = socialProfileUrl;
     }
 
     public User toEntity() {
         return User.builder()
                 .nickname(nickname)
                 .ageRange(ageRange)
+                .shotVerified(shotVerified)
                 .socialProvider(socialProvider)
                 .socialId(socialId)
                 .profileUrl(socialProfileUrl)

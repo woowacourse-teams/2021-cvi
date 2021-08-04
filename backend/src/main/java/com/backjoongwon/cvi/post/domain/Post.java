@@ -40,10 +40,12 @@ public class Post extends BaseEntity {
     private final Comments comments = new Comments();
 
     @Builder
-    public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
-        super(id, createdAt);
+    public Post(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, User user,
+                String content, int viewCount, VaccinationType vaccinationType) {
+        super(id, createdAt, lastModifiedAt);
         this.user = user;
         this.content = content;
+        this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
     }
 

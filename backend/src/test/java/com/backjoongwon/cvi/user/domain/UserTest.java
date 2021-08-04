@@ -49,16 +49,6 @@ class UserTest {
         assertThat(user.getAgeRange()).isEqualTo(updateUser.getAgeRange());
     }
 
-    @DisplayName("사용자 백신 접종 여부 수정 - 성공")
-    @Test
-    void makeVerified() {
-        //given
-        //when
-        user.makeVerified();
-        //then
-        assertThat(user.isShotVerified()).isTrue();
-    }
-
     @DisplayName("사용자 회원가입 - 실패 - 닉네임 빈 문자열")
     @ParameterizedTest
     @NullAndEmptySource
