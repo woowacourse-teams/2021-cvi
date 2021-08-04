@@ -11,6 +11,7 @@ import MyPageShotVerification from './MyPageShotVerification/MyPageShotVerificat
 import MyPageReview from './MyPageReview/MyPageReview';
 import MyPageCommentReview from './MyPageCommentReview/MyPageCommentReview';
 import MyPageLikeReview from './MyPageLikeReview/MyPageLikeReview';
+import StatePage from './StatePage/StatePage';
 
 export {
   HomePage,
@@ -26,4 +27,5 @@ export {
   MyPageReview,
   MyPageCommentReview,
   MyPageLikeReview,
+  StatePage,
 };
