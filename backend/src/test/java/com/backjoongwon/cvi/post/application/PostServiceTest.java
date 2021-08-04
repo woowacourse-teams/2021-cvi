@@ -84,8 +84,11 @@ class PostServiceTest {
         postService.createLike(post5.getId(), optionalUser1);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
+        postService.createComment(post1.getId(), optionalUser1, commentRequest);
         postService.createComment(post2.getId(), optionalUser1, commentRequest);
         postService.createComment(post3.getId(), optionalUser1, commentRequest);
+        postService.createComment(post4.getId(), optionalUser1, commentRequest);
+        postService.createComment(post5.getId(), optionalUser1, commentRequest);
     }
 
     private void initPost() {
@@ -350,6 +353,24 @@ class PostServiceTest {
         );
     }
 
+    @DisplayName("내가 작성한 글 페이징 첫 페이지 조회 - 성공")
+    @ParameterizedTest
+    @MethodSource
+    void findMyPostsPagingFirstPage(Long lastPostId, int size, List<String> expectedContents) {
+        //given
+        Filter filter = Filter.NONE;
+        //when
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, lastPostId, size, optionalUser1);
+        //then
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
+    }
+
+    static Stream<Arguments> findMyPostsPagingFirstPage() {
+        return Stream.of(
+                Arguments.of(Long.MAX_VALUE, 4, Arrays.asList("Test 4", "Test 3", "Test 2", "Test 1")),
+                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 3")));
+    }
+
     @DisplayName("내가 좋아요 한 글 페이징 첫 페이지 조회 - 성공")
     @ParameterizedTest
     @MethodSource
@@ -365,7 +386,26 @@ class PostServiceTest {
     static Stream<Arguments> findLikedPostsPagingFirstPage() {
         return Stream.of(
                 Arguments.of(Long.MAX_VALUE, 4, Arrays.asList("Test 4", "Test 2", "Test 0")),
-                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 2"))
+                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 2")));
+    }
+
+        @DisplayName("내가 댓글 단 게시글 페이징 조회 - 성공")
+    @ParameterizedTest
+    @MethodSource
+    void findCommentedPostPaging(int size, List<String> contentResult) {
+        //given
+        //when
+        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, Long.MAX_VALUE, size, optionalUser1);
+        //then
+        assertThat(postResponses.size()).isEqualTo(contentResult.size());
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(postResponses).extracting("writer.id").containsOnly(user1.getId());
+    }
+
+    static Stream<Arguments> findCommentedPostPaging() {
+        return Stream.of(
+                Arguments.of(2, Arrays.asList("Test 4", "Test 3")),
+                Arguments.of(3, Arrays.asList("Test 4", "Test 3", "Test 2"))
         );
     }
 
@@ -570,7 +610,7 @@ class PostServiceTest {
                 .map(PostResponse::getId)
                 .collect(Collectors.toList());
         //then
-        assertThat(postIds).containsExactlyInAnyOrder(post3.getId(), post2.getId());
+        assertThat(postIds).containsExactlyInAnyOrder(post3.getId(), post2.getId(), post1.getId(), post4.getId(), post5.getId());
     }
 
     @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
