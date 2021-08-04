@@ -14,9 +14,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-
-import static com.backjoongwon.cvi.DummyData.DUMMY_DATA_10000;
+import java.util.List;
+import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -34,60 +35,47 @@ public class DataLoader implements CommandLineRunner {
             User 유저2 = User.builder().nickname("욘").ageRange(AgeRange.TWENTIES).build();
             User 유저3 = User.builder().nickname("라이언").ageRange(AgeRange.THIRTIES).build();
             User 유저4 = User.builder().nickname("엘라").ageRange(AgeRange.FORTIES).build();
-            User 유저5 = User.builder().nickname("주모").ageRange(AgeRange.FIFTIES).build();
-            User 유저6 = User.builder().nickname("똥강아지").ageRange(AgeRange.OVER_SIXTIES).build();
-            User 유저1_shotVerified = User.builder()
-                    .nickname(유저1.getNickname())
-                    .ageRange(유저1.getAgeRange())
-                    .shotVerified(true)
-                    .profileUrl(유저1.getProfileUrl())
-                    .build();
-            유저1.update(유저1_shotVerified);
-            User 유저3_shotVerified = User.builder()
-                    .nickname(유저3.getNickname())
-                    .ageRange(유저3.getAgeRange())
-                    .shotVerified(true)
-                    .profileUrl(유저3.getProfileUrl())
-                    .build();
-            유저3.update(유저3_shotVerified);
-            userRepository.saveAll(Arrays.asList(유저1, 유저2, 유저3, 유저4, 유저5, 유저6));
 
-            Comment 댓글1 = Comment.builder().content("댓글1").user(유저1).build();
-            Comment 댓글2 = Comment.builder().content("댓글2").user(유저2).build();
-            Comment 댓글3 = Comment.builder().content("댓글3").user(유저3).build();
-            Comment 댓글4 = Comment.builder().content("댓글4").user(유저4).build();
-            Comment 댓글5 = Comment.builder().content("댓글5").user(유저5).build();
-            Comment 댓글6 = Comment.builder().content("댓글6").user(유저6).build();
+            유저1.makeVerified();
+            유저3.makeVerified();
+            userRepository.saveAll(Arrays.asList(유저1, 유저2, 유저3, 유저4));
 
-            Like 좋아요1 = Like.builder().user(유저1).build();
-            Like 좋아요2 = Like.builder().user(유저2).build();
-            Like 좋아요3 = Like.builder().user(유저3).build();
-            Like 좋아요4 = Like.builder().user(유저4).build();
-            Like 좋아요5 = Like.builder().user(유저5).build();
-            Like 좋아요6 = Like.builder().user(유저6).build();
+            List<Post> posts = new ArrayList<>();
+            Random random = new Random();
+            int randomInt;
 
-            Post 글1 = Post.builder().content("백신을 맞았으니 이젠 쇼미더머니 부담없이 나갈 수 있겠어요!!!ㅎㅎ").user(유저1).vaccinationType(VaccinationType.ASTRAZENECA).build();
-            Post 글2 = Post.builder().content("아스트라제네카는 사랑이에요... 제 첫사랑보다 강렬한 효과네요.").user(유저2).vaccinationType(VaccinationType.ASTRAZENECA).build();
-            Post 글3 = Post.builder().content("사라졌던 입맛이 돌아왔네요. 화이자가 아니었다면 사랑스런 족발을 맛없게 먹을 뻔했어요").user(유저3).vaccinationType(VaccinationType.PFIZER).build();
-            Post 글4 = Post.builder().content("얀센 1일차 후기. 우리집 똥개가 드디어 저한테 인사해주네요.").user(유저4).vaccinationType(VaccinationType.JANSSEN).build();
-            Post 글5 = Post.builder().content("이제 여자친구 만들수있겠어요! 백신이 아니었다면 꿈도 못꿨을꺼에요!").user(유저5).vaccinationType(VaccinationType.MODERNA).build();
-            Post 글6 = Post.builder().content("멍멍멍!! 멍멍멍!!  멍머어멍멍!!").user(유저6).vaccinationType(VaccinationType.MODERNA).build();
-            Post 글7 = Post.builder().content(DUMMY_DATA_10000).user(유저2).vaccinationType(VaccinationType.MODERNA).build();
-            postRepository.saveAll(Arrays.asList(글1, 글2, 글3, 글4, 글5, 글6, 글7));
+            for (int i = 0; i < 1000; i++) {
+                randomInt = random.nextInt(1000);
+                if (randomInt % 4 == 0) {
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.PFIZER).user(유저1).build();
+                    post.addLike(Like.builder().user(유저1).build());
+                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저1).build());
+                    posts.add(post);
 
-            글1.assignComment(댓글1);
-            글2.assignComment(댓글2);
-            글3.assignComment(댓글3);
-            글4.assignComment(댓글4);
-            글5.assignComment(댓글5);
-            글6.assignComment(댓글6);
+                }
+                if (randomInt % 4 == 1) {
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.ASTRAZENECA).user(유저2).build();
+                    post.addLike(Like.builder().user(유저2).build());
+                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저2).build());
+                    posts.add(post);
 
-            글1.addLike(좋아요1);
-            글2.addLike(좋아요2);
-            글3.addLike(좋아요3);
-            글4.addLike(좋아요4);
-            글5.addLike(좋아요5);
-            글6.addLike(좋아요6);
+                }
+                if (randomInt % 4 == 2) {
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.JANSSEN).user(유저3).build();
+                    post.addLike(Like.builder().user(유저3).build());
+                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저3).build());
+                    posts.add(post);
+
+                }
+                if (randomInt % 4 == 3) {
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.MODERNA).user(유저4).build();
+                    post.addLike(Like.builder().user(유저4).build());
+                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저4).build());
+                    posts.add(post);
+
+                }
+            }
+            postRepository.saveAll(posts);
         }
     }
 }

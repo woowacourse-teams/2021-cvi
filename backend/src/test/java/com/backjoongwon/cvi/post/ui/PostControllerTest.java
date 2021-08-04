@@ -25,11 +25,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.hypermedia.Link;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -148,10 +150,10 @@ class PostControllerTest extends ApiDocument {
         //given
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
-        List<PostResponse> postResponses = Arrays.asList(
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
                 new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
-        );
+        ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
@@ -219,15 +221,56 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineType() throws Exception {
         //given
-        willReturn(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(3L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
-        )).given(postService).findByVaccineType(any(VaccinationType.class), any());
+                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
-        ResultActions response = 게시글_타입별_조회_요청(VaccinationType.PFIZER);
+        ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
-        게시글_타입별_조회_요청_성공함(response);
+        글_타입별_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 타입별 조회 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void findByVaccineTypeWhenPostsIsEmpty() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        //when
+        ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
+        //then
+        글_타입별_조회_성공함_게시글없음(response, postResponses);
+    }
+
+    @DisplayName("게시글 타입별 조회 페이징 - 성공")
+    @Test
+    void findByVaccineTypePaging() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(39L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(38L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
+        //when
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
+        //then
+        글_타입별_페이징_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 타입별 페이징 조회 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any());
+        //when
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0L, 3);
+        //then
+        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
@@ -480,16 +523,44 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-delete-failure"));
     }
 
-    private ResultActions 게시글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
+    private ResultActions 글_타입별_조회_요청(VaccinationType vaccinationType) throws Exception {
         return mockMvc.perform(get("/api/v1/posts")
                 .queryParam("vaccinationType", vaccinationType.name())
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 게시글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
+    private void 글_타입별_조회_요청_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType"));
+    }
+
+    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-when-empty"));
+    }
+
+    private ResultActions 글_타입별_페이징_조회_요청(VaccinationType vaccinationType, Long lastPostId, int size) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/paging")
+                .queryParam("vaccinationType", vaccinationType.name())
+                .queryParam("lastPostId", String.valueOf(lastPostId))
+                .queryParam("size", String.valueOf(size))
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 글_타입별_페이징_조회_요청_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging"));
+    }
+
+    private void 글_타입별_페이징_조회_요청_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging-when-empty"));
     }
 
     private ResultActions 글_좋아요_생성_요청(Long postId) throws Exception {

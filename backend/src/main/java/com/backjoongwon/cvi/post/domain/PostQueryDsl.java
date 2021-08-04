@@ -7,6 +7,8 @@ public interface PostQueryDsl {
 
     List<Post> findByVaccineType(VaccinationType vaccinationType);
 
+    List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size);
+
     Optional<Post> findWithLikesById(Long id);
 
     Optional<Post> findWithCommentsById(Long id);

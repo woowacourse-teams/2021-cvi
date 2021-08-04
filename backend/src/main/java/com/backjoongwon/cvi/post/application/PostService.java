@@ -48,18 +48,17 @@ public class PostService {
     }
 
     private PostResponse createPostResponse(Optional<User> optionalUser, Post post) {
-        if (optionalUser.isPresent()) {
-            return PostResponse.of(post, optionalUser.get());
-        }
-        return PostResponse.of(post, null);
+        return PostResponse.of(post, optionalUser.orElse(null));
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType);
-        if (optionalUser.isPresent()) {
-            return PostResponse.of(posts, optionalUser.get());
-        }
-        return PostResponse.of(posts, null);
+        return PostResponse.toList(posts, optionalUser.orElse(null));
+    }
+
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Optional<User> optionalUser) {
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size);
+        return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
     @Transactional

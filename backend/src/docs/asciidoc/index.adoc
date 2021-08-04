@@ -196,6 +196,29 @@ include::{snippets}/post-findByVaccinationType/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findByVaccinationType/http-response.adoc[]
 
+==== 성공 - 게시글이 하나도 없는 경우
+===== Request
+include::{snippets}/post-findByVaccinationType-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType-when-empty/http-response.adoc[]
+
+=== 게시글 타입별 페이징 조회
+==== 성공
+===== Request
+include::{snippets}/post-findByVaccinationType-paging/http-request.adoc[]
+- 클라이언트 쪽에서 처음 페이징 요청시 Number.MAX_SAFE_INTEGER 를 실어 보내준다.
+
+===== Response
+include::{snippets}/post-findByVaccinationType-paging/http-response.adoc[]
+
+==== 성공 - 게시글이 하나도 없는 경우
+===== Request
+include::{snippets}/post-findByVaccinationType-paging-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType-paging-when-empty/http-response.adoc[]
+
 === 게시글 수정
 ==== 성공
 ===== Request
