@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.publicdata.application;
 
+import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.parser.VacinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationRate;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.REGIONS;
 import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccineParserResponse;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
@@ -29,7 +31,7 @@ import static org.mockito.Mockito.mock;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@DisplayName("공공데이터 요청 서비스 테스트")
+@DisplayName("공공데이터 요청 서비스 흐름 테스트")
 @Transactional
 class PublicDataServiceTest {
 
@@ -64,6 +66,27 @@ class PublicDataServiceTest {
         vaccinationRateRepository.deleteAll();
     }
 
+    @DisplayName("백신 정종률 데이터 저장 - 성공")
+    @Test
+    void saveVaccinationRates() {
+        //given
+        //when
+        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(targetDate));
+        //then
+        assertThat(publicData).extracting("sido")
+                .containsAll(REGIONS);
+    }
+
+    @DisplayName("백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
+    @Test
+    void saveVaccinationRatesFailureWhenAlreadySaved() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> publicDataService.saveVaccinationRates(targetDate))
+                .isInstanceOf(DuplicateException.class);
+    }
+
     @DisplayName("백신 정종률 데이터 조회 - 성공")
     @Test
     void findVaccinationRates() {
@@ -92,16 +115,5 @@ class PublicDataServiceTest {
                 .isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulateRate)
                 .isNotEmpty();
-    }
-
-    @DisplayName("백신 정종률 데이터 저장 - 성공")
-    @Test
-    void saveVaccinationRates() {
-        //given
-        //when
-        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(targetDate));
-        //then
-        assertThat(publicData).extracting("sido")
-                .containsAll(REGIONS);
     }
 }
