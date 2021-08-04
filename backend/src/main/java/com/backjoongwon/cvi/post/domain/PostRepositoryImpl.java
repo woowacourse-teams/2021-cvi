@@ -14,11 +14,11 @@ import java.util.Optional;
 
 import static com.backjoongwon.cvi.post.domain.QPost.post;
 
-public class PostQueryDslImpl implements PostQueryDsl {
+public class PostRepositoryImpl implements PostQueryDsl {
 
     private final JPQLQueryFactory queryFactory;
 
-    public PostQueryDslImpl(EntityManager em) {
+    public PostRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -31,11 +31,30 @@ public class PostQueryDslImpl implements PostQueryDsl {
                 .fetch();
     }
 
+    @Override
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(vaccinationTypeEq(vaccinationType), post.id.lt(lastPostId))
+                .limit(size)
+                .orderBy(post.createdAt.desc())
+                .fetch();
+    }
+
     private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
         if (Objects.nonNull(vaccinationType) && !vaccinationType.equals(VaccinationType.ALL)) {
             return post.vaccinationType.eq(vaccinationType);
         }
         return null;
+    }
+
+    @Override
+    public List<Post> findByUser(Long id) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(post.user.id.eq(id))
+                .orderBy(post.createdAt.desc())
+                .fetch();
     }
 
     @Override

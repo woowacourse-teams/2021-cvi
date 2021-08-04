@@ -28,8 +28,8 @@ public class Like extends BaseEntity {
     private User user;
 
     @Builder
-    public Like(Long id, LocalDateTime createdAt, Post post, User user) {
-        super(id, createdAt);
+    public Like(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Post post, User user) {
+        super(id, createdAt, lastModifiedAt);
         this.post = post;
         this.user = user;
     }
