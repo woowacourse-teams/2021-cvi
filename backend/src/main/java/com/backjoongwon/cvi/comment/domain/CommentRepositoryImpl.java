@@ -25,4 +25,14 @@ public class CommentRepositoryImpl implements CommentQueryDsl {
                 .orderBy(comment.createdAt.desc())
                 .fetch();
     }
+
+    @Override
+    public List<Comment> findByUser(Long id, Long lastCommentId, int size) {
+        return queryFactory.selectFrom(comment)
+                .leftJoin(comment.user, QUser.user).fetchJoin()
+                .where(comment.user.id.eq(id), comment.id.lt(lastCommentId))
+                .limit(size)
+                .orderBy(comment.createdAt.desc())
+                .fetch();
+    }
 }

@@ -44,6 +44,15 @@ public class UserController {
         return postService.findByUserAndFilter(user, filter);
     }
 
+    @GetMapping("/me/posts/paging")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "NONE") Filter filter,
+                                                         @RequestParam Long lastPostId,
+                                                         @RequestParam int size,
+                                                         @AuthenticationPrincipal Optional<User> user) {
+        return postService.findByUserAndFilter(filter, lastPostId, size, user);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse find(@PathVariable Long id) {

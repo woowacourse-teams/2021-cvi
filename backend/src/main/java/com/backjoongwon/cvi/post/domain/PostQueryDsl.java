@@ -14,4 +14,6 @@ public interface PostQueryDsl {
     Optional<Post> findWithLikesById(Long id);
 
     Optional<Post> findWithCommentsById(Long id);
+
+    List<Post> findByUser(Long id, Long lastPostId, int size);
 }

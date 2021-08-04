@@ -78,4 +78,14 @@ public class PostRepositoryImpl implements PostQueryDsl {
 
         return Optional.ofNullable(post);
     }
+
+    @Override
+    public List<Post> findByUser(Long id, Long lastPostId, int size) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(post.user.id.eq(id), post.id.lt(lastPostId))
+                .limit(size)
+                .orderBy(post.createdAt.desc())
+                .fetch();
+    }
 }
