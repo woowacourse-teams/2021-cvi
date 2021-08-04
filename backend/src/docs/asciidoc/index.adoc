@@ -94,6 +94,50 @@ include::{snippets}/user-find-me-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/user-find-me-failure/http-response.adoc[]
 
+=== 사용자 내가 작성한 게시글 조회
+==== 성공
+===== Request
+include::{snippets}/user-me-posts-filter-none/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-filter-none/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-me-posts-filter-none-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-filter-none-failure/http-response.adoc[]
+
+=== 사용자 내가 좋아요 한 게시글 조회
+==== 성공
+===== Request
+include::{snippets}/user-me-posts-filter-likes/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-filter-likes/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-me-posts-filter-likes-failure/http-request.adoc[]
+===== Response
+
+include::{snippets}/user-me-posts-filter-likes-failure/http-response.adoc[]
+
+=== 사용자 내가 댓글을 단 게시글 조회
+==== 성공
+===== Request
+include::{snippets}/user-me-posts-filter-comments/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-filter-comments/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/user-me-posts-filter-comments-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/user-me-posts-filter-comments-failure/http-response.adoc[]
 
 === 사용자 정보 조회
 ==== 성공

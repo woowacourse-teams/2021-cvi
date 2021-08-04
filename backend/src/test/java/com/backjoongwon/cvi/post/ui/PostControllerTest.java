@@ -25,7 +25,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.hypermedia.Link;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -88,10 +87,10 @@ class PostControllerTest extends ApiDocument {
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
         userResponse = UserResponse.of(user, null);
 
-        Comment comment = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
+        Comment comment1 = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
         Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(anotherUser).createdAt(LocalDateTime.now()).build();
 
-        commentResponses = Arrays.asList(CommentResponse.of(comment), CommentResponse.of(comment2));
+        commentResponses = Arrays.asList(CommentResponse.of(comment1), CommentResponse.of(comment2));
 
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));

@@ -14,7 +14,7 @@ const Avatar = ({ sizeType, src, styles, onClick }) => (
 Avatar.propTypes = {
   sizeType: PropTypes.string,
   src: PropTypes.string,
-  styles: PropTypes.object,
+  styles: PropTypes.string,
   onClick: PropTypes.func,
 };
 

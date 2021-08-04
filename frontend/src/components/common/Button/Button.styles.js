@@ -66,7 +66,6 @@ const Container = styled.button`
   background-color: ${({ color }) => color};
   border: 0.1rem solid ${({ color }) => color};
   color: ${({ color }) => color};
-  min-width: fit-content;
 
   ${({ backgroundType }) =>
     backgroundStyle[backgroundType] || backgroundStyle[BUTTON_BACKGROUND_TYPE.FILLED]};

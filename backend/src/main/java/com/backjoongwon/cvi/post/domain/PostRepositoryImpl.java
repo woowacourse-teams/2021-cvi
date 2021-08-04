@@ -14,11 +14,11 @@ import java.util.Optional;
 
 import static com.backjoongwon.cvi.post.domain.QPost.post;
 
-public class PostQueryDslImpl implements PostQueryDsl {
+public class PostRepositoryImpl implements PostQueryDsl {
 
     private final JPQLQueryFactory queryFactory;
 
-    public PostQueryDslImpl(EntityManager em) {
+    public PostRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -46,6 +46,15 @@ public class PostQueryDslImpl implements PostQueryDsl {
             return post.vaccinationType.eq(vaccinationType);
         }
         return null;
+    }
+
+    @Override
+    public List<Post> findByUser(Long id) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, QUser.user).fetchJoin()
+                .where(post.user.id.eq(id))
+                .orderBy(post.createdAt.desc())
+                .fetch();
     }
 
     @Override

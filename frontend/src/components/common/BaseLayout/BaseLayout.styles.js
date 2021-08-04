@@ -9,10 +9,6 @@ const Container = styled.div`
   height: 100%;
   background-color: ${THEME_COLOR.BACKGROUND};
   position: relative;
-
-  @media screen and (max-width: 1024px) {
-    flex-direction: column;
-  }
 `;
 
 const NavBar = styled.div`
@@ -45,10 +41,6 @@ const TopContainer = styled.div`
   justify-content: flex-end;
   padding: 2rem 8rem 0 0;
   min-height: 5.6rem;
-
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
 `;
 
 const avatarStyles = css`
@@ -57,4 +49,4 @@ const avatarStyles = css`
   }
 `;
 
-export { Container, MainContainer, TopContainer, avatarStyles, NavBar };
+export { Container, MainContainer, TopContainer, avatarStyles };

@@ -13,19 +13,11 @@ const Container = styled.div`
   & > *:last-child {
     margin-top: auto;
   }
-
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
 `;
 
 const LogoContainer = styled(Link)`
   margin: 0 auto;
   padding-right: 1.6rem;
-
-  @media screen and (max-width: 1024px) {
-    padding: 1rem 0;
-  }
 `;
 
 const MenuContainer = styled.div`

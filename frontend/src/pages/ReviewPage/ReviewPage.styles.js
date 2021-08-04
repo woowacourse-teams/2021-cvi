@@ -40,16 +40,6 @@ const ReviewList = styled.ul`
   & > *:not(:last-child) {
     border-bottom: 0.15rem solid ${PALETTE.NAVY100};
   }
-
-  @media screen and (max-width: 801px) {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-
-    & > li:not(:last-child) {
-      border-bottom: 0.15rem solid ${PALETTE.NAVY100};
-      border-right: none;
-    }
-  }
 `;
 
 const FrameContent = styled.div`

@@ -1,24 +1,17 @@
 import PropTypes from 'prop-types';
 import Avatar from '../Avatar/Avatar';
 import SideBar from '../SideBar/SideBar';
-import { Container, MainContainer, TopContainer, avatarStyles, NavBar } from './BaseLayout.styles';
+import { Container, MainContainer, TopContainer, avatarStyles } from './BaseLayout.styles';
 import { useSelector } from 'react-redux';
-import { LogoIcon, MenuIcon } from '../../../assets/icons';
-import { PATH, THEME_COLOR } from '../../../constants';
+import { EllipsisIcon } from '../../../assets/icons';
+import { FONT_COLOR, PATH } from '../../../constants';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import Button from '../Button/Button';
-import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
-import { css } from '@emotion/react';
-import SideBarMobile from '../SideBarMobile/SideBarMobile';
 
 const BaseLayout = ({ children }) => {
   const history = useHistory();
   const location = useLocation();
   const isLogin = !!useSelector((state) => state.authReducer.accessToken);
   const user = useSelector((state) => state.authReducer.user);
-
-  const [isOpenSideBar, setIsOpenSideBar] = useState(false);
 
   const goMyPage = () => {
     history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
@@ -47,9 +40,12 @@ const BaseLayout = ({ children }) => {
       </NavBar>
       <MainContainer>
         {!location.pathname.includes(PATH.MY_PAGE) && (
-          <TopContainer isOpenSideBar={isOpenSideBar}>
+          <TopContainer>
             {isLogin && (
-              <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+              <>
+                <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+                <EllipsisIcon width="24" hight="24" fill={FONT_COLOR.BLACK} />
+              </>
             )}
           </TopContainer>
         )}
