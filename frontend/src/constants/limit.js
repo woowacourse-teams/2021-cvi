@@ -1,11 +1,12 @@
 const LINE_LIMIT = {
   PREVIEW_ITEM: 3,
   REVIEW_ITEM: 3,
+  MY_COMMENT_ITEM: 1,
 };
 
 const COMMENT_LIMIT = {
   MIN_LENGTH: 1,
-  MAX_LEGNTH: 300,
+  MAX_LENGTH: 300,
 };
 
 const NICKNAME_LIMIT = {

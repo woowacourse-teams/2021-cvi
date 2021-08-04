@@ -8,7 +8,9 @@ import OAuthPage from './OAuthPage/OAuthPage';
 import MyPage from './MyPage/MyPage';
 import MyPageAccount from './MyPageAccount/MyPageAccount';
 import MyPageShotVerification from './MyPageShotVerification/MyPageShotVerification';
-import MyPageReviews from './MyPageReviews/MyPageReivews';
+import MyPageReview from './MyPageReview/MyPageReview';
+import MyPageCommentReview from './MyPageCommentReview/MyPageCommentReview';
+import MyPageLikeReview from './MyPageLikeReview/MyPageLikeReview';
 import StatusPage from './StatusPage/StatusPage';
 
 export {
@@ -22,6 +24,8 @@ export {
   MyPage,
   MyPageAccount,
   MyPageShotVerification,
-  MyPageReviews,
+  MyPageReview,
+  MyPageCommentReview,
+  MyPageLikeReview,
   StatusPage,
 };

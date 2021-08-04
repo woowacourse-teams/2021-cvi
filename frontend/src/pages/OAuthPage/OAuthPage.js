@@ -1,7 +1,14 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ALERT_MESSAGE, LOCAL_STORAGE_KEY, PATH, RESPONSE_STATE } from '../../constants';
+import {
+  ALERT_MESSAGE,
+  LOCAL_STORAGE_KEY,
+  PATH,
+  RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
+} from '../../constants';
+import { useSnackBar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postOAuthLoginAsync } from '../../service';
 
@@ -9,6 +16,8 @@ const OAuthPage = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  const { openSnackBar } = useSnackBar();
 
   const login = async () => {
     const code = new URLSearchParams(location.search).get('code');
@@ -44,6 +53,8 @@ const OAuthPage = () => {
 
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(accessToken));
       dispatch(getMyInfoAsync(accessToken));
+
+      openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGIN);
       history.push(`${PATH.HOME}`);
     }
   };

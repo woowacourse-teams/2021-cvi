@@ -17,7 +17,7 @@ import LikeIcon from './like.svg';
 import LikeTrueIcon from './like-true.svg';
 import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
-import ShorVerificationMenuIcon from './shot-verification-menu.svg';
+import ShotVerificationMenuIcon from './shot-verification-menu.svg';
 import LoadingIcon from './loading.gif';
 import StatusIcon from './status.svg';
 
@@ -41,7 +41,7 @@ export {
   LikeTrueIcon,
   MenuIcon,
   MyReviewMenuIcon,
-  ShorVerificationMenuIcon,
+  ShotVerificationMenuIcon,
   LoadingIcon,
   StatusIcon,
 };

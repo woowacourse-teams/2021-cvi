@@ -44,16 +44,16 @@ public class UserController {
         return postService.findByUserAndFilter(user, filter);
     }
 
+    @PutMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@AuthenticationPrincipal Optional<User> user, @RequestBody UserRequest userRequest) {
+        userService.update(user, userRequest);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse find(@PathVariable Long id) {
         return userService.findById(id);
-    }
-
-    @PutMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@AuthenticationPrincipal Optional<User> user, @RequestBody UserRequest userRequest) {
-        userService.update(user, userRequest);
     }
 
     @DeleteMapping

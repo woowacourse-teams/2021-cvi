@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { Button, Frame, Input, Selection } from '../../components/common';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/common/Button/Button.styles';
 import {
   AGE_RANGE,
   ALERT_MESSAGE,
-  NICKNAME_LIMIT,
   PATH,
-  REGEX,
   RESPONSE_STATE,
+  SNACKBAR_MESSAGE,
+  NICKNAME_LIMIT,
+  REGEX,
 } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';
@@ -25,15 +25,17 @@ import {
   LoginContainer,
   Span,
 } from './SignupPage.styles';
+import { useSnackBar } from '../../hooks';
 
 const SignupPage = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
+
+  const { openSnackBar } = useSnackBar();
 
   const goHomePage = () => {
     history.push(`${PATH.HOME}`);
@@ -68,7 +70,7 @@ const SignupPage = () => {
 
     dispatch(getMyInfoAsync(response.data.accessToken));
 
-    enqueueSnackbar(ALERT_MESSAGE.SUCCESS_TO_SIGNUP);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);
     goHomePage();
   };
 
