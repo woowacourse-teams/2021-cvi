@@ -61,4 +61,9 @@ const FrameContent = styled.div`
   width: 100%;
 `;
 
-export { Container, Title, ReviewList, FrameContent, ButtonWrapper };
+const ScrollLoadingContainer = styled.div`
+  position: relative;
+  height: 8rem;
+`;
+
+export { Container, Title, ReviewList, FrameContent, ButtonWrapper, ScrollLoadingContainer };
