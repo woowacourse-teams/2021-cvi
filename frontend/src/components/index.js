@@ -7,6 +7,8 @@ import VaccinationState from './VaccinationState/VaccinationState';
 import Comment from './Comment/Comment';
 import CommentForm from './CommentForm/CommentForm';
 import CommentItem from './CommentItem/CommentItem';
+import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
+import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
 
 export {
   Preview,
@@ -18,4 +20,6 @@ export {
   Comment,
   CommentForm,
   CommentItem,
+  RegionalStateChart,
+  RegionalStateTable,
 };

@@ -17,6 +17,7 @@ import {
   LogoutIcon,
   ReviewIcon,
   MyPageIcon,
+  StateIcon,
 } from '../../../assets/icons';
 import { useSnackBar } from '../../../hooks';
 
@@ -62,6 +63,9 @@ const SideBar = () => {
         </NavLinkElement>
         <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
           <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
+        </NavLinkElement>
+        <NavLinkElement to={PATH.STATE} activeStyle={selectedNavStyles}>
+          <StateIcon width="20" height="20" stroke="currentColor" /> 접종현황
         </NavLinkElement>
         {!!Object.keys(user).length && (
           <NavLinkElement
