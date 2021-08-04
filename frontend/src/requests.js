@@ -83,8 +83,9 @@ const requestPostOAuthLogin = (data) =>
     body: JSON.stringify(data),
   });
 
+// users -> users/me
 const requestPutAccount = (accessToken, data) =>
-  fetch(`${BASE_URL}/users`, {
+  fetch(`${BASE_URL}/users/me`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

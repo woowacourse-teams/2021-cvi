@@ -5,6 +5,7 @@ import { requestGetMyInfo } from '../requests';
 const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
   try {
     const response = await requestGetMyInfo(accessToken);
+
     if (!response.ok) {
       throw new Error(response);
     }

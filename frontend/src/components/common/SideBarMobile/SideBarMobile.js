@@ -24,7 +24,9 @@ import {
   MyPageIcon,
   CloseIcon,
   MyReviewMenuIcon,
-  ShorVerificationMenuIcon,
+  ShotVerificationMenuIcon,
+  LikeIcon,
+  CommentIcon,
 } from '../../../assets/icons';
 import Button from '../Button/Button';
 import { css } from '@emotion/react';
@@ -104,12 +106,20 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
                 to={PATH.MY_PAGE_SHOT_VERIFICATION}
                 onClick={() => setIsOpenSideBar(false)}
               >
-                <ShorVerificationMenuIcon width="22" height="22" stroke="currentColor" />
+                <ShotVerificationMenuIcon width="22" height="22" stroke="currentColor" />
                 접종 인증
               </MyPageLink>
-              <MyPageLink onClick={() => alert('준비 중인 서비스입니다')}>
+              <MyPageLink to={PATH.MY_PAGE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
                 <MyReviewMenuIcon width="22" height="22" stroke="currentColor" />
                 내가 쓴 글
+              </MyPageLink>
+              <MyPageLink to={PATH.MY_PAGE_COMMENT_REVIEW} onClick={() => setIsOpenSideBar(false)}>
+                <CommentIcon width="22" height="22" stroke="currentColor" />
+                댓글 단 글
+              </MyPageLink>
+              <MyPageLink to={PATH.MY_PAGE_LIKE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
+                <LikeIcon width="22" height="22" stroke="currentColor" />
+                좋아요 표시한 글
               </MyPageLink>
             </MyPageMenuContainer>
           )}
