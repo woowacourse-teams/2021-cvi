@@ -54,7 +54,9 @@ public class User extends BaseEntity {
     public void update(User updateUser) {
         this.nickname = updateUser.nickname;
         this.ageRange = updateUser.ageRange;
-        this.shotVerified = updateUser.isShotVerified();
+        if (updateUser.shotVerified) {
+            this.shotVerified = true;
+        }
         this.profileUrl = updateUser.profileUrl;
     }
 
