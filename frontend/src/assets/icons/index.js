@@ -18,6 +18,7 @@ import LikeTrueIcon from './like-true.svg';
 import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
 import ShorVerificationMenuIcon from './shot-verification-menu.svg';
+import LoadingIcon from './loading.gif';
 
 export {
   KakaoIcon,
@@ -40,4 +41,5 @@ export {
   MenuIcon,
   MyReviewMenuIcon,
   ShorVerificationMenuIcon,
+  LoadingIcon,
 };
