@@ -43,7 +43,7 @@ public class PostResponse {
         this.createdAt = createdAt;
     }
 
-    public static PostResponse toList(Post post, User viewer) {
+    public static PostResponse of(Post post, User viewer) {
         return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
                 post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer), makeCommentResponses(post.getCommentsAsList()), post.getVaccinationType(), post.getCreatedAt());
     }
@@ -56,7 +56,7 @@ public class PostResponse {
 
     public static List<PostResponse> toList(List<Post> posts, User viewer) {
         return posts.stream()
-                .map(post -> PostResponse.toList(post, viewer))
+                .map(post -> PostResponse.of(post, viewer))
                 .collect(Collectors.toList());
     }
 }

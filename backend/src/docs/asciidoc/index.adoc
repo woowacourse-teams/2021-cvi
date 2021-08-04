@@ -176,8 +176,7 @@ include::{snippets}/post-findAll-when-empty/http-response.adoc[]
 === 게시글 단일 조회
 ==== 성공
 ===== Request
-include::{snippets}/post-find
-/http-request.adoc[]
+include::{snippets}/post-find/http-request.adoc[]
 
 ===== Response
 include::{snippets}/post-find/http-response.adoc[]

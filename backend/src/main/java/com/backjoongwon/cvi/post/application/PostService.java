@@ -37,7 +37,7 @@ public class PostService {
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
-        return PostResponse.toList(post, writer);
+        return PostResponse.of(post, writer);
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class PostService {
     }
 
     private PostResponse createPostResponse(Optional<User> optionalUser, Post post) {
-        return PostResponse.toList(post, optionalUser.orElse(null));
+        return PostResponse.of(post, optionalUser.orElse(null));
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
