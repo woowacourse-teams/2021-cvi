@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -46,6 +46,8 @@ const ReviewEditPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
+  const user = useSelector((state) => state.authReducer.user);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [content, setContent] = useState('');
@@ -78,6 +80,13 @@ const ReviewEditPage = () => {
     enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
     goReviewDetailPage();
   };
+
+  useEffect(() => {
+    if (Object.keys(review).length && user?.id !== review?.writer?.id) {
+      alert(ALERT_MESSAGE.FAIL_TO_ACCESS_EDIT_PAGE);
+      history.goBack();
+    }
+  }, [review]);
 
   return (
     <Container>

@@ -5,6 +5,8 @@ const Container = styled.ul`
   display: grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  min-height: 36rem;
 
   & > li {
     border-bottom: 0.1rem solid ${PALETTE.NAVY150};

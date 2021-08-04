@@ -21,10 +21,11 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class NaverAuthorization implements Authorization {
 
-    @Value("${security.auth.naver.client-secret}")
-    private String clientSecret;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${security.auth.naver.client-secret}")
+    private String clientSecret;
 
     @Override
     public UserInformation requestProfile(String code, String state) {
