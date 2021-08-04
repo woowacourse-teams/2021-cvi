@@ -19,6 +19,7 @@ import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
 import ShorVerificationMenuIcon from './shot-verification-menu.svg';
 import LoadingIcon from './loading.gif';
+import StatusIcon from './status.svg';
 
 export {
   KakaoIcon,
@@ -42,4 +43,5 @@ export {
   MyReviewMenuIcon,
   ShorVerificationMenuIcon,
   LoadingIcon,
+  StatusIcon,
 };

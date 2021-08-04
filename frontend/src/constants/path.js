@@ -9,6 +9,7 @@ const PATH = {
   MY_PAGE_REVIEWS: '/mypage/reviews',
   OAUTH_KAKAO: '/auth/kakao/callback',
   OAUTH_NAVER: '/auth/naver/callback',
+  STATUS: '/status',
 };
 
 export default PATH;

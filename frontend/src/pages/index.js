@@ -9,6 +9,7 @@ import MyPage from './MyPage/MyPage';
 import MyPageAccount from './MyPageAccount/MyPageAccount';
 import MyPageShotVerification from './MyPageShotVerification/MyPageShotVerification';
 import MyPageReviews from './MyPageReviews/MyPageReivews';
+import StatusPage from './StatusPage/StatusPage';
 
 export {
   HomePage,
@@ -22,4 +23,5 @@ export {
   MyPageAccount,
   MyPageShotVerification,
   MyPageReviews,
+  StatusPage,
 };

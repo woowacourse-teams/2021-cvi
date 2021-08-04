@@ -14,6 +14,7 @@ import {
   MyPageAccount,
   MyPageShotVerification,
   MyPageReviews,
+  StatusPage,
 } from './pages';
 import { BaseLayout } from './components/common';
 
@@ -67,6 +68,7 @@ const App = () => {
               />
               <Route exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
               <Route exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
+              <Route exact path={PATH.STATUS} component={StatusPage} />
               <Redirect to={PATH.HOME} />
             </Switch>
           </BaseLayout>

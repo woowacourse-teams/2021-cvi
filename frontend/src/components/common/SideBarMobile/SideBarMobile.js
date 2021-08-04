@@ -25,6 +25,7 @@ import {
   CloseIcon,
   MyReviewMenuIcon,
   ShorVerificationMenuIcon,
+  StatusIcon,
 } from '../../../assets/icons';
 import Button from '../Button/Button';
 import { css } from '@emotion/react';
@@ -92,6 +93,9 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
           </NavLinkElement>
           <NavLinkElement to={PATH.REVIEW} onClick={() => setIsOpenSideBar(false)}>
             <ReviewIcon width="23" height="23" stroke="currentColor" /> 접종후기
+          </NavLinkElement>
+          <NavLinkElement to={PATH.STATUS} onClick={() => setIsOpenSideBar(false)}>
+            <StatusIcon width="23" height="23" stroke="currentColor" /> 접종현황
           </NavLinkElement>
           {!!Object.keys(user).length && (
             <MyPageMenuContainer>

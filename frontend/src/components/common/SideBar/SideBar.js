@@ -18,6 +18,7 @@ import {
   LogoutIcon,
   ReviewIcon,
   MyPageIcon,
+  StatusIcon,
 } from '../../../assets/icons';
 
 const SideBar = () => {
@@ -60,6 +61,9 @@ const SideBar = () => {
         </NavLinkElement>
         <NavLinkElement to={PATH.REVIEW} activeStyle={selectedNavStyles}>
           <ReviewIcon width="20" height="20" stroke="currentColor" /> 접종후기
+        </NavLinkElement>
+        <NavLinkElement to={PATH.STATUS} activeStyle={selectedNavStyles}>
+          <StatusIcon width="20" height="20" stroke="currentColor" /> 접종현황
         </NavLinkElement>
         {!!Object.keys(user).length && (
           <NavLinkElement
