@@ -5,7 +5,7 @@ const ERROR_MESSAGE = {
 
 const ALERT_MESSAGE = {
   SUCCESS_TO_SIGNUP: '회원가입에 성공했습니다',
-  FAIL_TO_LOGIN: '로그인에 실패했습니다. 알맞은 닉네임을 입력해주세요.',
+  FAIL_TO_LOGIN: '닉네임에 공백과 특수문자는 포함할 수 업습니다.',
   FAIL_TO_CREATE_REVIEW: '후기를 작성할 수 없습니다.',
   FAIL_TO_EDIT_REVIEW: '후기를 수정할 수 없습니다.',
   FAIL_TO_DELETE_REVIEW: '후기를 삭제할 수 없습니다.',
@@ -15,6 +15,8 @@ const ALERT_MESSAGE = {
   FAIL_TO_SERVER: '오류가 발생했습니다. 다시 한 번 시도해주세요.',
   FAIL_TO_EDIT_ACCOUNT: '내 정보를 수정할 수 없습니다.',
   FAIL_TO_FUIFILL_MIN_LENGTH: '최소 1자 이상 입력해야 합니다.',
+  FAIL_TO_ACCESS_EDIT_PAGE: '본인이 작성하지 않은 글은 수정할 수 없습니다.',
+  FAIL_TO_ACCESS_SIGNUP_PAGE: '회원가입 페이지에 접근할 수 없습니다.',
   NEED_LOGIN: '로그인이 필요한 서비스입니다.',
 };
 

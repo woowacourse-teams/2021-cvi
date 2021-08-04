@@ -5,6 +5,8 @@ const Container = styled.ul`
   display: grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  min-height: 36rem;
 
   & > li {
     border-bottom: 0.1rem solid ${PALETTE.NAVY150};
@@ -14,6 +16,16 @@ const Container = styled.ul`
   }
   & > li:nth-last-child(-n + 3) {
     border-bottom: none;
+  }
+
+  @media screen and (max-width: 801px) {
+    display: block;
+    grid-template-columns: repeat(1, 1fr);
+
+    & > li:not(:last-child) {
+      border-bottom: 0.1rem solid ${PALETTE.NAVY150};
+      border-right: none;
+    }
   }
 `;
 

@@ -38,7 +38,6 @@ const MyPageAccount = () => {
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_EDIT_ACCOUNT);
-      location.reload();
 
       return;
     }

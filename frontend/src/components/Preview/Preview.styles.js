@@ -2,6 +2,10 @@ import styled from '@emotion/styled';
 
 const Title = styled.h3`
   margin-bottom: 1rem;
+
+  @media screen and (max-width: 801px) {
+    margin: 1rem 1.4rem;
+  }
 `;
 
 const Container = styled.div`
