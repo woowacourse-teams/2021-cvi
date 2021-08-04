@@ -11,7 +11,7 @@ const PATH = {
   MY_PAGE_LIKE_REVIEW: '/mypage/like-review',
   OAUTH_KAKAO: '/auth/kakao/callback',
   OAUTH_NAVER: '/auth/naver/callback',
-  STATUS: '/status',
+  STATE: '/state',
 };
 
 export default PATH;

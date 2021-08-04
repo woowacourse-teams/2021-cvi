@@ -15,7 +15,7 @@ import {
   MyPageReview,
   MyPageCommentReview,
   MyPageLikeReview,
-  StatusPage,
+  StatePage,
 } from './pages';
 import { BaseLayout } from './components/common';
 import { useSnackBar } from './hooks';
@@ -83,7 +83,7 @@ const App = () => {
             />
             <Route exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
             <Route exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
-            <Route exact path={PATH.STATUS} component={StatusPage} />
+            <Route exact path={PATH.STATE} component={StatePage} />
             <Redirect to={PATH.HOME} />
           </Switch>
         </BaseLayout>

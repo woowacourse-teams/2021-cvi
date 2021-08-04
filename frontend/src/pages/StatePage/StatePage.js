@@ -1,8 +1,8 @@
 import { VaccinationState } from '../../components';
 import { Frame } from '../../components/common';
-import { Container, Title, Div } from './StatusPage.styles';
+import { Container, Title, Div } from './StatePage.styles';
 
-const StatusPage = () => {
+const StatePage = () => {
   return (
     <Container>
       <Title>접종 현황</Title>
@@ -19,4 +19,4 @@ const StatusPage = () => {
   );
 };
 
-export default StatusPage;
+export default StatePage;
