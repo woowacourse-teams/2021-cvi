@@ -62,8 +62,8 @@ class UserControllerTest extends ApiDocument {
                 .profileUrl(PROFILE_URL)
                 .build();
 
-        signinRequest = new UserRequest(NICKNAME, AGE_RANGE, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
-        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, null, null, PROFILE_URL);
+        signinRequest = new UserRequest(NICKNAME, AGE_RANGE, false, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
+        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, null, null, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
 
