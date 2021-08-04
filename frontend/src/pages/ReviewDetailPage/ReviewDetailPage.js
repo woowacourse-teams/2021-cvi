@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import {
   Container,
   FrameContent,
@@ -46,7 +45,7 @@ import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/ico
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { CommentForm, CommentItem } from '../../components';
-import { useLike, useLoading } from '../../hooks';
+import { useLike, useSnackBar, useLoading } from '../../hooks';
 
 // TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
@@ -54,7 +53,6 @@ const ReviewDetailPage = () => {
   const { id } = useParams();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const { enqueueSnackbar } = useSnackbar();
 
   const [review, setReview] = useState({});
 
@@ -74,6 +72,7 @@ const ReviewDetailPage = () => {
   };
 
   const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -97,7 +96,7 @@ const ReviewDetailPage = () => {
       return;
     }
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
     goReviewPage();
   };
 

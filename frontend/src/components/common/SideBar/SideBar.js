@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import {
   Container,
   LogoContainer,
@@ -19,18 +18,19 @@ import {
   ReviewIcon,
   MyPageIcon,
 } from '../../../assets/icons';
+import { useSnackBar } from '../../../hooks';
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { openSnackBar } = useSnackBar();
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     dispatch(logoutAction());
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
   };
 
   const isRelatedMyPage = (pathname) =>

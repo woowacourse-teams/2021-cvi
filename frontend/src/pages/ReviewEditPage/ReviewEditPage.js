@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -13,7 +12,7 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import { useFetch } from '../../hooks';
+import { useFetch, useSnackBar } from '../../hooks';
 import { requestGetReview } from '../../requests';
 import {
   Container,
@@ -48,10 +47,10 @@ const ReviewEditPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const user = useSelector((state) => state.authReducer.user);
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const [content, setContent] = useState('');
+
   const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -77,7 +76,7 @@ const ReviewEditPage = () => {
       return;
     }
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
     goReviewDetailPage();
   };
 

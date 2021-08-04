@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Button } from '../common';
 import {
@@ -25,8 +26,7 @@ import {
 } from '../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import { deleteCommentAsync, putCommentAsync } from '../../service';
-import { useState } from 'react';
-import { useSnackbar } from 'notistack';
+import { useSnackBar } from '../../hooks';
 
 const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
   // TODO: 규칙 어긋나는데 확인하기
@@ -35,7 +35,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { openSnackBar } = useSnackBar();
 
   const deleteComment = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_COMMENT)) return;
@@ -48,6 +48,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
       return;
     }
 
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_COMMENT);
     getReview();
   };
 
@@ -68,8 +69,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
     }
 
     setIsEditable(false);
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
-
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
     getReview();
   };
 
