@@ -48,7 +48,11 @@ security:
       expire-length: 3600000
   auth:
     naver:
-      client-secret: R_zN6l1A3V
+      client-secret: client-secret
+  public:
+    data:
+      vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
+
 ---
 spring:
   config:

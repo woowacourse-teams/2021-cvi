@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VaccineParser {
+public class VacinationParser {
 
     private static final String DATA_URL = "https://api.odcloud.kr/api/15077756/v1/vaccine-stat";
     private static final LocalDateTime START_DATE = LocalDateTime.of(2021, 3, 11, 0, 0, 0);
@@ -18,7 +18,7 @@ public class VaccineParser {
 
     private final Parser parser;
 
-    public VaccineParser(Parser parser) {
+    public VacinationParser(Parser parser) {
         this.parser = parser;
     }
 

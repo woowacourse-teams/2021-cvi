@@ -91,7 +91,7 @@ class VaccineParserTest {
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) {
         //given
-        VaccineParser vaccineParser = new VaccineParser(new Parser());
+        VacinationParser vaccineParser = new VacinationParser(new Parser());
         //when
         VaccineParserResponse vaccineParserResponse = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
         //then

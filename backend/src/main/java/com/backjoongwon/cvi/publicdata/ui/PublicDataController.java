@@ -4,10 +4,7 @@ import com.backjoongwon.cvi.publicdata.application.PublicDataService;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +19,11 @@ public class PublicDataController {
     @GetMapping("/vaccinations")
     public List<VaccinationRateResponse> findVaccinationRate() {
         return publicDataService.findVaccinationRates();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/vaccinations")
+    public List<VaccinationRateResponse> saveVaccinationRate() {
+        return publicDataService.saveVaccinationRates();
     }
 }

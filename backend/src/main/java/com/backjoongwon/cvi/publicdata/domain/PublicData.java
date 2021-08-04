@@ -2,20 +2,17 @@ package com.backjoongwon.cvi.publicdata.domain;
 
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
+@AttributeOverride(name = "id", column = @Column(name = "public_data_id"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PublicData extends BaseEntity {
 

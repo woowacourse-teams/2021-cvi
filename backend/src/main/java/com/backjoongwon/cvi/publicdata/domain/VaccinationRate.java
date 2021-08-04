@@ -22,10 +22,11 @@ public class VaccinationRate extends PublicData {
     private int totalSecondCnt;
     private int accumulatedFirstCnt;
     private int accumulatedSecondCnt;
+    private int accumulateRate;
 
     @Builder
     public VaccinationRate(Long id, LocalDateTime createdAt, String sido, String baseDate, int firstCnt, int secondCnt,
-                           int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt, int accumulatedSecondCnt) {
+                           int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt, int accumulatedSecondCnt, int accumulateRate) {
         super(id, createdAt, sido);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;
@@ -34,5 +35,6 @@ public class VaccinationRate extends PublicData {
         this.totalSecondCnt = totalSecondCnt;
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
+        this.accumulateRate = accumulateRate;
     }
 }
