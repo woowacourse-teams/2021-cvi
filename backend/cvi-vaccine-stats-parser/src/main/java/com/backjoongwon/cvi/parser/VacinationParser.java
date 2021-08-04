@@ -22,16 +22,21 @@ public class VacinationParser {
     }
 
     public VaccineParserResponse parseToPublicData(LocalDateTime targetDateTime, String apiSecretKey) {
-        if (targetDateTime.isBefore(START_DATE)) {
-            return VaccineParserResponse.empty();
-        }
-        if (targetDateTime.isAfter(LocalDateTime.now())) {
-            return VaccineParserResponse.empty();
-        }
-        if (targetDateTime.toLocalDate().isEqual(LocalDate.now()) && targetDateTime.getHour() < UPDATE_HOURS) {
+        if (isInvalidDateTime(targetDateTime)) {
             return VaccineParserResponse.empty();
         }
         return JsonMapper.toObject(getRawData(targetDateTime, apiSecretKey), VaccineParserResponse.class);
+    }
+
+    private boolean isInvalidDateTime(LocalDateTime targetDateTime) {
+        LocalDate nowDate = LocalDate.now();
+        if (targetDateTime.toLocalDate().isEqual(nowDate) && targetDateTime.getHour() < UPDATE_HOURS) {
+            return true;
+        }
+        if (targetDateTime.isBefore(START_DATE)) {
+            return true;
+        }
+        return targetDateTime.toLocalDate().isAfter(nowDate);
     }
 
     private String getRawData(LocalDateTime targetDateTime, String apiSecretKey) {

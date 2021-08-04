@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.publicdata;
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
+import com.backjoongwon.cvi.util.DateConverter;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class PublicDataFacotry {
     public static VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = targetDateTime.toLocalDate().toString() + " 00:00:00";
+        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),
@@ -52,7 +53,7 @@ public class PublicDataFacotry {
     }
 
     public static List<VaccinationRateResponse> toVaccinationRateResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = targetDateTime.toLocalDate().toString() + " 00:00:00";
+        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
         return Arrays.asList(
                 new VaccinationRateResponse(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557, 38),

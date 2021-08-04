@@ -59,7 +59,7 @@ class PublicDataControllerTest extends ApiDocument {
 
     private ResultActions 백신_정보률_조회_요청(LocalDate targetDate) throws Exception {
         return mockMvc.perform(get("/api/v1/publicdatas/vaccinations")
-                .param("targetDate", String.valueOf(LocalDate.now())));
+                .param("targetDate", LocalDate.now().toString()));
     }
 
     private void 백신_접종률_조회_성공함(ResultActions response) throws Exception {

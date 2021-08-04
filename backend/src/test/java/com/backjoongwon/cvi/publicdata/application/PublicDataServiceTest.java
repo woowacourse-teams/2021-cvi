@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationRate;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationRateRepository;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
+import com.backjoongwon.cvi.util.DateConverter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,17 +46,21 @@ class PublicDataServiceTest {
     private PublicDataService publicDataService;
     private VacinationParser vacinationParser;
 
+    private LocalDate targetDate;
+
     @BeforeEach
     void init() {
         vacinationParser = mock(VacinationParser.class);
         publicDataService = new PublicDataService(vacinationParser, vaccinationRateRepository, publicDataProperties);
-        willReturn(toVaccineParserResponse(LocalDateTime.now())).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        targetDate = LocalDate.now();
 
-        LocalDateTime targetDateTime = LocalDateTime.now();
-        willReturn(toVaccineParserResponse(targetDateTime)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        publicDataService.saveVaccinationRates(targetDateTime.toLocalDate());
-        willReturn(toVaccineParserResponse(targetDateTime)).given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
-        publicDataService.saveVaccinationRates(targetDateTime.minusDays(1).toLocalDate());
+        willReturn(toVaccineParserResponse(DateConverter.toLocalDateTime(targetDate)))
+                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        publicDataService.saveVaccinationRates(targetDate);
+
+        willReturn(toVaccineParserResponse(DateConverter.toLocalDateTime(targetDate.minusDays(1))))
+                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+        publicDataService.saveVaccinationRates(targetDate.minusDays(1));
     }
 
     @AfterEach
@@ -68,7 +73,7 @@ class PublicDataServiceTest {
     void findVaccinationRates() {
         //given
         //when
-        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(LocalDate.now());
+        List<VaccinationRateResponse> vaccinationRates = publicDataService.findVaccinationRates(targetDate);
         //then
         assertThat(vaccinationRates).isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulatedFirstCnt)
@@ -76,7 +81,7 @@ class PublicDataServiceTest {
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getBaseDate)
-                .contains(LocalDateTime.now().toLocalDate().toString() + " 00:00:00");
+                .contains(DateConverter.withZeroTime(targetDate));
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getSido)
                 .containsAll(REGIONS);
         assertThat(vaccinationRates).extracting(VaccinationRateResponse::getFirstCnt)
@@ -96,7 +101,7 @@ class PublicDataServiceTest {
     void saveVaccinationRates() {
         //given
         //when
-        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(LocalDateTime.now().toLocalDate() + " 00:00:00");
+        List<VaccinationRate> publicData = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(targetDate));
         //then
         assertThat(publicData).extracting("sido")
                 .containsAll(REGIONS);
