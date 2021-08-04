@@ -46,7 +46,7 @@ public class DataLoader implements CommandLineRunner {
             Random random = new Random();
             int randomInt;
 
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 300; i++) {
                 randomInt = random.nextInt(1000);
                 if (randomInt % 4 == 0) {
                     Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.PFIZER).user(유저1).build();
