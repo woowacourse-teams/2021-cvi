@@ -71,7 +71,12 @@ const ReviewDetailPage = () => {
     hideLoading();
   };
 
-  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
+  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount } = useLike(
+    accessToken,
+    review?.hasLiked,
+    review?.likeCount,
+    id,
+  );
   const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
@@ -181,8 +186,8 @@ const ReviewDetailPage = () => {
                     iconHeight="24"
                     color={FONT_COLOR.BLACK}
                     likeCountSize="1.6rem"
-                    hasLiked={review?.hasLiked}
-                    likeCount={review?.likeCount}
+                    hasLiked={updatedHasLiked}
+                    likeCount={updatedLikeCount}
                     onClickLike={onClickLike}
                   />
                 </IconContainer>

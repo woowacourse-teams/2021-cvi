@@ -21,13 +21,13 @@ import { useInView } from 'react-intersection-observer';
 const ReviewPage = () => {
   const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
-  const [ref, inView] = useInView();
 
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
   const [lastPostId, setLastPostId] = useState(Number.MAX_SAFE_INTEGER);
 
+  const [ref, inView] = useInView();
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
   const {
     showLoading: showScrollLoading,
@@ -124,7 +124,6 @@ const ReviewPage = () => {
                     key={review.id}
                     review={review}
                     accessToken={accessToken}
-                    getReviewList={getReviewList}
                     innerRef={isLastPost(index) ? ref : null}
                     onClick={() => goReviewDetailPage(review.id)}
                   />

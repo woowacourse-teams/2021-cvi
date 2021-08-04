@@ -19,7 +19,7 @@ import { Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 
-const ReviewItem = ({ review, accessToken, getReviewList, innerRef, onClick }) => {
+const ReviewItem = ({ review, accessToken, innerRef, onClick }) => {
   const {
     id,
     writer,
@@ -38,9 +38,7 @@ const ReviewItem = ({ review, accessToken, getReviewList, innerRef, onClick }) =
     hasLiked,
     likeCount,
     id,
-    getReviewList,
   );
-  console.log(hasLiked);
 
   return (
     <Container ref={innerRef} onClick={onClick}>
@@ -95,14 +93,12 @@ ReviewItem.propTypes = {
     comments: PropTypes.array.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
-  getReviewList: PropTypes.func,
   innerRef: PropTypes.node,
   onClick: PropTypes.func,
 };
 
 ReviewItem.defaultProps = {
   innerRef: null,
-  getReviewList: () => {},
   onClick: () => {},
 };
 export default ReviewItem;
