@@ -1,20 +1,15 @@
-import { VaccinationState } from '../../components';
-import { Frame } from '../../components/common';
-import { Container, Title, Div } from './StatePage.styles';
+import { RegionalStateChart, RegionalStateTable, VaccinationState } from '../../components';
+import { Container, Title, RegionalContainer } from './StatePage.styles';
 
 const StatePage = () => {
   return (
     <Container>
       <Title>접종 현황</Title>
       <VaccinationState />
-      <Div>
-        <Frame width="100%">
-          <div>asd</div>
-        </Frame>
-        <Frame width="100%">
-          <div>asd</div>
-        </Frame>
-      </Div>
+      <RegionalContainer>
+        <RegionalStateChart />
+        <RegionalStateTable />
+      </RegionalContainer>
     </Container>
   );
 };

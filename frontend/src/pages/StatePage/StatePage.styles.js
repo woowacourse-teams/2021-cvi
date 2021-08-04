@@ -7,16 +7,7 @@ const Container = styled.div`
     padding: 3rem 0 0 0;
   }
 `;
-const Title = styled.h2`
-  font-size: 2.8rem;
-  margin-bottom: 3.2rem;
-
-  @media screen and (max-width: 801px) {
-    margin-left: 2rem;
-  }
-`;
-
-const Div = styled.div`
+const RegionalContainer = styled.div`
   margin-top: 2.4rem;
   width: 100%;
   display: grid;
@@ -29,4 +20,13 @@ const Div = styled.div`
   }
 `;
 
-export { Container, Title, Div };
+const Title = styled.h2`
+  font-size: 2.8rem;
+  margin-bottom: 3.2rem;
+
+  @media screen and (max-width: 801px) {
+    margin-left: 2rem;
+  }
+`;
+
+export { Container, Title, RegionalContainer };

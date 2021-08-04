@@ -13,6 +13,7 @@ import SideBarMobile from './SideBarMobile/SideBarMobile';
 import DonutChart from './DonutChart/DonutChart';
 import SnackBar from './SnackBar/SnackBar';
 import Loading from './Loading/Loading';
+import ToggleButton from './ToggleButton/ToggleButton';
 
 export {
   Avatar,
@@ -30,4 +31,5 @@ export {
   DonutChart,
   SnackBar,
   Loading,
+  ToggleButton,
 };
