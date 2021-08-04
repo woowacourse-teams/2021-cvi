@@ -33,9 +33,10 @@ public class User extends BaseEntity {
     private String profileUrl;
 
     @Builder
-    public User(Long id, LocalDateTime createdAt, String nickname, AgeRange ageRange,
-                boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
-        super(id, createdAt);
+    public User(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String nickname,
+                AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
+        super(id, createdAt, lastModifiedAt);
+        validateNickName(nickname);
         this.nickname = nickname;
         validateNickName(nickname);
         this.ageRange = ageRange;

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -25,8 +26,12 @@ public abstract class BaseEntity {
     @Column(updatable = false)
     protected LocalDateTime createdAt;
 
-    protected BaseEntity(Long id, LocalDateTime createdAt) {
+    @LastModifiedDate
+    protected LocalDateTime lastModifiedAt;
+
+    public BaseEntity(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
         this.id = id;
         this.createdAt = createdAt;
+        this.lastModifiedAt = lastModifiedAt;
     }
 }
