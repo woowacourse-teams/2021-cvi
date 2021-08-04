@@ -57,4 +57,8 @@ const avatarStyles = css`
   }
 `;
 
-export { Container, MainContainer, TopContainer, avatarStyles, NavBar };
+const LogoContainer = styled.div`
+  cursor: pointer;
+`;
+
+export { Container, MainContainer, TopContainer, avatarStyles, NavBar, LogoContainer };

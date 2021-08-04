@@ -33,8 +33,8 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Builder
-    public Comment(Long id, LocalDateTime createdAt, Post post, User user, String content) {
-        super(id, createdAt);
+    public Comment(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Post post, User user, String content) {
+        super(id, createdAt, lastModifiedAt);
         this.post = post;
         this.user = user;
         this.content = content;

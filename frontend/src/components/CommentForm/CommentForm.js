@@ -62,14 +62,14 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
             value={content}
             placeholder={PLACEHOLDER.COMMENT_FORM}
             minLength={COMMENT_LIMIT.MIN_LENGTH}
-            maxLength={COMMENT_LIMIT.MAX_LEGNTH}
+            maxLength={COMMENT_LIMIT.MAX_LENGTH}
             readOnly={!accessToken}
             isLogin={accessToken}
             onChange={(event) => setContent(event.target.value)}
           />
           <BottomContainer>
             <div>
-              {content.length} <CommentMaxCount>/ {COMMENT_LIMIT.MAX_LEGNTH}</CommentMaxCount>
+              {content.length} <CommentMaxCount>/ {COMMENT_LIMIT.MAX_LENGTH}</CommentMaxCount>
             </div>
             <Button onClick={createComment}>댓글 작성</Button>
           </BottomContainer>

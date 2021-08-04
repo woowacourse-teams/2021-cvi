@@ -121,8 +121,8 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
         <>
           <TextArea
             value={editedContent}
-            minLength={COMMENT_LIMIT.MIN_LEGNTH}
-            maxLength={COMMENT_LIMIT.MAX_LEGNTH}
+            minLength={COMMENT_LIMIT.MIN_LENGTH}
+            maxLength={COMMENT_LIMIT.MAX_LENGTH}
             onChange={(event) => setEditedContent(event.target.value)}
           />
         </>
