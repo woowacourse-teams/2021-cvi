@@ -16,9 +16,9 @@ import {
   requestPutComment,
 } from '../requests';
 
-const getAllReviewListAsync = async (accessToken) => {
+const getAllReviewListAsync = async (accessToken, lastPostId) => {
   try {
-    const response = await requestGetAllReviewList(accessToken);
+    const response = await requestGetAllReviewList(accessToken, lastPostId);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -34,9 +34,13 @@ const getAllReviewListAsync = async (accessToken) => {
   }
 };
 
-const getSelectedReviewListAsync = async (accessToken, selectedVaccination) => {
+const getSelectedReviewListAsync = async (accessToken, selectedVaccination, lastPostId) => {
   try {
-    const response = await requestGetSelectedReviewList(accessToken, selectedVaccination);
+    const response = await requestGetSelectedReviewList(
+      accessToken,
+      selectedVaccination,
+      lastPostId,
+    );
 
     if (!response.ok) {
       // 에러 메시지 넣어달라고 하기
