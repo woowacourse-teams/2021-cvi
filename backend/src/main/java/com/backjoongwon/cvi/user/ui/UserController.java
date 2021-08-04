@@ -46,7 +46,7 @@ public class UserController {
 
     @GetMapping("/me/posts/paging")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "NONE") Filter filter,
+    public List<PostResponse> findMyPostsPaging(@RequestParam(defaultValue = "NONE") Filter filter,
                                                          @RequestParam Long lastPostId,
                                                          @RequestParam int size,
                                                          @AuthenticationPrincipal Optional<User> user) {
