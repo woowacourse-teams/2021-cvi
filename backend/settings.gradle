@@ -1,1 +1,3 @@
 rootProject.name = 'cvi'
+include 'cvi-vaccine-stats-parser'
+
