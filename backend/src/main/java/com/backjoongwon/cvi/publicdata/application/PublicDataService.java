@@ -4,9 +4,9 @@ import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
 import com.backjoongwon.cvi.parser.VacinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationRate;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationRateRepository;
-import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
+import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
+import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
+import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.util.DateConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,19 +25,19 @@ import java.util.stream.Collectors;
 public class PublicDataService {
 
     private final VacinationParser vacinationparser;
-    private final VaccinationRateRepository vaccinationRateRepository;
+    private final VaccinationStatisticRepository vaccinationStatisticRepository;
     private final PublicDataProperties publicDataProperties;
 
     @Transactional(readOnly = true)
-    public List<VaccinationRateResponse> findVaccinationRates(LocalDateTime targetDateTime) {
-        List<VaccinationRate> vaccinationRates = vaccinationRateRepository.findByBaseDate(DateConverter.withZeroTime(modifyDate(targetDateTime)));
-        return vaccinationRates.stream()
-                .map(VaccinationRateResponse::from)
+    public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDateTime targetDateTime) {
+        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDate(DateConverter.withZeroTime(modifyDate(targetDateTime)));
+        return vaccinationStatistic.stream()
+                .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<VaccinationRateResponse> saveVaccinationRates(LocalDateTime targetDateTime) {
+    public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDateTime targetDateTime) {
         targetDateTime = modifyDate(targetDateTime);
         validateExists(targetDateTime);
 
@@ -46,9 +46,9 @@ public class PublicDataService {
                 publicDataProperties.getVaccination()
         );
 
-        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponses(vaccineParserResponse);
-        vaccinationRateResponses.forEach(response -> vaccinationRateRepository.save(response.toEntity()));
-        return vaccinationRateResponses;
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponses(vaccineParserResponse);
+        vaccinationStatisticResponse.forEach(response -> vaccinationStatisticRepository.save(response.toEntity()));
+        return vaccinationStatisticResponse;
     }
 
     private LocalDateTime modifyDate(LocalDateTime targetDateTime) {
@@ -60,15 +60,15 @@ public class PublicDataService {
         return targetDateTime;
     }
 
-    private List<VaccinationRateResponse> toVaccinationRateResponses(VaccineParserResponse vaccineParserResponse) {
+    private List<VaccinationStatisticResponse> toVaccinationStatisticResponses(VaccineParserResponse vaccineParserResponse) {
         return vaccineParserResponse.getData()
                 .stream()
-                .map(VaccinationRateResponse::from)
+                .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }
 
     private void validateExists(LocalDateTime targetDateTime) {
-        if (vaccinationRateRepository.existsByBaseDate(DateConverter.withZeroTime(targetDateTime))) {
+        if (vaccinationStatisticRepository.existsByBaseDate(DateConverter.withZeroTime(targetDateTime))) {
             log.info("이미 존재하는 날짜의 데이터입니다.");
             throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
         }

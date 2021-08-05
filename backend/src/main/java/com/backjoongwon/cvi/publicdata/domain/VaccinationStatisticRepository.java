@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface VaccinationRateRepository extends JpaRepository<VaccinationRate, Long> {
+public interface VaccinationStatisticRepository extends JpaRepository<VaccinationStatistic, Long> {
 
-    List<VaccinationRate> findByBaseDate(String baseDate);
+    List<VaccinationStatistic> findByBaseDate(String baseDate);
 
     boolean existsByBaseDate(String baseDate);
 }

@@ -2,7 +2,7 @@ package com.backjoongwon.cvi.publicdata.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.publicdata.application.PublicDataService;
-import com.backjoongwon.cvi.publicdata.dto.VaccinationRateResponse;
+import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccinationRateResponse;
+import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccinationStatisticResponse;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,11 +35,11 @@ class PublicDataControllerTest extends ApiDocument {
 
     @DisplayName("백신 접종률 저장 - 성공")
     @Test
-    void saveVaccinationRate() throws Exception {
+    void saveVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(TARGET_DATE_TIME);
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponse(TARGET_DATE_TIME);
         //when
-        willReturn(vaccinationRateResponses).given(publicDataService).saveVaccinationRates(TARGET_DATE_TIME);
+        willReturn(vaccinationStatisticResponse).given(publicDataService).saveVaccinationStatistics(TARGET_DATE_TIME);
         ResultActions response = 백신_접종률_저장_요청(TARGET_DATE_TIME);
         //then
         백신_접종률_저장_성공함(response);
@@ -47,11 +47,11 @@ class PublicDataControllerTest extends ApiDocument {
 
     @DisplayName("백신 접종률 조회 - 성공")
     @Test
-    void findVaccinationRate() throws Exception {
+    void findVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationRateResponse> vaccinationRateResponses = toVaccinationRateResponse(TARGET_DATE_TIME);
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponse(TARGET_DATE_TIME);
         //when
-        willReturn(vaccinationRateResponses).given(publicDataService).findVaccinationRates(TARGET_DATE_TIME);
+        willReturn(vaccinationStatisticResponse).given(publicDataService).findVaccinationStatistics(TARGET_DATE_TIME);
         ResultActions response = 백신_접종률_조회_요청(TARGET_DATE_TIME);
         //then
         백신_접종률_조회_성공함(response);
@@ -59,18 +59,18 @@ class PublicDataControllerTest extends ApiDocument {
 
     @DisplayName("백신 접종률 조회 - 성공 - 요청 후 api 데이터가 없을 때")
     @Test
-    void findVaccinationRateEmpty() throws Exception {
+    void findVaccinationStatisticEmpty() throws Exception {
         //given
         LocalDateTime tomorrowDateTime = TARGET_DATE_TIME.plusDays(1);
         //when
-        willReturn(Collections.emptyList()).given(publicDataService).findVaccinationRates(tomorrowDateTime);
+        willReturn(Collections.emptyList()).given(publicDataService).findVaccinationStatistics(tomorrowDateTime);
         ResultActions response = 백신_접종률_조회_요청(tomorrowDateTime);
         //then
         백신_접종률_없데이트전_조회_성공함(response);
     }
 
     private ResultActions 백신_접종률_저장_요청(LocalDateTime targetDateTime) throws Exception {
-        return mockMvc.perform(post("/api/v1/publicdatas/vaccinations")
+        return mockMvc.perform(post("/api/v1/publicdata/vaccinations")
                 .param("targetDate", targetDateTime.toString()));
     }
 
@@ -81,7 +81,7 @@ class PublicDataControllerTest extends ApiDocument {
     }
 
     private ResultActions 백신_접종률_조회_요청(LocalDateTime targetDateTime) throws Exception {
-        return mockMvc.perform(get("/api/v1/publicdatas/vaccinations")
+        return mockMvc.perform(get("/api/v1/publicdata/vaccinations")
                 .param("targetDate", targetDateTime.toString()));
     }
 
