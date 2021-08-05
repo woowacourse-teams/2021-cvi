@@ -73,19 +73,3 @@ bootJar {
         into 'static/docs'
     }
 }
-
-sonarqube {
-    properties {
-        property 'sonar.host.url', 'http://cvi-korea-sonarqube.kro.kr:8080/'
-        property 'sonar.login', '8af6c898b75165429c5c747adc937277a8b3519b'
-        property 'sonar.password', ''
-        property 'sonar.sources', 'src'
-        property 'sonar.language', 'java'
-        property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
-        property 'sonar.sourceEncoding', 'UTF-8'
-        // property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
-        property 'sonar.java.binaries', '${buildDir}/classes'
-        property 'sonar.test.inclusions', '**/*Test.java'
-        property 'sonar.exclusions', '**/test/**, **/Q*.java, **/*Doc*.java, **/resources/**'
-    }
-}
