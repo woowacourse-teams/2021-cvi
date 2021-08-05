@@ -144,6 +144,8 @@ const requestDeleteLike = (accessToken, postId) =>
     },
   });
 
+const requestVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations`);
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -160,4 +162,5 @@ export {
   requestDeleteComment,
   requestPostLike,
   requestDeleteLike,
+  requestVaccinationStateList,
 };

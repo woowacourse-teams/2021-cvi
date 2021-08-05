@@ -14,6 +14,7 @@ import DonutChart from './DonutChart/DonutChart';
 import SnackBar from './SnackBar/SnackBar';
 import Loading from './Loading/Loading';
 import ToggleButton from './ToggleButton/ToggleButton';
+import BarChart from './BarChart/BarChart';
 
 export {
   Avatar,
@@ -32,4 +33,5 @@ export {
   SnackBar,
   Loading,
   ToggleButton,
+  BarChart,
 };

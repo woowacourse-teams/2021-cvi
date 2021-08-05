@@ -14,6 +14,7 @@ import {
   requestDeleteComment,
   requestGetReview,
   requestPutComment,
+  requestVaccinationStateList,
 } from '../requests';
 
 const getAllReviewListAsync = async (accessToken, offset) => {
