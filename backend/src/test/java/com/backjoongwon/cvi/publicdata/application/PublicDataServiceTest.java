@@ -122,7 +122,7 @@ class PublicDataServiceTest {
                 .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getTotalSecondCnt)
                 .isNotEmpty();
-        assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getAccumulateFirstRate)
+        assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getAccumulatedFirstRate)
                 .isNotEmpty();
     }
 

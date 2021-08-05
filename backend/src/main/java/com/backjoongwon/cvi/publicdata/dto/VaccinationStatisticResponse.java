@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.publicdata.dto;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
+import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,8 +13,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationStatisticResponse {
 
-    private static final int KOREA_POPULATION = 51_821_669;
-
     private int accumulatedFirstCnt;
     private int accumulatedSecondCnt;
     private String baseDate;
@@ -22,10 +21,12 @@ public class VaccinationStatisticResponse {
     private String sido;
     private int totalFirstCnt;
     private int totalSecondCnt;
-    private BigDecimal accumulateFirstRate;
+    private BigDecimal accumulatedFirstRate;
+    private BigDecimal accumulatedSecondRate;
 
     public VaccinationStatisticResponse(int accumulatedFirstCnt, int accumulatedSecondCnt, String baseDate, int firstCnt,
-                                   int secondCnt, String sido, int totalFirstCnt, int totalSecondCnt, BigDecimal accumulateFirstRate) {
+                                        int secondCnt, String sido, int totalFirstCnt, int totalSecondCnt, BigDecimal accumulatedFirstRate,
+                                        BigDecimal accumulatedSecondRate) {
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
         this.baseDate = baseDate;
@@ -34,25 +35,22 @@ public class VaccinationStatisticResponse {
         this.sido = sido;
         this.totalFirstCnt = totalFirstCnt;
         this.totalSecondCnt = totalSecondCnt;
-        this.accumulateFirstRate = accumulateFirstRate;
+        this.accumulatedFirstRate = accumulatedFirstRate;
+        this.accumulatedSecondRate = accumulatedSecondRate;
     }
 
     public static VaccinationStatisticResponse from(RegionVaccinationData regionVaccinationData) {
         return new VaccinationStatisticResponse(regionVaccinationData.getAccumulatedFirstCnt(), regionVaccinationData.getAccumulatedSecondCnt(),
                 regionVaccinationData.getBaseDate(), regionVaccinationData.getFirstCnt(), regionVaccinationData.getSecondCnt(),
                 regionVaccinationData.getSido(), regionVaccinationData.getTotalFirstCnt(), regionVaccinationData.getTotalSecondCnt(),
-                null);
+                null, null);
     }
 
     public static VaccinationStatisticResponse from(VaccinationStatistic vaccinationStatistic) {
         return new VaccinationStatisticResponse(vaccinationStatistic.getAccumulatedFirstCnt(), vaccinationStatistic.getAccumulatedSecondCnt(),
                 vaccinationStatistic.getBaseDate(), vaccinationStatistic.getFirstCnt(), vaccinationStatistic.getSecondCnt(),
-                vaccinationStatistic.getSido(), vaccinationStatistic.getTotalFirstCnt(), vaccinationStatistic.getTotalSecondCnt(),
-                vaccinationStatistic.getAccumulateFirstRate());
-    }
-
-    private static int calculatePercent(int accumulatedFirstCnt) {
-        return accumulatedFirstCnt * 100 / KOREA_POPULATION;
+                vaccinationStatistic.getRegionPopulation().getRegion(), vaccinationStatistic.getTotalFirstCnt(), vaccinationStatistic.getTotalSecondCnt(),
+                vaccinationStatistic.getAccumulatedFirstRate(), vaccinationStatistic.getAccumulatedSecondRate());
     }
 
     public VaccinationStatistic toEntity() {
@@ -62,10 +60,11 @@ public class VaccinationStatisticResponse {
                 .baseDate(baseDate)
                 .firstCnt(firstCnt)
                 .secondCnt(secondCnt)
-                .sido(sido)
+                .regionPopulation(RegionPopulation.findByRegion(sido))
                 .totalFirstCnt(totalFirstCnt)
                 .totalSecondCnt(totalSecondCnt)
-                .accumulateFirstRate(accumulateFirstRate)
+                .accumulatedFirstRate(accumulatedFirstRate)
+                .accumulatedSecondRate(accumulatedSecondRate)
                 .build();
     }
 }

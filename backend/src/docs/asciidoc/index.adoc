@@ -306,6 +306,15 @@ include::{snippets}/comment-delete-failure/http-response.adoc[]
 
 
 == PublicData (공공데이터)
+=== 공통 체크사항
+```
+시간을 Parameter로 넘기지 않을 때, defaultValue = LocalDateTime
+```
+
+```
+ 오전 10시전 당일 데이터 요청시, 전날 데이터 저장/출력
+ ex) 현재 날짜 2021-08-05 09:59:59 요청시 2021-08-04 데이터 저장/출력
+```
 === 백신 접종률 저장
 ==== 성공
 ===== Request

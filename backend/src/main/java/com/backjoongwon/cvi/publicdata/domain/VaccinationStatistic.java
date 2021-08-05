@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -22,12 +24,14 @@ public class VaccinationStatistic extends PublicData {
     private int totalSecondCnt;
     private int accumulatedFirstCnt;
     private int accumulatedSecondCnt;
-    private BigDecimal accumulateFirstRate;
+    private BigDecimal accumulatedFirstRate;
+    private BigDecimal accumulatedSecondRate;
 
     @Builder
-    public VaccinationStatistic(Long id, LocalDateTime createdAt, String sido, String baseDate, int firstCnt, int secondCnt,
-                           int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt, int accumulatedSecondCnt, BigDecimal accumulateFirstRate) {
-        super(id, createdAt, sido);
+    public VaccinationStatistic(Long id, LocalDateTime createdAt, RegionPopulation regionPopulation, String baseDate,
+                                int firstCnt, int secondCnt, int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt,
+                                int accumulatedSecondCnt, BigDecimal accumulatedFirstRate, BigDecimal accumulatedSecondRate) {
+        super(id, createdAt, regionPopulation);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;
         this.secondCnt = secondCnt;
@@ -35,6 +39,36 @@ public class VaccinationStatistic extends PublicData {
         this.totalSecondCnt = totalSecondCnt;
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
-        this.accumulateFirstRate = accumulateFirstRate;
+        assignAccumulatedFirstRate(accumulatedFirstRate);
+        assignAccumulatedSecondRate(accumulatedSecondRate);
+    }
+
+    private void assignAccumulatedFirstRate(BigDecimal accumulatedFirstRate) {
+        if (Objects.nonNull(accumulatedFirstRate)) {
+            this.accumulatedFirstRate = accumulatedFirstRate;
+            return;
+        }
+        this.accumulatedFirstRate = calculateRate(this.totalFirstCnt);
+    }
+
+    private void assignAccumulatedSecondRate(BigDecimal accumulatedSecondRate) {
+        if (Objects.nonNull(accumulatedSecondRate)) {
+            this.accumulatedSecondRate = accumulatedSecondRate;
+            return;
+        }
+        this.accumulatedSecondRate = calculateRate(this.totalSecondCnt);
+    }
+
+    private BigDecimal calculateRate(int totalCnt) {
+        return BigDecimal.valueOf(totalCnt).scaleByPowerOfTen(2)
+                .divide(BigDecimal.valueOf(this.regionPopulation.getPopulation()), 1, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal getAccumulatedFirstRate() {
+        return accumulatedFirstRate.setScale(1, RoundingMode.HALF_EVEN);
+    }
+
+    public BigDecimal getAccumulatedSecondRate() {
+        return accumulatedSecondRate.setScale(1, RoundingMode.HALF_EVEN);
     }
 }

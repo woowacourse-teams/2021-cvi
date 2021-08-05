@@ -16,10 +16,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PublicData extends BaseEntity {
 
-    private String sido;
+    @Enumerated(value = EnumType.STRING)
+    protected RegionPopulation regionPopulation;
 
-    public PublicData(Long id, LocalDateTime createdAt, String sido) {
+    public PublicData(Long id, LocalDateTime createdAt, RegionPopulation regionPopulation) {
         super(id, createdAt);
-        this.sido = sido;
+        this.regionPopulation = regionPopulation;
     }
 }

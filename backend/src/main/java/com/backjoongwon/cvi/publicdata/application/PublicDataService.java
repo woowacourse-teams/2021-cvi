@@ -47,8 +47,10 @@ public class PublicDataService {
         );
 
         List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponses(vaccineParserResponse);
-        vaccinationStatisticResponse.forEach(response -> vaccinationStatisticRepository.save(response.toEntity()));
-        return vaccinationStatisticResponse;
+        return vaccinationStatisticResponse.stream()
+                .map(it -> vaccinationStatisticRepository.save(it.toEntity()))
+                .map(VaccinationStatisticResponse::from)
+                .collect(Collectors.toList());
     }
 
     private LocalDateTime modifyDate(LocalDateTime targetDateTime) {
