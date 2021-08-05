@@ -10,11 +10,16 @@ import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -27,6 +32,10 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final Random random = new Random();
+
+    @Autowired
+    private final EntityManager em;
 
     @Override
     @Transactional
@@ -43,7 +52,6 @@ public class DataLoader implements CommandLineRunner {
             userRepository.saveAll(users);
 
             List<Post> posts = new ArrayList<>();
-            Random random = new Random();
             for (int i = 0; i < POST_COUNT; i++) {
                 int randomInt = random.nextInt(USER_COUNT);
                 User user = users.get(i % USER_COUNT);
@@ -66,6 +74,14 @@ public class DataLoader implements CommandLineRunner {
                 }
             }
             postRepository.saveAll(posts);
+
+            for (Post post : posts) {
+                Long id = post.getId();
+                Query q = em.createNativeQuery("UPDATE post SET created_at=:created_at WHERE post_id=:post_id");
+                q.setParameter("created_at", generateRandomLocalDateTime());
+                q.setParameter("post_id", id);
+                q.executeUpdate();
+            }
         }
     }
 
@@ -77,11 +93,19 @@ public class DataLoader implements CommandLineRunner {
             userSet.add(users.get(randomUser));
         }
 
-        for (User user : userSet){
+        for (User user : userSet) {
             Like like = Like.builder().user(user).build();
             post.addLike(like);
             post.assignComment(Comment.builder().content("댓글").user(user).build());
             likeRepository.save(like);
         }
+    }
+
+    private Timestamp generateRandomLocalDateTime() {
+        int randomHour = random.nextInt(24);
+        int randomMins = random.nextInt(60);
+        int randomDays = random.nextInt(20);
+        LocalDateTime localDateTime = LocalDateTime.now().minusHours(randomHour).minusMinutes(randomMins).minusDays(randomDays);
+        return Timestamp.valueOf(localDateTime);
     }
 }

@@ -47,6 +47,7 @@ public class Post extends BaseEntity {
         this.content = content;
         this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
+        this.createdAt = createdAt;
     }
 
     public void assignUser(User user) {
