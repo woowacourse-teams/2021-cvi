@@ -11,8 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("백신 접종률 도메인 테스트")
 class VaccinationStatisticTest {
 
-    @DisplayName("인구수 비례 1차 접종률 계산 - 성공 - 전국")
-    @ParameterizedTest
+    @ParameterizedTest(name = "인구수 비례 1차 접종률 계산 - 성공 - 전국")
     @CsvSource({
             "2100000, 4.1",
             "21000000, 40.5",
@@ -30,8 +29,7 @@ class VaccinationStatisticTest {
         assertThat(accumulateFirstRate.doubleValue()).isEqualTo(actual);
     }
 
-    @DisplayName("인구수 비례 2차 접종률 계산 - 성공 - 전국")
-    @ParameterizedTest
+    @ParameterizedTest(name = "인구수 비례 2차 접종률 계산 - 성공 - 전국")
     @CsvSource({
             "1100000, 2.1",
             "3000000, 5.8",

@@ -68,8 +68,7 @@ class PublicDataServiceTest {
         );
     }
 
-    @DisplayName("백신 정종률 데이터 저장 - 성공 - 당일 오전 10시 후 or 오늘 이전 날짜로 요청시 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "백신 정종률 데이터 저장 - 성공 - 당일 오전 10시 후 or 오늘 이전 날짜로 요청시 성공")
     @MethodSource
     void saveVaccinationStatistics(LocalDateTime targetDateTime) {
         //given

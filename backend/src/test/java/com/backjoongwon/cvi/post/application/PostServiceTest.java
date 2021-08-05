@@ -294,8 +294,7 @@ class PostServiceTest {
                 .isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("게시글 타입별 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "게시글 타입별 조회 - 성공")
     @MethodSource
     void findByVaccineType(VaccinationType vaccinationType) {
         //given
@@ -328,8 +327,7 @@ class PostServiceTest {
         assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
-    @DisplayName("게시글 타입별 페이징 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "게시글 타입별 페이징 조회 - 성공")
     @MethodSource
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
@@ -350,8 +348,7 @@ class PostServiceTest {
         );
     }
 
-    @DisplayName("내가 작성한 글 페이징 첫 페이지 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "내가 작성한 글 페이징 첫 페이지 조회 - 성공")
     @MethodSource
     void findMyPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
@@ -368,8 +365,7 @@ class PostServiceTest {
                 Arguments.of(0, 2, Arrays.asList("Test 4", "Test 3")));
     }
 
-    @DisplayName("내가 좋아요 한 글 페이징 첫 페이지 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "내가 좋아요 한 글 페이징 첫 페이지 조회 - 성공")
     @MethodSource
     void findLikedPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
@@ -386,8 +382,7 @@ class PostServiceTest {
                 Arguments.of(0, 2, Arrays.asList("Test 4", "Test 2")));
     }
 
-    @DisplayName("내가 댓글 단 게시글 페이징 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "내가 댓글 단 게시글 페이징 조회 - 성공")
     @MethodSource
     void findCommentedPostPaging(int size, List<String> contentResult) {
         //given

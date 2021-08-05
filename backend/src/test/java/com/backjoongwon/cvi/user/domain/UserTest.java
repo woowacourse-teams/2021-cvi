@@ -49,8 +49,7 @@ class UserTest {
         assertThat(user.getAgeRange()).isEqualTo(updateUser.getAgeRange());
     }
 
-    @DisplayName("사용자 회원가입 - 실패 - 닉네임 빈 문자열")
-    @ParameterizedTest
+    @ParameterizedTest(name = "사용자 회원가입 - 실패 - 닉네임 빈 문자열")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "라 이언", " gump", "yon "})
     void signupFailureWhenEmptyNickname(String nickname) {

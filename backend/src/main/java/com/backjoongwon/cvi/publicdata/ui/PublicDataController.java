@@ -7,9 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -22,14 +20,14 @@ public class PublicDataController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/vaccinations")
     public List<VaccinationStatisticResponse> findVaccinationStatistics(@RequestParam(name = "targetDate", required = false, defaultValue = "#{T(java.time.LocalDateTime).now()}")
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
+                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
         return publicDataService.findVaccinationStatistics(targetDateTime);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/vaccinations")
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(@RequestParam(name = "targetDate", required = false, defaultValue = "#{T(java.time.LocalDateTime).now()}")
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
+                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime targetDateTime) {
         return publicDataService.saveVaccinationStatistics(targetDateTime);
     }
 }

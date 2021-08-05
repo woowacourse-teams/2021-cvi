@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
-import static com.backjoongwon.cvi.post.domain.QPost.*;
+import static com.backjoongwon.cvi.post.domain.QPost.post;
 
 @Getter
 public enum Sort {
