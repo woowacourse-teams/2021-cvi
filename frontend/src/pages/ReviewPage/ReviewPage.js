@@ -1,6 +1,20 @@
-import { useState, useEffect } from 'react';
-import { VACCINATION, PATH, RESPONSE_STATE, ALERT_MESSAGE } from '../../constants';
-import { Container, Title, ReviewList, FrameContent, ButtonWrapper } from './ReviewPage.styles';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  VACCINATION,
+  PATH,
+  RESPONSE_STATE,
+  ALERT_MESSAGE,
+  THEME_COLOR,
+  PAGING_SIZE,
+} from '../../constants';
+import {
+  Container,
+  Title,
+  ReviewList,
+  FrameContent,
+  ButtonWrapper,
+  ScrollLoadingContainer,
+} from './ReviewPage.styles';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -8,6 +22,8 @@ import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service
 import { findKey } from '../../utils';
 import { Button, Frame, Tabs } from '../../components/common';
 import { ReviewItem, ReviewWritingModal } from '../../components';
+import { useLoading } from '../../hooks';
+import { useInView } from 'react-intersection-observer';
 
 const ReviewPage = () => {
   const history = useHistory();
@@ -16,8 +32,19 @@ const ReviewPage = () => {
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
+  const [offset, setOffset] = useState(0);
+
+  const [ref, inView] = useInView();
+  const { showLoading, hideLoading, isLoading, Loading } = useLoading();
+  const {
+    showLoading: showScrollLoading,
+    hideLoading: hideScrollLoading,
+    isLoading: isScrollLoading,
+    Loading: ScrollLoading,
+  } = useLoading();
 
   const tabList = ['전체', ...Object.values(VACCINATION)];
+  const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
   const goReviewDetailPage = (id) => {
     history.push(`${PATH.REVIEW}/${id}`);
@@ -37,9 +64,9 @@ const ReviewPage = () => {
     }
   };
 
-  const getReviewList = async () => {
+  const getReviewList = useCallback(async () => {
     if (selectedTab === '전체') {
-      const response = await getAllReviewListAsync(accessToken);
+      const response = await getAllReviewListAsync(accessToken, offset);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getAllReviewListAsync');
@@ -47,10 +74,10 @@ const ReviewPage = () => {
         return;
       }
 
-      setReviewList(response.data);
+      setReviewList((prevState) => [...prevState, ...response.data]);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedTab);
-      const response = await getSelectedReviewListAsync(accessToken, vaccinationType);
+      const response = await getSelectedReviewListAsync(accessToken, vaccinationType, offset);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getSelectedReviewListAsync');
@@ -58,13 +85,30 @@ const ReviewPage = () => {
         return;
       }
 
-      setReviewList(response.data);
+      setReviewList((prevState) => [...prevState, ...response.data]);
     }
-  };
+
+    hideLoading();
+    hideScrollLoading();
+  }, [offset, selectedTab]);
 
   useEffect(() => {
     getReviewList();
+  }, [getReviewList]);
+
+  useEffect(() => {
+    showLoading();
+
+    setOffset(0);
+    setReviewList([]);
   }, [selectedTab]);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    setOffset((prevState) => prevState + PAGING_SIZE);
+    showScrollLoading();
+  }, [inView]);
 
   return (
     <>
@@ -79,22 +123,33 @@ const ReviewPage = () => {
           <FrameContent>
             <Tabs tabList={tabList} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
             <ReviewList>
-              {reviewList?.map((review) => (
-                <ReviewItem
-                  key={review.id}
-                  review={review}
-                  accessToken={accessToken}
-                  getReviewList={getReviewList}
-                  onClick={() => goReviewDetailPage(review.id)}
-                />
-              ))}
+              {isLoading ? (
+                <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
+              ) : (
+                reviewList?.map((review, index) => (
+                  <ReviewItem
+                    key={review.id}
+                    review={review}
+                    accessToken={accessToken}
+                    innerRef={isLastPost(index) ? ref : null}
+                    onClick={() => goReviewDetailPage(review.id)}
+                  />
+                ))
+              )}
             </ReviewList>
+            {isScrollLoading && (
+              <ScrollLoadingContainer>
+                <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
+              </ScrollLoadingContainer>
+            )}
           </FrameContent>
         </Frame>
       </Container>
       {isModalOpen && (
         <ReviewWritingModal
           getReviewList={getReviewList}
+          setOffset={setOffset}
+          setReviewList={setReviewList}
           onClickClose={() => setModalOpen(false)}
         />
       )}

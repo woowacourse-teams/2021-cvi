@@ -54,7 +54,7 @@ public class PostResponse {
                 .collect(Collectors.toList());
     }
 
-    public static List<PostResponse> of(List<Post> posts, User viewer) {
+    public static List<PostResponse> toList(List<Post> posts, User viewer) {
         return posts.stream()
                 .map(post -> PostResponse.of(post, viewer))
                 .collect(Collectors.toList());

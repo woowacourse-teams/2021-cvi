@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import { ALERT_MESSAGE, RESPONSE_STATE, SNACKBAR_MESSAGE, VACCINATION } from '../../constants';
 import { Container, TextArea, ButtonWrapper, buttonStyles } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
 import { postReviewAsync } from '../../service';
 import { findKey } from '../../utils';
 import { Button, Modal, Selection } from '../common';
+import { useSnackBar } from '../../hooks';
 
-const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
+const ReviewWritingModal = ({ getReviewList, setReviewList, setLastPostId, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
-  const { enqueueSnackbar } = useSnackbar();
 
   const [selectedVaccine, setSelectedVaccine] = useState('모더나');
   const [content, setContent] = useState('');
+
+  const { openSnackBar } = useSnackBar();
 
   const vaccinationList = Object.values(VACCINATION);
 
@@ -30,8 +31,10 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
     }
 
     onClickClose();
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
+    setReviewList([]);
+    setLastPostId(Number.MAX_SAFE_INTEGER);
     getReviewList();
   };
 
@@ -56,6 +59,8 @@ const ReviewWritingModal = ({ getReviewList, onClickClose }) => {
 
 ReviewWritingModal.propTypes = {
   getReviewList: PropTypes.func.isRequired,
+  setReviewList: PropTypes.func.isRequired,
+  setLastPostId: PropTypes.func.isRequired,
   onClickClose: PropTypes.func.isRequired,
 };
 

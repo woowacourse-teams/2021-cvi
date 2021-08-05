@@ -1,7 +1,7 @@
-import { BASE_URL } from './constants';
+import { BASE_URL, PAGING_SIZE } from './constants';
 
-const requestGetAllReviewList = (accessToken) =>
-  fetch(`${BASE_URL}/posts`, {
+const requestGetAllReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/posts/paging?offset=${offset}&size=${PAGING_SIZE}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -9,14 +9,17 @@ const requestGetAllReviewList = (accessToken) =>
     },
   });
 
-const requestGetSelectedReviewList = (accessToken, vaccinationType) =>
-  fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${accessToken}`,
+const requestGetSelectedReviewList = (accessToken, vaccinationType, offset) =>
+  fetch(
+    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&offset=${offset}&size=${PAGING_SIZE}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
+  );
 
 const requestGetReview = (accessToken, id) =>
   fetch(`${BASE_URL}/posts/${id}`, {
@@ -83,8 +86,9 @@ const requestPostOAuthLogin = (data) =>
     body: JSON.stringify(data),
   });
 
+// users -> users/me
 const requestPutAccount = (accessToken, data) =>
-  fetch(`${BASE_URL}/users`, {
+  fetch(`${BASE_URL}/users/me`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

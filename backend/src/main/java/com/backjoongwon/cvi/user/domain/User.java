@@ -31,12 +31,14 @@ public class User extends BaseEntity {
     private String profileUrl;
 
     @Builder
-    public User(Long id, String nickname, AgeRange ageRange, SocialProvider socialProvider,
-                String socialId, String profileUrl, LocalDateTime createdAt) {
-        super(id, createdAt);
+    public User(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String nickname,
+                AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
+        super(id, createdAt, lastModifiedAt);
         validateNickName(nickname);
         this.nickname = nickname;
+        validateNickName(nickname);
         this.ageRange = ageRange;
+        this.shotVerified = shotVerified;
         this.socialProvider = socialProvider;
         this.socialId = socialId;
         this.profileUrl = profileUrl;
@@ -51,10 +53,9 @@ public class User extends BaseEntity {
     public void update(User updateUser) {
         this.nickname = updateUser.nickname;
         this.ageRange = updateUser.ageRange;
+        if (updateUser.shotVerified) {
+            this.shotVerified = true;
+        }
         this.profileUrl = updateUser.profileUrl;
-    }
-
-    public void makeVerified() {
-        this.shotVerified = true;
     }
 }
