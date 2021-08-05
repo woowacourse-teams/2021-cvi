@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -18,7 +19,7 @@ public class AuthController {
 
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse authenticate(@RequestBody AuthRequest authRequest, HttpServletResponse httpServletResponse) {
+    public UserResponse authenticate(@RequestBody @Valid AuthRequest authRequest, HttpServletResponse httpServletResponse) {
         UserResponse userResponse = authService.authenticate(authRequest);
         httpServletResponse.setHeader("Authorization", userResponse.getAccessToken());
         return userResponse;

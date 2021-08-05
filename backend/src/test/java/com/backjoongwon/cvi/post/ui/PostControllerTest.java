@@ -389,6 +389,32 @@ class PostControllerTest extends ApiDocument {
         댓글_삭제_실패함(response);
     }
 
+    @DisplayName("PostRequest validation - 유효하지 않은 경우")
+    @Test
+    void validatePostRequest() throws Exception {
+        //given
+        PostRequest invalidRequest = new PostRequest("  ", VaccinationType.PFIZER);
+        //when
+        ResultActions response = 글_등록_요청(invalidRequest);
+        ResultActions response2 = 글_수정_요청(POST_ID, invalidRequest);
+        //then
+        response.andExpect(status().isBadRequest());
+        response2.andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("CommentRequest validation - 유효하지 않은 경우")
+    @Test
+    void validateCommentRequest() throws Exception {
+        //given
+        CommentRequest invalidRequest = new CommentRequest("  ");
+        //when
+        ResultActions response = 댓글_등록_요청(POST_ID, invalidRequest, ACCESS_TOKEN);
+        ResultActions response2 = 댓글_수정_요청(POST_ID, COMMENT_ID, invalidRequest, ACCESS_TOKEN);
+        //then
+        response.andExpect(status().isBadRequest());
+        response2.andExpect(status().isBadRequest());
+    }
+
     private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
         return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
                 .contentType(MediaType.APPLICATION_JSON)

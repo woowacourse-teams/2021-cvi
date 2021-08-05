@@ -82,7 +82,7 @@ class UserControllerTest extends ApiDocument {
                 .build();
 
         signinRequest = new UserRequest(NICKNAME, AGE_RANGE, false, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
-        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, null, null, PROFILE_URL);
+        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
 
@@ -384,6 +384,53 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
     }
 
+    @DisplayName("UserRequest validation - 유효하지 않은 경우 - 닉네임")
+    @Test
+    void validateUserRequestWhenInvalidNickName() throws Exception {
+        //given
+        UserRequest invalidRequest1 = new UserRequest(" ", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL);
+        UserRequest invalidRequest2 = new UserRequest("123456789012345678901", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL);
+        UserRequest invalidRequest3 = new UserRequest("!@#$%^", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL);
+        UserRequest invalidRequest4 = new UserRequest("👏", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL);
+        //when
+        ResultActions createResponse1 = 사용자_회원가입_요청(invalidRequest1);
+        ResultActions createResponse2 = 사용자_회원가입_요청(invalidRequest2);
+        ResultActions createResponse3 = 사용자_회원가입_요청(invalidRequest3);
+        ResultActions createResponse4 = 사용자_회원가입_요청(invalidRequest4);
+
+        ResultActions updateResponse1 = 사용자_업데이트_요청(invalidRequest1);
+        ResultActions updateResponse2 = 사용자_업데이트_요청(invalidRequest2);
+        ResultActions updateResponse3 = 사용자_업데이트_요청(invalidRequest3);
+        ResultActions updateResponse4 = 사용자_업데이트_요청(invalidRequest4);
+
+        //then
+        유효성_검증_실패(createResponse1, createResponse2, createResponse3, createResponse4,
+                updateResponse1, updateResponse2, updateResponse3, updateResponse4);
+    }
+
+    @DisplayName("UserRequest validation - 유효하지 않은 경우 - 그 외")
+    @Test
+    void validateUserRequest() throws Exception {
+        //given
+        UserRequest invalidRequest1 = new UserRequest(NICKNAME, null, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL);
+        UserRequest invalidRequest2 = new UserRequest(NICKNAME, AgeRange.TEENS, false, null, SOCIAL_ID, PROFILE_URL);
+        UserRequest invalidRequest3 = new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, "  ", PROFILE_URL);
+        UserRequest invalidRequest4 = new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, " ");
+        //when
+        ResultActions createResponse1 = 사용자_회원가입_요청(invalidRequest1);
+        ResultActions createResponse2 = 사용자_회원가입_요청(invalidRequest2);
+        ResultActions createResponse3 = 사용자_회원가입_요청(invalidRequest3);
+        ResultActions createResponse4 = 사용자_회원가입_요청(invalidRequest4);
+
+        ResultActions updateResponse1 = 사용자_업데이트_요청(invalidRequest1);
+        ResultActions updateResponse2 = 사용자_업데이트_요청(invalidRequest2);
+        ResultActions updateResponse3 = 사용자_업데이트_요청(invalidRequest3);
+        ResultActions updateResponse4 = 사용자_업데이트_요청(invalidRequest4);
+        //then
+        유효성_검증_실패(createResponse1, createResponse2, createResponse3, createResponse4,
+                updateResponse1, updateResponse2, updateResponse3, updateResponse4);
+    }
+
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -521,5 +568,11 @@ class UserControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase() + "-failure"));
+    }
+
+    private void 유효성_검증_실패(ResultActions... responses) throws Exception {
+        for (ResultActions response : responses) {
+            response.andExpect(status().isBadRequest());
+        }
     }
 }

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -87,6 +86,20 @@ public class AuthControllerTest extends ApiDocument {
         사용자_OAuth_실패함(response);
     }
 
+    @DisplayName("AuthRequest validation - 유효하지 않은 경우")
+    @Test
+    void validateAuthRequest() throws Exception {
+        //given
+        AuthRequest invalidRequest1 = new AuthRequest(null, "code", "state");
+        AuthRequest invalidRequest2 = new AuthRequest(SocialProvider.NAVER, "", "state");
+        //when
+        ResultActions response1 = 사용자_OAuth_요청(invalidRequest1);
+        ResultActions response2 = 사용자_OAuth_요청(invalidRequest2);
+        //then
+        response1.andExpect(status().isBadRequest());
+        response2.andExpect(status().isBadRequest());
+    }
+
     private ResultActions 사용자_OAuth_요청(AuthRequest authRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/users/auth")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,5 +118,11 @@ public class AuthControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("user-auth-failure"));
+    }
+
+    private ResultActions 잘못된_OAuth_요청(String request) throws Exception {
+        return mockMvc.perform(post("/api/v1/users/auth")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
