@@ -235,8 +235,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsNone() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         Filter filter = Filter.NONE;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 내가_쓴_글_조회_요청();
         //then
@@ -262,8 +262,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsLikes() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         Filter filter = Filter.LIKES;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
@@ -289,8 +289,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsComments() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         Filter filter = Filter.COMMENTS;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
@@ -307,8 +307,8 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
                 new PostResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
         ));
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.NONE;
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 4);
         //then
@@ -319,8 +319,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsNonePaging() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.NONE;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 4);
         //then
@@ -336,8 +336,8 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
                 new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
         ));
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.LIKES;
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
         //then
@@ -348,8 +348,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsLikesPaging() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.LIKES;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
         //then
@@ -364,8 +364,8 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         ));
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.COMMENTS;
+        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 2);
         //then
@@ -376,8 +376,8 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsFailureWhenFilterIsCommentsPaging() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         Filter filter = Filter.COMMENTS;
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Long.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
         //then

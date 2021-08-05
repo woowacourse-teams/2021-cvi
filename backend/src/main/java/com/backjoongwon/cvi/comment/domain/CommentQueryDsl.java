@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CommentQueryDsl {
 
-    List<Comment> findByUser(Long id);
+    List<Comment> findByUserId(Long userId);
 
-    List<Comment> findByUser(Long id, Long lastCommentId, int size);
+    List<Comment> findByUserId(Long userId, Long lastCommentId, int size);
 }

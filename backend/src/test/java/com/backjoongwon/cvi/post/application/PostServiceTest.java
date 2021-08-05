@@ -389,7 +389,7 @@ class PostServiceTest {
                 Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 2")));
     }
 
-        @DisplayName("내가 댓글 단 게시글 페이징 조회 - 성공")
+    @DisplayName("내가 댓글 단 게시글 페이징 조회 - 성공")
     @ParameterizedTest
     @MethodSource
     void findCommentedPostPaging(int size, List<String> contentResult) {

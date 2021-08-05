@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.comment.domain;
 
-import com.backjoongwon.cvi.user.domain.QUser;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -8,6 +7,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.backjoongwon.cvi.comment.domain.QComment.comment;
+import static com.backjoongwon.cvi.user.domain.QUser.user;
 
 public class CommentRepositoryImpl implements CommentQueryDsl {
 
@@ -18,19 +18,19 @@ public class CommentRepositoryImpl implements CommentQueryDsl {
     }
 
     @Override
-    public List<Comment> findByUser(Long id) {
+    public List<Comment> findByUserId(Long userId) {
         return queryFactory.selectFrom(comment)
-                .leftJoin(comment.user, QUser.user).fetchJoin()
-                .where(comment.user.id.eq(id))
+                .leftJoin(comment.user, user).fetchJoin()
+                .where(comment.user.id.eq(userId))
                 .orderBy(comment.createdAt.desc())
                 .fetch();
     }
 
     @Override
-    public List<Comment> findByUser(Long id, Long lastCommentId, int size) {
+    public List<Comment> findByUserId(Long userId, Long lastCommentId, int size) {
         return queryFactory.selectFrom(comment)
-                .leftJoin(comment.user, QUser.user).fetchJoin()
-                .where(comment.user.id.eq(id), comment.id.lt(lastCommentId))
+                .leftJoin(comment.user, user).fetchJoin()
+                .where(comment.user.id.eq(userId), comment.id.lt(lastCommentId))
                 .limit(size)
                 .orderBy(comment.createdAt.desc())
                 .fetch();

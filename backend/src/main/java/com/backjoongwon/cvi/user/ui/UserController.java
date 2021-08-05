@@ -51,6 +51,7 @@ public class UserController {
                                                   @RequestParam int size,
                                                   @AuthenticationPrincipal Optional<User> user) {
         return postService.findByUserAndFilter(filter, lastPostId, size, user);
+    }
 
     @PutMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
