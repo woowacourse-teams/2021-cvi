@@ -1,9 +1,9 @@
-import { useSnackbar } from 'notistack';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Selection } from '../../components/common';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import { AGE_RANGE, ALERT_MESSAGE, RESPONSE_STATE, SNACKBAR_MESSAGE } from '../../constants';
+import { useSnackBar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { putAccountAsync } from '../../service';
 import {
@@ -22,9 +22,11 @@ const MyPageAccount = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const { enqueueSnackbar } = useSnackbar();
+
   const [nickname, setNickname] = useState('');
   const [ageRange, setAgeRange] = useState('');
+
+  const { openSnackBar } = useSnackBar();
 
   const editAccount = async (event) => {
     event.preventDefault();
@@ -44,7 +46,7 @@ const MyPageAccount = () => {
 
     dispatch(getMyInfoAsync(accessToken));
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
   };
 
   const isDisableButton = nickname === user.nickname && ageRange === user.ageRange?.meaning;

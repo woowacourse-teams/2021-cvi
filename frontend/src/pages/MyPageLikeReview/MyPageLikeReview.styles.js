@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
@@ -9,7 +10,6 @@ const Container = styled.div`
   flex-direction: column;
   height: inherit;
   overflow-y: auto;
-  align-items: center;
 
   @media screen and (max-width: 1024px) {
     padding: 3rem 0 0 0;
@@ -27,12 +27,15 @@ const Title = styled.div`
   }
 `;
 
-const MyReviewList = styled.div`
+const MyLikeReviewList = styled.div`
+  width: 100%;
   & > *:not(:last-child) {
     border-bottom: 0.15rem solid ${PALETTE.NAVY100};
   }
 `;
 
-const MyReview = styled.div``;
+const frameStyle = css`
+  width: 100%;
+`;
 
-export { Container, Title, MyReviewList, MyReview };
+export { Container, Title, MyLikeReviewList, frameStyle };

@@ -19,7 +19,7 @@ import { Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 
-const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
+const ReviewItem = ({ review, accessToken, innerRef, onClick }) => {
   const {
     id,
     writer,
@@ -31,12 +31,17 @@ const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
     likeCount,
     comments,
   } = review;
-  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
-  const { onClickLike, ButtonLike } = useLike(accessToken, hasLiked, id, getReviewList);
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount } = useLike(
+    accessToken,
+    hasLiked,
+    likeCount,
+    id,
+  );
 
   return (
-    <Container onClick={onClick}>
+    <Container ref={innerRef} onClick={onClick}>
       <TopContainer>
         <Label
           backgroundColor={VACCINATION_COLOR[vaccinationType]}
@@ -58,7 +63,11 @@ const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
             <ViewCount>{viewCount}</ViewCount>
           </IconContainer>
           <IconContainer>
-            <ButtonLike hasLiked={hasLiked} likeCount={likeCount} onClickLike={onClickLike} />
+            <ButtonLike
+              hasLiked={updatedHasLiked}
+              likeCount={updatedLikeCount}
+              onClickLike={onClickLike}
+            />
           </IconContainer>
           <IconContainer>
             <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
@@ -84,12 +93,12 @@ ReviewItem.propTypes = {
     comments: PropTypes.array.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
-  getReviewList: PropTypes.func,
+  innerRef: PropTypes.node,
   onClick: PropTypes.func,
 };
 
 ReviewItem.defaultProps = {
-  getReviewList: () => {},
+  innerRef: null,
   onClick: () => {},
 };
 export default ReviewItem;

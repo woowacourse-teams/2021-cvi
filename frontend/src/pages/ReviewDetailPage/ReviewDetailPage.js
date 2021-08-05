@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 import {
   Container,
   FrameContent,
@@ -17,11 +16,8 @@ import {
   Content,
   ViewCount,
   buttonStyles,
-  Comment,
   IconContainer,
   BottomContainer,
-  CommentCount,
-  CommentFormContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
 import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
@@ -45,8 +41,8 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { CommentForm, CommentItem } from '../../components';
-import { useLike, useLoading } from '../../hooks';
+import { Comment } from '../../components';
+import { useLike, useSnackBar, useLoading } from '../../hooks';
 
 // TODO: Comment 컴포넌트 분리
 const ReviewDetailPage = () => {
@@ -54,7 +50,6 @@ const ReviewDetailPage = () => {
   const { id } = useParams();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const { enqueueSnackbar } = useSnackbar();
 
   const [review, setReview] = useState({});
 
@@ -73,7 +68,13 @@ const ReviewDetailPage = () => {
     hideLoading();
   };
 
-  const { onClickLike, ButtonLike } = useLike(accessToken, review.hasLiked, id, getReview);
+  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount } = useLike(
+    accessToken,
+    review?.hasLiked,
+    review?.likeCount,
+    id,
+  );
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -97,14 +98,14 @@ const ReviewDetailPage = () => {
       return;
     }
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
     goReviewPage();
   };
 
   useEffect(() => {
     showLoading();
     getReview();
-  }, []);
+  }, [accessToken]);
 
   return (
     <Container>
@@ -182,8 +183,8 @@ const ReviewDetailPage = () => {
                     iconHeight="24"
                     color={FONT_COLOR.BLACK}
                     likeCountSize="1.6rem"
-                    hasLiked={review?.hasLiked}
-                    likeCount={review?.likeCount}
+                    hasLiked={updatedHasLiked}
+                    likeCount={updatedLikeCount}
                     onClickLike={onClickLike}
                   />
                 </IconContainer>
@@ -192,28 +193,13 @@ const ReviewDetailPage = () => {
                   <div>{review?.comments?.length}</div>
                 </IconContainer>
               </BottomContainer>
-              <Comment>
-                <CommentCount>댓글 {review?.comments?.length}</CommentCount>
-                <CommentFormContainer>
-                  <CommentForm
-                    accessToken={accessToken}
-                    reviewId={id}
-                    nickname={user.nickname}
-                    socialProfileUrl={user.socialProfileUrl}
-                    getReview={getReview}
-                  />
-                </CommentFormContainer>
-                {review?.comments?.map((comment) => (
-                  <CommentItem
-                    key={comment.id}
-                    accessToken={accessToken}
-                    userId={user.id}
-                    reviewId={id}
-                    comment={comment}
-                    getReview={getReview}
-                  />
-                ))}
-              </Comment>
+              <Comment
+                accessToken={accessToken}
+                user={user}
+                comments={review?.comments}
+                reviewId={id}
+                getReview={getReview}
+              />
             </>
           )}
         </FrameContent>
