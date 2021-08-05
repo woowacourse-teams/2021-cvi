@@ -1,8 +1,5 @@
 package com.backjoongwon.cvi.post.domain;
 
-import com.backjoongwon.cvi.comment.domain.QComment;
-import com.backjoongwon.cvi.like.domain.QLike;
-import com.backjoongwon.cvi.user.domain.QUser;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
@@ -13,7 +10,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.backjoongwon.cvi.comment.domain.QComment.comment;
+import static com.backjoongwon.cvi.like.domain.QLike.like;
 import static com.backjoongwon.cvi.post.domain.QPost.post;
+import static com.backjoongwon.cvi.user.domain.QUser.user;
 
 public class PostRepositoryImpl implements PostQueryDsl {
 
@@ -26,7 +26,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     @Override
     public List<Post> findByVaccineType(VaccinationType vaccinationType) {
         return queryFactory.selectFrom(post)
-                .leftJoin(post.user, QUser.user).fetchJoin()
+                .leftJoin(post.user, user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType))
                 .orderBy(post.createdAt.desc())
                 .fetch();
@@ -35,7 +35,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     @Override
     public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, OrderSpecifier orderSpecifier) {
         return queryFactory.selectFrom(post)
-                .leftJoin(post.user, QUser.user).fetchJoin()
+                .leftJoin(post.user, user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType), post.id.lt(lastPostId))
                 .limit(size)
                 .orderBy(orderSpecifier, post.createdAt.desc())
@@ -50,10 +50,10 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByUser(Long id) {
+    public List<Post> findByUserId(Long userId) {
         return queryFactory.selectFrom(post)
-                .leftJoin(post.user, QUser.user).fetchJoin()
-                .where(post.user.id.eq(id))
+                .leftJoin(post.user, user).fetchJoin()
+                .where(post.user.id.eq(userId))
                 .orderBy(post.createdAt.desc())
                 .fetch();
     }
@@ -61,7 +61,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     @Override
     public Optional<Post> findWithLikesById(Long id) {
         Post post = queryFactory.selectFrom(QPost.post)
-                .leftJoin(QPost.post.likes.likes, QLike.like).fetchJoin()
+                .leftJoin(QPost.post.likes.likes, like).fetchJoin()
                 .where(QPost.post.id.eq(id))
                 .orderBy(QPost.post.createdAt.desc())
                 .fetchOne();
@@ -72,11 +72,21 @@ public class PostRepositoryImpl implements PostQueryDsl {
     @Override
     public Optional<Post> findWithCommentsById(Long id) {
         Post post = queryFactory.selectFrom(QPost.post)
-                .leftJoin(QPost.post.comments.comments, QComment.comment).fetchJoin()
+                .leftJoin(QPost.post.comments.comments, comment).fetchJoin()
                 .where(QPost.post.id.eq(id))
                 .orderBy(QPost.post.createdAt.desc())
                 .fetchOne();
 
         return Optional.ofNullable(post);
+    }
+
+    @Override
+    public List<Post> findByUserId(Long userId, Long lastPostId, int size) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, user).fetchJoin()
+                .where(post.user.id.eq(userId), post.id.lt(lastPostId))
+                .limit(size)
+                .orderBy(post.createdAt.desc())
+                .fetch();
     }
 }

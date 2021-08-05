@@ -249,9 +249,9 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineTypePaging() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(39L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(38L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any(), any());
         //when

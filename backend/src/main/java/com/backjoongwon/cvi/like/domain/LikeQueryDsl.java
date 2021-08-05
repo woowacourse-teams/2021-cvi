@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface LikeQueryDsl {
 
-    List<Like> findByUser(Long id);
+    List<Like> findByUserId(Long userId);
+
+    List<Like> findByUserId(Long userId, Long lastLikeId, int size);
 }
