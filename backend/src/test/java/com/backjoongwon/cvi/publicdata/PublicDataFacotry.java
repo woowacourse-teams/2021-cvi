@@ -16,7 +16,7 @@ public class PublicDataFacotry {
             "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
     public static VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
+        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),
@@ -58,7 +58,7 @@ public class PublicDataFacotry {
     }
 
     public static List<VaccinationStatisticResponse> toVaccinationStatisticResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
+        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
         return Arrays.asList(
                 new VaccinationStatisticResponse(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557, BigDecimal.valueOf(39.2), BigDecimal.valueOf(14.3)),

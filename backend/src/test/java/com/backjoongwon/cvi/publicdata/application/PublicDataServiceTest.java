@@ -1,7 +1,7 @@
 package com.backjoongwon.cvi.publicdata.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
-import com.backjoongwon.cvi.parser.VacinationParser;
+import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
@@ -47,12 +47,12 @@ class PublicDataServiceTest {
 
     @Autowired
     private PublicDataService publicDataService;
-    private VacinationParser vacinationParser;
+    private VaccinationParser vaccinationParser;
 
     @BeforeEach
     void init() {
-        vacinationParser = mock(VacinationParser.class);
-        publicDataService = new PublicDataService(vacinationParser, vaccinationStatisticRepository, publicDataProperties);
+        vaccinationParser = mock(VaccinationParser.class);
+        publicDataService = new PublicDataService(vaccinationParser, vaccinationStatisticRepository, publicDataProperties);
     }
 
     @AfterEach
@@ -76,10 +76,10 @@ class PublicDataServiceTest {
         //when
         System.out.println("LocalDateTime.now() = " + LocalDateTime.now());
         백신_접종률_저장되어_있음(targetDateTime);
-        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(DateConverter.withZeroTime(targetDateTime));
+        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
         //then
         assertThat(publicData).extracting("baseDate")
-                .contains(DateConverter.withZeroTime(targetDateTime));
+                .contains(DateConverter.convertTimeToZero(targetDateTime));
     }
 
     @DisplayName("백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
@@ -109,7 +109,7 @@ class PublicDataServiceTest {
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
-                .contains(DateConverter.withZeroTime(targetDateTime));
+                .contains(DateConverter.convertTimeToZero(targetDateTime));
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getSido)
                 .containsAll(REGIONS);
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getFirstCnt)
@@ -137,7 +137,7 @@ class PublicDataServiceTest {
         //then
         assertThat(vaccinationStatistics).isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
-                .contains(DateConverter.withZeroTime(targetDateTime.minusDays(1)));
+                .contains(DateConverter.convertTimeToZero(targetDateTime.minusDays(1)));
     }
 
     @DisplayName("백신 정종률 데이터 조회 - 성공 - 전일 오전 10시 전, 전일 데이터 요청일 시 해당 일 데이터 요청")
@@ -151,12 +151,12 @@ class PublicDataServiceTest {
         //then
         assertThat(vaccinationStatistics).isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
-                .contains(DateConverter.withZeroTime(targetDateTime));
+                .contains(DateConverter.convertTimeToZero(targetDateTime));
     }
 
     private void 백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
         willReturn(toVaccineParserResponse(targetDateTime))
-                .given(vacinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
+                .given(vaccinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
         publicDataService.saveVaccinationStatistics(targetDateTime);
     }
 }

@@ -19,7 +19,7 @@ class DateConverterTest {
         //given
         LocalDateTime now = LocalDateTime.now();
         //when
-        String actual = DateConverter.withZeroTime(now);
+        String actual = DateConverter.convertTimeToZero(now);
         //then
         assertThat(actual).isEqualTo(LocalDate.now() + ZERO_TIME);
     }

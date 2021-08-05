@@ -1,7 +1,7 @@
 package com.backjoongwon.cvi.config;
 
 import com.backjoongwon.cvi.parser.Parser;
-import com.backjoongwon.cvi.parser.VacinationParser;
+import com.backjoongwon.cvi.parser.VaccinationParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class VaccinationConfig {
 
     @Bean
-    public VacinationParser vaccineParser() {
-        return new VacinationParser(new Parser());
+    public VaccinationParser vaccineParser() {
+        return new VaccinationParser(new Parser());
     }
 }

@@ -20,14 +20,17 @@ public class ParameterStringBuilder {
                 result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
                 result.append("&");
             }
-
-            String resultString = result.toString();
-            return resultString.length() > 0
-                    ? resultString.substring(0, resultString.length() - 1)
-                    : resultString;
+            return modifyResult(result.toString());
         } catch (UnsupportedEncodingException e) {
             LOG.info("지원하지 않는 인코딩 형식입니다.");
             throw new IllegalStateException("지원하지 않는 인코딩 형식입니다.");
         }
+    }
+
+    private static String modifyResult(String resultString) {
+        if (resultString.length() > 0) {
+            return resultString.substring(0, resultString.length() - 1);
+        }
+        return resultString;
     }
 }

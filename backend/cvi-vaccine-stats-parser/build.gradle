@@ -4,6 +4,7 @@ plugins {
 
 group 'com.backjoongwon'
 version '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '6.8.3'
