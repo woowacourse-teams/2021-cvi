@@ -253,7 +253,7 @@ class PostControllerTest extends ApiDocument {
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any(), any());
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any(), anyInt(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
         //then
@@ -265,7 +265,7 @@ class PostControllerTest extends ApiDocument {
     void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
         //given
         List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any(), any());
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyLong(), anyInt(), any(), anyInt(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0L, 3);
         //then

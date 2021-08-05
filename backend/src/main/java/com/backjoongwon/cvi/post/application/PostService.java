@@ -59,8 +59,8 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Sort sort, Optional<User> optionalUser) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size, Sort.toOrderSpecifier(sort));
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Sort sort, int hours, Optional<User> optionalUser) {
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size, Sort.toOrderSpecifier(sort), hours);
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
