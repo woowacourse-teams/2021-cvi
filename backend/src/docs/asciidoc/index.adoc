@@ -298,11 +298,13 @@ include::{snippets}/post-findByVaccinationType-when-empty/http-response.adoc[]
 |===
 |Paging
 |Param에 아래와 같은 조건을 추가 할 수 있다.
-|예시) lastPostId=55&size=10
-|불러오고싶은 가장 게시글 ID 55번으로부터 10개
-|클라이언트 쪽에서 처음 페이징 요청시 Number.MAX_SAFE_INTEGER 를 실어 보내준다.
-|lastPostId와 size를 적지 않고 보낼시 아래의 값으로 요청을 합니다.
-|기본값) lastPostId=Long.MAX_VALUE, size=6
+|예시) offset=0&size=6
+|지금까지 불러온 게시글은 0개이다, 앞으로 6개의 게시글을 불러온다.
+|클라이언트 쪽에서 처음 페이징 요청시 offset에 0을 실어 보내준다.
+|위와 같은 예시에서는 다음 요청시에 offset=6&size=6을 보내주면 된다.
+|그다음 요청시에는 offset=12&size=6을 보내주면 된다.
+|offset 또는 size를 적지 않고 보낼시 아래의 값으로 요청을 합니다.
+|기본값) offset=0, size=6
 |===
 ==== 정렬
 [cols=1*]
@@ -352,10 +354,10 @@ include::{snippets}/post-findByVaccinationType-when-empty/http-response.adoc[]
 ==== 모두 다 함께 사용 예시
 |===
 |All Combined
-|/api/v1/posts/paging?lastPostId=55&size=10&sort=CREATED_AT_ASC&fromHoursBefore=24
+|/api/v1/posts/paging?offset=6&size=6&sort=CREATED_AT_ASC&fromHoursBefore=24
 |(필터) 24시간 내 생성된 게시글
 |(정렬) 생성시간 기준 오름차순
-|(페이징) 55번 Id를 가진 게시글 중 위의 조건에 부합하는 게시글을 불러온다.
+|(페이징) 이전에 불러온 6개를 제외한 다음 6개의 글을 불러온다.
 |===
 
 === 게시글 타입별 페이징 조회

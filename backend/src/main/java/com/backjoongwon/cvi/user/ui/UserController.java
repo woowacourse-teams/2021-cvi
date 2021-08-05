@@ -47,10 +47,10 @@ public class UserController {
     @GetMapping("/me/posts/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findMyPostsByPaging(@RequestParam(defaultValue = "NONE") Filter filter,
-                                                  @RequestParam Long lastPostId,
-                                                  @RequestParam int size,
+                                                  @RequestParam(defaultValue = "0") int offset,
+                                                  @RequestParam(defaultValue = "6") int size,
                                                   @AuthenticationPrincipal Optional<User> user) {
-        return postService.findByUserAndFilter(filter, lastPostId, size, user);
+        return postService.findByUserAndFilter(filter, offset, size, user);
     }
 
     @PutMapping("/me")

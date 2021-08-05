@@ -59,8 +59,8 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Sort sort, int hours, Optional<User> optionalUser) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size, Sort.toOrderSpecifier(sort), hours);
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, int offset, int size, Sort sort, int hours, Optional<User> optionalUser) {
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, offset, size, Sort.toOrderSpecifier(sort), hours);
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
@@ -196,21 +196,21 @@ public class PostService {
         return PostResponse.toList(posts, user);
     }
 
-    public List<PostResponse> findByUserAndFilter(Filter filter, Long lastPostId, int size, Optional<User> optionalUser) {
+    public List<PostResponse> findByUserAndFilter(Filter filter, int offset, int size, Optional<User> optionalUser) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
         if (filter == Filter.LIKES) {
-            return createResponsesFilteredByLikes(user, lastPostId, size);
+            return createResponsesFilteredByLikes(user, offset, size);
         }
         if (filter == Filter.COMMENTS) {
-            return createResponsesFilteredByComments(user, lastPostId, size);
+            return createResponsesFilteredByComments(user, offset, size);
         }
-        List<Post> posts = postRepository.findByUserId(user.getId(), lastPostId, size);
+        List<Post> posts = postRepository.findByUserId(user.getId(), offset, size);
         return PostResponse.toList(posts, user);
     }
 
-    private List<PostResponse> createResponsesFilteredByComments(User user, Long lastPostId, int size) {
-        List<Comment> comments = commentRepository.findByUserId(user.getId(), lastPostId, size);
+    private List<PostResponse> createResponsesFilteredByComments(User user, int offset, int size) {
+        List<Comment> comments = commentRepository.findByUserId(user.getId(), offset, size);
         List<Post> posts = comments.stream()
                 .map(Comment::getPost)
                 .distinct()
@@ -218,8 +218,8 @@ public class PostService {
         return PostResponse.toList(posts, user);
     }
 
-    private List<PostResponse> createResponsesFilteredByLikes(User user, Long lastPostId, int size) {
-        List<Like> likes = likeRepository.findByUserId(user.getId(), lastPostId, size);
+    private List<PostResponse> createResponsesFilteredByLikes(User user, int offset, int size) {
+        List<Like> likes = likeRepository.findByUserId(user.getId(), offset, size);
         List<Post> posts = likes.stream()
                 .map(Like::getPost)
                 .collect(Collectors.toList());

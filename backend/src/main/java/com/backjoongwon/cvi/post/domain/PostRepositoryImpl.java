@@ -34,17 +34,14 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, OrderSpecifier orderSpecifier, int hours) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, int offset, int size, OrderSpecifier orderSpecifier, int hours) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()
-                .where(vaccinationTypeEq(vaccinationType), lessThan(lastPostId), fromHoursBefore(hours))
-                .limit(size)
+                .where(vaccinationTypeEq(vaccinationType), fromHoursBefore(hours))
                 .orderBy(orderSpecifier, post.createdAt.desc())
+                .offset(offset)
+                .limit(size)
                 .fetch();
-    }
-
-    private BooleanExpression lessThan(Long lastPostId) {
-        return post.id.lt(lastPostId);
     }
 
     private BooleanExpression fromHoursBefore(int hours) {
@@ -90,12 +87,13 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByUserId(Long userId, Long lastPostId, int size) {
+    public List<Post> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()
-                .where(post.user.id.eq(userId), lessThan(lastPostId))
-                .limit(size)
+                .where(post.user.id.eq(userId))
                 .orderBy(post.createdAt.desc())
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 }

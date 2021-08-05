@@ -27,12 +27,13 @@ public class CommentRepositoryImpl implements CommentQueryDsl {
     }
 
     @Override
-    public List<Comment> findByUserId(Long userId, Long lastCommentId, int size) {
+    public List<Comment> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(comment)
                 .leftJoin(comment.user, user).fetchJoin()
-                .where(comment.user.id.eq(userId), comment.id.lt(lastCommentId))
-                .limit(size)
+                .where(comment.user.id.eq(userId))
                 .orderBy(comment.createdAt.desc())
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 }

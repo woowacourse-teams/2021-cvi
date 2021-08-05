@@ -9,7 +9,7 @@ public interface PostQueryDsl {
 
     List<Post> findByVaccineType(VaccinationType vaccinationType);
 
-    List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, OrderSpecifier orderSpecifier, int hours);
+    List<Post> findByVaccineType(VaccinationType vaccinationType, int offset, int size, OrderSpecifier orderSpecifier, int hours);
 
     List<Post> findByUserId(Long userId);
 
@@ -17,5 +17,5 @@ public interface PostQueryDsl {
 
     Optional<Post> findWithCommentsById(Long id);
 
-    List<Post> findByUserId(Long userId, Long lastPostId, int size);
+    List<Post> findByUserId(Long userId, int offset, int size);
 }
