@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.asciidoctor.convert' version '1.5.8'
+    id 'org.sonarqube' version '3.0'
 }
 
 group = 'com.backjoongwon'
@@ -70,5 +71,20 @@ bootJar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}/html5") {
         into 'static/docs'
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://cvi-korea-sonarqube.kro.kr:8080/'
+        property 'sonar.login', '815df8ed0a752954057df6c6eb3e9cd2316c442d'
+        property 'sonar.sources', 'src'
+        property 'sonar.language', 'java'
+        property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        // property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.java.binaries', '${buildDir}/classes'
+        property 'sonar.test.inclusions', '**/*Test.java'
+        property 'sonar.exclusions', '**/test/**, **/Q*.java, **/*Doc*.java, **/resources/**'
     }
 }
