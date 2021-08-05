@@ -11,13 +11,13 @@ const PreviewList = () => {
   const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
-  const [lastPostId, setLastPostId] = useState(Number.MAX_SAFE_INTEGER);
+  const [offset, setOffset] = useState(0);
 
   const {
     response: reviewList,
     error: reviewError,
     loading,
-  } = useFetch([], () => requestGetAllReviewList(accessToken, lastPostId));
+  } = useFetch([], () => requestGetAllReviewList(accessToken, offset));
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const goReviewDetailPage = (id) => {
