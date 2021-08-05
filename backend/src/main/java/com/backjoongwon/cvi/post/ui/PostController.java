@@ -50,7 +50,7 @@ public class PostController {
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
                                                          @RequestParam Long lastPostId, @RequestParam int size,
                                                          @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
-                                                         @RequestParam(defaultValue = "2147483647") int fromHoursBefore,
+                                                         @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
                                                          @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, lastPostId, size, sort, fromHoursBefore, user);
     }
