@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 const frameStyle = css`
   display: flex;
@@ -6,6 +7,14 @@ const frameStyle = css`
   align-items: center;
   padding: 2rem;
   height: 50rem;
+  max-width: 100%;
+  overflow-x: hidden;
 `;
 
-export { frameStyle };
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+`;
+
+export { frameStyle, Content };

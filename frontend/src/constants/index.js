@@ -16,6 +16,7 @@ import { LOCAL_STORAGE_KEY } from './localStorage';
 import { TO_DATE_TYPE } from './toDateType';
 import { RESPONSE_STATE, PAGING_SIZE } from './service';
 import REGEX from './regex';
+import { REGION_NAME } from './region';
 
 export {
   PALETTE,
@@ -41,4 +42,5 @@ export {
   RESPONSE_STATE,
   PAGING_SIZE,
   REGEX,
+  REGION_NAME,
 };
