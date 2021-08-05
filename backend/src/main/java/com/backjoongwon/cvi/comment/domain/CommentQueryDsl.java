@@ -6,5 +6,5 @@ public interface CommentQueryDsl {
 
     List<Comment> findByUserId(Long userId);
 
-    List<Comment> findByUserId(Long userId, Long lastCommentId, int size);
+    List<Comment> findByUserId(Long userId, int offset, int size);
 }

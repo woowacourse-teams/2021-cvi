@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.post.ui;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -47,8 +48,12 @@ public class PostController {
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-                                                         @RequestParam Long lastPostId, @RequestParam int size, @AuthenticationPrincipal Optional<User> user) {
-        return postService.findByVaccineType(vaccinationType, lastPostId, size, user);
+                                                         @RequestParam(defaultValue =  "0") int offset,
+                                                         @RequestParam(defaultValue =  "6") int size,
+                                                         @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
+                                                         @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
+                                                         @AuthenticationPrincipal Optional<User> user) {
+        return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
     }
 
     @PutMapping("/{id}")

@@ -9,10 +9,7 @@ import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
-import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.PostRepository;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.domain.*;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
@@ -324,7 +321,7 @@ class PostServiceTest {
     void findByVaccineTypePagingAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, Long.MAX_VALUE, 3, optionalUser1);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUser1);
         //then
         assertThat(postResponses).size().isEqualTo(3);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
@@ -337,7 +334,7 @@ class PostServiceTest {
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, Long.MAX_VALUE, size, optionalUser1);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser1);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -356,37 +353,37 @@ class PostServiceTest {
     @DisplayName("내가 작성한 글 페이징 첫 페이지 조회 - 성공")
     @ParameterizedTest
     @MethodSource
-    void findMyPostsPagingFirstPage(Long lastPostId, int size, List<String> expectedContents) {
+    void findMyPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
         Filter filter = Filter.NONE;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, lastPostId, size, optionalUser1);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
     }
 
     static Stream<Arguments> findMyPostsPagingFirstPage() {
         return Stream.of(
-                Arguments.of(Long.MAX_VALUE, 4, Arrays.asList("Test 4", "Test 3", "Test 2", "Test 1")),
-                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 3")));
+                Arguments.of(0, 4, Arrays.asList("Test 4", "Test 3", "Test 2", "Test 1")),
+                Arguments.of(0, 2, Arrays.asList("Test 4", "Test 3")));
     }
 
     @DisplayName("내가 좋아요 한 글 페이징 첫 페이지 조회 - 성공")
     @ParameterizedTest
     @MethodSource
-    void findLikedPostsPagingFirstPage(Long lastPostId, int size, List<String> expectedContents) {
+    void findLikedPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
         Filter filter = Filter.LIKES;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, lastPostId, size, optionalUser1);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
     }
 
     static Stream<Arguments> findLikedPostsPagingFirstPage() {
         return Stream.of(
-                Arguments.of(Long.MAX_VALUE, 4, Arrays.asList("Test 4", "Test 2", "Test 0")),
-                Arguments.of(Long.MAX_VALUE, 2, Arrays.asList("Test 4", "Test 2")));
+                Arguments.of(0, 4, Arrays.asList("Test 4", "Test 2", "Test 0")),
+                Arguments.of(0, 2, Arrays.asList("Test 4", "Test 2")));
     }
 
     @DisplayName("내가 댓글 단 게시글 페이징 조회 - 성공")
@@ -395,7 +392,7 @@ class PostServiceTest {
     void findCommentedPostPaging(int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, Long.MAX_VALUE, size, optionalUser1);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, optionalUser1);
         //then
         assertThat(postResponses.size()).isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);

@@ -26,12 +26,13 @@ public class LikeRepositoryImpl implements LikeQueryDsl {
     }
 
     @Override
-    public List<Like> findByUserId(Long userId, Long lastLikeId, int size) {
+    public List<Like> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(like)
                 .leftJoin(like.user, user).fetchJoin()
-                .where(like.user.id.eq(userId), like.id.lt(lastLikeId))
-                .limit(size)
+                .where(like.user.id.eq(userId))
                 .orderBy(like.createdAt.desc())
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 }

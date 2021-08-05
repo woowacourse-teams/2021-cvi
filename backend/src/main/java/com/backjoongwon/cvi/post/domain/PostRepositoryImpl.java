@@ -1,10 +1,12 @@
 package com.backjoongwon.cvi.post.domain;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,13 +34,18 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, int offset, int size, OrderSpecifier orderSpecifier, int hours) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()
-                .where(vaccinationTypeEq(vaccinationType), post.id.lt(lastPostId))
+                .where(vaccinationTypeEq(vaccinationType), fromHoursBefore(hours))
+                .orderBy(orderSpecifier, post.createdAt.desc())
+                .offset(offset)
                 .limit(size)
-                .orderBy(post.createdAt.desc())
                 .fetch();
+    }
+
+    private BooleanExpression fromHoursBefore(int hours) {
+        return post.createdAt.after(LocalDateTime.now().minusHours(hours));
     }
 
     private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
@@ -80,12 +87,13 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByUserId(Long userId, Long lastPostId, int size) {
+    public List<Post> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()
-                .where(post.user.id.eq(userId), post.id.lt(lastPostId))
-                .limit(size)
+                .where(post.user.id.eq(userId))
                 .orderBy(post.createdAt.desc())
+                .offset(offset)
+                .limit(size)
                 .fetch();
     }
 }
