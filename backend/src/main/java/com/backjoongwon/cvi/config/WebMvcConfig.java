@@ -33,7 +33,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/api/v1/users/signup")
                 .excludePathPatterns("/api/v1/users/auth")
-                .excludePathPatterns("/api/v1/publicdatas/vaccinations");
+                .excludePathPatterns("/api/v1/publicdata/vaccinations");
     }
 
     @Override

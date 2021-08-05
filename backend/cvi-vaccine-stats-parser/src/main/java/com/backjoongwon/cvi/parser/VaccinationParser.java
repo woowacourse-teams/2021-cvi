@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VacinationParser {
+public class VaccinationParser {
 
     private static final String DATA_URL = "https://api.odcloud.kr/api/15077756/v1/vaccine-stat";
     private static final LocalDateTime START_DATE = LocalDateTime.of(2021, 3, 11, 0, 0, 0);
-    public static final int UPDATE_HOURS = 10;
+    private static final int UPDATE_HOURS = 10;
 
     private final Parser parser;
 
-    public VacinationParser(Parser parser) {
+    public VaccinationParser(Parser parser) {
         this.parser = parser;
     }
 
@@ -50,7 +50,7 @@ public class VacinationParser {
         parameters.put("page", "1");
         parameters.put("perPage", "20");
         parameters.put("serviceKey", apiSecretKey);
-        parameters.put("cond[baseDate::EQ]", DateConverter.withZeroTime(targetDateTime));
+        parameters.put("cond[baseDate::EQ]", DateConverter.convertTimeToZero(targetDateTime));
         return parameters;
     }
 }

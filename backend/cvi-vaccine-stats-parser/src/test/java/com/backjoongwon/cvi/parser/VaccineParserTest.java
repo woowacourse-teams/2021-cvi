@@ -74,7 +74,7 @@ class VaccineParserTest {
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getBaseDate)
-                .contains(DateConverter.withZeroTime(targetDateTime));
+                .contains(DateConverter.convertTimeToZero(targetDateTime));
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getSido)
                 .containsAll(REGIONS);
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getFirstCnt)
@@ -92,7 +92,7 @@ class VaccineParserTest {
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) {
         //given
-        VacinationParser vaccineParser = new VacinationParser(new Parser());
+        VaccinationParser vaccineParser = new VaccinationParser(new Parser());
         //when
         VaccineParserResponse vaccineParserResponse = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
         //then
@@ -105,7 +105,7 @@ class VaccineParserTest {
     }
 
     private VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.withZeroTime(targetDateTime);
+        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),

@@ -2,7 +2,7 @@ package com.backjoongwon.cvi.publicdata.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
-import com.backjoongwon.cvi.parser.VacinationParser;
+import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PublicDataService {
 
-    private final VacinationParser vacinationparser;
+    private final VaccinationParser vacinationparser;
     private final VaccinationStatisticRepository vaccinationStatisticRepository;
     private final PublicDataProperties publicDataProperties;
 
     @Transactional(readOnly = true)
     public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDateTime targetDateTime) {
-        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDate(DateConverter.withZeroTime(modifyDate(targetDateTime)));
+        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(modifyDate(targetDateTime)));
         return vaccinationStatistic.stream()
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class PublicDataService {
     }
 
     private void validateExists(LocalDateTime targetDateTime) {
-        if (vaccinationStatisticRepository.existsByBaseDate(DateConverter.withZeroTime(targetDateTime))) {
+        if (vaccinationStatisticRepository.existsByBaseDate(DateConverter.convertTimeToZero(targetDateTime))) {
             log.info("이미 존재하는 날짜의 데이터입니다.");
             throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
         }

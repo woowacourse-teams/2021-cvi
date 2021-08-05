@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
@@ -17,14 +18,23 @@ import java.util.Objects;
 @DiscriminatorValue(value = "vaccinationStatistic")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationStatistic extends PublicData {
+    @Column(updatable = false)
     private String baseDate;
+    @Column(updatable = false)
     private int firstCnt;
+    @Column(updatable = false)
     private int secondCnt;
+    @Column(updatable = false)
     private int totalFirstCnt;
+    @Column(updatable = false)
     private int totalSecondCnt;
+    @Column(updatable = false)
     private int accumulatedFirstCnt;
+    @Column(updatable = false)
     private int accumulatedSecondCnt;
+    @Column(updatable = false)
     private BigDecimal accumulatedFirstRate;
+    @Column(updatable = false)
     private BigDecimal accumulatedSecondRate;
 
     @Builder
