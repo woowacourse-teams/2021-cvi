@@ -11,6 +11,7 @@ import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.*;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
+import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -34,34 +35,34 @@ public class PostService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public PostWithCommentResponse create(Optional<User> optionalUser, PostRequest postRequest) {
+    public PostResponse create(Optional<User> optionalUser, PostRequest postRequest) {
         validateSignedin(optionalUser);
         User writer = optionalUser.get();
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
-        return PostWithCommentResponse.of(post, writer);
+        return PostResponse.of(post, writer);
     }
 
     @Transactional
-    public PostWithCommentResponse findById(Long id, Optional<User> optionalUser) {
+    public PostResponse findById(Long id, Optional<User> optionalUser) {
         Post post = findPostByPostId(id);
         post.increaseViewCount();
         return createPostResponse(optionalUser, post);
     }
 
-    private PostWithCommentResponse createPostResponse(Optional<User> optionalUser, Post post) {
-        return PostWithCommentResponse.of(post, optionalUser.orElse(null));
+    private PostResponse createPostResponse(Optional<User> optionalUser, Post post) {
+        return PostResponse.of(post, optionalUser.orElse(null));
     }
 
-    public List<PostWithCommentResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType);
-        return PostWithCommentResponse.toList(posts, optionalUser.orElse(null));
+        return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostWithCommentResponse> findByVaccineType(VaccinationType vaccinationType, int offset, int size, Sort sort, int hours, Optional<User> optionalUser) {
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, int offset, int size, Sort sort, int hours, Optional<User> optionalUser) {
         List<Post> posts = postRepository.findByVaccineType(vaccinationType, offset, size, Sort.toOrderSpecifier(sort), hours);
-        return PostWithCommentResponse.toList(posts, optionalUser.orElse(null));
+        return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
     @Transactional
