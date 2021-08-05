@@ -13,7 +13,7 @@ import {
   frameStyle,
 } from './RegionalStateTable.styles';
 
-const RegionalStateTable = ({ dataList }) => {
+const RegionalStateTable = ({ vaccinationStateList }) => {
   return (
     <Frame width="100%" showShadow={true} styles={frameStyle}>
       <Table>
@@ -26,7 +26,7 @@ const RegionalStateTable = ({ dataList }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {dataList.map((region) => (
+          {vaccinationStateList.map((region) => (
             <Tr key={region.sido}>
               <td>{REGION_NAME[region.sido]}</td>
               <td>
@@ -52,7 +52,7 @@ const RegionalStateTable = ({ dataList }) => {
 };
 
 RegionalStateTable.propTypes = {
-  dataList: PropTypes.array.isRequired,
+  vaccinationStateList: PropTypes.array.isRequired,
 };
 
 export default RegionalStateTable;

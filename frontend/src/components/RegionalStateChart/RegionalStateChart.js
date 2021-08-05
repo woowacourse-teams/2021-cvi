@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { BarChart, Frame, ToggleButton } from '../common';
 import { frameStyle, Content, CountingDate } from './RegionalStateChart.styles';
 
-const RegionalStateChart = ({ dataList }) => {
+const RegionalStateChart = ({ vaccinationStateList }) => {
   const [selected, setSelected] = useState(false);
 
   const selectionList = ['막대', '지도'];
@@ -31,14 +31,16 @@ const RegionalStateChart = ({ dataList }) => {
         selected={selected}
         toggleSelected={() => setSelected(!selected)}
       />
-      <Content>{selected ? <BarChart dataList={dataList} /> : <div>mapChart</div>}</Content>
+      <Content>
+        {selected ? <BarChart dataList={vaccinationStateList} /> : <div>mapChart</div>}
+      </Content>
       <CountingDate>국내현황 {getCountingDate()} 00:00 집계 기준</CountingDate>
     </Frame>
   );
 };
 
 RegionalStateChart.propTypes = {
-  dataList: PropTypes.array.isRequired,
+  vaccinationStateList: PropTypes.array.isRequired,
 };
 
 export default RegionalStateChart;
