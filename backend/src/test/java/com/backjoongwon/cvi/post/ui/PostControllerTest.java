@@ -250,12 +250,12 @@ class PostControllerTest extends ApiDocument {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
+                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
-        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0, 3);
         //then
         글_타입별_페이징_조회_요청_성공함(response);
     }
@@ -267,7 +267,7 @@ class PostControllerTest extends ApiDocument {
         List<PostResponse> postResponses = Collections.emptyList();
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
-        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0L, 3);
+        ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0, 3);
         //then
         글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
     }
@@ -541,10 +541,10 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findByVaccinationType-when-empty"));
     }
 
-    private ResultActions 글_타입별_페이징_조회_요청(VaccinationType vaccinationType, Long lastPostId, int size) throws Exception {
+    private ResultActions 글_타입별_페이징_조회_요청(VaccinationType vaccinationType, int offset, int size) throws Exception {
         return mockMvc.perform(get("/api/v1/posts/paging")
                 .queryParam("vaccinationType", vaccinationType.name())
-                .queryParam("lastPostId", String.valueOf(lastPostId))
+                .queryParam("offset", String.valueOf(offset))
                 .queryParam("size", String.valueOf(size))
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
