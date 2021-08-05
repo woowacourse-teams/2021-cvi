@@ -77,8 +77,6 @@ bootJar {
 sonarqube {
     properties {
         property 'sonar.host.url', 'http://cvi-korea-sonarqube.kro.kr:8080/'
-        property 'sonar.login', 'admin'
-        property 'sonar.password', 'qorwnddnjs'
         property 'sonar.sources', 'src'
         property 'sonar.language', 'java'
         property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
