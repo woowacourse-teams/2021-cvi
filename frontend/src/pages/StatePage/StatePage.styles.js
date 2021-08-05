@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 2.5rem 8rem 6rem 8rem;
+  display: flex;
+  flex-direction: column;
 
   @media screen and (max-width: 801px) {
     padding: 3rem 0 0 0;
