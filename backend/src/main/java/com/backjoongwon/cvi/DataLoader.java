@@ -2,6 +2,7 @@ package com.backjoongwon.cvi;
 
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -14,70 +15,73 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 @Profile("local&!test")
 public class DataLoader implements CommandLineRunner {
 
+    private static final int USER_COUNT = 50;
+    private static final int POST_COUNT = 300;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
 
     @Override
     @Transactional
     public void run(String... args) {
         if (userRepository.findAll().isEmpty()) {
-            User 유저1 = User.builder().nickname("검프").ageRange(AgeRange.TEENS).build();
-            User 유저2 = User.builder().nickname("욘").ageRange(AgeRange.TWENTIES).build();
-            User 유저3 = User.builder().nickname("라이언").ageRange(AgeRange.THIRTIES).build();
-            User 유저4 = User.builder().nickname("엘라").ageRange(AgeRange.FORTIES).build();
+            List<User> users = new ArrayList<>();
+            for (int i = 0; i < USER_COUNT; i++) {
+                User user = User.builder().nickname(String.valueOf(i)).ageRange(AgeRange.FIFTIES).build();
+                users.add(user);
 
-            User 업데이트유저1 = User.builder().nickname(유저1.getNickname()).ageRange(유저1.getAgeRange()).shotVerified(true).build();
-            User 업데이트유저3 = User.builder().nickname(유저3.getNickname()).ageRange(유저3.getAgeRange()).shotVerified(true).build();
-            유저1.update(업데이트유저1);
-            유저3.update(업데이트유저3);
-            userRepository.saveAll(Arrays.asList(유저1, 유저2, 유저3, 유저4));
+                User updateUser = User.builder().nickname(user.getNickname()).ageRange(AgeRange.FORTIES).shotVerified(true).build();
+                user.update(updateUser);
+            }
+            userRepository.saveAll(users);
 
             List<Post> posts = new ArrayList<>();
             Random random = new Random();
-            int randomInt;
-
-            for (int i = 0; i < 1000; i++) {
-                randomInt = random.nextInt(1000);
+            for (int i = 0; i < POST_COUNT; i++) {
+                int randomInt = random.nextInt(USER_COUNT);
+                User user = users.get(i % USER_COUNT);
                 if (randomInt % 4 == 0) {
-                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.PFIZER).user(유저1).build();
-                    post.addLike(Like.builder().user(유저1).build());
-                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저1).build());
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.PFIZER).user(user).build();
+                    putLikeAndCommentRandomly(users, USER_COUNT, post, random);
                     posts.add(post);
-
                 }
                 if (randomInt % 4 == 1) {
-                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.ASTRAZENECA).user(유저2).build();
-                    post.addLike(Like.builder().user(유저2).build());
-                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저2).build());
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.ASTRAZENECA).user(user).build();
                     posts.add(post);
-
                 }
                 if (randomInt % 4 == 2) {
-                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.JANSSEN).user(유저3).build();
-                    post.addLike(Like.builder().user(유저3).build());
-                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저3).build());
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.JANSSEN).user(user).build();
                     posts.add(post);
-
                 }
                 if (randomInt % 4 == 3) {
-                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.MODERNA).user(유저4).build();
-                    post.addLike(Like.builder().user(유저4).build());
-                    post.assignComment(Comment.builder().content("댓글" + randomInt).user(유저4).build());
+                    Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.MODERNA).user(user).build();
                     posts.add(post);
-
                 }
             }
             postRepository.saveAll(posts);
+        }
+    }
+
+    private void putLikeAndCommentRandomly(List<User> users, int userCount, Post post, Random random) {
+        Set<User> userSet = new HashSet<>();
+
+        for (int j = 0; j < random.nextInt(10); j++) {
+            int randomUser = random.nextInt(userCount);
+            userSet.add(users.get(randomUser));
+        }
+
+        for (User user : userSet){
+            Like like = Like.builder().user(user).build();
+            post.addLike(like);
+            post.assignComment(Comment.builder().content("댓글").user(user).build());
+            likeRepository.save(like);
         }
     }
 }

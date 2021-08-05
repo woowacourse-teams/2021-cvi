@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.post.domain;
 import com.backjoongwon.cvi.comment.domain.QComment;
 import com.backjoongwon.cvi.like.domain.QLike;
 import com.backjoongwon.cvi.user.domain.QUser;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,12 +33,12 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, OrderSpecifier orderSpecifier) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, QUser.user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType), post.id.lt(lastPostId))
                 .limit(size)
-                .orderBy(post.createdAt.desc())
+                .orderBy(orderSpecifier, post.createdAt.desc())
                 .fetch();
     }
 

@@ -1,5 +1,7 @@
 package com.backjoongwon.cvi.post.domain;
 
+import com.querydsl.core.types.OrderSpecifier;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +9,7 @@ public interface PostQueryDsl {
 
     List<Post> findByVaccineType(VaccinationType vaccinationType);
 
-    List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size);
+    List<Post> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, OrderSpecifier orderSpecifier);
 
     List<Post> findByUser(Long id);
 

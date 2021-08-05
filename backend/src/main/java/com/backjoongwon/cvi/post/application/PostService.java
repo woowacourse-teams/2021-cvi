@@ -8,10 +8,7 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
-import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.PostRepository;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.domain.*;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
@@ -62,8 +59,8 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Optional<User> optionalUser) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size);
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, Long lastPostId, int size, Sort sort, Optional<User> optionalUser) {
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, lastPostId, size, Sort.toOrderSpecifier(sort));
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 

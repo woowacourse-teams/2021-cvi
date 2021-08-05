@@ -9,10 +9,7 @@ import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
-import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.PostRepository;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.domain.*;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
@@ -319,7 +316,7 @@ class PostServiceTest {
     void findByVaccineTypePagingAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, Long.MAX_VALUE, 3, optionalUser1);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, Long.MAX_VALUE, 3, Sort.CREATED_AT_DESC, optionalUser1);
         //then
         assertThat(postResponses).size().isEqualTo(3);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
@@ -332,7 +329,7 @@ class PostServiceTest {
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses1 = postService.findByVaccineType(vaccinationType, Long.MAX_VALUE, size, optionalUser1);
+        List<PostResponse> postResponses1 = postService.findByVaccineType(vaccinationType, Long.MAX_VALUE, size, Sort.CREATED_AT_DESC, optionalUser1);
         //then
         assertThat(postResponses1).size().isEqualTo(contentResult.size());
         assertThat(postResponses1).extracting("content").containsExactlyElementsOf(contentResult);
