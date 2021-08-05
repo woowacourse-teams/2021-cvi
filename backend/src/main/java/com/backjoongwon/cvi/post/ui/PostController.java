@@ -7,7 +7,7 @@ import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -27,32 +27,32 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse create(@AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
-        PostResponse postResponse = postService.create(user, postRequest);
-        servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
-        return postResponse;
+    public PostWithCommentResponse create(@AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
+        PostWithCommentResponse postWithCommentResponse = postService.create(user, postRequest);
+        servletResponse.setHeader("Location", "/api/v1/posts/" + postWithCommentResponse.getId());
+        return postWithCommentResponse;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineType(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType, @AuthenticationPrincipal Optional<User> user) {
+    public List<PostWithCommentResponse> findByVaccineType(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType, @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, user);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
+    public PostWithCommentResponse find(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
         return postService.findById(id, user);
     }
 
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-                                                         @RequestParam(defaultValue =  "0") int offset,
-                                                         @RequestParam(defaultValue =  "6") int size,
-                                                         @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
-                                                         @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
-                                                         @AuthenticationPrincipal Optional<User> user) {
+    public List<PostWithCommentResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
+                                                                    @RequestParam(defaultValue =  "0") int offset,
+                                                                    @RequestParam(defaultValue =  "6") int size,
+                                                                    @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
+                                                                    @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
+                                                                    @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
     }
 

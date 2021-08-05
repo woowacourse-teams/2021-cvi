@@ -12,7 +12,7 @@ import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.*;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -153,12 +153,12 @@ class PostServiceTest {
     void create() {
         //given
         //when
-        PostResponse postResponse = postService.create(optionalUser1, postRequest);
-        Post foundPost = postRepository.findById(postResponse.getId())
+        PostWithCommentResponse postWithCommentResponse = postService.create(optionalUser1, postRequest);
+        Post foundPost = postRepository.findById(postWithCommentResponse.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
-        assertThat(postResponse.getWriter().getId()).isEqualTo(user1.getId());
-        assertThat(postResponse.getContent()).isEqualTo(postRequest.getContent());
+        assertThat(postWithCommentResponse.getWriter().getId()).isEqualTo(user1.getId());
+        assertThat(postWithCommentResponse.getContent()).isEqualTo(postRequest.getContent());
         assertThat(foundPost).isNotNull();
         assertThat(foundPost.getUser()).isNotNull();
     }
@@ -178,7 +178,7 @@ class PostServiceTest {
     void findById() {
         //given
         //when
-        PostResponse response = postService.findById(post2.getId(), optionalUser1);
+        PostWithCommentResponse response = postService.findById(post2.getId(), optionalUser1);
         //then
         assertThat(response.getId()).isEqualTo(post2.getId());
     }
@@ -198,7 +198,7 @@ class PostServiceTest {
     void findAll() {
         //given
         //when
-        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser1);
+        List<PostWithCommentResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser1);
         //then
         assertThat(response).hasSize(5);
         assertThat(response.get(0).getContent()).isEqualTo(post5.getContent());
@@ -300,9 +300,9 @@ class PostServiceTest {
     void findByVaccineType(VaccinationType vaccinationType) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByVaccineType(vaccinationType, optionalUser1);
         //then
-        assertThat(postResponses).filteredOn(
+        assertThat(postWithCommentRespons).filteredOn(
                 response -> response.getVaccinationType().equals(vaccinationType)
         );
     }
@@ -321,11 +321,11 @@ class PostServiceTest {
     void findByVaccineTypePagingAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUser1);
         //then
-        assertThat(postResponses).size().isEqualTo(3);
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
-        assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
+        assertThat(postWithCommentRespons).size().isEqualTo(3);
+        assertThat(postWithCommentRespons).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
+        assertThat(postWithCommentRespons).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
     @DisplayName("게시글 타입별 페이징 조회 - 성공")
@@ -334,11 +334,11 @@ class PostServiceTest {
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser1);
         //then
-        assertThat(postResponses).size().isEqualTo(contentResult.size());
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
-        assertThat(postResponses).extracting("vaccinationType").containsOnly(vaccinationType);
+        assertThat(postWithCommentRespons).size().isEqualTo(contentResult.size());
+        assertThat(postWithCommentRespons).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(postWithCommentRespons).extracting("vaccinationType").containsOnly(vaccinationType);
     }
 
     static Stream<Arguments> findByVaccineTypePaging() {
@@ -357,9 +357,9 @@ class PostServiceTest {
         //given
         Filter filter = Filter.NONE;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
         //then
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
+        assertThat(postWithCommentRespons).extracting("content").containsExactlyElementsOf(expectedContents);
     }
 
     static Stream<Arguments> findMyPostsPagingFirstPage() {
@@ -375,9 +375,9 @@ class PostServiceTest {
         //given
         Filter filter = Filter.LIKES;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(filter, offset, size, optionalUser1);
         //then
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
+        assertThat(postWithCommentRespons).extracting("content").containsExactlyElementsOf(expectedContents);
     }
 
     static Stream<Arguments> findLikedPostsPagingFirstPage() {
@@ -392,11 +392,11 @@ class PostServiceTest {
     void findCommentedPostPaging(int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, optionalUser1);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, optionalUser1);
         //then
-        assertThat(postResponses.size()).isEqualTo(contentResult.size());
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
-        assertThat(postResponses).extracting("writer.id").containsOnly(user1.getId());
+        assertThat(postWithCommentRespons.size()).isEqualTo(contentResult.size());
+        assertThat(postWithCommentRespons).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(postWithCommentRespons).extracting("writer.id").containsOnly(user1.getId());
     }
 
     static Stream<Arguments> findCommentedPostPaging() {
@@ -575,9 +575,9 @@ class PostServiceTest {
     void findByUserAndFilterNone() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user1), Filter.NONE);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(Optional.of(user1), Filter.NONE);
         //then
-        List<Long> userIds = postResponses.stream()
+        List<Long> userIds = postWithCommentRespons.stream()
                 .map(postResponse -> postResponse.getWriter().getId())
                 .distinct()
                 .collect(Collectors.toList());
@@ -589,10 +589,10 @@ class PostServiceTest {
     void findByUserAndFilterLikes() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(Optional.of(user1), Filter.LIKES);
         //then
-        List<Long> postIds = postResponses.stream()
-                .map(PostResponse::getId)
+        List<Long> postIds = postWithCommentRespons.stream()
+                .map(PostWithCommentResponse::getId)
                 .collect(Collectors.toList());
         assertThat(postIds).containsExactly(post5.getId(), post3.getId(), post1.getId());
     }
@@ -602,9 +602,9 @@ class PostServiceTest {
     void findByUserAndFilterComments() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser1, Filter.COMMENTS);
-        List<Long> postIds = postResponses.stream()
-                .map(PostResponse::getId)
+        List<PostWithCommentResponse> postWithCommentRespons = postService.findByUserAndFilter(optionalUser1, Filter.COMMENTS);
+        List<Long> postIds = postWithCommentRespons.stream()
+                .map(PostWithCommentResponse::getId)
                 .collect(Collectors.toList());
         //then
         assertThat(postIds).containsExactlyInAnyOrder(post3.getId(), post2.getId(), post1.getId(), post4.getId(), post5.getId());
@@ -615,9 +615,9 @@ class PostServiceTest {
     void hasLiked() {
         //given
         //when
-        PostResponse postResponse = postService.findById(post1.getId(), optionalUser1);
+        PostWithCommentResponse postWithCommentResponse = postService.findById(post1.getId(), optionalUser1);
         //then
-        assertThat(postResponse.isHasLiked()).isTrue();
+        assertThat(postWithCommentResponse.isHasLiked()).isTrue();
     }
 
     @DisplayName("게시글에 좋아요를 누르지 않은 사람이 해당 글을 조회하면 hasLiked값이 false로 조회된다.")
@@ -625,8 +625,8 @@ class PostServiceTest {
     void notHasLiked() {
         //given
         //when
-        PostResponse postResponse = postService.findById(post1.getId(), optionalAnotherUser);
+        PostWithCommentResponse postWithCommentResponse = postService.findById(post1.getId(), optionalAnotherUser);
         //then
-        assertThat(postResponse.isHasLiked()).isFalse();
+        assertThat(postWithCommentResponse.isHasLiked()).isFalse();
     }
 }

@@ -8,11 +8,10 @@ import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
-import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
@@ -101,7 +100,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
+        PostWithCommentResponse expectedResponse = new PostWithCommentResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
         given(postService.create(any(), any(PostRequest.class))).willReturn(expectedResponse);
         //when
         ResultActions response = 글_등록_요청(request);
@@ -124,12 +123,12 @@ class PostControllerTest extends ApiDocument {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
-        given(postService.findById(any(Long.class), any())).willReturn(expectedPostResponse);
+        PostWithCommentResponse expectedPostWithCommentResponse = new PostWithCommentResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
+        given(postService.findById(any(Long.class), any())).willReturn(expectedPostWithCommentResponse);
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
-        글_단일_조회_성공함(response, expectedPostResponse);
+        글_단일_조회_성공함(response, expectedPostWithCommentResponse);
     }
 
     @DisplayName("게시글 단일 조회 - 실패")
@@ -149,27 +148,27 @@ class PostControllerTest extends ApiDocument {
         //given
         UserResponse anotherUserResponse = UserResponse.of(user, null);
 
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
-        글_전체_조회_성공함(response, postResponses);
+        글_전체_조회_성공함(response, postWithCommentRespons);
     }
 
     @DisplayName("게시글 전체 조회 - 성공 - 게시글이 하나도 없는 경우")
     @Test
     void findAllWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        List<PostWithCommentResponse> postWithCommentRespons = Collections.emptyList();
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
-        글_전체_조회_성공함_게시글없음(response, postResponses);
+        글_전체_조회_성공함_게시글없음(response, postWithCommentRespons);
     }
 
     @DisplayName("게시글 수정 - 성공")
@@ -220,12 +219,12 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineType() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
@@ -236,24 +235,24 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineTypeWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        List<PostWithCommentResponse> postWithCommentRespons = Collections.emptyList();
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
-        글_타입별_조회_성공함_게시글없음(response, postResponses);
+        글_타입별_조회_성공함_게시글없음(response, postWithCommentRespons);
     }
 
     @DisplayName("게시글 타입별 조회 페이징 - 성공")
     @Test
     void findByVaccineTypePaging() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 39L, 3);
         //then
@@ -264,23 +263,23 @@ class PostControllerTest extends ApiDocument {
     @Test
     void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        List<PostWithCommentResponse> postWithCommentRespons = Collections.emptyList();
+        willReturn(postWithCommentRespons).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0L, 3);
         //then
-        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
+        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postWithCommentRespons);
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
     void createLike() throws Exception {
         //given
-        PostResponse expectedPostResponse = createPostResponse();
+        PostWithCommentResponse expectedPostWithCommentResponse = createPostResponse();
         LikeResponse likeResponse = LikeResponse.from(1L);
         willReturn(likeResponse).given(postService).createLike(any(Long.class), any());
         //when
-        ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostResponse.getId());
+        ResultActions actualResponse = 글_좋아요_생성_요청(expectedPostWithCommentResponse.getId());
         //then
         글_좋아요_생성_성공(actualResponse, 1L);
     }
@@ -289,10 +288,10 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createLikeFailureWhenPostNotExists() throws Exception {
         //given
-        PostResponse expectedPostResponse = createPostResponse();
+        PostWithCommentResponse expectedPostWithCommentResponse = createPostResponse();
         willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).createLike(any(Long.class), any());
         //when
-        ResultActions response = 글_좋아요_생성_요청(expectedPostResponse.getId());
+        ResultActions response = 글_좋아요_생성_요청(expectedPostWithCommentResponse.getId());
         //then
         글_좋아요_생성_실패(response);
     }
@@ -434,9 +433,9 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_등록_성공함(ResultActions response, PostResponse postResponse) throws Exception {
+    private void 글_등록_성공함(ResultActions response, PostWithCommentResponse postWithCommentResponse) throws Exception {
         response.andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/v1/posts/" + postResponse.getId()))
+                .andExpect(header().string("Location", "/api/v1/posts/" + postWithCommentResponse.getId()))
                 .andDo(print())
                 .andDo(toDocument("post-create"));
     }
@@ -453,7 +452,7 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_단일_조회_성공함(ResultActions response, PostResponse postResponse) throws Exception {
+    private void 글_단일_조회_성공함(ResultActions response, PostWithCommentResponse postWithCommentResponse) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-find"));
@@ -471,16 +470,16 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_전체_조회_성공함(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("post-findAll"));
     }
 
-    private void 글_전체_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_전체_조회_성공함_게시글없음(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("post-findAll-when-empty"));
     }
@@ -534,9 +533,9 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findByVaccinationType"));
     }
 
-    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-when-empty"));
     }
@@ -555,9 +554,9 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("post-findByVaccinationType-paging"));
     }
 
-    private void 글_타입별_페이징_조회_요청_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_타입별_페이징_조회_요청_성공함_게시글없음(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-paging-when-empty"));
     }
@@ -599,12 +598,12 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("like-delete-failure"));
     }
 
-    private PostResponse createPostResponse() {
+    private PostWithCommentResponse createPostResponse() {
         AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
         UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
                 ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
 
-        return new PostResponse(1L, userResponse, "내용", 1,
+        return new PostWithCommentResponse(1L, userResponse, "내용", 1,
                 1, true, null, VaccinationType.PFIZER, LocalDateTime.now());
     }
 

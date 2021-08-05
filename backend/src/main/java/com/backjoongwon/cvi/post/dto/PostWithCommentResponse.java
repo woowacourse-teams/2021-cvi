@@ -9,7 +9,6 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,8 +16,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-public class PostResponse {
+public class PostWithCommentResponse {
 
     private Long id;
     private UserResponse writer;
@@ -30,8 +28,8 @@ public class PostResponse {
     private VaccinationType vaccinationType;
     private LocalDateTime createdAt;
 
-    public PostResponse(Long id, UserResponse user, String content, int viewCount, int likeCount,
-                        boolean hasLiked, List<CommentResponse> comments, VaccinationType vaccinationType, LocalDateTime createdAt) {
+    public PostWithCommentResponse(Long id, UserResponse user, String content, int viewCount, int likeCount,
+                                   boolean hasLiked, List<CommentResponse> comments, VaccinationType vaccinationType, LocalDateTime createdAt) {
         this.id = id;
         this.writer = user;
         this.content = content;
@@ -43,8 +41,8 @@ public class PostResponse {
         this.createdAt = createdAt;
     }
 
-    public static PostResponse of(Post post, User viewer) {
-        return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
+    public static PostWithCommentResponse of(Post post, User viewer) {
+        return new PostWithCommentResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
                 post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer), makeCommentResponses(post.getCommentsAsList()), post.getVaccinationType(), post.getCreatedAt());
     }
 
@@ -54,9 +52,9 @@ public class PostResponse {
                 .collect(Collectors.toList());
     }
 
-    public static List<PostResponse> toList(List<Post> posts, User viewer) {
+    public static List<PostWithCommentResponse> toList(List<Post> posts, User viewer) {
         return posts.stream()
-                .map(post -> PostResponse.of(post, viewer))
+                .map(post -> PostWithCommentResponse.of(post, viewer))
                 .collect(Collectors.toList());
     }
 }

@@ -11,7 +11,7 @@ import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.Filter;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
@@ -219,16 +219,16 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsNone() throws Exception {
         //given
-        List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now()));
+        List<PostWithCommentResponse> postWithCommentRespons = Arrays.asList(
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostWithCommentResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now()));
         Filter filter = Filter.NONE;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 내가_쓴_글_조회_요청();
         //then
-        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_필터링_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 작성한 게시글 조회 - 실패")
@@ -247,15 +247,15 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsLikes() throws Exception {
         //given
-        List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
+        List<PostWithCommentResponse> postWithCommentRespons = Arrays.asList(
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
         Filter filter = Filter.LIKES;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
-        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_필터링_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 좋아요 한 글 조회 - 실패")
@@ -274,15 +274,15 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsComments() throws Exception {
         //given
-        List<PostResponse> postResponses = Arrays.asList(
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()));
+        List<PostWithCommentResponse> postWithCommentRespons = Arrays.asList(
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()));
         Filter filter = Filter.COMMENTS;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(), any(Filter.class));
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
         ResultActions response = 마이페이지_글_필터링_조회_요청(filter);
         //then
-        마이페이지_글_필터링_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_필터링_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 댓글을 단 게시글 조회 - 실패")
@@ -301,18 +301,18 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsNonePaging() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
-                new PostResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
+                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
+                new PostWithCommentResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
         ));
         Filter filter = Filter.NONE;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 4);
         //then
-        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 작성한 글 조회 페이징 - 실패")
@@ -331,17 +331,17 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsLikesPaging() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
+                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
         ));
         Filter filter = Filter.LIKES;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
         //then
-        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 좋아요 한 글 조회 페이징 - 실패")
@@ -360,16 +360,16 @@ class UserControllerTest extends ApiDocument {
     @Test
     void findMyPostsWhenFilterIsCommentsPaging() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+        List<PostWithCommentResponse> postWithCommentRespons = new LinkedList<>(Arrays.asList(
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
         ));
         Filter filter = Filter.COMMENTS;
-        willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
+        willReturn(postWithCommentRespons).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 2);
         //then
-        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
+        마이페이지_글_타입별_페이징_조회_요청_성공함(response, postWithCommentRespons, filter);
     }
 
     @DisplayName("내가 댓글을 단 글 조회 페이징 - 실패")
@@ -497,9 +497,9 @@ class UserControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 마이페이지_글_타입별_페이징_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {
+    private void 마이페이지_글_타입별_페이징_조회_요청_성공함(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons, Filter filter) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase()));
     }
@@ -510,9 +510,9 @@ class UserControllerTest extends ApiDocument {
                 .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase() + "-failure"));
     }
 
-    private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostResponse> postResponses, Filter filter) throws Exception {
+    private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostWithCommentResponse> postWithCommentRespons, Filter filter) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postWithCommentRespons)))
                 .andDo(print())
                 .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase()));
     }
