@@ -7,7 +7,6 @@ const frameStyle = css`
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  height: 50rem;
   max-width: 100%;
   overflow-x: hidden;
 `;

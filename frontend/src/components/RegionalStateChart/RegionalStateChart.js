@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { BarChart, Frame, ToggleButton } from '../common';
 import { frameStyle, Content, CountingDate } from './RegionalStateChart.styles';
 
-const RegionalStateChart = () => {
+const RegionalStateChart = ({ dataList }) => {
   const [selected, setSelected] = useState(false);
 
   const selectionList = ['막대', '지도'];
@@ -24,16 +25,20 @@ const RegionalStateChart = () => {
   };
 
   return (
-    <Frame width="100%" styles={frameStyle}>
+    <Frame width="100%" height="100%" showShadow={true} styles={frameStyle}>
       <ToggleButton
         selectionList={selectionList}
         selected={selected}
         toggleSelected={() => setSelected(!selected)}
       />
-      <Content>{selected ? <BarChart /> : <div>mapChart</div>}</Content>
+      <Content>{selected ? <BarChart dataList={dataList} /> : <div>mapChart</div>}</Content>
       <CountingDate>국내현황 {getCountingDate()} 00:00 집계 기준</CountingDate>
     </Frame>
   );
+};
+
+RegionalStateChart.propTypes = {
+  dataList: PropTypes.array.isRequired,
 };
 
 export default RegionalStateChart;
