@@ -19,8 +19,8 @@ public abstract class PublicData extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     protected RegionPopulation regionPopulation;
 
-    public PublicData(Long id, LocalDateTime createdAt, RegionPopulation regionPopulation) {
-        super(id, createdAt);
+    public PublicData(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation) {
+        super(id, createdAt, lastModifiedAt);
         this.regionPopulation = regionPopulation;
     }
 }

@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.publicdata.ui;
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.publicdata.application.PublicDataService;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
+import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class PublicDataControllerTest extends ApiDocument {
 
     @MockBean
     public PublicDataService publicDataService;
+
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;

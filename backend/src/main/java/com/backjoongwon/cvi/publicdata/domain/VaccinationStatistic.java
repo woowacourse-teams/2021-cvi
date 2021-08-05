@@ -38,10 +38,10 @@ public class VaccinationStatistic extends PublicData {
     private BigDecimal accumulatedSecondRate;
 
     @Builder
-    public VaccinationStatistic(Long id, LocalDateTime createdAt, RegionPopulation regionPopulation, String baseDate,
-                                int firstCnt, int secondCnt, int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt,
+    public VaccinationStatistic(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation,
+                                String baseDate, int firstCnt, int secondCnt, int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt,
                                 int accumulatedSecondCnt, BigDecimal accumulatedFirstRate, BigDecimal accumulatedSecondRate) {
-        super(id, createdAt, regionPopulation);
+        super(id, createdAt, lastModifiedAt, regionPopulation);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;
         this.secondCnt = secondCnt;
