@@ -6,5 +6,5 @@ public interface LikeQueryDsl {
 
     List<Like> findByUserId(Long userId);
 
-    List<Like> findByUserId(Long userId, Long lastLikeId, int size);
+    List<Like> findByUserId(Long userId, int offset, int size);
 }

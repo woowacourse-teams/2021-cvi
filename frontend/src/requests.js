@@ -1,7 +1,7 @@
 import { BASE_URL, PAGING_SIZE } from './constants';
 
-const requestGetAllReviewList = (accessToken, lastPostId) =>
-  fetch(`${BASE_URL}/posts/paging?lastPostId=${lastPostId}&size=${PAGING_SIZE}`, {
+const requestGetAllReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/posts/paging?offset=${offset}&size=${PAGING_SIZE}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -9,9 +9,9 @@ const requestGetAllReviewList = (accessToken, lastPostId) =>
     },
   });
 
-const requestGetSelectedReviewList = (accessToken, vaccinationType, lastPostId) =>
+const requestGetSelectedReviewList = (accessToken, vaccinationType, offset) =>
   fetch(
-    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&lastPostId=${lastPostId}&size=${PAGING_SIZE}`,
+    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&offset=${offset}&size=${PAGING_SIZE}`,
     {
       method: 'GET',
       headers: {

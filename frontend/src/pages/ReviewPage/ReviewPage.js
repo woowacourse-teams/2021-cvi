@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { VACCINATION, PATH, RESPONSE_STATE, ALERT_MESSAGE, THEME_COLOR } from '../../constants';
+import {
+  VACCINATION,
+  PATH,
+  RESPONSE_STATE,
+  ALERT_MESSAGE,
+  THEME_COLOR,
+  PAGING_SIZE,
+} from '../../constants';
 import {
   Container,
   Title,
@@ -25,7 +32,7 @@ const ReviewPage = () => {
   const [selectedTab, setSelectedTab] = useState('전체');
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
-  const [lastPostId, setLastPostId] = useState(Number.MAX_SAFE_INTEGER);
+  const [offset, setOffset] = useState(0);
 
   const [ref, inView] = useInView();
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
@@ -37,7 +44,7 @@ const ReviewPage = () => {
   } = useLoading();
 
   const tabList = ['전체', ...Object.values(VACCINATION)];
-  const isLastPost = (index) => index === reviewList?.length - 1;
+  const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
   const goReviewDetailPage = (id) => {
     history.push(`${PATH.REVIEW}/${id}`);
@@ -59,7 +66,7 @@ const ReviewPage = () => {
 
   const getReviewList = useCallback(async () => {
     if (selectedTab === '전체') {
-      const response = await getAllReviewListAsync(accessToken, lastPostId);
+      const response = await getAllReviewListAsync(accessToken, offset);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getAllReviewListAsync');
@@ -70,7 +77,7 @@ const ReviewPage = () => {
       setReviewList((prevState) => [...prevState, ...response.data]);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedTab);
-      const response = await getSelectedReviewListAsync(accessToken, vaccinationType, lastPostId);
+      const response = await getSelectedReviewListAsync(accessToken, vaccinationType, offset);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getSelectedReviewListAsync');
@@ -83,7 +90,7 @@ const ReviewPage = () => {
 
     hideLoading();
     hideScrollLoading();
-  }, [lastPostId, selectedTab]);
+  }, [offset, selectedTab]);
 
   useEffect(() => {
     getReviewList();
@@ -92,14 +99,14 @@ const ReviewPage = () => {
   useEffect(() => {
     showLoading();
 
-    setLastPostId(Number.MAX_SAFE_INTEGER);
+    setOffset(0);
     setReviewList([]);
   }, [selectedTab]);
 
   useEffect(() => {
     if (!inView) return;
 
-    setLastPostId(reviewList[reviewList.length - 1]?.id);
+    setOffset((prevState) => prevState + PAGING_SIZE);
     showScrollLoading();
   }, [inView]);
 
@@ -141,7 +148,7 @@ const ReviewPage = () => {
       {isModalOpen && (
         <ReviewWritingModal
           getReviewList={getReviewList}
-          setLastPostId={setLastPostId}
+          setOffset={setOffset}
           setReviewList={setReviewList}
           onClickClose={() => setModalOpen(false)}
         />
