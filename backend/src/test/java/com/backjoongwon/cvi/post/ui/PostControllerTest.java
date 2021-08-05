@@ -272,6 +272,38 @@ class PostControllerTest extends ApiDocument {
         글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
     }
 
+    @DisplayName("게시글 타입별 조회 좋아요 오름차순 정렬 - 성공")
+    @Test
+    void findByVaccineTypeSorting() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        //when
+        ResultActions response = 글_타입별_정렬_조회_요청(VaccinationType.PFIZER, Sort.LIKE_COUNT_ASC);
+        //then
+        글_타입별_정렬_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 타입별 조회 시간 필터링 - 성공")
+    @Test
+    void findByVaccineTypeHourFiltering() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
+        ));
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        //when
+        ResultActions response = 글_타입별_시간필터링_조회_요청(VaccinationType.PFIZER, 24);
+        //then
+        글_타입별_시간필터링_조회_요청_성공함(response);
+    }
+
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
     void createLike() throws Exception {
@@ -549,10 +581,36 @@ class PostControllerTest extends ApiDocument {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
+    private ResultActions 글_타입별_정렬_조회_요청(VaccinationType vaccinationType, Sort sort) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/paging")
+                .queryParam("vaccinationType", vaccinationType.name())
+                .queryParam("sort", sort.name())
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private ResultActions 글_타입별_시간필터링_조회_요청(VaccinationType vaccinationType, int hour) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/paging")
+                .queryParam("vaccinationType", vaccinationType.name())
+                .queryParam("fromHoursBefore", String.valueOf(hour))
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
     private void 글_타입별_페이징_조회_요청_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-paging"));
+    }
+
+    private void 글_타입별_정렬_조회_요청_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging-sorting"));
+    }
+
+    private void 글_타입별_시간필터링_조회_요청_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("post-findByVaccinationType-paging-filteringHour"));
     }
 
     private void 글_타입별_페이징_조회_요청_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
