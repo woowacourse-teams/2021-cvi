@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { FONT_COLOR } from '../../constants';
 
 const frameStyle = css`
   display: flex;
@@ -17,4 +18,10 @@ const Content = styled.div`
   overflow-x: auto;
 `;
 
-export { frameStyle, Content };
+const CountingDate = styled.div`
+  font-size: 1.2rem;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  margin-top: 2rem;
+`;
+
+export { frameStyle, Content, CountingDate };
