@@ -65,6 +65,10 @@ sonarqube {
     }
 }
 
+tasks.named('sonarqube').configure {
+    dependsOn jacocoTestCoverageVerification
+}
+
 /**
 * jacoco 관련 설정
 */
