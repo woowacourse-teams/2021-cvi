@@ -34,7 +34,7 @@ then
 else
   nohup java -jar \
     -Duser.timezone=Asia/Seoul \
-    -Dspring.config.location=classpath:/application.yml\
+    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-client-secret.yml\
     -Dspring.profiles.active=$IDLE_PROFILE,"$1"\
     $JAR_LOCATION > ~/nohup.out 2>&1 &
 fi

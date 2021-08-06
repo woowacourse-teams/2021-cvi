@@ -1,16 +1,32 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Container, DialogButton } from './ToggleButton.styles';
+import { MapIcon, BarChartIcon } from '../../../assets/icons';
+import { Container, ToggleItem, DialogButton } from './ToggleButton.styles';
 
-const ToggleButton = ({ selectionList, selected, toggleSelected }) => {
-  return (
-    <Container onClick={toggleSelected}>
-      <DialogButton selected={selected}>
-        {selected ? selectionList[0] : selectionList[1]}
-      </DialogButton>
-    </Container>
-  );
-};
+const ToggleButton = ({ selectionList, selected, toggleSelected }) => (
+  <Container onClick={toggleSelected}>
+    <ToggleItem>
+      <MapIcon height="14" width="14" />
+      {selectionList[1]}
+    </ToggleItem>
+    <ToggleItem>
+      <BarChartIcon height="16" width="16" />
+      {selectionList[0]}
+    </ToggleItem>
+    <DialogButton selected={selected}>
+      {selected ? (
+        <ToggleItem isSelected={true}>
+          <BarChartIcon height="16" width="16" />
+          {selectionList[0]}
+        </ToggleItem>
+      ) : (
+        <ToggleItem isSelected={true}>
+          <MapIcon height="14" width="14" />
+          {selectionList[1]}
+        </ToggleItem>
+      )}
+    </DialogButton>
+  </Container>
+);
 
 ToggleButton.propTypes = {
   selected: PropTypes.array.isRequired,

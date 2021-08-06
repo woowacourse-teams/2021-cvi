@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'org.asciidoctor.convert' version '1.5.8'
     id 'jacoco'
+    id 'org.sonarqube' version '3.0'
 }
 
 group = 'com.backjoongwon'

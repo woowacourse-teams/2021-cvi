@@ -1,0 +1,31 @@
+<svg 
+  height="current" 
+  id="svg2793" 
+  fill="currentColor"
+  style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" 
+  version="1.1" 
+  viewBox="0 0 512 512" 
+  width="current" 
+  xml:space="preserve" 
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:cc="http://creativecommons.org/ns#" 
+  xmlns:dc="http://purl.org/dc/elements/1.1/" 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:serif="http://www.serif.com/" 
+  xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs2797"/>
+  <g id="_39-Direction" style="display:inline" transform="translate(-4096,-7168)">
+    <g id="g1971" transform="translate(4275.09,7239.02)">
+      <path d="M 0,-41.02 H 255.44 L 277.429,-20.51 255.44,0 H 0 Z M -15,30 h 276.351 c 3.797,0 7.454,-1.441 10.231,-4.032 l 38.069,-35.509 c 3.042,-2.837 4.769,-6.81 4.769,-10.969 0,-4.159 -1.727,-8.132 -4.769,-10.969 l -38.069,-35.51 c -2.777,-2.591 -6.434,-4.031 -10.231,-4.031 H -15 c -8.284,0 -15,6.716 -15,15 V 15 c 0,8.284 6.716,15 15,15" id="path1969" style="fill-rule:nonzero"/>
+    </g>
+    <g id="g1975" transform="translate(4173.47,7376.02)">
+      <path d="M 0,-41.029 H 255.431 V 0 H 0.002 L -21.99,-20.517 Z M -16.142,25.968 C -13.364,28.559 -9.708,30 -5.909,30 h 276.34 c 8.284,0 15,-6.716 15,-15 v -71.029 c 0,-8.284 -6.716,-15 -15,-15 H -5.909 c -3.798,0 -7.454,1.44 -10.232,4.031 l -38.07,35.51 c -3.041,2.837 -4.768,6.809 -4.768,10.968 0,4.159 1.726,8.132 4.767,10.969 z" id="path1973" style="fill-rule:nonzero"/>
+    </g>
+    <g id="g1979" transform="translate(4530.53,7471.99)">
+      <path d="M 0,41.02 H -255.44 V 0 H 0 L 21.988,20.51 Z M 16.142,-25.968 C 13.364,-28.559 9.708,-30 5.91,-30 h -276.35 c -8.285,0 -15,6.716 -15,15 v 71.02 c 0,8.284 6.715,15 15,15 H 5.91 c 3.798,0 7.454,-1.44 10.232,-4.031 l 38.069,-35.51 c 3.042,-2.837 4.768,-6.81 4.768,-10.969 0,-4.159 -1.726,-8.132 -4.768,-10.969 z" id="path1977" style="fill-rule:nonzero"/>
+    </g>
+    <g id="g1983" transform="translate(4428.9,7608.98)">
+      <path d="M 0,41.02 H -255.43 L -277.419,20.51 -255.43,0 H 0 Z M 15,-30 h -276.34 c -3.798,0 -7.454,1.441 -10.231,4.032 l -38.071,35.509 c -3.041,2.837 -4.768,6.81 -4.768,10.969 0,4.159 1.727,8.132 4.768,10.969 l 38.071,35.51 c 2.777,2.591 6.433,4.031 10.231,4.031 H 15 c 8.284,0 15,-6.716 15,-15 V -15 c 0,-8.284 -6.716,-15 -15,-15" id="path1981" style="fill-rule:nonzero"/>
+    </g>
+  </g>
+</svg>
