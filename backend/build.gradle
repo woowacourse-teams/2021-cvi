@@ -57,6 +57,17 @@ task cleanGeneatedDir(type: Delete) { // 인텔리제이 annotation processor �
     delete file('src/main/generated')
 }
 
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java"
+    }
+}
+
+tasks.named('sonarqube').configure {
+    dependsOn jacocoTestCoverageVerification
+}
+
 /**
 * jacoco 관련 설정
 */
@@ -68,8 +79,8 @@ jacocoTestReport {
     dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
     reports {
         html.enabled true
-        csv.enabled true
-        xml.enabled false
+        xml.enabled true
+        csv.enabled false
     }
 
     def Qdomains = []
