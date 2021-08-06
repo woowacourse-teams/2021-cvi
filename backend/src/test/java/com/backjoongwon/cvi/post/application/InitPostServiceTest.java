@@ -54,6 +54,8 @@ public class InitPostServiceTest {
     protected Post post3;
     protected Post post4;
     protected Post post5;
+    protected Post post6;
+    protected Post post7;
     protected PostRequest postRequest;
     protected LikeResponse likeResponse;
     protected CommentRequest commentRequest;
@@ -105,8 +107,20 @@ public class InitPostServiceTest {
                 .user(user1)
                 .createdAt(LocalDateTime.now())
                 .build();
+        post6 = Post.builder()
+                .content("Test 5")
+                .vaccinationType(VaccinationType.JANSSEN)
+                .user(user2)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post7 = Post.builder()
+                .content("Test 6")
+                .vaccinationType(VaccinationType.PFIZER)
+                .user(user2)
+                .createdAt(LocalDateTime.now())
+                .build();
 
-        postRepository.saveAll(Arrays.asList(post1, post2, post3, post4, post5));
+        postRepository.saveAll(Arrays.asList(post1, post2, post3, post4, post5, post6, post7));
     }
 
     private void initUser() {

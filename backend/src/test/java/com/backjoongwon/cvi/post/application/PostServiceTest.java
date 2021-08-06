@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -79,8 +80,8 @@ class PostServiceTest extends InitPostServiceTest {
         //when
         List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser);
         //then
-        assertThat(response).hasSize(5);
-        assertThat(response.get(0).getContent()).isEqualTo(post5.getContent());
+        assertThat(response).hasSize(7);
+        assertThat(response.get(0).getContent()).isEqualTo(post7.getContent());
     }
 
     @DisplayName("게시글 수정 - 성공")
@@ -196,19 +197,31 @@ class PostServiceTest extends InitPostServiceTest {
 
     @DisplayName("게시글 타입별(전체) 첫 페이징 조회 - 성공")
     @Test
-    void findByVaccineTypePagingAll() {
+    void findByVaccineTypeFirstPageAll() {
         //given
         //when
         List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(3);
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 4", "Test 3", "Test 2"));
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 6", "Test 5", "Test 4"));
+        assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
+    }
+
+    @DisplayName("게시글 타입별(전체) 다음 페이징 조회 - 성공")
+    @Test
+    void findByVaccineTypeNextPageAll() {
+        //given
+        //when
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 3, 3, Sort.CREATED_AT_DESC, 24, optionalUser);
+        //then
+        assertThat(postResponses).size().isEqualTo(3);
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 3", "Test 2", "Test 1"));
         assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
     @ParameterizedTest(name = "게시글 타입별 첫 페이징 조회 - 성공")
     @MethodSource
-    void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
+    void findByVaccineTypeFirstPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
         List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser);
@@ -218,12 +231,33 @@ class PostServiceTest extends InitPostServiceTest {
         assertThat(postResponses).extracting("vaccinationType").containsOnly(vaccinationType);
     }
 
-    static Stream<Arguments> findByVaccineTypePaging() {
+    static Stream<Arguments> findByVaccineTypeFirstPage() {
         return Stream.of(
-                Arguments.of(VaccinationType.ASTRAZENECA, 10, Arrays.asList("Test 3", "Test 1", "Test 0")),
+                Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 3")),
                 Arguments.of(VaccinationType.ASTRAZENECA, 2, Arrays.asList("Test 3", "Test 1")),
-                Arguments.of(VaccinationType.JANSSEN, 5, Arrays.asList("Test 4")),
-                Arguments.of(VaccinationType.PFIZER, 5, Arrays.asList("Test 2"))
+                Arguments.of(VaccinationType.JANSSEN, 1, Arrays.asList("Test 5")),
+                Arguments.of(VaccinationType.PFIZER, 1, Arrays.asList("Test 6"))
+        );
+    }
+
+    @ParameterizedTest(name = "게시글 타입별 다음 페이징 조회 - 성공")
+    @MethodSource
+    void findByVaccineTypeNextPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
+        //given
+        //when
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser);
+        //then
+        assertThat(postResponses).size().isEqualTo(contentResult.size());
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(postResponses).extracting("vaccinationType").containsOnly(vaccinationType);
+    }
+
+    static Stream<Arguments> findByVaccineTypeNextPage() {
+        return Stream.of(
+                Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 1")),
+                Arguments.of(VaccinationType.ASTRAZENECA, 2, Arrays.asList("Test 1", "Test 0")),
+                Arguments.of(VaccinationType.JANSSEN, 5, Collections.singletonList("Test 4")),
+                Arguments.of(VaccinationType.PFIZER, 5, Collections.singletonList("Test 2"))
         );
     }
 

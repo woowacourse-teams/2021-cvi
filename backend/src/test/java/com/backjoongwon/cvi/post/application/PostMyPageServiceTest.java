@@ -68,7 +68,7 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
 
     @ParameterizedTest(name = "내가 댓글 단 게시글 첫 페이징 조회 - 성공")
     @MethodSource
-    void findCommentedPostPaging(int size, List<String> contentResult) {
+    void findCommentedPostFirstPage(int size, List<String> contentResult) {
         //given
         //when
         List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, optionalUser);
@@ -78,7 +78,7 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
         assertThat(postResponses).extracting("writer.id").containsOnly(user1.getId());
     }
 
-    static Stream<Arguments> findCommentedPostPaging() {
+    static Stream<Arguments> findCommentedPostFirstPage() {
         return Stream.of(
                 Arguments.of(2, Arrays.asList("Test 4", "Test 3")),
                 Arguments.of(3, Arrays.asList("Test 4", "Test 3", "Test 2"))
