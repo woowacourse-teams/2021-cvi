@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends BaseEntity {
 
-    public static final GuestUser GUEST_USER = new GuestUser();
-
     @Column(unique = true)
     private String nickname;
 
@@ -59,16 +57,5 @@ public class User extends BaseEntity {
             this.shotVerified = true;
         }
         this.profileUrl = updateUser.profileUrl;
-    }
-
-    public boolean isGuestUser() {
-        return false;
-    }
-
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
     }
 }

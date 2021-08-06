@@ -16,7 +16,7 @@ const Title = styled.h3`
 const FrameContent = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: ${({ withWorld }) => (withWorld ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)')};
   margin: 2.4rem 2.7rem;
   padding: 0 0.6rem;
 

@@ -20,6 +20,8 @@ import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
 import ShotVerificationMenuIcon from './shot-verification-menu.svg';
 import StateIcon from './state.svg';
+import MapIcon from './map.svg';
+import BarChartIcon from './bar-chart.svg';
 
 export {
   KakaoIcon,
@@ -44,4 +46,6 @@ export {
   ShotVerificationMenuIcon,
   LoadingIcon,
   StateIcon,
+  MapIcon,
+  BarChartIcon,
 };
