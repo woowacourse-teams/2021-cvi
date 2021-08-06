@@ -19,9 +19,9 @@ import {
   requestGetMyLikeReviewList,
 } from '../requests';
 
-const getAllReviewListAsync = async (accessToken, offset) => {
+const getAllReviewListAsync = async (accessToken, offset, filteringList) => {
   try {
-    const response = await requestGetAllReviewList(accessToken, offset);
+    const response = await requestGetAllReviewList(accessToken, offset, filteringList);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -37,9 +37,19 @@ const getAllReviewListAsync = async (accessToken, offset) => {
   }
 };
 
-const getSelectedReviewListAsync = async (accessToken, selectedVaccination, offset) => {
+const getSelectedReviewListAsync = async (
+  accessToken,
+  selectedVaccination,
+  offset,
+  filteringList,
+) => {
   try {
-    const response = await requestGetSelectedReviewList(accessToken, selectedVaccination, offset);
+    const response = await requestGetSelectedReviewList(
+      accessToken,
+      selectedVaccination,
+      offset,
+      filteringList,
+    );
 
     if (!response.ok) {
       // 에러 메시지 넣어달라고 하기

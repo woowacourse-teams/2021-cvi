@@ -17,6 +17,7 @@ import { TO_DATE_TYPE } from './toDateType';
 import { RESPONSE_STATE } from './service';
 import REGEX from './regex';
 import { REGION_NAME } from './region';
+import { FILTER_TYPE, SORT_TYPE } from './list';
 
 export {
   PALETTE,
@@ -43,4 +44,6 @@ export {
   PAGING_SIZE,
   REGEX,
   REGION_NAME,
+  FILTER_TYPE,
+  SORT_TYPE,
 };

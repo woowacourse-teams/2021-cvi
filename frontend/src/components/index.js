@@ -9,6 +9,7 @@ import CommentForm from './CommentForm/CommentForm';
 import CommentItem from './CommentItem/CommentItem';
 import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
 import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
+import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
 
 export {
   Preview,
@@ -22,4 +23,5 @@ export {
   CommentItem,
   RegionalStateChart,
   RegionalStateTable,
+  ReviewFilterList,
 };

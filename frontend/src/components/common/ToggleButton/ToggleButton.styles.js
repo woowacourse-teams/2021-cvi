@@ -11,6 +11,16 @@ const Container = styled.div`
   border-radius: 1.6rem;
   position: relative;
   display: flex;
+  font-size: 1.4rem;
+
+  & > *:nth-of-type(1) {
+    color: ${({ selected }) => (selected ? FONT_COLOR.GRAY : FONT_COLOR.BLACK)};
+    font-weight: ${({ selected }) => (selected ? '400' : '600')};
+  }
+  & > *:nth-of-type(2) {
+    color: ${({ selected }) => (selected ? FONT_COLOR.BLACK : FONT_COLOR.GRAY)};
+    font-weight: ${({ selected }) => (selected ? '600' : '400')};
+  }
 `;
 
 const ToggleItem = styled.div`
@@ -19,8 +29,8 @@ const ToggleItem = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.4rem;
-  color: ${({ isSelected }) => (isSelected ? FONT_COLOR.BLACK : FONT_COLOR.GRAY)};
   gap: 0.4rem;
+  z-index: 1;
 `;
 
 const DialogButton = styled.div`
@@ -37,9 +47,6 @@ const DialogButton = styled.div`
   position: absolute;
   left: 50%;
   transition: all 0.3s ease;
-  font-size: 1.4rem;
-  font-weight: 600;
-  z-index: 1;
 
   ${({ selected }) => !selected && `background-color: ${THEME_COLOR.WHITE}; left: 0`}
 `;
