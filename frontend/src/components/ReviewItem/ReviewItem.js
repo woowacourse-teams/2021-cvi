@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -11,15 +10,24 @@ import {
   IconContainer,
   InfoContainer,
   CreatedAt,
+  buttonStyles,
 } from './ReviewItem.styles';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import {
+  VACCINATION_COLOR,
+  VACCINATION,
+  FONT_COLOR,
+  TO_DATE_TYPE,
+  PATH,
+  CONFIRM_MESSAGE,
+} from '../../constants';
 import { toDate } from '../../utils';
-import { Label } from '../common';
+import { Button, Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
+import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 
-const ReviewItem = ({ review, accessToken, innerRef, onClick }) => {
+const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
   const {
     id,
     writer,
@@ -33,12 +41,21 @@ const ReviewItem = ({ review, accessToken, innerRef, onClick }) => {
   } = review;
 
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
-  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount } = useLike(
+  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount, deleteLike } = useLike(
     accessToken,
     hasLiked,
     likeCount,
     id,
   );
+
+  const cancelLike = (event) => {
+    event.stopPropagation();
+
+    if (!window.confirm(CONFIRM_MESSAGE.CANCEL_LIKE)) return;
+
+    deleteLike();
+    location.reload();
+  };
 
   return (
     <Container ref={innerRef} onClick={onClick}>
@@ -73,6 +90,17 @@ const ReviewItem = ({ review, accessToken, innerRef, onClick }) => {
             <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
             <ViewCount>{comments?.length}</ViewCount>
           </IconContainer>
+          {path === PATH.MY_PAGE_LIKE_REVIEW && (
+            <IconContainer>
+              <Button
+                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                styles={buttonStyles}
+                onClick={cancelLike}
+              >
+                좋아요 취소
+              </Button>
+            </IconContainer>
+          )}
         </InfoContainer>
         <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
       </BottomContainer>
@@ -93,12 +121,14 @@ ReviewItem.propTypes = {
     comments: PropTypes.array.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
-  innerRef: PropTypes.node,
+  innerRef: PropTypes.func,
+  path: PropTypes.string,
   onClick: PropTypes.func,
 };
 
 ReviewItem.defaultProps = {
   innerRef: null,
+  path: '',
   onClick: () => {},
 };
 export default ReviewItem;

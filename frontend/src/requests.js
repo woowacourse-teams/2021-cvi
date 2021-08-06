@@ -146,6 +146,33 @@ const requestDeleteLike = (accessToken, postId) =>
 
 const requestVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations`);
 
+const requestGetMyReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=NONE&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestGetMyCommentReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=COMMENTS&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestGetMyLikeReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=LIKES&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -163,4 +190,7 @@ export {
   requestPostLike,
   requestDeleteLike,
   requestVaccinationStateList,
+  requestGetMyReviewList,
+  requestGetMyCommentReviewList,
+  requestGetMyLikeReviewList,
 };

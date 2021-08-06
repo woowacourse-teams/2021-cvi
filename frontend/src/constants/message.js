@@ -36,6 +36,7 @@ const SNACKBAR_MESSAGE = {
 const CONFIRM_MESSAGE = {
   DELETE_REVIEW: '후기를 삭제하시겠습니까?',
   DELETE_COMMENT: '댓글을 삭제하시겠습니까?',
+  CANCEL_LIKE: '좋아요를 취소하시겠습니까?',
   GO_BACK: '현재 화면에서 나가시겠습니까? 변경사항이 저장되지 않을 수 있습니다.',
 };
 

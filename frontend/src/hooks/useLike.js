@@ -53,7 +53,7 @@ const useLike = (accessToken, hasLiked, likeCount, postId) => {
     updatedHasLiked ? deleteLike() : createLike();
   };
 
-  return { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount };
+  return { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount, deleteLike };
 };
 
 export default useLike;

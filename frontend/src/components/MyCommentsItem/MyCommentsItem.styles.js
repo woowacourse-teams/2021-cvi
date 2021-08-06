@@ -1,26 +1,24 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FONT_COLOR, LINE_LIMIT } from '../../constants';
+import { FONT_COLOR, LINE_LIMIT, PALETTE } from '../../constants';
 
 const Container = styled.div`
+  width: 100%;
   cursor: pointer;
 `;
 
+const Content = styled.div`
+  padding: 2.4rem 3.2rem;
+  border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+`;
+
 const ReviewContainer = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 0.1rem transparent ${FONT_COLOR.LIGHT_GRAY};
+  width: 100%;
   border-radius: 1.6rem;
   padding: 1.8rem;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-`;
-
-const TopContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const CreatedAt = styled.div`
@@ -30,6 +28,11 @@ const CreatedAt = styled.div`
 
 const CommentContent = styled.div`
   margin: 0.6rem 0 2.4rem 0;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ShotVerified = styled.div`
@@ -54,21 +57,14 @@ const Writer = styled.div`
   font-size: 1.4rem;
 `;
 
-const frameStyle = css`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 2.4rem;
-`;
-
 export {
   Container,
-  ReviewContainer,
-  TopContainer,
+  Content,
   CreatedAt,
   CommentContent,
+  ReviewContainer,
+  TopContainer,
   ShotVerified,
   ReviewContent,
   Writer,
-  frameStyle,
 };

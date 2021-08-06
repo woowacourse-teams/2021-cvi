@@ -16,6 +16,11 @@ const Container = styled.div`
   }
 `;
 
+const ScrollLoadingContainer = styled.div`
+  position: relative;
+  height: 8rem;
+`;
+
 const Title = styled.div`
   font-size: 2.8rem;
   margin-bottom: 6.8rem;
@@ -28,6 +33,7 @@ const Title = styled.div`
 `;
 
 const MyReviewList = styled.div`
+  position: relative;
   width: 100%;
   & > *:not(:last-child) {
     border-bottom: 0.15rem solid ${PALETTE.NAVY100};
@@ -35,7 +41,10 @@ const MyReviewList = styled.div`
 `;
 
 const frameStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
 `;
 
-export { Container, Title, MyReviewList, frameStyle };
+export { Container, ScrollLoadingContainer, Title, MyReviewList, frameStyle };

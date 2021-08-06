@@ -47,7 +47,7 @@ const MyPage = ({ children }) => {
               <Link to={PATH.MY_PAGE_COMMENT_REVIEW}>댓글 단 글</Link>
             </div>
             <div>
-              <Link to={PATH.MY_PAGE_LIKE_REVIEW}>좋아요 표시한 글</Link>
+              <Link to={PATH.MY_PAGE_LIKE_REVIEW}>좋아요 누른 글</Link>
             </div>
           </MenuItem>
         </MenuContainer>

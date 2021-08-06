@@ -3,6 +3,4 @@ const RESPONSE_STATE = {
   FAILURE: 'FAILURE',
 };
 
-const PAGING_SIZE = 10;
-
-export { RESPONSE_STATE, PAGING_SIZE };
+export { RESPONSE_STATE };
