@@ -61,7 +61,6 @@ sonarqube {
     properties {
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
-        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
     }
 }
 
@@ -128,6 +127,7 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
             ] + Qdomains
         }
     }
+    finalizedBy 'sonarqube'
 }
 
 task testCoverage(type: Test) {
