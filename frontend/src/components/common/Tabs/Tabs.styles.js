@@ -1,12 +1,16 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FONT_COLOR, PALETTE } from '../../../constants';
+import { FONT_COLOR, THEME_COLOR } from '../../../constants';
+
+const SELECTED_TAB_STYLE_TYPE = Object.freeze({
+  UNDERLINE: 'UNDERLINE',
+  LEFT_CIRCLE: 'LEFT_CIRCLE',
+});
 
 const Container = styled.div`
   display: flex;
   height: 5.2rem;
   width: 100%;
-  border-bottom: 0.2rem solid ${PALETTE.NAVY100};
   justify-content: flex-start;
   align-items: center;
   line-height: 1.5;
@@ -27,11 +31,29 @@ const buttonStyles = css`
   }
 `;
 
-const selectedButtonStyles = css`
-  border-bottom: 2px solid ${FONT_COLOR.BLACK};
-  color: ${PALETTE.GRAY900};
-  padding-bottom: 0.1rem;
-  box-sizing: content-box;
-`;
+const selectedButtonStyles = {
+  [SELECTED_TAB_STYLE_TYPE.UNDERLINE]: css`
+    border-bottom: 2px solid ${FONT_COLOR.BLACK};
+    color: ${FONT_COLOR.BLACK};
+    padding-bottom: 0.1rem;
+    box-sizing: content-box;
+  `,
+  [SELECTED_TAB_STYLE_TYPE.LEFT_CIRCLE]: css`
+    color: ${FONT_COLOR.BLACK};
+    position: relative;
 
-export { Container, buttonStyles, selectedButtonStyles };
+    &::before {
+      content: '';
+      position: absolute;
+      top: 52%;
+      transform: translateY(-50%);
+      left: 0.4rem;
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 50%;
+      background-color: ${THEME_COLOR.PRIMARY};
+    }
+  `,
+};
+
+export { Container, buttonStyles, selectedButtonStyles, SELECTED_TAB_STYLE_TYPE };
