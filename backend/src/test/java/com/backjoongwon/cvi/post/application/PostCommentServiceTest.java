@@ -23,8 +23,8 @@ public class PostCommentServiceTest extends InitPostServiceTest {
         //given
         //when
         CommentRequest newCommentRequest = new CommentRequest("새로운 댓글 내용");
-        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalAnotherUser, newCommentRequest);
-        Post foundPost = postRepository.findWithCommentsById(post1.getId())
+        CommentResponse commentResponse = postService.createComment(post0.getId(), optionalUserWithLikesAndComment, newCommentRequest);
+        Post foundPost = postRepository.findWithCommentsById(post0.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
         assertThat(foundPost.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
@@ -36,7 +36,7 @@ public class PostCommentServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createComment(post2.getId(), Optional.empty(), commentRequest))
+        assertThatThrownBy(() -> postService.createComment(post1.getId(), Optional.empty(), commentRequest))
                 .isInstanceOf(UnAuthorizedException.class);
     }
 
@@ -44,10 +44,10 @@ public class PostCommentServiceTest extends InitPostServiceTest {
     @Test
     void updateComment() {
         //given
-        CommentResponse commentResponse = postService.createComment(post2.getId(), optionalUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
-        postService.updateComment(post2.getId(), commentResponse.getId(), optionalUser, updateRequest);
+        postService.updateComment(post1.getId(), commentResponse.getId(), optionalUserNoLikesAndComment, updateRequest);
         Comment comment = commentRepository.findById(commentResponse.getId()).get();
         //then
         assertThat(comment.getContent()).isEqualTo(updateRequest.getContent());
@@ -60,7 +60,7 @@ public class PostCommentServiceTest extends InitPostServiceTest {
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
         //then
-        assertThatThrownBy(() -> postService.updateComment(post2.getId(), 0L, optionalUser, updateRequest))
+        assertThatThrownBy(() -> postService.updateComment(post1.getId(), 0L, optionalUserNoLikesAndComment, updateRequest))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
@@ -69,11 +69,11 @@ public class PostCommentServiceTest extends InitPostServiceTest {
     @Test
     void updateCommentWhenWrongUser() {
         //given
-        CommentResponse commentResponse = postService.createComment(post2.getId(), optionalUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
         CommentRequest updateRequest = new CommentRequest("저녁 술 ㄱ?");
         //when
         //then
-        assertThatThrownBy(() -> postService.updateComment(post2.getId(), commentResponse.getId(), optionalAnotherUser, updateRequest))
+        assertThatThrownBy(() -> postService.updateComment(post1.getId(), commentResponse.getId(), optionalUserWithLikesAndComment, updateRequest))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.");
     }
@@ -82,13 +82,13 @@ public class PostCommentServiceTest extends InitPostServiceTest {
     @Test
     void deleteComment() {
         //given
-        CommentResponse commentResponse = postService.createComment(post2.getId(), optionalUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
         //when
-        postService.deleteComment(post2.getId(), commentResponse.getId(), optionalUser);
+        postService.deleteComment(post1.getId(), commentResponse.getId(), optionalUserNoLikesAndComment);
         postRepository.flush();
 
         Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
-        Post foundPost = postRepository.findById(this.post2.getId()).get();
+        Post foundPost = postRepository.findById(this.post1.getId()).get();
         //then
         assertThat(foundComment).isEmpty();
         assertThat(foundPost.getCommentsAsList()).extracting("id").doesNotContain(commentResponse.getId());
@@ -100,7 +100,7 @@ public class PostCommentServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteComment(post2.getId(), 0L, optionalUser))
+        assertThatThrownBy(() -> postService.deleteComment(post1.getId(), 0L, optionalUserNoLikesAndComment))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
@@ -109,10 +109,10 @@ public class PostCommentServiceTest extends InitPostServiceTest {
     @Test
     void deleteCommentWhenWrongUser() {
         //given
-        CommentResponse commentResponse = postService.createComment(post2.getId(), optionalUser, commentRequest);
+        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteComment(post2.getId(), commentResponse.getId(), optionalAnotherUser))
+        assertThatThrownBy(() -> postService.deleteComment(post1.getId(), commentResponse.getId(), optionalUserWithLikesAndComment))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
     }

@@ -8,6 +8,7 @@ import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ class PostServiceTest extends InitPostServiceTest {
     void create() {
         //given
         //when
-        PostResponse postResponse = postService.create(optionalUser, postRequest);
+        PostResponse postResponse = postService.create(optionalUserNoLikesAndComment, postRequest);
         Post foundPost = postRepository.findById(postResponse.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
@@ -58,9 +59,9 @@ class PostServiceTest extends InitPostServiceTest {
     void findById() {
         //given
         //when
-        PostResponse response = postService.findById(post2.getId(), optionalUser);
+        PostResponse response = postService.findById(post1.getId(), optionalUserNoLikesAndComment);
         //then
-        assertThat(response.getId()).isEqualTo(post2.getId());
+        assertThat(response.getId()).isEqualTo(post1.getId());
     }
 
     @DisplayName("게시글 단일 조회 - 실패 - 게시글이 존재하지 않는 경우")
@@ -69,7 +70,7 @@ class PostServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.findById(0L, optionalUser))
+        assertThatThrownBy(() -> postService.findById(0L, optionalUserNoLikesAndComment))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -78,10 +79,10 @@ class PostServiceTest extends InitPostServiceTest {
     void findAll() {
         //given
         //when
-        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUser);
+        List<PostResponse> response = postService.findByVaccineType(VaccinationType.ALL, optionalUserNoLikesAndComment);
         //then
         assertThat(response).hasSize(7);
-        assertThat(response.get(0).getContent()).isEqualTo(post7.getContent());
+        assertThat(response.get(0).getContent()).isEqualTo(post6.getContent());
     }
 
     @DisplayName("게시글 수정 - 성공")
@@ -89,8 +90,8 @@ class PostServiceTest extends InitPostServiceTest {
     void update() {
         //given
         PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
-        postService.update(post2.getId(), optionalUser, changedRequest);
-        Post changedPost = postRepository.findById(post2.getId())
+        postService.update(post1.getId(), optionalUserNoLikesAndComment, changedRequest);
+        Post changedPost = postRepository.findById(post1.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
         assertThat(changedPost.getContent()).isEqualTo(changedRequest.getContent());
@@ -103,7 +104,7 @@ class PostServiceTest extends InitPostServiceTest {
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(0L, optionalUser, changedContent))
+        assertThatThrownBy(() -> postService.update(0L, optionalUserNoLikesAndComment, changedContent))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -114,7 +115,7 @@ class PostServiceTest extends InitPostServiceTest {
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post2.getId(), optionalAnotherUser, changedContent))
+        assertThatThrownBy(() -> postService.update(post1.getId(), optionalUserWithLikesAndComment, changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
@@ -123,8 +124,8 @@ class PostServiceTest extends InitPostServiceTest {
     void delete() {
         //given
         //when
-        postService.delete(post2.getId(), optionalUser);
-        Optional<Post> foundPost = postRepository.findById(post2.getId());
+        postService.delete(post1.getId(), optionalUserNoLikesAndComment);
+        Optional<Post> foundPost = postRepository.findById(post1.getId());
         //then
         assertThat(foundPost).isEmpty();
     }
@@ -134,9 +135,9 @@ class PostServiceTest extends InitPostServiceTest {
     void deleteWithComments() {
         //given
         //when
-        CommentResponse commentResponse = postService.createComment(post2.getId(), optionalUser, commentRequest);
-        postService.delete(post2.getId(), optionalUser);
-        Optional<Post> foundPost = postRepository.findById(post2.getId());
+        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
+        postService.delete(post1.getId(), optionalUserNoLikesAndComment);
+        Optional<Post> foundPost = postRepository.findById(post1.getId());
         Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
         //then
         assertThat(foundPost).isEmpty();
@@ -147,8 +148,9 @@ class PostServiceTest extends InitPostServiceTest {
     @Test
     void deleteLikeWhenDeletePost() {
         //given
+        LikeResponse likeResponse = postService.createLike(post0.getId(), optionalUserNoLikesAndComment);
         //when
-        postService.delete(post1.getId(), optionalUser);
+        postService.delete(post0.getId(), optionalUserNoLikesAndComment);
         //then
         assertThat(likeRepository.findById(likeResponse.getId())).isEmpty();
     }
@@ -159,7 +161,7 @@ class PostServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.delete(0L, optionalUser))
+        assertThatThrownBy(() -> postService.delete(0L, optionalUserNoLikesAndComment))
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
@@ -170,7 +172,7 @@ class PostServiceTest extends InitPostServiceTest {
         PostRequest postRequest = new PostRequest("변경할 내용", VaccinationType.MODERNA);
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post2.getId(), optionalAnotherUser, postRequest))
+        assertThatThrownBy(() -> postService.update(post1.getId(), optionalUserWithLikesAndComment, postRequest))
                 .isInstanceOf(InvalidOperationException.class);
     }
 
@@ -179,7 +181,7 @@ class PostServiceTest extends InitPostServiceTest {
     void findByVaccineType(VaccinationType vaccinationType) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUserNoLikesAndComment);
         //then
         assertThat(postResponses).filteredOn(
                 response -> response.getVaccinationType().equals(vaccinationType)
@@ -200,7 +202,7 @@ class PostServiceTest extends InitPostServiceTest {
     void findByVaccineTypeFirstPageAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 3, Sort.CREATED_AT_DESC, 24, optionalUserNoLikesAndComment);
         //then
         assertThat(postResponses).size().isEqualTo(3);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 6", "Test 5", "Test 4"));
@@ -212,7 +214,7 @@ class PostServiceTest extends InitPostServiceTest {
     void findByVaccineTypeNextPageAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 3, 3, Sort.CREATED_AT_DESC, 24, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 3, 3, Sort.CREATED_AT_DESC, 24, optionalUserNoLikesAndComment);
         //then
         assertThat(postResponses).size().isEqualTo(3);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 3", "Test 2", "Test 1"));
@@ -224,7 +226,7 @@ class PostServiceTest extends InitPostServiceTest {
     void findByVaccineTypeFirstPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, 2147483647, optionalUserNoLikesAndComment);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -245,7 +247,7 @@ class PostServiceTest extends InitPostServiceTest {
     void findByVaccineTypeNextPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, 2147483647, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, 2147483647, optionalUserNoLikesAndComment);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -261,12 +263,24 @@ class PostServiceTest extends InitPostServiceTest {
         );
     }
 
+//    @ParameterizedTest(name = "게시글 정렬 조회 - 성공")
+//    @MethodSource
+//    void findByVaccineTypeSortBy() {
+//        System.out.println();
+//    }
+//
+//    static Stream<Arguments> findByVaccineTypeSortBy() {
+//        return Stream.of(
+//                Arguments.of()
+//        );
+//    }
+
     @DisplayName("게시글에 좋아요를 누른 후 본인이 다시 해당 글을 조회하면 hasLiked값이 true로 조회된다.")
     @Test
     void hasLiked() {
         //given
         //when
-        PostResponse postResponse = postService.findById(post1.getId(), optionalUser);
+        PostResponse postResponse = postService.findById(post1.getId(), optionalUserWithLikesAndComment);
         //then
         assertThat(postResponse.isHasLiked()).isTrue();
     }
@@ -276,7 +290,7 @@ class PostServiceTest extends InitPostServiceTest {
     void notHasLiked() {
         //given
         //when
-        PostResponse postResponse = postService.findById(post1.getId(), optionalAnotherUser);
+        PostResponse postResponse = postService.findById(post0.getId(), optionalUserNoLikesAndComment);
         //then
         assertThat(postResponse.isHasLiked()).isFalse();
     }
