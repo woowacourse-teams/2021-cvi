@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE } from '../../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -14,6 +13,11 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     padding: 3rem 0 0 0;
   }
+`;
+
+const ScrollLoadingContainer = styled.div`
+  position: relative;
+  height: 8rem;
 `;
 
 const MyCommentReviewListContainer = styled.div`
@@ -31,14 +35,11 @@ const Title = styled.div`
   }
 `;
 
-const MyCommentReviewList = styled.div`
-  width: 100%;
-  border-bottom: 0.15rem solid ${PALETTE.NAVY100};
-  padding: 2.4rem 3.2rem;
-`;
-
 const frameStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
 `;
 
-export { Container, MyCommentReviewListContainer, Title, MyCommentReviewList, frameStyle };
+export { Container, ScrollLoadingContainer, MyCommentReviewListContainer, Title, frameStyle };

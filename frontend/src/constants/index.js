@@ -2,7 +2,7 @@ import PATH from './path';
 import PALETTE from './palette';
 import VACCINATION from './vaccination';
 import { VACCINATION_COLOR, FONT_COLOR, THEME_COLOR } from './theme';
-import { LINE_LIMIT, COMMENT_LIMIT, NICKNAME_LIMIT } from './limit';
+import { LINE_LIMIT, COMMENT_LIMIT, NICKNAME_LIMIT, PAGING_SIZE } from './limit';
 import AGE_RANGE from './ageRange';
 import {
   ERROR_MESSAGE,
@@ -14,7 +14,7 @@ import {
 import { BASE_URL, NAVER_LOGIN_URL, KAKAO_LOGIN_URL } from './url';
 import { LOCAL_STORAGE_KEY } from './localStorage';
 import { TO_DATE_TYPE } from './toDateType';
-import { RESPONSE_STATE, PAGING_SIZE } from './service';
+import { RESPONSE_STATE } from './service';
 import REGEX from './regex';
 import { REGION_NAME } from './region';
 import { FILTER_TYPE, SORT_TYPE } from './list';
