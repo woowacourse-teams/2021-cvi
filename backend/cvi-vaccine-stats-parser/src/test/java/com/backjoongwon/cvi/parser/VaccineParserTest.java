@@ -2,26 +2,32 @@ package com.backjoongwon.cvi.parser;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.WorldVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.util.DateConverter;
 import com.backjoongwon.cvi.util.JsonMapper;
-import org.junit.jupiter.api.AfterEach;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.MockedStatic;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
 
 @DisplayName("공공 데이터 api 요청 테스트")
 class VaccineParserTest {
@@ -31,7 +37,10 @@ class VaccineParserTest {
             "울산광역시", "경기도", "강원도", "세종특별자치시", "충청북도", "충청남도",
             "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
-    private MockedStatic<JsonMapper> mockJsonMapper;
+    private JsonMapper jsonMapper;
+    private Parser parser;
+    private VaccinationParser vaccineParser;
+
 
     private static Stream<Arguments> parseToPublicDataToBeforeTenAndAnyDate() {
         return Stream.of(
@@ -51,23 +60,23 @@ class VaccineParserTest {
 
     @BeforeEach
     void init() {
-        mockJsonMapper = mockStatic(JsonMapper.class);
-    }
-
-    @AfterEach
-    void close() {
-        mockJsonMapper.close();
+        jsonMapper = mock(JsonMapper.class);
+        parser = mock(Parser.class);
+        vaccineParser = new VaccinationParser(parser, jsonMapper);
     }
 
     @DisplayName("백신 접종 데이터 가져오기 - 성공 - 10시 이후의 오늘 날짜 및 2021-03-10이후의 날짜")
     @ParameterizedTest
     @MethodSource
-    void parseToPublicDataToBeforeTenAndAnyDate(LocalDateTime targetDateTime) {
+    void parseToPublicDataToBeforeTenAndAnyDate(LocalDateTime targetDateTime) throws JsonProcessingException {
         //given
-        VaccineParserResponse vaccineParserResponse = toVaccineParserResponse(targetDateTime);
+        VaccineParserResponse expect = toVaccineParserResponse(targetDateTime);
+        String rawData = new ObjectMapper().writeValueAsString(expect);
         //when
-        when(JsonMapper.toObject(anyString(), any())).thenReturn(vaccineParserResponse);
-        List<RegionVaccinationData> regionVaccinationData = vaccineParserResponse.getData();
+        willReturn(expect).given(jsonMapper).toObject(anyString(), any());
+        willReturn(rawData).given(parser).parse(anyString());
+        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
+        List<RegionVaccinationData> regionVaccinationData = actual.getData();
         //then
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedFirstCnt)
                 .isNotEmpty();
@@ -90,18 +99,62 @@ class VaccineParserTest {
     @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
     @ParameterizedTest
     @MethodSource
-    void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) {
+    void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) throws JsonProcessingException {
         //given
-        VaccinationParser vaccineParser = new VaccinationParser(new Parser());
+        VaccineParserResponse expect = toVaccineParserResponse(targetDateTime);
+        String rawData = new ObjectMapper().writeValueAsString(expect);
         //when
-        VaccineParserResponse vaccineParserResponse = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
+        willReturn(expect).given(jsonMapper).toObject(anyString(), any());
+        willReturn(rawData).given(parser).parse(anyString());
+        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
         //then
-        assertThat(vaccineParserResponse.getCurrentCount()).isEqualTo(0);
-        assertThat(vaccineParserResponse.getData()).isEmpty();
-        assertThat(vaccineParserResponse.getMatchCount()).isEqualTo(0);
-        assertThat(vaccineParserResponse.getPage()).isEqualTo(1);
-        assertThat(vaccineParserResponse.getPerPage()).isEqualTo(20);
-        assertThat(vaccineParserResponse.getTotalCount()).isEqualTo(0);
+        assertThat(actual.getCurrentCount()).isEqualTo(0);
+        assertThat(actual.getData()).isEmpty();
+        assertThat(actual.getMatchCount()).isEqualTo(0);
+        assertThat(actual.getPage()).isEqualTo(1);
+        assertThat(actual.getPerPage()).isEqualTo(20);
+        assertThat(actual.getTotalCount()).isEqualTo(0);
+    }
+
+    @DisplayName("세계 백신 접종 데이터 - 성공")
+    @Test
+    void parseToPWorldPublicData() throws JsonProcessingException {
+        //given
+        List<WorldVaccinationParserResponse> expect = toWorldVaccinationParserResponse();
+        String rawData = new ObjectMapper().writeValueAsString(expect);
+        //when
+        willReturn(expect).given(jsonMapper).toWorldVaccinationParserResponse(anyString());
+        willReturn(rawData).given(parser).parse(anyString());
+        WorldVaccinationParserResponse actual = vaccineParser.parseToWorldPublicData();
+        List<WorldVaccinationData> actualData = actual.getData();
+        //then
+        assertThat(actual.getCountry()).isEqualTo("World");
+        assertThat(actualData).extracting("date").contains("2021-08-04", "2021-08-05");
+        assertThat(actualData).extracting(WorldVaccinationData::getTotal_vaccinations).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeople_vaccinated).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeople_fully_vaccinated).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations_raw).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getTotal_vaccinations_per_hundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeople_vaccinated_per_hundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeople_fully_vaccinated_per_hundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations_per_million).isNotEmpty();
+    }
+
+    @DisplayName("세계 백신 접종 데이터 - 성공 - 데이터 업데이트 전 요청")
+    @Test
+    void parseToPWorldPublicDataWhenNotUpdate() throws JsonProcessingException {
+        //given
+        List<WorldVaccinationParserResponse> expect = Collections.singletonList(WorldVaccinationParserResponse.empty());
+        String rawData = new ObjectMapper().writeValueAsString(expect);
+        //when
+        willReturn(expect).given(jsonMapper).toWorldVaccinationParserResponse(anyString());
+        willReturn(rawData).given(parser).parse(anyString());
+        WorldVaccinationParserResponse actual = vaccineParser.parseToWorldPublicData();
+        List<WorldVaccinationData> actualData = actual.getData();
+        //then
+        assertThat(actual.getCountry()).isEqualTo("World");
+        assertThat(actualData).isEmpty();
     }
 
     private VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
@@ -144,5 +197,22 @@ class VaccineParserTest {
                 new RegionVaccinationData(251414, 93046, expectDateTime,
                         7155, 427, "제주특별자치도", 258569, 93473)
         ), 18, 1, 20, 2634);
+    }
+
+    private List<WorldVaccinationParserResponse> toWorldVaccinationParserResponse() {
+        return Arrays.asList(
+                new WorldVaccinationParserResponse("Afghanistan", "AFG",
+                        Collections.singletonList(new WorldVaccinationData("2021-08-01", 1442250L, 763936L, 33692L, 0,
+                                0, 0, 3.7, 1.96, 865L))
+                ),
+                new WorldVaccinationParserResponse("World", "OWID_WRL",
+                        Arrays.asList(new WorldVaccinationData("2021-08-04", 4327424315L, 2293196690L, 1175939230L,
+                                        43847311L, 42963523L, 55.52, 29.42, 15.09, 5512L),
+                                new WorldVaccinationData("2021-08-05", 4359746656L, 2303769251L, 1181952381L,
+                                        32322341L, 40310055L, 55.93, 29.56, 15.16, 5171L)
+
+                        )
+                )
+        );
     }
 }
