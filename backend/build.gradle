@@ -59,7 +59,6 @@ task cleanGeneatedDir(type: Delete) { // 인텔리제이 annotation processor �
 
 sonarqube {
     properties {
-        property "sonar.host.url", "http://cvi-korea-sonarqube.kro.kr:8080"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
         property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
