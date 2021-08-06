@@ -15,7 +15,6 @@ import SnackBar from './SnackBar/SnackBar';
 import Loading from './Loading/Loading';
 import ToggleButton from './ToggleButton/ToggleButton';
 import BarChart from './BarChart/BarChart';
-import Dropdown from './Dropdown/Dropdown';
 import OptionList from './OptionList/OptionList';
 
 export {
@@ -36,6 +35,5 @@ export {
   Loading,
   ToggleButton,
   BarChart,
-  Dropdown,
   OptionList,
 };
