@@ -7,6 +7,8 @@ import {
   THEME_COLOR,
   PAGING_SIZE,
   FONT_COLOR,
+  FILTER_TYPE,
+  SORT_TYPE,
 } from '../../constants';
 import {
   Container,
@@ -56,8 +58,8 @@ const ReviewPage = () => {
   } = useLoading();
 
   const vaccineList = ['전체', ...Object.values(VACCINATION)];
-  const filterList = ['최신순', '좋아요순', '조회수순'];
-  const sortList = ['오름차순', '내림차순'];
+  const filterList = Object.values(FILTER_TYPE);
+  const sortList = Object.values(SORT_TYPE);
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
   const goReviewDetailPage = (id) => {
@@ -88,7 +90,10 @@ const ReviewPage = () => {
 
   const getReviewList = useCallback(async () => {
     if (selectedVaccination === '전체') {
-      const response = await getAllReviewListAsync(accessToken, offset);
+      const response = await getAllReviewListAsync(accessToken, offset, [
+        selectedFilter,
+        selectedSort,
+      ]);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getAllReviewListAsync');
@@ -99,7 +104,10 @@ const ReviewPage = () => {
       setReviewList((prevState) => [...prevState, ...response.data]);
     } else {
       const vaccinationType = findKey(VACCINATION, selectedVaccination);
-      const response = await getSelectedReviewListAsync(accessToken, vaccinationType, offset);
+      const response = await getSelectedReviewListAsync(accessToken, vaccinationType, offset, [
+        selectedFilter,
+        selectedSort,
+      ]);
 
       if (response.state === RESPONSE_STATE.FAILURE) {
         alert('failure - getSelectedReviewListAsync');
@@ -112,7 +120,7 @@ const ReviewPage = () => {
 
     hideLoading();
     hideScrollLoading();
-  }, [offset, selectedVaccination]);
+  }, [offset, selectedVaccination, selectedFilter, selectedSort]);
 
   useEffect(() => {
     getReviewList();
@@ -123,7 +131,7 @@ const ReviewPage = () => {
 
     setOffset(0);
     setReviewList([]);
-  }, [selectedVaccination]);
+  }, [selectedVaccination, selectedFilter, selectedSort]);
 
   useEffect(() => {
     if (!inView) return;

@@ -1,17 +1,46 @@
-import { BASE_URL, PAGING_SIZE } from './constants';
+import { BASE_URL, FILTER_TYPE, PAGING_SIZE, SORT_TYPE } from './constants';
 
-const requestGetAllReviewList = (accessToken, offset) =>
-  fetch(`${BASE_URL}/posts/paging?offset=${offset}&size=${PAGING_SIZE}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+const getFilterQuery = (filteringList) => {
+  const [filterType, sortType] = filteringList;
 
-const requestGetSelectedReviewList = (accessToken, vaccinationType, offset) =>
+  if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.ASC) {
+    return `&sort=CREATED_AT_ASC`;
+  } else if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.DESC) {
+    return `&sort=CREATED_AT_DESC`;
+  } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.ASC) {
+    return `&sort=LIKE_COUNT_ASC`;
+  } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.DESC) {
+    return `&sort=LIKE_COUNT_DESC`;
+  } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.ASC) {
+    return `&sort=VIEW_COUNT_ASC`;
+  } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.DESC) {
+    return `&sort=VIEW_COUNT_DESC`;
+  } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.ASC) {
+    return `&sort=COMMENT_COUNT_ASC`;
+  } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.DESC) {
+    return `&sort=COMMENT_COUNT_DESC`;
+  }
+};
+
+const filterQuery = (filteringList) => (filteringList ? getFilterQuery(filteringList) : '');
+
+const requestGetAllReviewList = (accessToken, offset, filteringList) =>
   fetch(
-    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&offset=${offset}&size=${PAGING_SIZE}`,
+    `${BASE_URL}/posts/paging?offset=${offset}&size=${PAGING_SIZE}${filterQuery(filteringList)}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+const requestGetSelectedReviewList = (accessToken, vaccinationType, offset, filteringList) =>
+  fetch(
+    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&offset=${offset}&size=${PAGING_SIZE}${filterQuery(
+      filteringList,
+    )}`,
     {
       method: 'GET',
       headers: {
