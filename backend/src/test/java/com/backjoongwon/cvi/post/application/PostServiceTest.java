@@ -38,7 +38,7 @@ class PostServiceTest extends InitPostServiceTest {
         Post foundPost = postRepository.findById(postResponse.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
-        assertThat(postResponse.getWriter().getId()).isEqualTo(user1.getId());
+        assertThat(postResponse.getWriter().getId()).isEqualTo(user0.getId());
         assertThat(postResponse.getContent()).isEqualTo(postRequest.getContent());
         assertThat(foundPost).isNotNull();
         assertThat(foundPost.getUser()).isNotNull();
@@ -89,9 +89,9 @@ class PostServiceTest extends InitPostServiceTest {
     @Test
     void update() {
         //given
-        PostRequest changedRequest = new PostRequest("change content", postRequest.getVaccinationType());
-        postService.update(post1.getId(), optionalUserNoLikesAndComment, changedRequest);
-        Post changedPost = postRepository.findById(post1.getId())
+        PostRequest changedRequest = new PostRequest("changed content", postRequest.getVaccinationType());
+        postService.update(post0.getId(), Optional.of(user0), changedRequest);
+        Post changedPost = postRepository.findById(post0.getId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
         assertThat(changedPost.getContent()).isEqualTo(changedRequest.getContent());
@@ -115,7 +115,7 @@ class PostServiceTest extends InitPostServiceTest {
         PostRequest changedContent = new PostRequest("changed content", postRequest.getVaccinationType());
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post1.getId(), optionalUserWithLikesAndComment, changedContent))
+        assertThatThrownBy(() -> postService.update(post0.getId(), Optional.of(user1), changedContent))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
@@ -124,19 +124,19 @@ class PostServiceTest extends InitPostServiceTest {
     void delete() {
         //given
         //when
-        postService.delete(post1.getId(), optionalUserNoLikesAndComment);
-        Optional<Post> foundPost = postRepository.findById(post1.getId());
+        postService.delete(post0.getId(), Optional.of(user0));
+        Optional<Post> foundPost = postRepository.findById(post0.getId());
         //then
         assertThat(foundPost).isEmpty();
     }
 
-    @DisplayName("게시글 삭제 - 성공 - 댓글도 함꼐 삭제 되는지 확인")
+    @DisplayName("게시글 삭제 - 성공 - 댓글도 함께 삭제 되는지 확인")
     @Test
     void deleteWithComments() {
         //given
         //when
-        CommentResponse commentResponse = postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
-        postService.delete(post1.getId(), optionalUserNoLikesAndComment);
+        CommentResponse commentResponse = postService.createComment(post1.getId(), Optional.of(user1), commentRequest);
+        postService.delete(post1.getId(), Optional.of(user1));
         Optional<Post> foundPost = postRepository.findById(post1.getId());
         Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
         //then
@@ -165,14 +165,14 @@ class PostServiceTest extends InitPostServiceTest {
                 .isExactlyInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("게시글 작성자 확인 - 실패 - 글 작성자가 아님")
+    @DisplayName("게시글 삭제 - 실패 - 글 작성자가 아님")
     @Test
     void deletePostFailureWhenNotAuthor() {
         //given
         PostRequest postRequest = new PostRequest("변경할 내용", VaccinationType.MODERNA);
         //when
         //then
-        assertThatThrownBy(() -> postService.update(post1.getId(), optionalUserWithLikesAndComment, postRequest))
+        assertThatThrownBy(() -> postService.update(post1.getId(), Optional.of(user0), postRequest))
                 .isInstanceOf(InvalidOperationException.class);
     }
 

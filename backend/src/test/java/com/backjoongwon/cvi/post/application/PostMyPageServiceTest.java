@@ -25,15 +25,15 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
         //given
         Filter filter = Filter.NONE;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUserNoLikesAndComment);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, Optional.of(user0));
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
     }
 
     static Stream<Arguments> findMyPostsPagingFirstPage() {
         return Stream.of(
-                Arguments.of(0, 4, Arrays.asList("Test 4", "Test 3", "Test 2", "Test 1")),
-                Arguments.of(0, 2, Arrays.asList("Test 4", "Test 3")));
+                Arguments.of(0, 4, Arrays.asList("Test 6", "Test 5", "Test 0")),
+                Arguments.of(0, 2, Arrays.asList("Test 6", "Test 5")));
     }
 
     @ParameterizedTest(name = "내가 좋아요 한 글 첫 페이징 조회 - 성공")
@@ -42,7 +42,7 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
         //given
         Filter filter = Filter.LIKES;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUserWithLikesAndComment);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, Optional.of(user1));
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
     }
@@ -58,12 +58,12 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
     void findByUserAndFilterComments() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUserNoLikesAndComment, Filter.COMMENTS);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUserWithLikesAndComment, Filter.COMMENTS);
         List<Long> postIds = postResponses.stream()
                 .map(PostResponse::getId)
                 .collect(Collectors.toList());
         //then
-        assertThat(postIds).containsExactlyInAnyOrder(post2.getId(), post1.getId(), post0.getId(), post3.getId(), post4.getId());
+        assertThat(postIds).containsExactlyInAnyOrder(post6.getId(), post5.getId(), post4.getId(), post3.getId(), post2.getId(), post1.getId());
     }
 
     @ParameterizedTest(name = "내가 댓글 단 게시글 첫 페이징 조회 - 성공")
@@ -71,17 +71,16 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
     void findCommentedPostFirstPage(int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, optionalUserNoLikesAndComment);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, 0, size, Optional.of(user1));
         //then
         assertThat(postResponses.size()).isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
-        assertThat(postResponses).extracting("writer.id").containsOnly(user1.getId());
     }
 
     static Stream<Arguments> findCommentedPostFirstPage() {
         return Stream.of(
-                Arguments.of(2, Arrays.asList("Test 4", "Test 3")),
-                Arguments.of(3, Arrays.asList("Test 4", "Test 3", "Test 2"))
+                Arguments.of(3, Arrays.asList("Test 6", "Test 5", "Test 4")),
+                Arguments.of(2, Arrays.asList("Test 6", "Test 5"))
         );
     }
 
@@ -90,13 +89,13 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
     void findByUserAndFilterNone() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user1), Filter.NONE);
+        List<PostResponse> postResponses = postService.findByUserAndFilter(Optional.of(user0), Filter.NONE);
         //then
         List<Long> userIds = postResponses.stream()
                 .map(postResponse -> postResponse.getWriter().getId())
                 .distinct()
                 .collect(Collectors.toList());
-        assertThat(userIds).containsExactly(user1.getId());
+        assertThat(userIds).containsExactly(user0.getId());
     }
 
     @DisplayName("내가 좋아요 한 게시글 조회 - 성공")

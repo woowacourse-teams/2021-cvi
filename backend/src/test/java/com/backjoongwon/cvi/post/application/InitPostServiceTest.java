@@ -53,8 +53,8 @@ public class InitPostServiceTest {
     @PersistenceContext
     private EntityManager em;
 
+    protected User user0;
     protected User user1;
-    protected User user2;
     protected Optional<User> optionalUserNoLikesAndComment;
     protected Optional<User> optionalUserWithLikesAndComment;
     protected Post post0;
@@ -70,30 +70,27 @@ public class InitPostServiceTest {
     @BeforeEach
     void init() {
         List<User> users = initUser();
-        List<Post> posts = initPost();
+        List<Post> posts = initPost(users);
         initLike(users, posts);
+        initComment(users, posts);
         postRequest = new PostRequest("Test Content222", VaccinationType.PFIZER);
-        commentRequest = new CommentRequest("방귀대장 라뿡연훈이");
-        postService.createComment(post0.getId(), optionalUserNoLikesAndComment, commentRequest);
-        postService.createComment(post1.getId(), optionalUserNoLikesAndComment, commentRequest);
-        postService.createComment(post2.getId(), optionalUserNoLikesAndComment, commentRequest);
-        postService.createComment(post3.getId(), optionalUserNoLikesAndComment, commentRequest);
-        postService.createComment(post4.getId(), optionalUserNoLikesAndComment, commentRequest);
+        commentRequest = new CommentRequest("댓글");
     }
 
     /**
-     * 포스트0 -> 좋아요 안눌림
-     * 포스트1 -> 좋아요 1개, 댓글 1개 (유저1)
-     * 포스트2 -> 좋아요 2개, 댓글 2개 (유저1, 유저2)
-     * .....
-     * 포스트5 -> 좋아요 5개, 댓글 5개 (유저1, 유저2, 유저3, 유저4, 유저5)
-     * 포스트6 -> 좋아요 6개, 댓글 6개 (유저1, 유저2, 유저3, 유저4, 유저5, 유저6)
+     * 포스트0(유저0작성) -> 좋아요 0개
+     * 포스트1(유저1작성) -> 좋아요 1개, 댓글 1개 (유저1)
+     * 포스트2(유저2작성) -> 좋아요 2개, 댓글 2개 (유저1, 유저2)
+     * 포스트3(유저3작성) -> 좋아요 2개, 댓글 3개 (유저1, 유저2, 유저3)
+     * 포스트4(유저4작성) -> 좋아요 2개, 댓글 4개 (유저1, 유저2, 유저3, 유저4)
+     * 포스트5(유저0작성) -> 좋아요 5개, 댓글 5개 (유저1, 유저2, 유저3, 유저4, 유저5)
+     * 포스트6(유저0작성) -> 좋아요 6개, 댓글 6개 (유저1, 유저2, 유저3, 유저4, 유저5, 유저6)
      */
 
     private void initLike(List<User> users, List<Post> posts) {
         List<Like> likes = new ArrayList<>();
         for (int i = 1; i < posts.size(); i++) {
-            for (int j = 1; j <= i ; j++) {
+            for (int j = 1; j <= i; j++) {
                 Like like = Like.builder().user(users.get(j)).build();
                 posts.get(i).addLike(like);
                 likes.add(like);
@@ -105,7 +102,7 @@ public class InitPostServiceTest {
     private void initComment(List<User> users, List<Post> posts) {
         List<Comment> comments = new ArrayList<>();
         for (int i = 1; i < posts.size(); i++) {
-            for (int j = 1; j <= i ; j++) {
+            for (int j = 1; j <= i; j++) {
                 Comment comment = Comment.builder().content("댓글 " + j).user(users.get(j)).build();
                 posts.get(i).assignComment(comment);
                 comments.add(comment);
@@ -114,47 +111,47 @@ public class InitPostServiceTest {
         }
     }
 
-    private List<Post> initPost() {
+    private List<Post> initPost(List<User> users) {
         post0 = Post.builder()
                 .content("Test 0")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user1)
+                .user(users.get(0))
                 .createdAt(LocalDateTime.now())
                 .build();
         post1 = Post.builder()
                 .content("Test 1")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user1)
+                .user(users.get(1))
                 .createdAt(LocalDateTime.now())
                 .build();
         post2 = Post.builder()
                 .content("Test 2")
                 .vaccinationType(VaccinationType.PFIZER)
-                .user(user1)
+                .user(users.get(2))
                 .createdAt(LocalDateTime.now())
                 .build();
         post3 = Post.builder()
                 .content("Test 3")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user1)
+                .user(users.get(3))
                 .createdAt(LocalDateTime.now())
                 .build();
         post4 = Post.builder()
                 .content("Test 4")
                 .vaccinationType(VaccinationType.JANSSEN)
-                .user(user1)
+                .user(users.get(4))
                 .createdAt(LocalDateTime.now())
                 .build();
         post5 = Post.builder()
                 .content("Test 5")
                 .vaccinationType(VaccinationType.JANSSEN)
-                .user(user2)
+                .user(users.get(0))
                 .createdAt(LocalDateTime.now())
                 .build();
         post6 = Post.builder()
                 .content("Test 6")
                 .vaccinationType(VaccinationType.PFIZER)
-                .user(user2)
+                .user(users.get(0))
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -184,11 +181,11 @@ public class InitPostServiceTest {
         }
         userRepository.saveAll(users);
 
-        user1 = users.get(0);
-        user2 = users.get(1);
+        user0 = users.get(0);
+        user1 = users.get(1);
 
-        optionalUserNoLikesAndComment = Optional.of(user1);
-        optionalUserWithLikesAndComment = Optional.of(user2);
+        optionalUserNoLikesAndComment = Optional.of(user0);
+        optionalUserWithLikesAndComment = Optional.of(user1);
 
         return users;
     }
