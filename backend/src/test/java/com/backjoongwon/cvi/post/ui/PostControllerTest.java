@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -59,8 +60,12 @@ class PostControllerTest extends ApiDocument {
 
     private User user;
     private User anotherUser;
+    private Comment comment1;
+    private Comment comment2;
     private PostRequest request;
     private UserResponse userResponse;
+    private CommentResponse commentResponse1;
+    private CommentResponse commentResponse2;
 
     @BeforeEach
     void setUp() {
@@ -80,9 +85,13 @@ class PostControllerTest extends ApiDocument {
                 .socialId("{Unique ID received from social provider}")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
+        comment1 = Comment.builder().id(POST_ID).content("댓글입니다.").user(anotherUser).createdAt(LocalDateTime.now().minusDays(1)).build();
+        comment2 = Comment.builder().id(POST_ID + 1L).content("댓글입니다22.").user(anotherUser).createdAt(LocalDateTime.now()).build();
 
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
         userResponse = UserResponse.of(user, null);
+        commentResponse1 = CommentResponse.of(comment1);
+        commentResponse2 = CommentResponse.of(comment2);
 
         willReturn(true).given(jwtTokenProvider).isValidToken(ACCESS_TOKEN);
         willReturn(String.valueOf(user.getId())).given(jwtTokenProvider).getPayload(ACCESS_TOKEN);
@@ -93,7 +102,7 @@ class PostControllerTest extends ApiDocument {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, 2, false, request.getVaccinationType(), LocalDateTime.now());
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
         willReturn(expectedResponse).given(postService).create(any(), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(request);
@@ -334,6 +343,28 @@ class PostControllerTest extends ApiDocument {
         댓글_등록_실패함(response);
     }
 
+    @DisplayName("게시글 댓글 조회 - 성공")
+    @Test
+    void findCommentOfPost() throws Exception {
+        //given
+        willReturn(Arrays.asList(commentResponse1, commentResponse2)).given(postService).findCommentsById(anyLong());
+        //when
+        ResultActions response = 댓글_조회_요청(POST_ID);
+        //then
+        댓글_조회_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 조회 - 실패 - 게시글이 없는 경우")
+    @Test
+    void findCommentOfPostFailure() throws Exception {
+        //given
+        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(postService).findCommentsById(anyLong());
+        //when
+        ResultActions response = 댓글_조회_요청(anyLong());
+        //then
+        댓글_조회_실패함(response);
+    }
+
     @DisplayName("게시글 댓글 수정 - 성공")
     @Test
     void putComment() throws Exception {
@@ -381,41 +412,13 @@ class PostControllerTest extends ApiDocument {
         댓글_삭제_실패함(response);
     }
 
-    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request))
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
-        );
-    }
+    private PostResponse createPostResponse() {
+        AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
+        UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
+                ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
 
-    private void 댓글_수정_성공함(ResultActions response) throws Exception {
-        response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("comment-update"));
-    }
-
-    private void 댓글_수정_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("comment-update-failure"));
-    }
-
-    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
-                .header(HttpHeaders.AUTHORIZATION, accessToken));
-    }
-
-    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
-        response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("comment-delete"));
-    }
-
-    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("comment-delete-failure"));
+        return new PostResponse(1L, userResponse, "내용", 1,
+                1, 4, true, VaccinationType.PFIZER, LocalDateTime.now());
     }
 
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {
@@ -590,15 +593,6 @@ class PostControllerTest extends ApiDocument {
                 .andDo(toDocument("like-delete-failure"));
     }
 
-    private PostResponse createPostResponse() {
-        AgeRangeResponse ageRangeResponse = new AgeRangeResponse(AgeRange.TEENS);
-        UserResponse userResponse = new UserResponse(1L, "인비", ageRangeResponse, true,
-                ACCESS_TOKEN, SocialProvider.NAVER, "naver_id", "http://naver_url.com");
-
-        return new PostResponse(1L, userResponse, "내용", 1,
-                1, 4, true, VaccinationType.PFIZER, LocalDateTime.now());
-    }
-
     private ResultActions 댓글_등록_요청(Long postId, CommentRequest request, String headerValue) throws Exception {
         return mockMvc.perform(post("/api/v1/posts/{postId}/comments", postId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -617,5 +611,58 @@ class PostControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("comment-create-failure"));
+    }
+
+    private ResultActions 댓글_조회_요청(Long postId) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    private void 댓글_조회_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("comment-find"));
+    }
+
+    private void 댓글_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("comment-find-failure"));
+    }
+
+    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_수정_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-update"));
+    }
+
+    private void 댓글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-update-failure"));
+    }
+
+    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-delete"));
+    }
+
+    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-delete-failure"));
     }
 }

@@ -96,6 +96,11 @@ public class PostService {
         return CommentResponse.of(comment);
     }
 
+    public List<CommentResponse> findCommentsById(Long postId) {
+        Post post = findPostWithCommentsById(postId);
+        return CommentResponse.toList(post.getCommentsAsList());
+    }
+
     @Transactional
     public void updateComment(Long id, Long commentId, Optional<User> optionalUser, CommentRequest updateRequest) {
         validateSignedin(optionalUser);

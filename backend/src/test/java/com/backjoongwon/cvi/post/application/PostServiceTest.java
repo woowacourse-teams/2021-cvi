@@ -514,6 +514,28 @@ class PostServiceTest {
                 .isInstanceOf(UnAuthorizedException.class);
     }
 
+    @DisplayName("댓글 조회 - 성공")
+    @Test
+    void findComment() {
+        //given
+        //when
+        List<CommentResponse> comments = postService.findCommentsById(post1.getId());
+        //then
+        assertThat(comments).hasSize(1);
+        assertThat(comments.get(0).getWriter().getId()).isEqualTo(user1.getId());
+        assertThat(comments.get(0).getContent()).isEqualTo(commentRequest.getContent());
+    }
+
+    @DisplayName("댓글 조회 - 실패 - 없는 게시글")
+    @Test
+    void findCommentWhenNotExistsPost() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> postService.findCommentsById(post2.getId() + 99L))
+                .isInstanceOf(NotFoundException.class);
+    }
+
     @DisplayName("댓글 수정 - 성공")
     @Test
     void updateComment() {
