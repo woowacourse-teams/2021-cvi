@@ -5,6 +5,9 @@ spring:
         - db
         - jwt
         - client-secret
+      local:
+        - jwt
+        - client-secret
 
   jpa:
     properties:
