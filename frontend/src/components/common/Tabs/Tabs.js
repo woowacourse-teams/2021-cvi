@@ -29,6 +29,7 @@ const Tabs = ({ tabList, selectedTab, selectedTabStyleType, setSelectedTab }) =>
   </Container>
 );
 
+//  ⦁
 Tabs.propTypes = {
   tabList: PropTypes.array.isRequired,
   selectedTab: PropTypes.string.isRequired,

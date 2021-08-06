@@ -29,8 +29,8 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
-import { Button, Frame, OptionList, Tabs } from '../../components/common';
-import { ReviewItem, ReviewWritingModal } from '../../components';
+import { Button, Frame, Tabs } from '../../components/common';
+import { ReviewFilterList, ReviewItem, ReviewWritingModal } from '../../components';
 import { useLoading } from '../../hooks';
 import { useInView } from 'react-intersection-observer';
 import { SELECTED_TAB_STYLE_TYPE } from '../../components/common/Tabs/Tabs.styles';
@@ -151,7 +151,7 @@ const ReviewPage = () => {
         </ButtonWrapper>
         <Frame width="100%" showShadow={true} styles={tabFrameStyles}>
           {isOptionListShowing ? (
-            <OptionList
+            <ReviewFilterList
               vaccineList={vaccineList}
               filterList={filterList}
               sortList={sortList}

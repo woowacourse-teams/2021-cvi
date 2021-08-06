@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import { CloseIcon } from '../../../assets/icons';
-import { FONT_COLOR } from '../../../constants';
-import Button from '../Button/Button';
-import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
-import Tabs from '../Tabs/Tabs';
-import { SELECTED_TAB_STYLE_TYPE } from '../Tabs/Tabs.styles';
-import { Container, closeOptionListButtonStyles } from './OptionList.styles';
+import { CloseIcon } from '../../assets/icons';
+import { FONT_COLOR } from '../../constants';
+import { Button } from '../common';
+import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
+import Tabs from '../common/Tabs/Tabs';
+import { SELECTED_TAB_STYLE_TYPE } from '../common/Tabs/Tabs.styles';
+import { Container, Type, closeOptionListButtonStyles } from './ReviewFilterList.styles';
 
-const OptionList = ({
+const ReviewFilterList = ({
   vaccineList,
   selectedVaccination,
   setSelectedVaccination,
@@ -21,21 +21,21 @@ const OptionList = ({
 }) => {
   return (
     <Container>
-      <div>백신 종류</div>
+      <Type>백신 종류</Type>
       <Tabs
         tabList={vaccineList}
         selectedTab={selectedVaccination}
         selectedTabStyleType={SELECTED_TAB_STYLE_TYPE.LEFT_CIRCLE}
         setSelectedTab={setSelectedVaccination}
       />
-      <div>필터</div>
+      <Type>필터</Type>
       <Tabs
         tabList={filterList}
         selectedTab={selectedFilter}
         selectedTabStyleType={SELECTED_TAB_STYLE_TYPE.LEFT_CIRCLE}
         setSelectedTab={setSelectedFilter}
       />
-      <div>정렬</div>
+      <Type>정렬</Type>
       <Tabs
         tabList={sortList}
         selectedTab={selectedSort}
@@ -53,7 +53,7 @@ const OptionList = ({
   );
 };
 
-OptionList.propTypes = {
+ReviewFilterList.propTypes = {
   filterList: PropTypes.array.isRequired,
   hideOptionList: PropTypes.func.isRequired,
   selectedFilter: PropTypes.string.isRequired,
@@ -66,4 +66,4 @@ OptionList.propTypes = {
   vaccineList: PropTypes.array.isRequired,
 };
 
-export default OptionList;
+export default ReviewFilterList;

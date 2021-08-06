@@ -4,25 +4,26 @@ const getFilterQuery = (filteringList) => {
   const [filterType, sortType] = filteringList;
 
   if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.ASC) {
-    return `&sort=CREATED_AT_ASC`;
+    return 'CREATED_AT_ASC';
   } else if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.DESC) {
-    return `&sort=CREATED_AT_DESC`;
+    return 'CREATED_AT_DESC';
   } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.ASC) {
-    return `&sort=LIKE_COUNT_ASC`;
+    return 'LIKE_COUNT_ASC';
   } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.DESC) {
-    return `&sort=LIKE_COUNT_DESC`;
+    return 'LIKE_COUNT_DESC';
   } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.ASC) {
-    return `&sort=VIEW_COUNT_ASC`;
+    return 'VIEW_COUNT_ASC';
   } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.DESC) {
-    return `&sort=VIEW_COUNT_DESC`;
+    return 'VIEW_COUNT_DESC';
   } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.ASC) {
-    return `&sort=COMMENT_COUNT_ASC`;
+    return 'COMMENT_COUNT_ASC';
   } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.DESC) {
-    return `&sort=COMMENT_COUNT_DESC`;
+    return 'COMMENT_COUNT_DESC';
   }
 };
 
-const filterQuery = (filteringList) => (filteringList ? getFilterQuery(filteringList) : '');
+const filterQuery = (filteringList) =>
+  filteringList ? `&sort=${getFilterQuery(filteringList)}` : '';
 
 const requestGetAllReviewList = (accessToken, offset, filteringList) =>
   fetch(

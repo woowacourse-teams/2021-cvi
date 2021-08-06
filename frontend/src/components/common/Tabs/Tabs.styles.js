@@ -25,9 +25,20 @@ const Container = styled.div`
 const buttonStyles = css`
   height: 100%;
   border-radius: 0;
+  position: relative;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0.5rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background-color: ${FONT_COLOR.BLUE_GRAY};
+    font-size: 1.6rem;
+    border: 0.1rem soid ${FONT_COLOR.LIGHT_GRAY};
   }
 `;
 
@@ -41,15 +52,16 @@ const selectedButtonStyles = {
   [SELECTED_TAB_STYLE_TYPE.LEFT_CIRCLE]: css`
     color: ${FONT_COLOR.BLACK};
     position: relative;
+    height: 100%;
 
     &::before {
       content: '';
       position: absolute;
-      top: 52%;
+      top: 50%;
       transform: translateY(-50%);
-      left: 0.4rem;
-      width: 0.8rem;
-      height: 0.8rem;
+      left: 0.5rem;
+      width: 0.6rem;
+      height: 0.6rem;
       border-radius: 50%;
       background-color: ${THEME_COLOR.PRIMARY};
     }

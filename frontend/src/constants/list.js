@@ -7,7 +7,7 @@ const FILTER_TYPE = {
 
 const SORT_TYPE = {
   DESC: '내림차순',
-  ASC: '오른차순',
+  ASC: '오름차순',
 };
 
 export { FILTER_TYPE, SORT_TYPE };

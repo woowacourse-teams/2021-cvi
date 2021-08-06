@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 const Container = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-columns: 1fr 9fr 1fr;
   grid-template-rows: repeat(3, 1fr);
   padding: 1rem 1rem 1rem 3rem;
 
@@ -21,6 +21,10 @@ const Container = styled.div`
   }
 `;
 
+const Type = styled.div`
+  font-weight: 600;
+`;
+
 const closeOptionListButtonStyles = css`
   display: flex;
   justify-content: flex-end;
@@ -29,4 +33,4 @@ const closeOptionListButtonStyles = css`
   padding-right: 0.4rem;
 `;
 
-export { Container, closeOptionListButtonStyles };
+export { Container, Type, closeOptionListButtonStyles };
