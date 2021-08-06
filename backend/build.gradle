@@ -78,6 +78,8 @@ jacocoTestReport {
         html.enabled true
         xml.enabled true
         csv.enabled false
+
+        xml.destination file("src/docs/jacoco/jacoco.xml")
     }
 
     def Qdomains = []
