@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
@@ -63,7 +64,66 @@ const FrameContent = styled.div`
 
 const ScrollLoadingContainer = styled.div`
   position: relative;
-  height: 8rem;
+  height: 6rem;
 `;
 
-export { Container, Title, ReviewList, FrameContent, ButtonWrapper, ScrollLoadingContainer };
+const TabContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
+const tabFrameStyles = css`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+  padding-right: 2rem;
+  align-items: center;
+  min-height: 6rem;
+`;
+
+const filterButtonStyles = css`
+  line-height: 2;
+`;
+
+const Option = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  padding: 1rem 1rem 1rem 3rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+  }
+  & > button {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    justify-self: end;
+  }
+`;
+
+const closeOptionListButtonStyles = css`
+  display: flex;
+  justify-content: flex-end;
+  height: 5.2rem;
+  padding-bottom: 1.2rem;
+  padding-right: 0.4rem;
+`;
+
+export {
+  Container,
+  Title,
+  ReviewList,
+  FrameContent,
+  ButtonWrapper,
+  ScrollLoadingContainer,
+  TabContainer,
+  tabFrameStyles,
+  filterButtonStyles,
+  Option,
+  closeOptionListButtonStyles,
+};

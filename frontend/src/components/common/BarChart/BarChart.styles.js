@@ -92,7 +92,7 @@ const BarContainer = styled.div`
 
 const Line = styled.div`
   border: 1px dashed ${THEME_COLOR.PLACEHOLDER};
-  height: ${({ percent }) => 80 - percent * 1.5}%;
+  height: ${({ percent }) => 100 - percent * 1.5}%;
   display: ${({ isShowing }) => (isShowing ? 'block' : 'none')};
 `;
 
