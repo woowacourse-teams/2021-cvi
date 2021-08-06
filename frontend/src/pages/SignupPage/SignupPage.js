@@ -63,7 +63,7 @@ const SignupPage = () => {
     const response = await postSignupAsync(data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
-      alert(ALERT_MESSAGE.FAIL_TO_SERVER);
+      alert('sign');
 
       return;
     }

@@ -63,7 +63,20 @@ const FrameContent = styled.div`
 
 const ScrollLoadingContainer = styled.div`
   position: relative;
-  height: 8rem;
+  height: 6rem;
 `;
 
-export { Container, Title, ReviewList, FrameContent, ButtonWrapper, ScrollLoadingContainer };
+const TabContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export {
+  Container,
+  Title,
+  ReviewList,
+  FrameContent,
+  ButtonWrapper,
+  ScrollLoadingContainer,
+  TabContainer,
+};

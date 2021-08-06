@@ -15,6 +15,7 @@ import SnackBar from './SnackBar/SnackBar';
 import Loading from './Loading/Loading';
 import ToggleButton from './ToggleButton/ToggleButton';
 import BarChart from './BarChart/BarChart';
+import Dropdown from './Dropdown/Dropdown';
 
 export {
   Avatar,
@@ -34,4 +35,5 @@ export {
   Loading,
   ToggleButton,
   BarChart,
+  Dropdown,
 };

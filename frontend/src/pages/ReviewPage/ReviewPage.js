@@ -14,13 +14,17 @@ import {
   FrameContent,
   ButtonWrapper,
   ScrollLoadingContainer,
+  TabContainer,
 } from './ReviewPage.styles';
-import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
+import {
+  BUTTON_BACKGROUND_TYPE,
+  BUTTON_SIZE_TYPE,
+} from '../../components/common/Button/Button.styles';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
-import { Button, Frame, Tabs } from '../../components/common';
+import { Button, Dropdown, Frame, Tabs } from '../../components/common';
 import { ReviewItem, ReviewWritingModal } from '../../components';
 import { useLoading } from '../../hooks';
 import { useInView } from 'react-intersection-observer';
@@ -30,9 +34,11 @@ const ReviewPage = () => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
   const [selectedTab, setSelectedTab] = useState('전체');
+  const [selectedFilter, setSelectedFilter] = useState('최신순');
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
   const [offset, setOffset] = useState(0);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const [ref, inView] = useInView();
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
@@ -44,6 +50,7 @@ const ReviewPage = () => {
   } = useLoading();
 
   const tabList = ['전체', ...Object.values(VACCINATION)];
+  const dropdownMenuList = ['최신순', '좋아요순', '댓글 개수 순', '조회수순'];
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
   const goReviewDetailPage = (id) => {
@@ -61,6 +68,16 @@ const ReviewPage = () => {
       if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
 
       goLoginPage();
+    }
+  };
+
+  const showDropdown = () => {
+    setIsDropdownVisible(true);
+  };
+
+  const hideDropdown = (event) => {
+    if (event.currentTarget === event.target) {
+      setIsDropdownVisible(false);
     }
   };
 
@@ -112,7 +129,7 @@ const ReviewPage = () => {
 
   return (
     <>
-      <Container>
+      <Container onClick={hideDropdown}>
         <Title>접종 후기</Title>
         <ButtonWrapper>
           <Button type="button" sizeType={BUTTON_SIZE_TYPE.LARGE} onClick={onClickButton}>
@@ -121,7 +138,15 @@ const ReviewPage = () => {
         </ButtonWrapper>
         <Frame width="100%" showShadow={true}>
           <FrameContent>
-            <Tabs tabList={tabList} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+            <TabContainer>
+              <Tabs tabList={tabList} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+              <Dropdown
+                isDropdownVisible={isDropdownVisible}
+                selectedFilter={selectedFilter}
+                menuList={dropdownMenuList}
+                onClick={showDropdown}
+              />
+            </TabContainer>
             <ReviewList>
               {isLoading ? (
                 <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
