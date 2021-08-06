@@ -194,7 +194,7 @@ class PostServiceTest extends InitPostServiceTest {
         );
     }
 
-    @DisplayName("게시글 타입별(전체) 페이징 조회 - 성공")
+    @DisplayName("게시글 타입별(전체) 첫 페이징 조회 - 성공")
     @Test
     void findByVaccineTypePagingAll() {
         //given
@@ -206,7 +206,7 @@ class PostServiceTest extends InitPostServiceTest {
         assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
-    @ParameterizedTest(name = "게시글 타입별 페이징 조회 - 성공")
+    @ParameterizedTest(name = "게시글 타입별 첫 페이징 조회 - 성공")
     @MethodSource
     void findByVaccineTypePaging(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given

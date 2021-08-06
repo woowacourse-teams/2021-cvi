@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("게시글-마이페이지 비즈니스 흐름 테스트")
 public class PostMyPageServiceTest extends InitPostServiceTest {
 
-    @ParameterizedTest(name = "내가 작성한 글 페이징 첫 페이징 조회 - 성공")
+    @ParameterizedTest(name = "내가 작성한 글 첫 페이징 조회 - 성공")
     @MethodSource
     void findMyPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
@@ -36,7 +36,7 @@ public class PostMyPageServiceTest extends InitPostServiceTest {
                 Arguments.of(0, 2, Arrays.asList("Test 4", "Test 3")));
     }
 
-    @ParameterizedTest(name = "내가 좋아요 한 글 페이징 첫 페이징 조회 - 성공")
+    @ParameterizedTest(name = "내가 좋아요 한 글 첫 페이징 조회 - 성공")
     @MethodSource
     void findLikedPostsPagingFirstPage(int offset, int size, List<String> expectedContents) {
         //given
