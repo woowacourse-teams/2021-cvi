@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FONT_COLOR, PALETTE, THEME_COLOR } from '../../constants';
+import { PALETTE } from '../../constants';
 
 const Container = styled.div`
   padding: 2.5rem 8rem 6rem 8rem;
@@ -79,6 +79,7 @@ const tabFrameStyles = css`
   margin-bottom: 2rem;
   padding-right: 2rem;
   align-items: center;
+  min-height: 6rem;
 `;
 
 const filterButtonStyles = css`
