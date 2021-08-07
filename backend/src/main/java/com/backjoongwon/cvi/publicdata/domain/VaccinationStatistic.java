@@ -81,4 +81,8 @@ public class VaccinationStatistic extends PublicData {
     public BigDecimal getAccumulatedSecondRate() {
         return accumulatedSecondRate.setScale(1, RoundingMode.HALF_EVEN);
     }
+
+    public boolean isSameDate(String baseDate) {
+        return this.baseDate.equals(baseDate);
+    }
 }

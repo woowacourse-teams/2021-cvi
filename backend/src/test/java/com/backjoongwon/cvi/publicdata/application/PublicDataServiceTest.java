@@ -172,18 +172,6 @@ class PublicDataServiceTest {
                 .contains(RegionPopulation.WORLD);
     }
 
-    @DisplayName("세계 백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
-    @Test
-    void saveWorldVaccinationStatisticsFailureWhenAlreadySaved() {
-        //given
-        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
-        //when
-        세계_백신_접종률_저장되어_있음(targetDateTime);
-        //then
-        assertThatThrownBy(() -> publicDataService.saveWorldVaccinationStatistics(targetDateTime))
-                .isInstanceOf(DuplicateException.class);
-    }
-
     private void 백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
         willReturn(toVaccineParserResponse(targetDateTime))
                 .given(vaccinationParser).parseToPublicData(any(LocalDateTime.class), anyString());

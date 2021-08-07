@@ -2,14 +2,11 @@ package com.backjoongwon.cvi.publicdata.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
-import com.backjoongwon.cvi.dto.WorldVaccinationData;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
-import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
-import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
+import com.backjoongwon.cvi.publicdata.domain.*;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
+import com.backjoongwon.cvi.publicdata.dto.WorldVaccinationDataFactory;
 import com.backjoongwon.cvi.util.DateConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,17 +58,14 @@ public class PublicDataService {
 
     @Transactional
     public List<VaccinationStatisticResponse> saveWorldVaccinationStatistics(LocalDateTime targetDateTime) {
-        validateWorldExists(targetDateTime);
         WorldVaccinationParserResponse worldVaccinationParserResponse = vacinationparser.parseToWorldPublicData();
-        List<WorldVaccinationData> worldVaccinationData = worldVaccinationParserResponse.getData();
-        List<VaccinationStatistic> vaccinationStatistics = worldVaccinationData.stream()
-                .map(VaccinationStatisticResponse::from)
-                .map(VaccinationStatisticResponse::toEntity)
-                .collect(Collectors.toList());
+        WorldVaccinationDataFactory worldVaccinationDataFactory = new WorldVaccinationDataFactory(worldVaccinationParserResponse.getData());
+        VaccinationStatistics vaccinationStatistics = worldVaccinationDataFactory.toVaccinationStatistics();
+        List<VaccinationStatistic> foundByRegionPopulation = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
 
-        return vaccinationStatistics.stream()
-                .filter(it -> it.getBaseDate().equals(DateConverter.convertTimeToZero(targetDateTime)))
-                .map(vaccinationStatisticRepository::save)
+        List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByRegionPopulation, targetDateTime);
+        return vaccinationStatisticRepository.saveAll(unSavedStatistics)
+                .stream()
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }
@@ -106,18 +100,7 @@ public class PublicDataService {
     private void validateExists(LocalDateTime targetDateTime) {
         if (vaccinationStatisticRepository.existsByBaseDateAndRegionPopulationNot(
                 DateConverter.convertTimeToZero(targetDateTime),
-                RegionPopulation.WORLD
-                )) {
-            log.info("이미 존재하는 날짜의 데이터입니다.");
-            throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
-        }
-    }
-
-    private void validateWorldExists(LocalDateTime targetDateTime) {
-        if (vaccinationStatisticRepository.existsByBaseDateAndRegionPopulation(
-                DateConverter.convertTimeToZero(targetDateTime),
-                RegionPopulation.WORLD
-        )) {
+                RegionPopulation.WORLD)) {
             log.info("이미 존재하는 날짜의 데이터입니다.");
             throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
         }

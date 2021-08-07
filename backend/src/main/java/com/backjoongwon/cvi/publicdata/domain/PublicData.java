@@ -23,4 +23,8 @@ public abstract class PublicData extends BaseEntity {
         super(id, createdAt, lastModifiedAt);
         this.regionPopulation = regionPopulation;
     }
+
+    public boolean isSameRegionPopulation(RegionPopulation regionPopulation) {
+        return this.regionPopulation.equals(regionPopulation);
+    }
 }
