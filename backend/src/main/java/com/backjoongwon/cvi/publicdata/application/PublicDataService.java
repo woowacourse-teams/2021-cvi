@@ -62,7 +62,6 @@ public class PublicDataService {
         WorldVaccinationDataFactory worldVaccinationDataFactory = new WorldVaccinationDataFactory(worldVaccinationParserResponse.getData());
         VaccinationStatistics vaccinationStatistics = worldVaccinationDataFactory.toVaccinationStatistics();
         List<VaccinationStatistic> foundByRegionPopulation = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
-
         List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByRegionPopulation, targetDateTime);
         return vaccinationStatisticRepository.saveAll(unSavedStatistics)
                 .stream()
@@ -72,11 +71,10 @@ public class PublicDataService {
 
     @Transactional(readOnly = true)
     public List<VaccinationStatisticResponse> findWorldVaccinationStatistics(LocalDateTime targetDateTime) {
-        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDateAndRegionPopulation(
-                DateConverter.convertTimeToZero(modifyDate(targetDateTime)),
-                RegionPopulation.WORLD
-        );
-        return vaccinationStatistic.stream()
+        List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
+        VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDateTime);
+        return recentlyStatistics.stream()
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +26,19 @@ public class VaccinationStatistics {
     public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundByWorld, LocalDateTime targetDateTime) {
         LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
         return this.vaccinationStatistics.stream()
-                .filter(base -> toLocalDate(base.getBaseDate()).isBefore(targetDate) || toLocalDate(base.getBaseDate()).isEqual(targetDate))
+                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
                 .filter(base -> foundByWorld.stream()
                         .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation))
                 )
+                .collect(Collectors.toList());
+    }
+
+    public List<VaccinationStatistic> findRecentlyStatistics(LocalDateTime targetDateTime) {
+        LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
+        return this.vaccinationStatistics.stream()
+                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
+                .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
+                .limit(1)
                 .collect(Collectors.toList());
     }
 }

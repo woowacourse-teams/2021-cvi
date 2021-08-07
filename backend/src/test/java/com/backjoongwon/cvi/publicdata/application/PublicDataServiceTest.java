@@ -78,7 +78,7 @@ class PublicDataServiceTest {
         List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDateAndRegionPopulationNot(
                 DateConverter.convertTimeToZero(targetDateTime),
                 RegionPopulation.WORLD
-                );
+        );
         //then
         assertThat(publicData).extracting("baseDate")
                 .contains(DateConverter.convertTimeToZero(targetDateTime));
@@ -164,7 +164,7 @@ class PublicDataServiceTest {
         //when
         세계_백신_접종률_저장되어_있음(targetDateTime);
         List<VaccinationStatistic> vaccinationStatistics =
-                vaccinationStatisticRepository.findByBaseDateAndRegionPopulation(DateConverter.convertTimeToZero(targetDateTime), RegionPopulation.WORLD);
+                vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
         //then
         assertThat(vaccinationStatistics).extracting("baseDate")
                 .contains(DateConverter.convertTimeToZero(targetDateTime));

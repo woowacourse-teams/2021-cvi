@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface VaccinationStatisticRepository extends JpaRepository<VaccinationStatistic, Long> {
 
-    List<VaccinationStatistic> findByBaseDateAndRegionPopulation(String baseDate, RegionPopulation regionPopulation);
-
     List<VaccinationStatistic> findByBaseDateAndRegionPopulationNot(String baseDate, RegionPopulation regionPopulation);
 
     List<VaccinationStatistic> findByRegionPopulation(RegionPopulation world);
