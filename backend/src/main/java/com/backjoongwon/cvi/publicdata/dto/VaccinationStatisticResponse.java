@@ -1,6 +1,8 @@
 package com.backjoongwon.cvi.publicdata.dto;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
 import lombok.AccessLevel;
@@ -51,6 +53,12 @@ public class VaccinationStatisticResponse {
                 vaccinationStatistic.getBaseDate(), vaccinationStatistic.getFirstCnt(), vaccinationStatistic.getSecondCnt(),
                 vaccinationStatistic.getRegionPopulation().getRegion(), vaccinationStatistic.getTotalFirstCnt(), vaccinationStatistic.getTotalSecondCnt(),
                 vaccinationStatistic.getAccumulatedFirstRate(), vaccinationStatistic.getAccumulatedSecondRate());
+    }
+
+    public static VaccinationStatisticResponse from(WorldVaccinationData worldVaccinationData) {
+        return new VaccinationStatisticResponse(0L, 0L, worldVaccinationData.getDate() + " 00:00:00", 0L, 0L, RegionPopulation.WORLD.getRegion(),
+                worldVaccinationData.getPeople_vaccinated(), worldVaccinationData.getPeople_fully_vaccinated(), null, null
+        );
     }
 
     public VaccinationStatistic toEntity() {

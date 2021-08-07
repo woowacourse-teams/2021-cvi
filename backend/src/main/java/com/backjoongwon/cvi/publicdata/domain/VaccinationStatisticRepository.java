@@ -8,5 +8,7 @@ public interface VaccinationStatisticRepository extends JpaRepository<Vaccinatio
 
     List<VaccinationStatistic> findByBaseDate(String baseDate);
 
+    List<VaccinationStatistic> findByBaseDateAndRegionPopulation(String baseDate, RegionPopulation regionPopulation);
+
     boolean existsByBaseDate(String baseDate);
 }

@@ -26,7 +26,7 @@ public enum RegionPopulation {
     GYEONGSANGBUK_DO("경상북도", 2_635_896L),
     GYEONGSANGNAME_DO("경상남도", 3_229_623L),
     JEJU_OD("제주특별자치도", 675_293L),
-    WORLD("전셰계", 7_882_955_909L);
+    WORLD("World", 7_882_955_909L);
 
     private static final Map<String, RegionPopulation> regions = new HashMap<>();
 

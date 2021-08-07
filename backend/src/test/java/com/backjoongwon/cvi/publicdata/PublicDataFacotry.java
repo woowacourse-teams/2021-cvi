@@ -2,10 +2,13 @@ package com.backjoongwon.cvi.publicdata;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.WorldVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.util.DateConverter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -96,6 +99,19 @@ public class PublicDataFacotry {
                         31098, 1943, "경상남도", 1281008, 466053, BigDecimal.valueOf(39.2), BigDecimal.valueOf(14.3)),
                 new VaccinationStatisticResponse(251414, 93046, expectDateTime,
                         7155, 427, "제주특별자치도", 258569, 93473, BigDecimal.valueOf(42.7), BigDecimal.valueOf(17.8))
+        );
+    }
+
+    public static WorldVaccinationParserResponse toWorldVaccinationParserResponse(LocalDateTime targetDateTime) {
+        LocalDate expectDate = targetDateTime.toLocalDate();
+        return new WorldVaccinationParserResponse("World", "OWID_WRL",
+                Arrays.asList(new WorldVaccinationData(expectDate.minusDays(2).toString(), 4327424315L, 2293196690L, 1175939230L,
+                                43847311L, 42963523L, 55.52, 29.42, 15.09, 5512L),
+                        new WorldVaccinationData(expectDate.minusDays(1).toString(), 4399234109L, 2317353271L, 1181952381L,
+                                32322341L, 40310055L, 55.93, 29.56, 15.16, 5171L),
+                        new WorldVaccinationData(expectDate.toString(), 4359746656L, 2303769251L, 1191535085L,
+                                33797364L, 40043557L, 56.44,  29.73, 15.29, 5137L)
+                )
         );
     }
 }

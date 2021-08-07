@@ -2,6 +2,8 @@ package com.backjoongwon.cvi.publicdata.application;
 
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.WorldVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
@@ -49,6 +51,22 @@ public class PublicDataService {
         List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponses(vaccineParserResponse);
         return vaccinationStatisticResponse.stream()
                 .map(it -> vaccinationStatisticRepository.save(it.toEntity()))
+                .map(VaccinationStatisticResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<VaccinationStatisticResponse> saveWorldVaccinationStatistics(LocalDateTime targetDateTime) {
+        WorldVaccinationParserResponse worldVaccinationParserResponse = vacinationparser.parseToWorldPublicData();
+        List<WorldVaccinationData> worldVaccinationData = worldVaccinationParserResponse.getData();
+        List<VaccinationStatistic> vaccinationStatistics = worldVaccinationData.stream()
+                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toEntity)
+                .collect(Collectors.toList());
+
+        return vaccinationStatistics.stream()
+                .filter(it -> it.getBaseDate().equals(DateConverter.convertTimeToZero(targetDateTime)))
+                .map(vaccinationStatisticRepository::save)
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }

@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.publicdata.application;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
+import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
@@ -25,8 +26,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.REGIONS;
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccineParserResponse;
+import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,6 +49,14 @@ class PublicDataServiceTest {
     private PublicDataService publicDataService;
     private VaccinationParser vaccinationParser;
 
+    public static Stream<Arguments> saveVaccinationStatistics() {
+        return Stream.of(
+                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59))),
+                Arguments.of(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 59, 59))),
+                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 11), LocalTime.MIN))
+        );
+    }
+
     @BeforeEach
     void init() {
         vaccinationParser = mock(VaccinationParser.class);
@@ -60,21 +68,12 @@ class PublicDataServiceTest {
         vaccinationStatisticRepository.deleteAll();
     }
 
-    public static Stream<Arguments> saveVaccinationStatistics() {
-        return Stream.of(
-                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59))),
-                Arguments.of(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 59, 59))),
-                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 11), LocalTime.MIN))
-        );
-    }
-
     @DisplayName("백신 정종률 데이터 저장 - 성공 - 당일 오전 10시 후 or 오늘 이전 날짜로 요청시 성공")
     @ParameterizedTest
     @MethodSource
     void saveVaccinationStatistics(LocalDateTime targetDateTime) {
         //given
         //when
-        System.out.println("LocalDateTime.now() = " + LocalDateTime.now());
         백신_접종률_저장되어_있음(targetDateTime);
         List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
         //then
@@ -152,6 +151,24 @@ class PublicDataServiceTest {
         assertThat(vaccinationStatistics).isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
                 .contains(DateConverter.convertTimeToZero(targetDateTime));
+    }
+
+    @DisplayName("세계 백신 정좁률 데이터 - 저장 - 성공 ")
+    @Test
+    void saveWorldVaccinationStatistics() {
+        //given
+        LocalDateTime targetDateTime = LocalDateTime.now();
+        //when
+        willReturn(toWorldVaccinationParserResponse(targetDateTime)).given(vaccinationParser).parseToWorldPublicData();
+        publicDataService.saveWorldVaccinationStatistics(targetDateTime);
+        List<VaccinationStatistic> vaccinationStatistics =
+                vaccinationStatisticRepository.findByBaseDateAndRegionPopulation(DateConverter.convertTimeToZero(targetDateTime), RegionPopulation.WORLD);
+        //then
+        assertThat(vaccinationStatistics).extracting("baseDate")
+                .contains(DateConverter.convertTimeToZero(targetDateTime));
+        assertThat(vaccinationStatistics).extracting("regionPopulation")
+                .contains(RegionPopulation.WORLD);
+
     }
 
     private void 백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
