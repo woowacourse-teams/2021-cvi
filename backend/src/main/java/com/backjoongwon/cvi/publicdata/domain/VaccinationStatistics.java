@@ -23,11 +23,11 @@ public class VaccinationStatistics {
         return LocalDate.parse(targetDate, formatter);
     }
 
-    public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundByWorld, LocalDateTime targetDateTime) {
+    public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundVaccinationStatistics, LocalDateTime targetDateTime) {
         LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
         return this.vaccinationStatistics.stream()
                 .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
-                .filter(base -> foundByWorld.stream()
+                .filter(base -> foundVaccinationStatistics.stream()
                         .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation))
                 )
                 .collect(Collectors.toList());

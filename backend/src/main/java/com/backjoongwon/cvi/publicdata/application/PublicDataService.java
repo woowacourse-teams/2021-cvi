@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.dto.VaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.*;
+import com.backjoongwon.cvi.publicdata.dto.RegionVaccinationDataFactory;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.publicdata.dto.WorldVaccinationDataFactory;
 import com.backjoongwon.cvi.util.DateConverter;
@@ -41,17 +42,16 @@ public class PublicDataService {
 
     @Transactional
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDateTime targetDateTime) {
-        targetDateTime = modifyDate(targetDateTime);
-        validateExists(targetDateTime);
-
         VaccineParserResponse vaccineParserResponse = vacinationparser.parseToPublicData(
                 targetDateTime,
                 publicDataProperties.getVaccination()
         );
-
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponses(vaccineParserResponse);
-        return vaccinationStatisticResponse.stream()
-                .map(it -> vaccinationStatisticRepository.save(it.toEntity()))
+        RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(vaccineParserResponse.getData());
+        VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
+        List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
+        List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByDate, targetDateTime);
+        return vaccinationStatisticRepository.saveAll(unSavedStatistics)
+                .stream()
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
     }
@@ -86,21 +86,5 @@ public class PublicDataService {
             return targetDateTime.minusDays(1);
         }
         return targetDateTime;
-    }
-
-    private List<VaccinationStatisticResponse> toVaccinationStatisticResponses(VaccineParserResponse vaccineParserResponse) {
-        return vaccineParserResponse.getData()
-                .stream()
-                .map(VaccinationStatisticResponse::from)
-                .collect(Collectors.toList());
-    }
-
-    private void validateExists(LocalDateTime targetDateTime) {
-        if (vaccinationStatisticRepository.existsByBaseDateAndRegionPopulationNot(
-                DateConverter.convertTimeToZero(targetDateTime),
-                RegionPopulation.WORLD)) {
-            log.info("이미 존재하는 날짜의 데이터입니다.");
-            throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
-        }
     }
 }

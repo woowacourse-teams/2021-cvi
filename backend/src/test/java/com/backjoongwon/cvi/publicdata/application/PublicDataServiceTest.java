@@ -68,32 +68,17 @@ class PublicDataServiceTest {
         vaccinationStatisticRepository.deleteAll();
     }
 
-    @DisplayName("백신 정종률 데이터 저장 - 성공 - 당일 오전 10시 후 or 오늘 이전 날짜로 요청시 성공")
+    @DisplayName("백신 정종률 데이터 저장 - 성공")
     @ParameterizedTest
     @MethodSource
     void saveVaccinationStatistics(LocalDateTime targetDateTime) {
         //given
         //when
         백신_접종률_저장되어_있음(targetDateTime);
-        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDateAndRegionPopulationNot(
-                DateConverter.convertTimeToZero(targetDateTime),
-                RegionPopulation.WORLD
-        );
+        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
         //then
         assertThat(publicData).extracting("baseDate")
                 .contains(DateConverter.convertTimeToZero(targetDateTime));
-    }
-
-    @DisplayName("백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
-    @Test
-    void saveVaccinationStatisticsFailureWhenAlreadySaved() {
-        //given
-        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
-        //when
-        백신_접종률_저장되어_있음(targetDateTime);
-        //then
-        assertThatThrownBy(() -> publicDataService.saveVaccinationStatistics(targetDateTime))
-                .isInstanceOf(DuplicateException.class);
     }
 
     @DisplayName("백신 정종률 데이터 조회 - 성공")
