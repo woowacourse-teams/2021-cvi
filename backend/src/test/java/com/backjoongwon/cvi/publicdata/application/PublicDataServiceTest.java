@@ -75,7 +75,10 @@ class PublicDataServiceTest {
         //given
         //when
         백신_접종률_저장되어_있음(targetDateTime);
-        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
+        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDateAndRegionPopulationNot(
+                DateConverter.convertTimeToZero(targetDateTime),
+                RegionPopulation.WORLD
+                );
         //then
         assertThat(publicData).extracting("baseDate")
                 .contains(DateConverter.convertTimeToZero(targetDateTime));
@@ -159,8 +162,7 @@ class PublicDataServiceTest {
         //given
         LocalDateTime targetDateTime = LocalDateTime.now();
         //when
-        willReturn(toWorldVaccinationParserResponse(targetDateTime)).given(vaccinationParser).parseToWorldPublicData();
-        publicDataService.saveWorldVaccinationStatistics(targetDateTime);
+        세계_백신_접종률_저장되어_있음(targetDateTime);
         List<VaccinationStatistic> vaccinationStatistics =
                 vaccinationStatisticRepository.findByBaseDateAndRegionPopulation(DateConverter.convertTimeToZero(targetDateTime), RegionPopulation.WORLD);
         //then
@@ -168,12 +170,28 @@ class PublicDataServiceTest {
                 .contains(DateConverter.convertTimeToZero(targetDateTime));
         assertThat(vaccinationStatistics).extracting("regionPopulation")
                 .contains(RegionPopulation.WORLD);
+    }
 
+    @DisplayName("세계 백신 정종률 데이터 저장 - 실패 - 오늘 날짜에 이미 저장되어 있음")
+    @Test
+    void saveWorldVaccinationStatisticsFailureWhenAlreadySaved() {
+        //given
+        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
+        //when
+        세계_백신_접종률_저장되어_있음(targetDateTime);
+        //then
+        assertThatThrownBy(() -> publicDataService.saveWorldVaccinationStatistics(targetDateTime))
+                .isInstanceOf(DuplicateException.class);
     }
 
     private void 백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
         willReturn(toVaccineParserResponse(targetDateTime))
                 .given(vaccinationParser).parseToPublicData(any(LocalDateTime.class), anyString());
         publicDataService.saveVaccinationStatistics(targetDateTime);
+    }
+
+    private void 세계_백신_접종률_저장되어_있음(LocalDateTime targetDateTime) {
+        willReturn(toWorldVaccinationParserResponse(targetDateTime)).given(vaccinationParser).parseToWorldPublicData();
+        publicDataService.saveWorldVaccinationStatistics(targetDateTime);
     }
 }
