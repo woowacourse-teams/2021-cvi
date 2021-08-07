@@ -51,6 +51,15 @@ public class DataLoader implements CommandLineRunner {
             }
             userRepository.saveAll(users);
 
+
+
+
+
+
+
+
+
+
             List<Post> posts = new ArrayList<>();
             for (int i = 0; i < POST_COUNT; i++) {
                 int randomInt = random.nextInt(USER_COUNT);
