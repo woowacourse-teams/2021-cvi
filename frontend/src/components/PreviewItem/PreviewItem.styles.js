@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { LINE_LIMIT, FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
-  padding: 1.2rem;
+  padding: 2rem;
   width: 100%;
   cursor: pointer;
 
@@ -29,7 +29,7 @@ const Content = styled.div`
 
 const BottomContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   font-size: 1.4rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
@@ -39,4 +39,34 @@ const ShotVerified = styled.div`
   color: ${FONT_COLOR.GREEN};
 `;
 
-export { Container, TopContainer, Content, BottomContainer, ShotVerified };
+const IconContainer = styled.div`
+  display: flex;
+  gap: 1.6rem;
+`;
+
+const IconItem = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ViewCount = styled.div`
+  margin-left: 0.4rem;
+`;
+
+const CreatedAt = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export {
+  Container,
+  TopContainer,
+  Content,
+  BottomContainer,
+  ShotVerified,
+  IconContainer,
+  IconItem,
+  ViewCount,
+  CreatedAt,
+};
