@@ -49,6 +49,15 @@ public class DataLoader implements CommandLineRunner {
                 User updateUser = User.builder().nickname(user.getNickname()).ageRange(AgeRange.FORTIES).shotVerified(true).build();
                 user.update(updateUser);
             }
+
+
+
+
+
+
+
+
+
             userRepository.saveAll(users);
 
             List<Post> posts = new ArrayList<>();
