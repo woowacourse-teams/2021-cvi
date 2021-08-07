@@ -13,19 +13,19 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationStatisticResponse {
 
-    private int accumulatedFirstCnt;
-    private int accumulatedSecondCnt;
+    private long accumulatedFirstCnt;
+    private long accumulatedSecondCnt;
     private String baseDate;
-    private int firstCnt;
-    private int secondCnt;
+    private long firstCnt;
+    private long secondCnt;
     private String sido;
-    private int totalFirstCnt;
-    private int totalSecondCnt;
+    private long totalFirstCnt;
+    private long totalSecondCnt;
     private BigDecimal accumulatedFirstRate;
     private BigDecimal accumulatedSecondRate;
 
-    public VaccinationStatisticResponse(int accumulatedFirstCnt, int accumulatedSecondCnt, String baseDate, int firstCnt,
-                                        int secondCnt, String sido, int totalFirstCnt, int totalSecondCnt, BigDecimal accumulatedFirstRate,
+    public VaccinationStatisticResponse(long accumulatedFirstCnt, long accumulatedSecondCnt, String baseDate, long firstCnt,
+                                        long secondCnt, String sido, long totalFirstCnt, long totalSecondCnt, BigDecimal accumulatedFirstRate,
                                         BigDecimal accumulatedSecondRate) {
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;

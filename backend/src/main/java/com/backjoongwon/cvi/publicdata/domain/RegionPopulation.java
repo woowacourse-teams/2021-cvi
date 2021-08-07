@@ -8,24 +8,25 @@ import java.util.Map;
 
 @Getter
 public enum RegionPopulation {
-    REGION_WIDE("전국", 51_821_669),
-    SEOUL("서울특별시", 9_587_711),
-    BUSAN("부산광역시", 3_369_704),
-    DAEGU("대구광역시", 2_406_296),
-    DAEJEON("대전광역시", 1_457_610),
-    INCHEON("인천광역시", 2_936_214),
-    GWANGJU("광주광역시", 1_444_787),
-    ULSAN("울산광역시", 1_128_163),
-    GYEONGGI_DO("경기도", 13_479_798),
-    GANGWOND_DO("강원도", 1_536_175),
-    SEJONG("세종특별자치시", 362_995),
-    CHUNGCHEONGBUK_DO("충청북도", 1_566_303),
-    CHUNGCHEONGNAM_DO("충청남도", 2_116_452),
-    JEOLLAKBUK_DO("전라북도", 1_796_331),
-    JEOLLANAM_DO("전라남도", 1_844_148),
-    GYEONGSANGBUK_DO("경상북도", 2_635_896),
-    GYEONGSANGNAME_DO("경상남도", 3_229_623),
-    JEJU_OD("제주특별자치도", 675_293);
+    REGION_WIDE("전국", 51_821_669L),
+    SEOUL("서울특별시", 9_587_711L),
+    BUSAN("부산광역시", 3_369_704L),
+    DAEGU("대구광역시", 2_406_296L),
+    DAEJEON("대전광역시", 1_457_610L),
+    INCHEON("인천광역시", 2_936_214L),
+    GWANGJU("광주광역시", 1_444_787L),
+    ULSAN("울산광역시", 1_128_163L),
+    GYEONGGI_DO("경기도", 13_479_798L),
+    GANGWOND_DO("강원도", 1_536_175L),
+    SEJONG("세종특별자치시", 362_995L),
+    CHUNGCHEONGBUK_DO("충청북도", 1_566_303L),
+    CHUNGCHEONGNAM_DO("충청남도", 2_116_452L),
+    JEOLLAKBUK_DO("전라북도", 1_796_331L),
+    JEOLLANAM_DO("전라남도", 1_844_148L),
+    GYEONGSANGBUK_DO("경상북도", 2_635_896L),
+    GYEONGSANGNAME_DO("경상남도", 3_229_623L),
+    JEJU_OD("제주특별자치도", 675_293L),
+    WORLD("전셰계", 7_882_955_909L);
 
     private static final Map<String, RegionPopulation> regions = new HashMap<>();
 

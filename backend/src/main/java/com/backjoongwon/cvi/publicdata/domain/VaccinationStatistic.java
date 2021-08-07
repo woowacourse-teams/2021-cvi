@@ -21,17 +21,17 @@ public class VaccinationStatistic extends PublicData {
     @Column(updatable = false)
     private String baseDate;
     @Column(updatable = false)
-    private int firstCnt;
+    private long firstCnt;
     @Column(updatable = false)
-    private int secondCnt;
+    private long secondCnt;
     @Column(updatable = false)
-    private int totalFirstCnt;
+    private long totalFirstCnt;
     @Column(updatable = false)
-    private int totalSecondCnt;
+    private long totalSecondCnt;
     @Column(updatable = false)
-    private int accumulatedFirstCnt;
+    private long accumulatedFirstCnt;
     @Column(updatable = false)
-    private int accumulatedSecondCnt;
+    private long accumulatedSecondCnt;
     @Column(updatable = false)
     private BigDecimal accumulatedFirstRate;
     @Column(updatable = false)
@@ -39,8 +39,8 @@ public class VaccinationStatistic extends PublicData {
 
     @Builder
     public VaccinationStatistic(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation,
-                                String baseDate, int firstCnt, int secondCnt, int totalFirstCnt, int totalSecondCnt, int accumulatedFirstCnt,
-                                int accumulatedSecondCnt, BigDecimal accumulatedFirstRate, BigDecimal accumulatedSecondRate) {
+                                String baseDate, long firstCnt, long secondCnt, long totalFirstCnt, long totalSecondCnt, long accumulatedFirstCnt,
+                                long accumulatedSecondCnt, BigDecimal accumulatedFirstRate, BigDecimal accumulatedSecondRate) {
         super(id, createdAt, lastModifiedAt, regionPopulation);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;
@@ -69,7 +69,7 @@ public class VaccinationStatistic extends PublicData {
         this.accumulatedSecondRate = calculateRate(this.totalSecondCnt);
     }
 
-    private BigDecimal calculateRate(int totalCnt) {
+    private BigDecimal calculateRate(long totalCnt) {
         return BigDecimal.valueOf(totalCnt).scaleByPowerOfTen(2)
                 .divide(BigDecimal.valueOf(this.regionPopulation.getPopulation()), 1, RoundingMode.HALF_EVEN);
     }
