@@ -51,4 +51,8 @@ public class VaccineParserResponse {
     public int getTotalCount() {
         return totalCount;
     }
+
+    public boolean isEmptyData() {
+        return data.isEmpty();
+    }
 }

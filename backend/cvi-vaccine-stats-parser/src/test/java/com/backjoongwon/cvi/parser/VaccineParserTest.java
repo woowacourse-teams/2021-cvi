@@ -101,7 +101,7 @@ class VaccineParserTest {
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) throws JsonProcessingException {
         //given
-        VaccineParserResponse expect = toVaccineParserResponse(targetDateTime);
+        VaccineParserResponse expect = VaccineParserResponse.empty();
         String rawData = new ObjectMapper().writeValueAsString(expect);
         //when
         willReturn(expect).given(jsonMapper).toObject(anyString(), any());
