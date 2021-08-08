@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 
 @DisplayName("게시글 컨트롤러 Mock 테스트 - 환경설정")
 @WebMvcTest(controllers = PostController.class)
-abstract class InitPostControllerTest extends ApiDocument {
+abstract class PreprocessPostControllerTest extends ApiDocument {
 
     protected static final Long USER_ID = 1L;
     protected static final Long POST_ID = 1L;

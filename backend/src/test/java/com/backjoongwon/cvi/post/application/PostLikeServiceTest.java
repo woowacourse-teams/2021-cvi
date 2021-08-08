@@ -9,6 +9,7 @@ import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -21,7 +22,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -163,5 +167,25 @@ public class PostLikeServiceTest extends ApiDocument {
         assertThatThrownBy(() -> postService.deleteLike(Long.MAX_VALUE, optionalUserWithoutLike))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("해당 id의 게시글이 존재하지 않습니다.");
+    }
+
+    @DisplayName("게시글 좋아요 누른 유저 hasLiked 상태값(true) 확인 - 성공")
+    @Test
+    void hasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalUserWithLike);
+        //then
+        assertThat(postResponse.isHasLiked()).isTrue();
+    }
+
+    @DisplayName("게시글 좋아요 누르지 않은 유저 유저 hasLiked 상태값(false) 확인 - 성공")
+    @Test
+    void notHasLiked() {
+        //given
+        //when
+        PostResponse postResponse = postService.findById(post.getId(), optionalUserWithoutLike);
+        //then
+        assertThat(postResponse.isHasLiked()).isFalse();
     }
 }

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("게시글 컨트롤러 Mock 테스트- 좋아요")
-public class PostLikeControllerTest extends InitPostControllerTest {
+public class PostLikeControllerTest extends PreprocessPostControllerTest {
 
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
