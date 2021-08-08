@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   margin-top: 0.3rem;
@@ -61,4 +61,9 @@ const InfoTitle = styled.div`
   }
 `;
 
-export { Container, Title, FrameContent, PrimaryState, Info, InfoTitle };
+const IncreaseIcon = styled.span`
+  color: ${PALETTE.RED500};
+  font-size: 1.2rem;
+`;
+
+export { Container, Title, FrameContent, PrimaryState, Info, InfoTitle, IncreaseIcon };

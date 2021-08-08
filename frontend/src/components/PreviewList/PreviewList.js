@@ -24,13 +24,13 @@ const PreviewList = () => {
     history.push(`${PATH.REVIEW}/${id}`);
   };
 
-  if (reviewError) {
-    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW_LIST}</Error>;
-  }
-
   useEffect(() => {
     loading ? showLoading() : hideLoading();
   }, [loading]);
+
+  if (reviewError) {
+    return <Error>{ERROR_MESSAGE.FAIL_TO_GET_REVIEW_LIST}</Error>;
+  }
 
   return (
     <Container>

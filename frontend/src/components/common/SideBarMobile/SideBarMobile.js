@@ -123,7 +123,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_LIKE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
                 <LikeIcon width="22" height="22" stroke="currentColor" />
-                좋아요 표시한 글
+                좋아요 누른 글
               </MyPageLink>
             </MyPageMenuContainer>
           )}

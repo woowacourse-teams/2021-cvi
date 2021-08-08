@@ -9,7 +9,7 @@ import { findKey } from '../../utils';
 import { Button, Modal, Selection } from '../common';
 import { useSnackBar } from '../../hooks';
 
-const ReviewWritingModal = ({ getReviewList, setReviewList, setLastPostId, onClickClose }) => {
+const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
   const [selectedVaccine, setSelectedVaccine] = useState('모더나');
@@ -34,7 +34,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setLastPostId, onCli
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
     setReviewList([]);
-    setLastPostId(Number.MAX_SAFE_INTEGER);
+    setOffset(0);
     getReviewList();
   };
 
@@ -60,7 +60,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setLastPostId, onCli
 ReviewWritingModal.propTypes = {
   getReviewList: PropTypes.func.isRequired,
   setReviewList: PropTypes.func.isRequired,
-  setLastPostId: PropTypes.func.isRequired,
+  setOffset: PropTypes.func.isRequired,
   onClickClose: PropTypes.func.isRequired,
 };
 
