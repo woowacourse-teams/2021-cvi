@@ -47,6 +47,8 @@ public class PostCommentServiceTest {
     @Autowired
     private PostService postService;
 
+    private User user;
+    private User anotherUser;
     private Optional<User> optionalUser;
     private Optional<User> optionalAnotherUser;
     private Optional<User> optionalUserNotSignedIn;
@@ -55,40 +57,38 @@ public class PostCommentServiceTest {
 
     @BeforeEach
     void init() {
-        List<User> users = initUsers();
-        initPost(users);
+        initUsers();
+        initPost();
         commentRequest = new CommentRequest("테스트 댓글");
     }
 
-    private List<Post> initPost(List<User> users) {
+    private void initPost() {
         post = Post.builder()
                 .content("테스트게시글")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(users.get(1))
+                .user(user)
                 .createdAt(LocalDateTime.now())
                 .build();
-        return postRepository.saveAll(Collections.singletonList(post));
+        postRepository.save(post);
     }
 
-    private List<User> initUsers() {
-        User user = User.builder()
+    private void initUsers() {
+        user = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-        User anotherUser = User.builder()
+        anotherUser = User.builder()
                 .nickname("테스트유저-다른유저")
                 .ageRange(AgeRange.FORTIES)
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
-
-
         optionalUser = Optional.of(user);
         optionalAnotherUser = Optional.of(anotherUser);
         optionalUserNotSignedIn = Optional.empty();
-        return userRepository.saveAll(Arrays.asList(user, anotherUser));
+        userRepository.saveAll(Arrays.asList(user, anotherUser));
     }
 
     @DisplayName("댓글 생성 - 성공")
@@ -188,5 +188,19 @@ public class PostCommentServiceTest {
         assertThatThrownBy(() -> postService.deleteComment(post.getId(), commentResponse.getId(), optionalAnotherUser))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
+    }
+
+    @DisplayName("게시글 삭제시 댓글 삭제 - 성공")
+    @Test
+    void deleteWithComments() {
+        //given
+        CommentResponse commentResponse = postService.createComment(post.getId(), optionalUser, commentRequest);
+        //when
+        postService.delete(post.getId(), optionalUser);
+        Optional<Post> foundPost = postRepository.findById(post.getId());
+        Optional<Comment> foundComment = commentRepository.findById(commentResponse.getId());
+        //then
+        assertThat(foundPost).isEmpty();
+        assertThat(foundComment).isEmpty();
     }
 }

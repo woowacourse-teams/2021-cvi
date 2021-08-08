@@ -5,9 +5,11 @@ import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
@@ -41,6 +43,9 @@ public class PostLikeServiceTest {
     private UserRepository userRepository;
 
     @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
     private PostService postService;
 
     private User userWithoutLike;
@@ -52,8 +57,8 @@ public class PostLikeServiceTest {
 
     @BeforeEach
     void init() {
-        List<User> users = initUsers();
-        initPost(users);
+        initUsers();
+        initPost();
         initLike();
     }
 
@@ -61,17 +66,17 @@ public class PostLikeServiceTest {
         post.addLike(Like.builder().user(userWithLike).build());
     }
 
-    private List<Post> initPost(List<User> users) {
+    private void initPost() {
         post = Post.builder()
                 .content("테스트게시글")
                 .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(users.get(1))
+                .user(userWithLike)
                 .createdAt(LocalDateTime.now())
                 .build();
-        return postRepository.saveAll(Collections.singletonList(post));
+        postRepository.save(post);
     }
 
-    private List<User> initUsers() {
+    private void initUsers() {
         userWithoutLike = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
@@ -88,7 +93,7 @@ public class PostLikeServiceTest {
         optionalUserWithoutLike = Optional.of(userWithoutLike);
         optionalUserWithLike = Optional.of(userWithLike);
         optionalUserNotSignedIn = Optional.empty();
-        return userRepository.saveAll(Arrays.asList(userWithoutLike, userWithLike));
+        userRepository.saveAll(Arrays.asList(userWithoutLike, userWithLike));
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
@@ -186,5 +191,16 @@ public class PostLikeServiceTest {
         PostResponse postResponse = postService.findById(post.getId(), optionalUserWithoutLike);
         //then
         assertThat(postResponse.isHasLiked()).isFalse();
+    }
+
+    @DisplayName("게시글 삭제시 좋아요 삭제 - 성공")
+    @Test
+    void deleteLikeWhenDeletePost() {
+        //given
+        LikeResponse likeResponse = postService.createLike(post.getId(), optionalUserWithoutLike);
+        //when
+        postService.delete(post.getId(), optionalUserWithLike);
+        //then
+        assertThat(likeRepository.findById(likeResponse.getId())).isEmpty();
     }
 }
