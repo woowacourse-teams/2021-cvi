@@ -1,10 +1,6 @@
 package com.backjoongwon.cvi.publicdata.domain;
 
-import com.backjoongwon.cvi.util.DateConverter;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,36 +14,27 @@ public class VaccinationStatistics {
         this.vaccinationStatistics = new ArrayList<>(vaccinationStatistics);
     }
 
-    public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundVaccinationStatistics, LocalDateTime targetDateTime) {
-        LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
+    public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundVaccinationStatistics, LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
+                .filter(base -> LocalDate.parse(base.getBaseDate()).isEqual(targetDate) || LocalDate.parse(base.getBaseDate()).isBefore(targetDate))
                 .filter(base -> foundVaccinationStatistics.stream()
-                        .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation))
-                )
+                        .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation)))
                 .collect(Collectors.toList());
     }
 
-    public List<VaccinationStatistic> findWorldRecentlyStatistics(LocalDateTime targetDateTime) {
-        LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
+    public List<VaccinationStatistic> findWorldRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
+                .filter(base -> LocalDate.parse(base.getBaseDate()).isEqual(targetDate) || LocalDate.parse(base.getBaseDate()).isBefore(targetDate))
                 .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
                 .limit(1)
                 .collect(Collectors.toList());
     }
 
-    public List<VaccinationStatistic> findRecentlyStatistics(LocalDateTime targetDateTime) {
-        LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
+    public List<VaccinationStatistic> findRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
+                .filter(base -> LocalDate.parse(base.getBaseDate()).isEqual(targetDate) || LocalDate.parse(base.getBaseDate()).isBefore(targetDate))
                 .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
                 .limit(RegionPopulation.size())
                 .collect(Collectors.toList());
-    }
-
-    private LocalDate toLocalDate(String targetDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDate.parse(targetDate, formatter);
     }
 }

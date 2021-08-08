@@ -9,7 +9,6 @@ import com.backjoongwon.cvi.util.DateConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,8 +17,8 @@ public class PublicDataFacotry {
             "울산광역시", "경기도", "강원도", "세종특별자치시", "충청북도", "충청남도",
             "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
-    public static VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    public static VaccineParserResponse toVaccineParserResponse(LocalDate targetDate) {
+        String expectDateTime = DateConverter.convertDateToContainsZeroTime(targetDate);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),
@@ -60,8 +59,8 @@ public class PublicDataFacotry {
         ), 18, 1, 20, 2634);
     }
 
-    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponse(LocalDate targetDate) {
+        String expectDateTime = targetDate.toString();
         return Arrays.asList(
                 new VaccinationStatisticResponse(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557, BigDecimal.valueOf(39.2), BigDecimal.valueOf(14.3)),
@@ -104,8 +103,8 @@ public class PublicDataFacotry {
         );
     }
 
-    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponseWithWorldRegion(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponseWithWorldRegion(LocalDate targetDate) {
+        String expectDateTime = targetDate.toString();
         return Arrays.asList(
                 new VaccinationStatisticResponse(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557, BigDecimal.valueOf(39.2), BigDecimal.valueOf(14.3)),
@@ -148,31 +147,30 @@ public class PublicDataFacotry {
         );
     }
 
-    public static WorldVaccinationParserResponse toWorldVaccinationParserResponse(LocalDateTime targetDateTime) {
-        LocalDate expectDate = targetDateTime.toLocalDate();
+    public static WorldVaccinationParserResponse toWorldVaccinationParserResponse(LocalDate targetDate) {
         return new WorldVaccinationParserResponse("World", "OWID_WRL",
-                Arrays.asList(new WorldVaccinationData(expectDate.minusDays(2).toString(), 4327424315L, 2293196690L, 1175939230L,
+                Arrays.asList(new WorldVaccinationData(targetDate.minusDays(2).toString(), 4327424315L, 2293196690L, 1175939230L,
                                 43847311L, 42963523L, 55.52, 29.42, 15.09, 5512L),
-                        new WorldVaccinationData(expectDate.minusDays(1).toString(), 4399234109L, 2317353271L, 1181952381L,
+                        new WorldVaccinationData(targetDate.minusDays(1).toString(), 4399234109L, 2317353271L, 1181952381L,
                                 32322341L, 40310055L, 55.93, 29.56, 15.16, 5171L),
-                        new WorldVaccinationData(expectDate.toString(), 4359746656L, 2303769251L, 1191535085L,
+                        new WorldVaccinationData(targetDate.toString(), 4359746656L, 2303769251L, 1191535085L,
                                 33797364L, 40043557L, 56.44, 29.73, 15.29, 5137L)
                 )
         );
     }
 
-    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponseOnlyWorldRegion(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    public static List<VaccinationStatisticResponse> toVaccinationStatisticResponseOnlyWorldRegion(LocalDate targetDate) {
+        String expectDateTime = targetDate.toString();
         return Arrays.asList(
                 new VaccinationStatisticResponse(0, 0, expectDateTime,
                         0, 0, "World", 2303769251L, 1191535085L, BigDecimal.valueOf(29.3), BigDecimal.valueOf(15.0)),
-                new VaccinationStatisticResponse(0, 0, DateConverter.convertTimeToZero(targetDateTime.minusDays(1)),
+                new VaccinationStatisticResponse(0, 0, DateConverter.convertDateToContainsZeroTime(targetDate.minusDays(1)),
                         0, 0, "World", 2293196690L, 1175939230L, BigDecimal.valueOf(28.9), BigDecimal.valueOf(14.7))
         );
     }
 
-    public static VaccinationStatisticResponse toSingleWorldVaccinationStatisticResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    public static VaccinationStatisticResponse toSingleWorldVaccinationStatisticResponse(LocalDate targetDate) {
+        String expectDateTime = targetDate.toString();
         return new VaccinationStatisticResponse(0, 0, expectDateTime,
                 0, 0, "World", 2303769251L, 1191535085L, BigDecimal.valueOf(29.3), BigDecimal.valueOf(15.0));
     }

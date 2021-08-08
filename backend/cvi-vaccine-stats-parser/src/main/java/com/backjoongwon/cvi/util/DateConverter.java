@@ -1,14 +1,19 @@
 package com.backjoongwon.cvi.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class DateConverter {
 
-    public static String convertTimeToZero(LocalDateTime targetDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        targetDateTime = targetDateTime.truncatedTo(ChronoUnit.DAYS);
-        return targetDateTime.format(formatter);
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String convertDateToContainsZeroTime(LocalDate targetDate) {
+        LocalDateTime targetDateTime = targetDate.atStartOfDay();
+        return targetDateTime.format(FORMATTER);
+    }
+
+    public static LocalDate convertLocalDateTimeStringToLocalDate(String targetLocalDateTime) {
+        return LocalDate.parse(targetLocalDateTime, FORMATTER);
     }
 }

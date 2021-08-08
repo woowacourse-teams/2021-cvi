@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Slf4j
 @Component
@@ -19,19 +19,21 @@ public class PublicDataScheduler {
 
     @PostConstruct
     private void initializeVaccinationDate() {
+        LocalDate today = LocalDate.now();
         log.info("백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveVaccinationStatistics(LocalDateTime.now());
+        publicDataService.saveVaccinationStatistics(today);
         log.info("세계 백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveWorldVaccinationStatistics(LocalDateTime.now());
+        publicDataService.saveWorldVaccinationStatistics(today);
         log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
     }
 
     @Scheduled(cron = "0 0 10 * * ?")
     private void scheduleVaccinationData() {
+        LocalDate today = LocalDate.now();
         log.info("백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveVaccinationStatistics(LocalDateTime.now());
+        publicDataService.saveVaccinationStatistics(today);
         log.info("세계 백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveWorldVaccinationStatistics(LocalDateTime.now());
+        publicDataService.saveWorldVaccinationStatistics(today);
         log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
     }
 }

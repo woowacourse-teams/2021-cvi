@@ -16,8 +16,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -44,17 +42,17 @@ class VaccineParserTest {
 
     private static Stream<Arguments> parseToPublicDataToBeforeTenAndAnyDate() {
         return Stream.of(
-                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0))),
-                Arguments.of(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(9, 59, 59))),
-                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 11), LocalTime.MIN))
+                Arguments.of(LocalDate.now()),
+                Arguments.of(LocalDate.now().minusDays(1)),
+                Arguments.of(LocalDate.of(2021, 3, 11))
         );
     }
 
     private static Stream<Arguments> parseToPublicDataWhenNotUpdate() {
         return Stream.of(
-                Arguments.of(LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 59, 59))),
-                Arguments.of(LocalDateTime.of(LocalDate.of(2021, 3, 10), LocalTime.MAX)),
-                Arguments.of(LocalDateTime.now().plusDays(1))
+                Arguments.of(LocalDate.now()),
+                Arguments.of(LocalDate.of(2021, 3, 10)),
+                Arguments.of(LocalDate.now().plusDays(1))
         );
     }
 
@@ -65,17 +63,17 @@ class VaccineParserTest {
         vaccineParser = new VaccinationParser(parser, jsonMapper);
     }
 
-    @DisplayName("백신 접종 데이터 가져오기 - 성공 - 10시 이후의 오늘 날짜 및 2021-03-10이후의 날짜")
-    @ParameterizedTest
+    @DisplayName("백신 접종 데이터 가져오기 - 성공 ")
+    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 ")
     @MethodSource
-    void parseToPublicDataToBeforeTenAndAnyDate(LocalDateTime targetDateTime) throws JsonProcessingException {
+    void parseToPublicDataToBeforeTenAndAnyDate(LocalDate targetDate) throws JsonProcessingException {
         //given
-        VaccineParserResponse expect = toVaccineParserResponse(targetDateTime);
+        VaccineParserResponse expect = toVaccineParserResponse(targetDate);
         String rawData = new ObjectMapper().writeValueAsString(expect);
         //when
         willReturn(expect).given(jsonMapper).toObject(anyString(), any());
         willReturn(rawData).given(parser).parse(anyString());
-        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
+        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDate, API_SECRET_KEY);
         List<RegionVaccinationData> regionVaccinationData = actual.getData();
         //then
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedFirstCnt)
@@ -83,7 +81,7 @@ class VaccineParserTest {
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getBaseDate)
-                .contains(DateConverter.convertTimeToZero(targetDateTime));
+                .contains(DateConverter.convertDateToContainsZeroTime(targetDate));
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getSido)
                 .containsAll(REGIONS);
         assertThat(regionVaccinationData).extracting(RegionVaccinationData::getFirstCnt)
@@ -99,14 +97,14 @@ class VaccineParserTest {
     @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
     @ParameterizedTest
     @MethodSource
-    void parseToPublicDataWhenNotUpdate(LocalDateTime targetDateTime) throws JsonProcessingException {
+    void parseToPublicDataWhenNotUpdate(LocalDate targetDate) throws JsonProcessingException {
         //given
         VaccineParserResponse expect = VaccineParserResponse.empty();
         String rawData = new ObjectMapper().writeValueAsString(expect);
         //when
         willReturn(expect).given(jsonMapper).toObject(anyString(), any());
         willReturn(rawData).given(parser).parse(anyString());
-        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDateTime, API_SECRET_KEY);
+        VaccineParserResponse actual = vaccineParser.parseToPublicData(targetDate, API_SECRET_KEY);
         //then
         assertThat(actual.getCurrentCount()).isEqualTo(0);
         assertThat(actual.getData()).isEmpty();
@@ -157,8 +155,8 @@ class VaccineParserTest {
         assertThat(actualData).isEmpty();
     }
 
-    private VaccineParserResponse toVaccineParserResponse(LocalDateTime targetDateTime) {
-        String expectDateTime = DateConverter.convertTimeToZero(targetDateTime);
+    private VaccineParserResponse toVaccineParserResponse(LocalDate targetDate) {
+        String expectDateTime = DateConverter.convertDateToContainsZeroTime(targetDate);
         return new VaccineParserResponse(18, Arrays.asList(
                 new RegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),
@@ -210,7 +208,6 @@ class VaccineParserTest {
                                         43847311L, 42963523L, 55.52, 29.42, 15.09, 5512L),
                                 new WorldVaccinationData("2021-08-05", 4359746656L, 2303769251L, 1181952381L,
                                         32322341L, 40310055L, 55.93, 29.56, 15.16, 5171L)
-
                         )
                 )
         );

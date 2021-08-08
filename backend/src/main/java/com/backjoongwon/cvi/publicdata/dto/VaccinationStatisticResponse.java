@@ -2,9 +2,9 @@ package com.backjoongwon.cvi.publicdata.dto;
 
 import com.backjoongwon.cvi.dto.RegionVaccinationData;
 import com.backjoongwon.cvi.dto.WorldVaccinationData;
-import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
+import com.backjoongwon.cvi.util.DateConverter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +43,7 @@ public class VaccinationStatisticResponse {
 
     public static VaccinationStatisticResponse from(RegionVaccinationData regionVaccinationData) {
         return new VaccinationStatisticResponse(regionVaccinationData.getAccumulatedFirstCnt(), regionVaccinationData.getAccumulatedSecondCnt(),
-                regionVaccinationData.getBaseDate(), regionVaccinationData.getFirstCnt(), regionVaccinationData.getSecondCnt(),
+                DateConverter.convertLocalDateTimeStringToLocalDate(regionVaccinationData.getBaseDate()).toString(), regionVaccinationData.getFirstCnt(), regionVaccinationData.getSecondCnt(),
                 regionVaccinationData.getSido(), regionVaccinationData.getTotalFirstCnt(), regionVaccinationData.getTotalSecondCnt(),
                 null, null);
     }
@@ -56,7 +56,7 @@ public class VaccinationStatisticResponse {
     }
 
     public static VaccinationStatisticResponse from(WorldVaccinationData worldVaccinationData) {
-        return new VaccinationStatisticResponse(0L, 0L, worldVaccinationData.getDate() + " 00:00:00", 0L, 0L, RegionPopulation.WORLD.getRegion(),
+        return new VaccinationStatisticResponse(0L, 0L, worldVaccinationData.getDate(), 0L, 0L, RegionPopulation.WORLD.getRegion(),
                 worldVaccinationData.getPeople_vaccinated(), worldVaccinationData.getPeople_fully_vaccinated(), null, null
         );
     }

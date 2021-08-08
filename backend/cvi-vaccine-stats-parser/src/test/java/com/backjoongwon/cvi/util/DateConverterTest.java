@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,10 +16,17 @@ class DateConverterTest {
     @Test
     void localDateTimeWithZero() {
         //given
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate expect = LocalDate.now();
         //when
-        String actual = DateConverter.convertTimeToZero(now);
+        String actual = DateConverter.convertDateToContainsZeroTime(expect);
         //then
         assertThat(actual).isEqualTo(LocalDate.now() + ZERO_TIME);
+    }
+
+    @Test
+    void play() {
+        //String localDateTime = DateConverter.convertTimeWithZero(LocalDate.now());
+        LocalDate localDate = DateConverter.convertLocalDateTimeStringToLocalDate("2021-08-01" + ZERO_TIME);
+        System.out.println("localDate.toString() = " + localDate);
     }
 }

@@ -13,16 +13,16 @@ import java.util.List;
 public class JsonMapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonMapper.class);
-    private static ObjectMapper objectMapper;
+    private static final ObjectMapper OBJECT_MAPPER;
 
     static {
-        objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER = new ObjectMapper();
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public <T> T toObject(String rawData, Class<T> object) {
         try {
-            return objectMapper.readValue(rawData, object);
+            return OBJECT_MAPPER.readValue(rawData, object);
         } catch (JsonProcessingException e) {
             LOG.info("객체를 매핑할 수 없습니다.");
             throw new IllegalStateException("객체를 매핑할 수 없습니다.");
@@ -31,7 +31,7 @@ public class JsonMapper {
 
     public List<WorldVaccinationParserResponse> toWorldVaccinationParserResponse(String rawData) {
         try {
-            return Arrays.asList(objectMapper.readValue(rawData, WorldVaccinationParserResponse[].class));
+            return Arrays.asList(OBJECT_MAPPER.readValue(rawData, WorldVaccinationParserResponse[].class));
         } catch (JsonProcessingException e) {
             LOG.info("객체를 매핑할 수 없습니다.");
             throw new IllegalStateException("객체를 매핑할 수 없습니다.");

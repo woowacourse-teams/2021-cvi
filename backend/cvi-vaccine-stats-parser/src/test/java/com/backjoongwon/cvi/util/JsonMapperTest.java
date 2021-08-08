@@ -88,7 +88,7 @@ class JsonMapperTest {
                 "        \"daily_vaccinations_per_million\": 35\n" +
                 "      }\n" +
                 "    ]\n" +
-                "  },\n "+
+                "  },\n " +
                 "  {\n" +
                 "    \"country\": \"World\",\n" +
                 "    \"iso_code\": \"OWID_WRL\",\n" +
@@ -159,8 +159,8 @@ class JsonMapperTest {
         //when
         List<WorldVaccinationParserResponse> worldVaccinationParserResponses = jsonMapper.toWorldVaccinationParserResponse(rawData);
         //then
-        assertThat(worldVaccinationParserResponses).extracting("country").contains("Afghanistan", "World");
-        assertThat(worldVaccinationParserResponses).extracting("data").isNotEmpty();
+        assertThat(worldVaccinationParserResponses).extracting(WorldVaccinationParserResponse::getCountry).contains("Afghanistan", "World");
+        assertThat(worldVaccinationParserResponses).extracting(WorldVaccinationParserResponse::getData).isNotEmpty();
     }
 
 }

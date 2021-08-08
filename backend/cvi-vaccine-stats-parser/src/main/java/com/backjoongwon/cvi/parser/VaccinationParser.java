@@ -5,7 +5,7 @@ import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.util.DateConverter;
 import com.backjoongwon.cvi.util.JsonMapper;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +24,8 @@ public class VaccinationParser {
         this.jsonMapper = jsonMapper;
     }
 
-    public VaccineParserResponse parseToPublicData(LocalDateTime targetDateTime, String apiSecretKey) {
-        VaccineParserResponse vaccineParserResponse = jsonMapper.toObject(getRawData(targetDateTime, apiSecretKey), VaccineParserResponse.class);
+    public VaccineParserResponse parseToPublicData(LocalDate targetDate, String apiSecretKey) {
+        VaccineParserResponse vaccineParserResponse = jsonMapper.toObject(getRawData(targetDate, apiSecretKey), VaccineParserResponse.class);
         if (!vaccineParserResponse.isEmptyData()) {
             return vaccineParserResponse;
         }
@@ -45,18 +45,18 @@ public class VaccinationParser {
         return WorldVaccinationParserResponse.empty();
     }
 
-    private String getRawData(LocalDateTime targetDateTime, String apiSecretKey) {
-        Map<String, String> parameters = makeParameters(targetDateTime, apiSecretKey);
+    private String getRawData(LocalDate targetDate, String apiSecretKey) {
+        Map<String, String> parameters = makeParameters(targetDate, apiSecretKey);
         String params = ParameterStringBuilder.getParamsString(parameters);
         return parser.parse(DATA_URL + "?" + params);
     }
 
-    private Map<String, String> makeParameters(LocalDateTime targetDateTime, String apiSecretKey) {
+    private Map<String, String> makeParameters(LocalDate targetDate, String apiSecretKey) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("page", "1");
         parameters.put("perPage", "20");
         parameters.put("serviceKey", apiSecretKey);
-        parameters.put("cond[baseDate::EQ]", DateConverter.convertTimeToZero(targetDateTime));
+        parameters.put("cond[baseDate::EQ]", DateConverter.convertDateToContainsZeroTime(targetDate));
         return parameters;
     }
 }
