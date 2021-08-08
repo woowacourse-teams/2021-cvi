@@ -19,15 +19,19 @@ public class PublicDataScheduler {
 
     @PostConstruct
     private void initializeVaccinationDate() {
-        log.info("서버시작, 백신접종률 api요청 시작:");
+        log.info("백신접종률 api요청 및 저장 시작:");
         publicDataService.saveVaccinationStatistics(LocalDateTime.now());
-        log.info("서버시작, 백신접종률 api요청 완료 및 데이터베이스 저장 완료");
+        log.info("세계 백신접종률 api요청 및 저장 시작:");
+        publicDataService.saveWorldVaccinationStatistics(LocalDateTime.now());
+        log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
     }
 
     @Scheduled(cron = "0 0 10 * * ?")
     private void scheduleVaccinationData() {
-        log.info("백신접종률 api요청 시작:");
+        log.info("백신접종률 api요청 및 저장 시작:");
         publicDataService.saveVaccinationStatistics(LocalDateTime.now());
+        log.info("세계 백신접종률 api요청 및 저장 시작:");
+        publicDataService.saveWorldVaccinationStatistics(LocalDateTime.now());
         log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
     }
 }
