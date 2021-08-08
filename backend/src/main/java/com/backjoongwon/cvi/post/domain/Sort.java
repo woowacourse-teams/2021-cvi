@@ -25,11 +25,11 @@ public enum Sort {
         this.sort = sort;
     }
 
-    public static OrderSpecifier toOrderSpecifier(Sort sort) {
+    public static OrderSpecifier toOrderSpecifier(Sort input) {
         return Arrays.stream(values())
-                .filter(it -> it == sort)
+                .filter(sort -> sort == sort)
                 .findAny()
-                .map(it -> it.getSort())
+                .map(sort -> input.getSort())
                 .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
     }
 }

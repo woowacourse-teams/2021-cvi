@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-@DisplayName("게시글 비즈니스 흐름 테스트")
+@DisplayName("게시글 생성/수정/삭제 비즈니스 흐름 테스트")
 class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
