@@ -53,7 +53,7 @@ public class PostCommentServiceTest extends ApiDocument {
 
     @BeforeEach
     void init() {
-        List<User> users = initUser();
+        List<User> users = initUsers();
         initPost(users);
         commentRequest = new CommentRequest("테스트 댓글");
     }
@@ -68,15 +68,15 @@ public class PostCommentServiceTest extends ApiDocument {
         return postRepository.saveAll(Collections.singletonList(post));
     }
 
-    private List<User> initUser() {
+    private List<User> initUsers() {
         User user = User.builder()
-                .nickname("테스트유저-댓글X")
+                .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
                 .build();
         User anotherUser = User.builder()
-                .nickname("테스트유저-댓글O")
+                .nickname("테스트유저-다른유저")
                 .ageRange(AgeRange.FORTIES)
                 .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)

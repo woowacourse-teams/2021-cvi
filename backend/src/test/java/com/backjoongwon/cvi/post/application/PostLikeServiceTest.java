@@ -6,7 +6,6 @@ import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -30,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-@DisplayName("게시글-좋아 비즈니스 흐름 테스트")
+@DisplayName("게시글-좋아요 비즈니스 흐름 테스트")
 public class PostLikeServiceTest extends ApiDocument {
     @Autowired
     private PostRepository postRepository;
@@ -50,7 +49,7 @@ public class PostLikeServiceTest extends ApiDocument {
 
     @BeforeEach
     void init() {
-        List<User> users = initUser();
+        List<User> users = initUsers();
         initPost(users);
         initLike();
     }
@@ -69,7 +68,7 @@ public class PostLikeServiceTest extends ApiDocument {
         return postRepository.saveAll(Collections.singletonList(post));
     }
 
-    private List<User> initUser() {
+    private List<User> initUsers() {
         userWithoutLike = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
