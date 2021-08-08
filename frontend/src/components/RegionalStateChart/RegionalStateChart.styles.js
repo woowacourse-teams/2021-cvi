@@ -9,12 +9,14 @@ const frameStyle = css`
   padding: 2rem;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
 `;
 
 const Content = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 58.5rem;
   overflow-x: auto;
+  overflow-y: hidden;
 `;
 
 const CountingDate = styled.div`

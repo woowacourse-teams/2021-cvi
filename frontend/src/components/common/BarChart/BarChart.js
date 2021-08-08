@@ -12,21 +12,21 @@ import {
   Percent,
   Bar,
   Region,
-  HoverdDetail,
+  HoveredDetail,
   DetailContainer,
   DetailTitle,
   DetailCount,
 } from './BarChart.styles';
 
 const BarChart = ({ dataList }) => {
-  const [hoverdRegion, setHoveredRegion] = useState('서울특별시');
+  const [hoveredRegion, setHoveredRegion] = useState('서울특별시');
 
   return (
     <Container>
       <RegionList>
         {dataList.map((region) => (
           <RegionItem key={region.sido}>
-            <HoverdDetail isShowing={hoverdRegion === region.sido}>
+            <HoveredDetail isShowing={hoveredRegion === region.sido}>
               <DetailContainer>
                 <DetailTitle>1차 접종</DetailTitle>
                 <DetailCount first={true}>{numberWithCommas(region.totalFirstCnt)}명</DetailCount>
@@ -35,36 +35,36 @@ const BarChart = ({ dataList }) => {
                 <DetailTitle first={false}>완전 접종 </DetailTitle>
                 <DetailCount>{numberWithCommas(region.totalSecondCnt)}명</DetailCount>
               </DetailContainer>
-            </HoverdDetail>
+            </HoveredDetail>
             <BarList>
               <BarContainer
                 first={true}
-                isShowing={hoverdRegion === region.sido}
+                isShowing={hoveredRegion === region.sido}
                 onMouseEnter={() => setHoveredRegion(region.sido)}
               >
                 <Line
-                  isShowing={hoverdRegion === region.sido}
+                  isShowing={hoveredRegion === region.sido}
                   percent={region.accumulatedFirstRate}
                 />
                 <Percent>{region.accumulatedFirstRate}%</Percent>
                 <Bar
                   first={true}
-                  isShowing={hoverdRegion === region.sido}
+                  isShowing={hoveredRegion === region.sido}
                   percent={region.accumulatedFirstRate}
                 />
               </BarContainer>
               <BarContainer
-                isShowing={hoverdRegion === region.sido}
+                isShowing={hoveredRegion === region.sido}
                 onMouseEnter={() => setHoveredRegion(region.sido)}
               >
                 <Percent>{region.accumulatedSecondRate}%</Percent>
                 <Bar
-                  isShowing={hoverdRegion === region.sido}
+                  isShowing={hoveredRegion === region.sido}
                   percent={region.accumulatedSecondRate}
                 />
               </BarContainer>
             </BarList>
-            <Region isShowing={hoverdRegion === region.sido}>{REGION_NAME[region.sido]}</Region>
+            <Region isShowing={hoveredRegion === region.sido}>{REGION_NAME[region.sido]}</Region>
           </RegionItem>
         ))}
       </RegionList>

@@ -34,7 +34,7 @@ const RegionItem = styled.div`
   flex-direction: column;
 `;
 
-const HoverdDetail = styled.div`
+const HoveredDetail = styled.div`
   position: absolute;
   width: 23rem;
   display: ${({ isShowing }) => (isShowing ? 'flex' : 'none')};
@@ -128,7 +128,7 @@ export {
   Percent,
   Bar,
   Region,
-  HoverdDetail,
+  HoveredDetail,
   DetailContainer,
   DetailTitle,
   DetailCount,

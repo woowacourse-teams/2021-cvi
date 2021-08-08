@@ -30,7 +30,7 @@ const RegionalStateTable = ({ vaccinationStateList }) => {
             <Tr key={region.sido}>
               <td>{REGION_NAME[region.sido]}</td>
               <td>
-                {numberWithCommas(region.firstCnt + region.secondCnt)}
+                {numberWithCommas(region.firstCnt)}
                 <Span>
                   명 <IncreaseIcon>▴</IncreaseIcon>
                 </Span>
@@ -40,7 +40,7 @@ const RegionalStateTable = ({ vaccinationStateList }) => {
                 <Span>명</Span>
               </td>
               <td>
-                {numberWithCommas(region.totalFirstCnt)}
+                {numberWithCommas(region.totalSecondCnt)}
                 <Span>명</Span>
               </td>
             </Tr>
