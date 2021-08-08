@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("게시글 컨트롤러 Mock 테스트 - 댓")
+@DisplayName("게시글 컨트롤러 Mock 테스트 - 댓글")
 public class PostCommentControllerTest extends PreprocessPostControllerTest {
 
     @DisplayName("게시글 댓글 등록 - 성공")

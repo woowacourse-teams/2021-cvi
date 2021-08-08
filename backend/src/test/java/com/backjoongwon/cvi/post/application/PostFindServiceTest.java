@@ -76,7 +76,7 @@ public class PostFindServiceTest {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             User dummyUser = User.builder()
-                    .nickname("테스트유저-댓글"+i+"좋아요"+i)
+                    .nickname("테스트유저-댓글" + i + "좋아요" + i)
                     .ageRange(AgeRange.FORTIES)
                     .profileUrl("")
                     .socialProvider(SocialProvider.NAVER)
@@ -451,40 +451,40 @@ public class PostFindServiceTest {
                 Arguments.of(VaccinationType.JANSSEN, Sort.LIKE_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.MODERNA, Sort.LIKE_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.LIKE_COUNT_DESC, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Sort.LIKE_COUNT_DESC,Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Sort.LIKE_COUNT_DESC,Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Sort.LIKE_COUNT_DESC,Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Sort.LIKE_COUNT_DESC,Collections.emptyList()),
+                Arguments.of(VaccinationType.ASTRAZENECA, Sort.LIKE_COUNT_DESC, Arrays.asList("Test 1", "Test 0")),
+                Arguments.of(VaccinationType.PFIZER, Sort.LIKE_COUNT_DESC, Arrays.asList("Test 2")),
+                Arguments.of(VaccinationType.JANSSEN, Sort.LIKE_COUNT_DESC, Collections.emptyList()),
+                Arguments.of(VaccinationType.MODERNA, Sort.LIKE_COUNT_DESC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.COMMENT_COUNT_ASC, Arrays.asList("Test 0", "Test 1", "Test 2")),
                 Arguments.of(VaccinationType.ASTRAZENECA, Sort.COMMENT_COUNT_ASC, Arrays.asList("Test 0", "Test 1")),
                 Arguments.of(VaccinationType.PFIZER, Sort.COMMENT_COUNT_ASC, Arrays.asList("Test 2")),
                 Arguments.of(VaccinationType.JANSSEN, Sort.COMMENT_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.MODERNA, Sort.COMMENT_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.COMMENT_COUNT_DESC, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Sort.COMMENT_COUNT_DESC,Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Sort.COMMENT_COUNT_DESC,Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Sort.COMMENT_COUNT_DESC,Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Sort.COMMENT_COUNT_DESC,Collections.emptyList()),
+                Arguments.of(VaccinationType.ASTRAZENECA, Sort.COMMENT_COUNT_DESC, Arrays.asList("Test 1", "Test 0")),
+                Arguments.of(VaccinationType.PFIZER, Sort.COMMENT_COUNT_DESC, Arrays.asList("Test 2")),
+                Arguments.of(VaccinationType.JANSSEN, Sort.COMMENT_COUNT_DESC, Collections.emptyList()),
+                Arguments.of(VaccinationType.MODERNA, Sort.COMMENT_COUNT_DESC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.VIEW_COUNT_ASC, Arrays.asList("Test 0", "Test 1", "Test 2")),
                 Arguments.of(VaccinationType.ASTRAZENECA, Sort.VIEW_COUNT_ASC, Arrays.asList("Test 0", "Test 1")),
                 Arguments.of(VaccinationType.PFIZER, Sort.VIEW_COUNT_ASC, Arrays.asList("Test 2")),
                 Arguments.of(VaccinationType.JANSSEN, Sort.VIEW_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.MODERNA, Sort.VIEW_COUNT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.VIEW_COUNT_DESC, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Sort.VIEW_COUNT_DESC,Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Sort.VIEW_COUNT_DESC,Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Sort.VIEW_COUNT_DESC,Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Sort.VIEW_COUNT_DESC,Collections.emptyList()),
+                Arguments.of(VaccinationType.ASTRAZENECA, Sort.VIEW_COUNT_DESC, Arrays.asList("Test 1", "Test 0")),
+                Arguments.of(VaccinationType.PFIZER, Sort.VIEW_COUNT_DESC, Arrays.asList("Test 2")),
+                Arguments.of(VaccinationType.JANSSEN, Sort.VIEW_COUNT_DESC, Collections.emptyList()),
+                Arguments.of(VaccinationType.MODERNA, Sort.VIEW_COUNT_DESC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.CREATED_AT_ASC, Arrays.asList("Test 0", "Test 1", "Test 2")),
                 Arguments.of(VaccinationType.ASTRAZENECA, Sort.CREATED_AT_ASC, Arrays.asList("Test 0", "Test 1")),
                 Arguments.of(VaccinationType.PFIZER, Sort.CREATED_AT_ASC, Arrays.asList("Test 2")),
                 Arguments.of(VaccinationType.JANSSEN, Sort.CREATED_AT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.MODERNA, Sort.CREATED_AT_ASC, Collections.emptyList()),
                 Arguments.of(VaccinationType.ALL, Sort.CREATED_AT_DESC, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Sort.CREATED_AT_DESC,Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Sort.CREATED_AT_DESC,Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Sort.CREATED_AT_DESC,Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Sort.CREATED_AT_DESC,Collections.emptyList())
+                Arguments.of(VaccinationType.ASTRAZENECA, Sort.CREATED_AT_DESC, Arrays.asList("Test 1", "Test 0")),
+                Arguments.of(VaccinationType.PFIZER, Sort.CREATED_AT_DESC, Arrays.asList("Test 2")),
+                Arguments.of(VaccinationType.JANSSEN, Sort.CREATED_AT_DESC, Collections.emptyList()),
+                Arguments.of(VaccinationType.MODERNA, Sort.CREATED_AT_DESC, Collections.emptyList())
         );
     }
 }
