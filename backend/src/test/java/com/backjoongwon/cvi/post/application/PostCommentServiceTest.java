@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.post.application;
 
-import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.domain.CommentRepository;
@@ -35,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @Transactional
 @DisplayName("게시글-댓글 비즈니스 흐름 테스트")
-public class PostCommentServiceTest extends ApiDocument {
+public class PostCommentServiceTest {
     @Autowired
     private PostRepository postRepository;
 

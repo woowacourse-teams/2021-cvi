@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.post.application;
 
-import com.backjoongwon.cvi.ApiDocument;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
@@ -34,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @Transactional
 @DisplayName("게시글-좋아요 비즈니스 흐름 테스트")
-public class PostLikeServiceTest extends ApiDocument {
+public class PostLikeServiceTest {
     @Autowired
     private PostRepository postRepository;
 
