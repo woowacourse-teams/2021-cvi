@@ -23,30 +23,30 @@ const VaccinationState = ({ title, withWorld }) => {
       <Frame width="100%" showShadow={true}>
         <FrameContent withWorld={withWorld}>
           <PrimaryState>
-            <DonutChart target="35.8" />
+            <DonutChart target={koreanState?.accumulatedFirstRate} />
             <Info>
               <InfoTitle>국내 1차 접종</InfoTitle>
               <div>누적 {numberWithCommas(Number(koreanState?.totalFirstCnt))}</div>
               <div>
-                신규 {numberWithCommas(Number(koreanState?.firstCnt))}{' '}
+                신규 {numberWithCommas(Number(koreanState?.firstCnt))}
                 <IncreaseIcon>▴</IncreaseIcon>
               </div>
             </Info>
           </PrimaryState>
           <PrimaryState>
-            <DonutChart target="13.7" />
+            <DonutChart target={koreanState?.accumulatedSecondRate} />
             <Info>
               <InfoTitle>국내 완전 접종</InfoTitle>
               <div>누적 {numberWithCommas(Number(koreanState?.totalSecondCnt))}</div>
               <div>
-                신규 {numberWithCommas(Number(koreanState?.secondCnt))}{' '}
+                신규 {numberWithCommas(Number(koreanState?.secondCnt))}
                 <IncreaseIcon>▴</IncreaseIcon>
               </div>
             </Info>
           </PrimaryState>
           {withWorld && (
             <PrimaryState>
-              <DonutChart target="14.6" />
+              <DonutChart target={15.3} />
               <Info>
                 <InfoTitle>세계 완전 접종</InfoTitle>
                 <div>누적 1,096,011,434</div>
