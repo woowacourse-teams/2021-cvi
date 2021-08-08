@@ -17,18 +17,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("게시글 컨트롤러 Mock 테스트- 좋아요")
 public class PostLikeControllerTest extends InitPostControllerTest {
 
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
     void createLike() throws Exception {
         //given
-        LikeResponse likeResponse = LikeResponse.from(1L);
+        LikeResponse likeResponse = LikeResponse.from(LIKE_ID);
         willReturn(likeResponse).given(postService).createLike(any(Long.class), any());
         //when
         ResultActions actualResponse = 글_좋아요_생성_요청(postResponse.getId());
         //then
-        글_좋아요_생성_성공(actualResponse, 1L);
+        글_좋아요_생성_성공(actualResponse, LIKE_ID);
     }
 
     @DisplayName("게시글 좋아요 생성 - 실패 - 게시글이 없는 경우")

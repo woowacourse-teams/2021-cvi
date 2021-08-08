@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@DisplayName("게시글 컨트롤러 Mock 테스트 - 게시글")
 class PostControllerTest extends InitPostControllerTest {
 
     @DisplayName("게시글 등록 - 성공")

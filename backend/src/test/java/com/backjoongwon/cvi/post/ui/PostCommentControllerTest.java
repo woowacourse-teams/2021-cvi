@@ -19,13 +19,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("게시글 컨트롤러 Mock 테스트 - 댓")
 public class PostCommentControllerTest extends InitPostControllerTest {
 
     @DisplayName("게시글 댓글 등록 - 성공")
     @Test
     void createComment() throws Exception {
         //given
-        CommentResponse expectedResponse = new CommentResponse(1L, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
+        CommentResponse expectedResponse = new CommentResponse(COMMENT_ID, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
         willReturn(expectedResponse).given(postService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
