@@ -13,8 +13,13 @@ const Container = styled.div`
   }
 
   @media screen and (max-width: 1024px) {
-    padding: 2.4rem 0 0 0;
+    padding: 2.4rem 0 7.2rem 0;
     gap: 3rem;
+    grid-template-columns: repeat(1, 1fr);
+    & > *:nth-of-type(1) {
+      grid-column-start: 1;
+      grid-column-end: 2;
+    }
   }
 `;
 
