@@ -2,20 +2,20 @@ package com.backjoongwon.cvi.dto;
 
 public class RegionVaccinationData {
 
-    private int accumulatedFirstCnt;
-    private int accumulatedSecondCnt;
+    private long accumulatedFirstCnt;
+    private long accumulatedSecondCnt;
     private String baseDate;
-    private int firstCnt;
-    private int secondCnt;
+    private long firstCnt;
+    private long secondCnt;
     private String sido;
-    private int totalFirstCnt;
-    private int totalSecondCnt;
+    private long totalFirstCnt;
+    private long totalSecondCnt;
 
     public RegionVaccinationData() {
     }
 
-    public RegionVaccinationData(int accumulatedFirstCnt, int accumulatedSecondCnt, String baseDate, int firstCnt,
-                                 int secondCnt, String sido, int totalFirstCnt, int totalSecondCnt) {
+    public RegionVaccinationData(long accumulatedFirstCnt, long accumulatedSecondCnt, String baseDate, long firstCnt,
+                                 long secondCnt, String sido, long totalFirstCnt, long totalSecondCnt) {
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
         this.baseDate = baseDate;
@@ -26,11 +26,11 @@ public class RegionVaccinationData {
         this.totalSecondCnt = totalSecondCnt;
     }
 
-    public int getAccumulatedFirstCnt() {
+    public long getAccumulatedFirstCnt() {
         return accumulatedFirstCnt;
     }
 
-    public int getAccumulatedSecondCnt() {
+    public long getAccumulatedSecondCnt() {
         return accumulatedSecondCnt;
     }
 
@@ -38,11 +38,11 @@ public class RegionVaccinationData {
         return baseDate;
     }
 
-    public int getFirstCnt() {
+    public long getFirstCnt() {
         return firstCnt;
     }
 
-    public int getSecondCnt() {
+    public long getSecondCnt() {
         return secondCnt;
     }
 
@@ -50,11 +50,11 @@ public class RegionVaccinationData {
         return sido;
     }
 
-    public int getTotalFirstCnt() {
+    public long getTotalFirstCnt() {
         return totalFirstCnt;
     }
 
-    public int getTotalSecondCnt() {
+    public long getTotalSecondCnt() {
         return totalSecondCnt;
     }
 }

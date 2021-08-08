@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.toVaccinationStatisticResponse;
+import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.*;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,7 +53,7 @@ class PublicDataControllerTest extends ApiDocument {
     @Test
     void findVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponse(TARGET_DATE_TIME);
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponseWithWorldRegion(TARGET_DATE_TIME);
         //when
         willReturn(vaccinationStatisticResponse).given(publicDataService).findVaccinationStatistics(TARGET_DATE_TIME);
         ResultActions response = 백신_접종률_조회_요청(TARGET_DATE_TIME);
@@ -71,6 +71,29 @@ class PublicDataControllerTest extends ApiDocument {
         ResultActions response = 백신_접종률_조회_요청(tomorrowDateTime);
         //then
         백신_접종률_없데이트전_조회_성공함(response);
+    }
+
+    @DisplayName("세계 백신 접종률 조회 - 성공")
+    @Test
+    void saveWorldVaccinationStatistic() throws Exception {
+        //given
+        //when
+        willReturn(toVaccinationStatisticResponseOnlyWorldRegion(TARGET_DATE_TIME)).given(publicDataService).saveWorldVaccinationStatistics(TARGET_DATE_TIME);
+        ResultActions response = 세계_백신_접종률_저장_요청(TARGET_DATE_TIME);
+        //then
+        세계_백신_접종률_저장_성공함(response);
+    }
+
+    @DisplayName("세계 백신 접종률 조회 - 성공")
+    @Test
+    void findWorldVaccinationStatistic() throws Exception {
+        //given
+        List<VaccinationStatisticResponse> expect = Collections.singletonList(toSingleWorldVaccinationStatisticResponse(TARGET_DATE_TIME));
+        //when
+        willReturn(expect).given(publicDataService).findWorldVaccinationStatistics(TARGET_DATE_TIME);
+        ResultActions response = 세계_백신_접종률_조회_요청(TARGET_DATE_TIME);
+        //then
+        새걔_백신_접종률_조회_성공함(response);
     }
 
     private ResultActions 백신_접종률_저장_요청(LocalDateTime targetDateTime) throws Exception {
@@ -99,5 +122,27 @@ class PublicDataControllerTest extends ApiDocument {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("publicdata-vaccination-nodata-find"));
+    }
+
+    private ResultActions 세계_백신_접종률_저장_요청(LocalDateTime targetDateTime) throws Exception {
+        return mockMvc.perform(post("/api/v1/publicdata/vaccinations/world")
+                .param("targetDate", targetDateTime.toString()));
+    }
+
+    private void 세계_백신_접종률_저장_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(toDocument("publicdata-world-vaccination-save"));
+    }
+
+    private ResultActions 세계_백신_접종률_조회_요청(LocalDateTime targetDateTime) throws Exception {
+        return mockMvc.perform(get("/api/v1/publicdata/vaccinations/world")
+                .param("targetDate", targetDateTime.toString()));
+    }
+
+    private void 새걔_백신_접종률_조회_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("publicdata-world-vaccination-find"));
     }
 }
