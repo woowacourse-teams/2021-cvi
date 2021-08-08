@@ -15,6 +15,9 @@ import SnackBar from './SnackBar/SnackBar';
 import Loading from './Loading/Loading';
 import ToggleButton from './ToggleButton/ToggleButton';
 import BarChart from './BarChart/BarChart';
+import MapChart from './MapChart/MapChart';
+import MapChartSvg from './MapChartSvg/MapChartSvg';
+import MapChartStandard from './MapChartStandard/MapChartStandard';
 
 export {
   Avatar,
@@ -34,4 +37,7 @@ export {
   Loading,
   ToggleButton,
   BarChart,
+  MapChart,
+  MapChartSvg,
+  MapChartStandard,
 };

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { BarChart, Frame, ToggleButton } from '../common';
+import { BarChart, Frame, MapChart, ToggleButton } from '../common';
 import { frameStyle, Content, CountingDate } from './RegionalStateChart.styles';
 
 const RegionalStateChart = ({ vaccinationStateList }) => {
@@ -32,7 +32,11 @@ const RegionalStateChart = ({ vaccinationStateList }) => {
         toggleSelected={() => setSelected(!selected)}
       />
       <Content>
-        {selected ? <BarChart dataList={vaccinationStateList} /> : <div>mapChart</div>}
+        {selected ? (
+          <BarChart dataList={vaccinationStateList} />
+        ) : (
+          <MapChart dataList={vaccinationStateList} />
+        )}
       </Content>
       <CountingDate>국내현황 {getCountingDate()} 00:00 집계 기준</CountingDate>
     </Frame>

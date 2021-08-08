@@ -5,7 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media screen and (max-width: 801px) {
+  @media screen and (max-width: 1024px) {
     padding: 3rem 0 0 0;
   }
 `;
@@ -37,13 +37,18 @@ const Content = styled.div`
     grid-row-start: 1;
     grid-row-end: 6;
   }
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 2.8rem;
   margin-bottom: 3.2rem;
 
-  @media screen and (max-width: 801px) {
+  @media screen and (max-width: 1024px) {
     margin-left: 2rem;
   }
 `;
