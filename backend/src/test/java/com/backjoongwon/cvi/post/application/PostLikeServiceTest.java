@@ -1,28 +1,104 @@
 package com.backjoongwon.cvi.post.application;
 
+import com.backjoongwon.cvi.ApiDocument;
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.like.domain.Like;
+import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
+import com.backjoongwon.cvi.post.domain.PostRepository;
+import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.user.domain.AgeRange;
+import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.domain.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ActiveProfiles("test")
+@SpringBootTest
+@Transactional
 @DisplayName("게시글-좋아 비즈니스 흐름 테스트")
-public class PostLikeServiceTest extends InitPostServiceTest {
+public class PostLikeServiceTest extends ApiDocument {
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PostService postService;
+
+    private User userWithoutLike;
+    private User userWithLike;
+    private Optional<User> optionalUserWithoutLike;
+    private Optional<User> optionalUserWithLike;
+    private Optional<User> optionalUserNotSignedIn;
+    private Post post;
+
+    @BeforeEach
+    void init() {
+        List<User> users = initUser();
+        initPost(users);
+        initLike();
+    }
+
+    private void initLike() {
+        post.addLike(Like.builder().user(userWithLike).build());
+    }
+
+    private List<Post> initPost(List<User> users) {
+        post = Post.builder()
+                .content("테스트게시글")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(users.get(1))
+                .createdAt(LocalDateTime.now())
+                .build();
+        return postRepository.saveAll(Collections.singletonList(post));
+    }
+
+    private List<User> initUser() {
+        userWithoutLike = User.builder()
+                .nickname("테스트유저")
+                .ageRange(AgeRange.FORTIES)
+                .profileUrl("")
+                .socialProvider(SocialProvider.NAVER)
+                .build();
+        userWithLike = User.builder()
+                .nickname("테스트유저-다른유저")
+                .ageRange(AgeRange.FORTIES)
+                .profileUrl("")
+                .socialProvider(SocialProvider.NAVER)
+                .build();
+
+        optionalUserWithoutLike = Optional.of(userWithoutLike);
+        optionalUserWithLike = Optional.of(userWithLike);
+        optionalUserNotSignedIn = Optional.empty();
+        return userRepository.saveAll(Arrays.asList(userWithoutLike, userWithLike));
+    }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
     @Test
     void createLike() {
         //given
         //when
-        Long postId = post0.getId();
-        postService.createLike(postId, optionalUserWithLikesAndComment);
+        Long postId = post.getId();
+        postService.createLike(postId, optionalUserWithoutLike);
         Post post = postRepository.findWithLikesById(postId).get();
         //then
-        assertThat(post.getLikesCount()).isEqualTo(1);
+        assertThat(post.getLikesCount()).isEqualTo(2);
     }
 
     @DisplayName("게시글 좋아요 생성 - 실패 - 게시글이 없는 경우")
@@ -31,7 +107,7 @@ public class PostLikeServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createLike(Long.MAX_VALUE, optionalUserWithLikesAndComment))
+        assertThatThrownBy(() -> postService.createLike(Long.MAX_VALUE, optionalUserWithoutLike))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -41,17 +117,28 @@ public class PostLikeServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.createLike(post1.getId(), optionalUserWithLikesAndComment))
+        assertThatThrownBy(() -> postService.createLike(post.getId(), optionalUserWithLike))
                 .isInstanceOf(InvalidOperationException.class);
     }
+
+    @DisplayName("좋아요 생성 - 실패 - 비회원 좋아요 생성 시도")
+    @Test
+    void createCommentWhenNotLoginUser() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> postService.createLike(post.getId(), optionalUserNotSignedIn))
+                .isInstanceOf(UnAuthorizedException.class);
+    }
+
 
     @DisplayName("게시글 좋아요 삭제 - 성공")
     @Test
     void deleteLike() {
         //given
         //when
-        postService.deleteLike(post1.getId(), optionalUserWithLikesAndComment);
-        Post actualPost = postRepository.findWithLikesById(this.post0.getId())
+        postService.deleteLike(post.getId(), optionalUserWithLike);
+        Post actualPost = postRepository.findWithLikesById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         //then
         assertThat(actualPost.getLikes().getLikes()).isEmpty();
@@ -63,7 +150,7 @@ public class PostLikeServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteLike(post1.getId(), optionalUserNoLikesAndComment))
+        assertThatThrownBy(() -> postService.deleteLike(post.getId(), optionalUserWithoutLike))
                 .isInstanceOf(UnAuthorizedException.class)
                 .hasMessage("해당 사용자의 좋아요가 글에 존재하지 않습니다.");
     }
@@ -74,7 +161,7 @@ public class PostLikeServiceTest extends InitPostServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> postService.deleteLike(12379021380912L, optionalUserNoLikesAndComment))
+        assertThatThrownBy(() -> postService.deleteLike(Long.MAX_VALUE, optionalUserWithoutLike))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("해당 id의 게시글이 존재하지 않습니다.");
     }
