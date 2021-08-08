@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.publicdata.application;
 
-import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.dto.VaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
@@ -29,23 +28,13 @@ public class PublicDataService {
     private final VaccinationStatisticRepository vaccinationStatisticRepository;
     private final PublicDataProperties publicDataProperties;
 
-    @Transactional(readOnly = true)
-    public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDateTime targetDateTime) {
-        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDateAndRegionPopulationNot(
-                DateConverter.convertTimeToZero(modifyDate(targetDateTime)),
-                RegionPopulation.WORLD
-        );
-        return vaccinationStatistic.stream()
-                .map(VaccinationStatisticResponse::from)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDateTime targetDateTime) {
         VaccineParserResponse vaccineParserResponse = vacinationparser.parseToPublicData(
                 targetDateTime,
                 publicDataProperties.getVaccination()
         );
+
         RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(vaccineParserResponse.getData());
         VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
         List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(targetDateTime));
@@ -56,9 +45,20 @@ public class PublicDataService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDateTime targetDateTime) {
+        List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findAll();
+        VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDateTime);
+        return recentlyStatistics.stream()
+                .map(VaccinationStatisticResponse::from)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public List<VaccinationStatisticResponse> saveWorldVaccinationStatistics(LocalDateTime targetDateTime) {
         WorldVaccinationParserResponse worldVaccinationParserResponse = vacinationparser.parseToWorldPublicData();
+
         WorldVaccinationDataFactory worldVaccinationDataFactory = new WorldVaccinationDataFactory(worldVaccinationParserResponse.getData());
         VaccinationStatistics vaccinationStatistics = worldVaccinationDataFactory.toVaccinationStatistics();
         List<VaccinationStatistic> foundByRegionPopulation = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
@@ -73,18 +73,9 @@ public class PublicDataService {
     public List<VaccinationStatisticResponse> findWorldVaccinationStatistics(LocalDateTime targetDateTime) {
         List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
-        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDateTime);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findWorldRecentlyStatistics(targetDateTime);
         return recentlyStatistics.stream()
                 .map(VaccinationStatisticResponse::from)
                 .collect(Collectors.toList());
-    }
-
-    private LocalDateTime modifyDate(LocalDateTime targetDateTime) {
-        if (targetDateTime.toLocalDate().isEqual(LocalDate.now()) &&
-                targetDateTime.toLocalTime().isBefore(LocalTime.of(10, 0))) {
-            log.info("데이터가 업데이트 되기 전입니다. 전날 기준으로 로직을 실행합니다.");
-            return targetDateTime.minusDays(1);
-        }
-        return targetDateTime;
     }
 }

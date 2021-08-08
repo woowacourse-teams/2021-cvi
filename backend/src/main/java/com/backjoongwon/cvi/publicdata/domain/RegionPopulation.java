@@ -46,4 +46,8 @@ public enum RegionPopulation {
     public static RegionPopulation findByRegion(String region) {
         return regions.get(region);
     }
+
+    public static long size() {
+        return regions.size();
+    }
 }

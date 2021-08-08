@@ -18,11 +18,6 @@ public class VaccinationStatistics {
         this.vaccinationStatistics = new ArrayList<>(vaccinationStatistics);
     }
 
-    private LocalDate toLocalDate(String targetDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDate.parse(targetDate, formatter);
-    }
-
     public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundVaccinationStatistics, LocalDateTime targetDateTime) {
         LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
         return this.vaccinationStatistics.stream()
@@ -33,12 +28,26 @@ public class VaccinationStatistics {
                 .collect(Collectors.toList());
     }
 
-    public List<VaccinationStatistic> findRecentlyStatistics(LocalDateTime targetDateTime) {
+    public List<VaccinationStatistic> findWorldRecentlyStatistics(LocalDateTime targetDateTime) {
         LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
         return this.vaccinationStatistics.stream()
                 .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
                 .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
                 .limit(1)
                 .collect(Collectors.toList());
+    }
+
+    public List<VaccinationStatistic> findRecentlyStatistics(LocalDateTime targetDateTime) {
+        LocalDate targetDate = toLocalDate(DateConverter.convertTimeToZero(targetDateTime));
+        return this.vaccinationStatistics.stream()
+                .filter(base -> toLocalDate(base.getBaseDate()).isEqual(targetDate) || toLocalDate(base.getBaseDate()).isBefore(targetDate))
+                .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
+                .limit(RegionPopulation.size())
+                .collect(Collectors.toList());
+    }
+
+    private LocalDate toLocalDate(String targetDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDate.parse(targetDate, formatter);
     }
 }
