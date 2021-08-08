@@ -1,5 +1,5 @@
 const LINE_LIMIT = {
-  PREVIEW_ITEM: 3,
+  PREVIEW_ITEM: 1,
   REVIEW_ITEM: 3,
   MY_COMMENT_ITEM: 1,
 };

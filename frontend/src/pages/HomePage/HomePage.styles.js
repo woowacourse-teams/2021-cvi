@@ -4,7 +4,6 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: 2.5rem 8rem 6rem 8rem;
-  flex-direction: column;
   column-gap: 2.4rem;
   row-gap: 6rem;
 

@@ -23,6 +23,9 @@ const Preview = ({ title, reviewType }) => {
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
           color={FONT_COLOR.BLUE_GRAY}
           withIcon={true}
+          styles={css`
+            padding-right: 0;
+          `}
           onClick={goReviewPage}
         >
           <div>더보기</div>

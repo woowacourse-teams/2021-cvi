@@ -17,9 +17,9 @@ const TopContainer = styled.div`
 `;
 
 const Content = styled.div`
-  margin: 2rem 0;
+  margin: 1.6rem 0;
   line-height: 1.5;
-  min-height: 7.2rem;
+  min-height: 2.4rem;
   white-space: normal;
   display: -webkit-box;
   -webkit-line-clamp: ${LINE_LIMIT.PREVIEW_ITEM};
