@@ -28,7 +28,7 @@ if [[ "$1" == prod ]]
 then
   nohup java -jar \
     -Duser.timezone=Asia/Seoul \
-    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml \
+    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml, /home/ubuntu/deploy/application-client-secret.yml\
     -Dspring.profiles.active=$IDLE_PROFILE,"$1"\
     $JAR_LOCATION > ~/nohup.out 2>&1 &
 else
