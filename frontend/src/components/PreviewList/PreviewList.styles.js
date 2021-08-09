@@ -2,20 +2,13 @@ import styled from '@emotion/styled/';
 import { PALETTE } from '../../constants';
 
 const Container = styled.ul`
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: column;
   position: relative;
   min-height: 36rem;
 
-  & > li {
+  & > li:not(:last-child) {
     border-bottom: 0.1rem solid ${PALETTE.NAVY150};
-  }
-  & > li:not(:nth-of-type(3n)) {
-    border-right: 0.1rem solid ${PALETTE.NAVY150};
-  }
-  & > li:nth-last-child(-n + 3) {
-    border-bottom: none;
   }
 
   @media screen and (max-width: 801px) {

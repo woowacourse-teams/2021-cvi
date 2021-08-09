@@ -88,6 +88,10 @@ const disabledStyles = css`
     background-color: ${FONT_COLOR.LIGHT_GRAY};
     border: 0.1rem solid ${FONT_COLOR.LIGHT_GRAY};
   }
+
+  @media screen and (max-width: 514px) {
+    width: 100%;
+  }
 `;
 
 export {
