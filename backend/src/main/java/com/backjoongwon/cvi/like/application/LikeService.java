@@ -28,7 +28,7 @@ public class LikeService {
     public LikeResponse createLike(Long postId, Optional<User> optionalUser) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
-        Post post = postRepository.findWithLikesById(postId)
+        Post post = postRepository.findWithLikesByPostId(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         Like like = Like.builder()
                 .user(user)
@@ -41,7 +41,7 @@ public class LikeService {
     public void deleteLike(Long postId, Optional<User> optionalUser) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
-        Post post = postRepository.findWithLikesById(postId)
+        Post post = postRepository.findWithLikesByPostId(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         post.deleteLike(user.getId());
     }

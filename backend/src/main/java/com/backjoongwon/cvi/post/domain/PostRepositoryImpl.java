@@ -65,7 +65,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public Optional<Post> findWithLikesById(Long id) {
+    public Optional<Post> findWithLikesByPostId(Long id) {
         Post post = queryFactory.selectFrom(QPost.post)
                 .leftJoin(QPost.post.likes.likes, like).fetchJoin()
                 .where(QPost.post.id.eq(id))
