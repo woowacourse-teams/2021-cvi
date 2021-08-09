@@ -31,11 +31,11 @@ public class PublicDataService {
 
         RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(vaccineParserResponse.getData());
         VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
-        List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(targetDate.toString());
+        List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(targetDate);
         List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByDate, targetDate);
         return vaccinationStatisticRepository.saveAll(unSavedStatistics)
                 .stream()
-                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class PublicDataService {
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
         List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDate);
         return recentlyStatistics.stream()
-                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +59,7 @@ public class PublicDataService {
         List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByRegionPopulation, targetDate);
         return vaccinationStatisticRepository.saveAll(unSavedStatistics)
                 .stream()
-                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +69,7 @@ public class PublicDataService {
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
         List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findWorldRecentlyStatistics(targetDate);
         return recentlyStatistics.stream()
-                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 }

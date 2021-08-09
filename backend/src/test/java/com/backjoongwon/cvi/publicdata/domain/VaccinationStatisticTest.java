@@ -25,7 +25,7 @@ class VaccinationStatisticTest {
                 .totalFirstCnt(totalFirstCnt)
                 .build();
         //when
-        BigDecimal accumulateFirstRate = vaccinationStatistic.getAccumulatedFirstRate();
+        BigDecimal accumulateFirstRate = vaccinationStatistic.getTotalFirstRate();
         //then
         assertThat(accumulateFirstRate.doubleValue()).isEqualTo(actual);
     }
@@ -44,7 +44,7 @@ class VaccinationStatisticTest {
                 .totalSecondCnt(totalSecondCnt)
                 .build();
         //when
-        BigDecimal accumulatedSecondRate = vaccinationStatistic.getAccumulatedSecondRate();
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
         //then
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
@@ -63,7 +63,7 @@ class VaccinationStatisticTest {
                 .totalSecondCnt(totalSecondCnt)
                 .build();
         //when
-        BigDecimal accumulatedSecondRate = vaccinationStatistic.getAccumulatedSecondRate();
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
         //then
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
@@ -82,7 +82,7 @@ class VaccinationStatisticTest {
                 .totalSecondCnt(totalSecondCnt)
                 .build();
         //when
-        BigDecimal accumulatedSecondRate = vaccinationStatistic.getAccumulatedSecondRate();
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
         //then
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }

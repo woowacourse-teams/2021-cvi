@@ -39,7 +39,6 @@ class PublicDataServiceTest {
     private VaccinationStatisticRepository vaccinationStatisticRepository;
     @Autowired
     private PublicDataProperties publicDataProperties;
-
     @Autowired
     private PublicDataService publicDataService;
     private VaccinationParser vaccinationParser;
@@ -70,10 +69,10 @@ class PublicDataServiceTest {
         //given
         //when
         백신_접종률_저장되어_있음(targetDate);
-        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(targetDate.toString());
+        List<VaccinationStatistic> publicData = vaccinationStatisticRepository.findByBaseDate(targetDate);
         //then
         assertThat(publicData).extracting(VaccinationStatistic::getBaseDate)
-                .contains(targetDate.toString());
+                .contains(targetDate);
     }
 
     @DisplayName("백신 정종률 데이터 조회 - 성공")
@@ -91,7 +90,7 @@ class PublicDataServiceTest {
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
-                .contains(targetDate.toString());
+                .contains(targetDate);
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getSido)
                 .containsAll(REGIONS);
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getFirstCnt)
@@ -104,7 +103,7 @@ class PublicDataServiceTest {
                 .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getTotalSecondCnt)
                 .isNotEmpty();
-        assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getAccumulatedFirstRate)
+        assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getTotalFirstRate)
                 .isNotEmpty();
     }
 
@@ -119,7 +118,7 @@ class PublicDataServiceTest {
                 vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
         //then
         assertThat(vaccinationStatistics).extracting(VaccinationStatistic::getBaseDate)
-                .contains(targetDate.toString());
+                .contains(targetDate);
         assertThat(vaccinationStatistics).extracting(VaccinationStatistic::getRegionPopulation)
                 .contains(RegionPopulation.WORLD);
     }

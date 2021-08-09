@@ -16,4 +16,8 @@ public class DateConverter {
     public static LocalDate convertLocalDateTimeStringToLocalDate(String targetLocalDateTime) {
         return LocalDate.parse(targetLocalDateTime, FORMATTER);
     }
+
+    public static LocalDate toLocalDate(String targetDate) {
+        return LocalDate.parse(targetDate);
+    }
 }

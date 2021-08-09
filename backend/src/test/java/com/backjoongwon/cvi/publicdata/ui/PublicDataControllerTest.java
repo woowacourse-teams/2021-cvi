@@ -49,18 +49,6 @@ class PublicDataControllerTest extends ApiDocument {
         백신_접종률_저장_성공함(response);
     }
 
-    @DisplayName("백신 접종률 조회 - 성공")
-    @Test
-    void findVaccinationStatistic() throws Exception {
-        //given
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponseWithWorldRegion(TARGET_DATE);
-        //when
-        willReturn(vaccinationStatisticResponse).given(publicDataService).findVaccinationStatistics(TARGET_DATE);
-        ResultActions response = 백신_접종률_조회_요청(TARGET_DATE);
-        //then
-        백신_접종률_조회_성공함(response);
-    }
-
     @DisplayName("백신 접종률 조회 - 성공 - 요청 후 api 데이터가 없을 때")
     @Test
     void findVaccinationStatisticEmpty() throws Exception {
@@ -84,7 +72,7 @@ class PublicDataControllerTest extends ApiDocument {
         세계_백신_접종률_저장_성공함(response);
     }
 
-    @DisplayName("세계 백신 접종률 조회 - 성공")
+    @DisplayName("세계 백신 접종률 조회 - 성공 - 요청 후 api 데이터가 없을 때")
     @Test
     void findWorldVaccinationStatistic() throws Exception {
         //given
