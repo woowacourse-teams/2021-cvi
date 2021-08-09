@@ -76,7 +76,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public Optional<Post> findWithCommentsById(Long id) {
+    public Optional<Post> findWithCommentsByPostId(Long id) {
         Post post = queryFactory.selectFrom(QPost.post)
                 .leftJoin(QPost.post.comments.comments, comment).fetchJoin()
                 .where(QPost.post.id.eq(id))
