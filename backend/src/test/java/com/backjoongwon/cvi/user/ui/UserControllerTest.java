@@ -21,9 +21,13 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -32,7 +36,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -82,7 +88,7 @@ class UserControllerTest extends ApiDocument {
                 .build();
 
         signinRequest = new UserRequest(NICKNAME, AGE_RANGE, false, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
-        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, null, null, PROFILE_URL);
+        updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
 
@@ -382,6 +388,46 @@ class UserControllerTest extends ApiDocument {
         ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 3);
         //then
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
+    }
+
+    @ParameterizedTest(name = "UserRequest validation - 유효하지 않은 경우 - 닉네임")
+    @MethodSource
+    void validateUserRequestWhenInvalidNickName(UserRequest userRequest) throws Exception {
+        //given
+        //when
+        ResultActions createResponse = 사용자_회원가입_요청(userRequest);
+        ResultActions updateResponse = 사용자_업데이트_요청(userRequest);
+        //then
+        assertThat(createResponse.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(updateResponse.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    static Stream<Arguments> validateUserRequestWhenInvalidNickName() {
+        return Stream.of(
+                Arguments.of(new UserRequest(" ", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+                Arguments.of(new UserRequest("123456789012345678901", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+                Arguments.of(new UserRequest("!@#$%^", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+                Arguments.of(new UserRequest("👏", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)));
+    }
+
+    @ParameterizedTest(name = "UserRequest validation - 유효하지 않은 경우 - 그 외")
+    @MethodSource
+    void validateUserRequest(UserRequest userRequest) throws Exception {
+        //given
+        //when
+        ResultActions createResponse = 사용자_회원가입_요청(userRequest);
+        ResultActions updateResponse = 사용자_업데이트_요청(userRequest);
+        //then
+        assertThat(createResponse.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(updateResponse.andReturn().getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    static Stream<Arguments> validateUserRequest() {
+        return Stream.of(
+                Arguments.of(new UserRequest(NICKNAME, null, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, null, SOCIAL_ID, PROFILE_URL)),
+                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, "  ", PROFILE_URL)),
+                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, " ")));
     }
 
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {

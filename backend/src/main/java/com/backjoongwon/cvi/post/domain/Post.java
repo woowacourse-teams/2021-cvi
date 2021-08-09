@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +34,7 @@ public class Post extends BaseEntity {
     private User user;
 
     @Lob
+    @NotBlank(message = "게시글의 내용은 비어있을 수 없습니다.")
     private String content;
     private int viewCount;
 
