@@ -26,13 +26,13 @@ public class UserRequest {
     private AgeRange ageRange;
     private boolean shotVerified;
 
-    @NotNull(message = "OAuth 제공자는 null일 수 없습니다.")
+    @NotNull(message = "provider(OAuth 제공자)는 null일 수 없습니다.")
     private SocialProvider socialProvider;
 
-    @NotBlank(message = "OAuth 고유의 id는 null일 수 없습니다.")
+    @NotBlank(message = "socialId(OAuth 고유의 id)는 null일 수 없습니다.")
     private String socialId;
 
-    @NotBlank(message = "OAuth profile url은 null일 수 없습니다.")
+    @NotBlank(message = "socialProfileUrl(OAuth profile url)은 null일 수 없습니다.")
     private String socialProfileUrl;
 
     @Builder

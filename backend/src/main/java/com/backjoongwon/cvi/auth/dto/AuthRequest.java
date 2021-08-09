@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthRequest {
 
-    @NotNull(message = "OAuth 제공자는 null일 수 없습니다.")
+    @NotNull(message = "provider(OAuth 제공자)는 null일 수 없습니다.")
     private SocialProvider provider;
     @NotBlank(message = "code는 비어있을 수 없습니다.")
     private String code;

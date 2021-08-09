@@ -395,10 +395,10 @@ class PostControllerTest extends ApiDocument {
         //given
         PostRequest invalidRequest = new PostRequest("  ", VaccinationType.PFIZER);
         //when
-        ResultActions response = 글_등록_요청(invalidRequest);
+        ResultActions response1 = 글_등록_요청(invalidRequest);
         ResultActions response2 = 글_수정_요청(POST_ID, invalidRequest);
         //then
-        response.andExpect(status().isBadRequest());
+        response1.andExpect(status().isBadRequest());
         response2.andExpect(status().isBadRequest());
     }
 
@@ -408,10 +408,10 @@ class PostControllerTest extends ApiDocument {
         //given
         CommentRequest invalidRequest = new CommentRequest("  ");
         //when
-        ResultActions response = 댓글_등록_요청(POST_ID, invalidRequest, ACCESS_TOKEN);
+        ResultActions response1 = 댓글_등록_요청(POST_ID, invalidRequest, ACCESS_TOKEN);
         ResultActions response2 = 댓글_수정_요청(POST_ID, COMMENT_ID, invalidRequest, ACCESS_TOKEN);
         //then
-        response.andExpect(status().isBadRequest());
+        response1.andExpect(status().isBadRequest());
         response2.andExpect(status().isBadRequest());
     }
 
