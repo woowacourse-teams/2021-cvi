@@ -101,7 +101,7 @@ public class PostCommentServiceTest {
         //given
         //when
         CommentResponse commentResponse = postService.createComment(post.getId(), optionalAnotherUser, commentRequest);
-        Post foundPost = postRepository.findWithCommentsById(post.getId())
+        Post foundPost = postRepository.findWithCommentsByPostId(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
         assertThat(foundPost.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
