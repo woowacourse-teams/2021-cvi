@@ -63,14 +63,16 @@ public class PostLikeServiceTest {
         userWithoutLike = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
                 .build();
         userWithLike = User.builder()
-                .nickname("테스트유저-다른유저")
+                .nickname("다른유저")
                 .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
                 .build();
 
         optionalUserWithoutLike = Optional.of(userWithoutLike);

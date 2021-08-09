@@ -75,10 +75,11 @@ public class PostFindServiceTest {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             User dummyUser = User.builder()
-                    .nickname("테스트유저-댓글" + i + "좋아요" + i)
+                    .nickname("테스트유저댓글" + i + "좋아요" + i)
                     .ageRange(AgeRange.FORTIES)
-                    .profileUrl("")
                     .socialProvider(SocialProvider.NAVER)
+                    .socialId("NAVER_ID")
+                    .profileUrl("naver.com/profile")
                     .build();
             users.add(dummyUser);
         }
