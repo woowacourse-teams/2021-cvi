@@ -27,9 +27,13 @@ public enum Sort {
 
     public static OrderSpecifier toOrderSpecifier(Sort input) {
         return Arrays.stream(values())
-                .filter(sort -> sort == sort)
+                .filter(Sort::isSameTypeOf)
                 .findAny()
                 .map(sort -> input.getSort())
                 .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
+    }
+
+    private static boolean isSameTypeOf(Sort sort) {
+        return sort == sort;
     }
 }

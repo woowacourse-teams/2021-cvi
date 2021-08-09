@@ -135,7 +135,6 @@ public class PostLikeServiceTest {
                 .isInstanceOf(UnAuthorizedException.class);
     }
 
-
     @DisplayName("게시글 좋아요 삭제 - 성공")
     @Test
     void deleteLike() {
