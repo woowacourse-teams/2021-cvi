@@ -102,8 +102,8 @@ public class PostService {
     }
 
     public List<CommentResponse> findCommentsById(Long postId, int offset, int size) {
-        Post post = findPostWithCommentsById(postId, offset, size);
-        return CommentResponse.toList(post.getCommentsAsList());
+        Post post = findPostWithCommentsById(postId);
+        return CommentResponse.toList(post.sliceCommentsAsList(offset, size));
     }
 
     @Transactional
@@ -154,12 +154,6 @@ public class PostService {
     private Post findPostWithCommentsById(Long postId) {
         validateNotNull(postId);
         return postRepository.findWithCommentsById(postId)
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
-    }
-
-    private Post findPostWithCommentsById(Long postId, int offset, int size) {
-        validateNotNull(postId);
-        return postRepository.findWithCommentsById(postId, offset, size)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 

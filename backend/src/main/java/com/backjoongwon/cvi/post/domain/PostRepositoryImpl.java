@@ -87,19 +87,6 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public Optional<Post> findWithCommentsById(Long id, int offset, int size) {
-        Post post = queryFactory.selectFrom(QPost.post)
-                .leftJoin(QPost.post.comments.comments, comment).fetchJoin()
-                .where(QPost.post.id.eq(id))
-                .orderBy(QPost.post.createdAt.desc())
-                .offset(offset)
-                .limit(size)
-                .fetchOne();
-
-        return Optional.ofNullable(post);
-    }
-
-    @Override
     public List<Post> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()

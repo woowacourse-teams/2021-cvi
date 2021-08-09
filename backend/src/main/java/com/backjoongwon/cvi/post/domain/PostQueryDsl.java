@@ -17,7 +17,5 @@ public interface PostQueryDsl {
 
     Optional<Post> findWithCommentsById(Long id);
 
-    Optional<Post> findWithCommentsById(Long id, int offset, int size);
-
     List<Post> findByUserId(Long userId, int offset, int size);
 }
