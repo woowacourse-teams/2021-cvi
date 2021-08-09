@@ -76,6 +76,22 @@ include::{snippets}/publicdata-vaccination-nodata-find/http-request.adoc[]
 ===== Response
 include::{snippets}/publicdata-vaccination-nodata-find/http-response.adoc[]
 
+=== 세계 백신 접종률 저장
+==== 성공
+===== Request
+include::{snippets}/publicdata-world-vaccination-save/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-world-vaccination-save/http-response.adoc[]
+
+=== 세계 백신 접종률 조회
+==== 성공
+===== Request
+include::{snippets}/publicdata-world-vaccination-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-world-vaccination-find/http-response.adoc[]
+
 == User (사용자)
 === 사용자 OAuth
 ==== 성공
@@ -544,5 +560,3 @@ include::{snippets}/comment-delete/http-response.adoc[]
 ===== Request
 include::{snippets}/comment-delete-failure/http-request.adoc[]
 
-===== Response
-include::{snippets}/comment-delete-failure/http-response.adoc[]

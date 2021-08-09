@@ -1,32 +1,35 @@
 package com.backjoongwon.cvi.publicdata.dto;
 
-import com.backjoongwon.cvi.dto.RegionVaccinationData;
+import com.backjoongwon.cvi.dto.KoreaRegionVaccinationData;
+import com.backjoongwon.cvi.dto.WorldVaccinationData;
 import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
+import com.backjoongwon.cvi.util.DateConverter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationStatisticResponse {
 
-    private int accumulatedFirstCnt;
-    private int accumulatedSecondCnt;
-    private String baseDate;
-    private int firstCnt;
-    private int secondCnt;
+    private long accumulatedFirstCnt;
+    private long accumulatedSecondCnt;
+    private LocalDate baseDate;
+    private long firstCnt;
+    private long secondCnt;
     private String sido;
-    private int totalFirstCnt;
-    private int totalSecondCnt;
-    private BigDecimal accumulatedFirstRate;
-    private BigDecimal accumulatedSecondRate;
+    private long totalFirstCnt;
+    private long totalSecondCnt;
+    private BigDecimal totalFirstRate;
+    private BigDecimal totalSecondRate;
 
-    public VaccinationStatisticResponse(int accumulatedFirstCnt, int accumulatedSecondCnt, String baseDate, int firstCnt,
-                                        int secondCnt, String sido, int totalFirstCnt, int totalSecondCnt, BigDecimal accumulatedFirstRate,
-                                        BigDecimal accumulatedSecondRate) {
+    public VaccinationStatisticResponse(long accumulatedFirstCnt, long accumulatedSecondCnt, LocalDate baseDate, long firstCnt,
+                                        long secondCnt, String sido, long totalFirstCnt, long totalSecondCnt, BigDecimal totalFirstRate,
+                                        BigDecimal totalSecondRate) {
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
         this.baseDate = baseDate;
@@ -35,22 +38,28 @@ public class VaccinationStatisticResponse {
         this.sido = sido;
         this.totalFirstCnt = totalFirstCnt;
         this.totalSecondCnt = totalSecondCnt;
-        this.accumulatedFirstRate = accumulatedFirstRate;
-        this.accumulatedSecondRate = accumulatedSecondRate;
+        this.totalFirstRate = totalFirstRate;
+        this.totalSecondRate = totalSecondRate;
     }
 
-    public static VaccinationStatisticResponse from(RegionVaccinationData regionVaccinationData) {
-        return new VaccinationStatisticResponse(regionVaccinationData.getAccumulatedFirstCnt(), regionVaccinationData.getAccumulatedSecondCnt(),
-                regionVaccinationData.getBaseDate(), regionVaccinationData.getFirstCnt(), regionVaccinationData.getSecondCnt(),
-                regionVaccinationData.getSido(), regionVaccinationData.getTotalFirstCnt(), regionVaccinationData.getTotalSecondCnt(),
+    public static VaccinationStatisticResponse from(KoreaRegionVaccinationData koreaRegionVaccinationData) {
+        return new VaccinationStatisticResponse(koreaRegionVaccinationData.getAccumulatedFirstCnt(), koreaRegionVaccinationData.getAccumulatedSecondCnt(),
+                DateConverter.convertLocalDateTimeStringToLocalDate(koreaRegionVaccinationData.getBaseDate()), koreaRegionVaccinationData.getFirstCnt(), koreaRegionVaccinationData.getSecondCnt(),
+                koreaRegionVaccinationData.getSido(), koreaRegionVaccinationData.getTotalFirstCnt(), koreaRegionVaccinationData.getTotalSecondCnt(),
                 null, null);
     }
 
-    public static VaccinationStatisticResponse from(VaccinationStatistic vaccinationStatistic) {
+    public static VaccinationStatisticResponse from(WorldVaccinationData worldVaccinationData) {
+        return new VaccinationStatisticResponse(0L, 0L, DateConverter.toLocalDate(worldVaccinationData.getDate()), 0L, 0L, RegionPopulation.WORLD.getRegion(),
+                worldVaccinationData.getPeople_vaccinated(), worldVaccinationData.getPeople_fully_vaccinated(), null, null
+        );
+    }
+
+    public static VaccinationStatisticResponse toResponse(VaccinationStatistic vaccinationStatistic) {
         return new VaccinationStatisticResponse(vaccinationStatistic.getAccumulatedFirstCnt(), vaccinationStatistic.getAccumulatedSecondCnt(),
                 vaccinationStatistic.getBaseDate(), vaccinationStatistic.getFirstCnt(), vaccinationStatistic.getSecondCnt(),
                 vaccinationStatistic.getRegionPopulation().getRegion(), vaccinationStatistic.getTotalFirstCnt(), vaccinationStatistic.getTotalSecondCnt(),
-                vaccinationStatistic.getAccumulatedFirstRate(), vaccinationStatistic.getAccumulatedSecondRate());
+                vaccinationStatistic.getTotalFirstRate(), vaccinationStatistic.getTotalSecondRate());
     }
 
     public VaccinationStatistic toEntity() {
@@ -63,8 +72,8 @@ public class VaccinationStatisticResponse {
                 .regionPopulation(RegionPopulation.findByRegion(sido))
                 .totalFirstCnt(totalFirstCnt)
                 .totalSecondCnt(totalSecondCnt)
-                .accumulatedFirstRate(accumulatedFirstRate)
-                .accumulatedSecondRate(accumulatedSecondRate)
+                .totalFirstRate(totalFirstRate)
+                .totalSecondRate(totalSecondRate)
                 .build();
     }
 }

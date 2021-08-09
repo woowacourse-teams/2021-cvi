@@ -1,21 +1,18 @@
 package com.backjoongwon.cvi.publicdata.application;
 
-import com.backjoongwon.cvi.common.exception.DuplicateException;
-import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
+import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
-import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
+import com.backjoongwon.cvi.publicdata.domain.*;
+import com.backjoongwon.cvi.publicdata.dto.RegionVaccinationDataFactory;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
-import com.backjoongwon.cvi.util.DateConverter;
+import com.backjoongwon.cvi.publicdata.dto.WorldVaccinationDataFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,51 +25,51 @@ public class PublicDataService {
     private final VaccinationStatisticRepository vaccinationStatisticRepository;
     private final PublicDataProperties publicDataProperties;
 
+    @Transactional
+    public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDate targetDate) {
+        KoreaVaccineParserResponse koreaVaccineParserResponse = vacinationparser.parseToKoreaPublicData(targetDate, publicDataProperties.getVaccination());
+
+        RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(koreaVaccineParserResponse.getData());
+        VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
+        List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(targetDate);
+        List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByDate, targetDate);
+        return vaccinationStatisticRepository.saveAll(unSavedStatistics)
+                .stream()
+                .map(VaccinationStatisticResponse::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
-    public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDateTime targetDateTime) {
-        List<VaccinationStatistic> vaccinationStatistic = vaccinationStatisticRepository.findByBaseDate(DateConverter.convertTimeToZero(modifyDate(targetDateTime)));
-        return vaccinationStatistic.stream()
-                .map(VaccinationStatisticResponse::from)
+    public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDate targetDate) {
+        List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findAll();
+        VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDate);
+        return recentlyStatistics.stream()
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDateTime targetDateTime) {
-        targetDateTime = modifyDate(targetDateTime);
-        validateExists(targetDateTime);
+    public List<VaccinationStatisticResponse> saveWorldVaccinationStatistics(LocalDate targetDate) {
+        WorldVaccinationParserResponse worldVaccinationParserResponse = vacinationparser.parseToWorldPublicData();
 
-        VaccineParserResponse vaccineParserResponse = vacinationparser.parseToPublicData(
-                targetDateTime,
-                publicDataProperties.getVaccination()
-        );
-
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponses(vaccineParserResponse);
-        return vaccinationStatisticResponse.stream()
-                .map(it -> vaccinationStatisticRepository.save(it.toEntity()))
-                .map(VaccinationStatisticResponse::from)
-                .collect(Collectors.toList());
-    }
-
-    private LocalDateTime modifyDate(LocalDateTime targetDateTime) {
-        if (targetDateTime.toLocalDate().isEqual(LocalDate.now()) &&
-                targetDateTime.toLocalTime().isBefore(LocalTime.of(10, 0))) {
-            log.info("데이터가 업데이트 되기 전입니다. 전날 기준으로 로직을 실행합니다.");
-            return targetDateTime.minusDays(1);
-        }
-        return targetDateTime;
-    }
-
-    private List<VaccinationStatisticResponse> toVaccinationStatisticResponses(VaccineParserResponse vaccineParserResponse) {
-        return vaccineParserResponse.getData()
+        WorldVaccinationDataFactory worldVaccinationDataFactory = new WorldVaccinationDataFactory(worldVaccinationParserResponse.getData());
+        VaccinationStatistics vaccinationStatistics = worldVaccinationDataFactory.toVaccinationStatistics();
+        List<VaccinationStatistic> foundByRegionPopulation = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
+        List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByRegionPopulation, targetDate);
+        return vaccinationStatisticRepository.saveAll(unSavedStatistics)
                 .stream()
-                .map(VaccinationStatisticResponse::from)
+                .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
-    private void validateExists(LocalDateTime targetDateTime) {
-        if (vaccinationStatisticRepository.existsByBaseDate(DateConverter.convertTimeToZero(targetDateTime))) {
-            log.info("이미 존재하는 날짜의 데이터입니다.");
-            throw new DuplicateException("이미 존재하는 날짜의 데이터입니다.");
-        }
+    @Transactional(readOnly = true)
+    public List<VaccinationStatisticResponse> findWorldVaccinationStatistics(LocalDate targetDate) {
+        List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
+        VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findWorldRecentlyStatistics(targetDate);
+        return recentlyStatistics.stream()
+                .map(VaccinationStatisticResponse::toResponse)
+                .collect(Collectors.toList());
     }
 }
