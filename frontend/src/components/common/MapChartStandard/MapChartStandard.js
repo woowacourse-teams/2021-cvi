@@ -9,8 +9,8 @@ import {
 } from './MapChartStandard.styles';
 
 const MapChartStandard = ({ dataList }) => {
-  const averageCompletedVaccination = dataList.map((data) => data.accumulatedSecondRate);
-  const { mean, standardDeviation } = getStatisticalValues(averageCompletedVaccination);
+  const averageInoculationList = dataList.map((data) => data.totalSecondRate);
+  const { mean, standardDeviation } = getStatisticalValues(averageInoculationList);
 
   return (
     <Container>
@@ -27,7 +27,7 @@ const MapChartStandard = ({ dataList }) => {
           {mean + 0.1} ~ {mean + standardDeviation}
         </div>
         <div>
-          {(mean + standardDeviation + 0.1).toFixed(1)} ~ {Math.max(...averageCompletedVaccination)}
+          {(mean + standardDeviation + 0.1).toFixed(1)} ~ {Math.max(...averageInoculationList)}
         </div>
       </StandardContainer>
       <InoculationRateContainer>

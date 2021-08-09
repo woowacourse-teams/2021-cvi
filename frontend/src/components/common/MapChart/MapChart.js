@@ -30,8 +30,8 @@ const MapChart = ({ dataList }) => {
                 <Region>{REGION_NAME[region.sido]}</Region>
               </Title>
               <InoculationRateContainer>
-                <div>{region.accumulatedFirstRate}%</div>
-                <div>{region.accumulatedSecondRate}%</div>
+                <div>{region.totalFirstRate}%</div>
+                <div>{region.totalSecondRate}%</div>
               </InoculationRateContainer>
             </Info>
           );
