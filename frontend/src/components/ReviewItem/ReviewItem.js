@@ -118,7 +118,7 @@ ReviewItem.propTypes = {
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,
     likeCount: PropTypes.number.isRequired,
-    commentCount: PropTypes.number.isRequired,
+    commentCount: PropTypes.number,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
   innerRef: PropTypes.func,
