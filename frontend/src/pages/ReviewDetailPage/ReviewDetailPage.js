@@ -190,13 +190,13 @@ const ReviewDetailPage = () => {
                 </IconContainer>
                 <IconContainer>
                   <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-                  <div>{review?.comments?.length}</div>
+                  <div>{review?.commentCount}</div>
                 </IconContainer>
               </BottomContainer>
               <Comment
                 accessToken={accessToken}
                 user={user}
-                comments={review?.comments}
+                commentCount={review?.commentCount}
                 reviewId={id}
                 getReview={getReview}
               />

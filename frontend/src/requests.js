@@ -203,6 +203,9 @@ const requestGetMyLikeReviewList = (accessToken, offset) =>
     },
   });
 
+const requestGetCommentList = (postId, offset) =>
+  fetch(`${BASE_URL}/posts/${postId}/comments/paging?offset=${offset}&size=${PAGING_SIZE}`);
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -223,4 +226,5 @@ export {
   requestGetMyReviewList,
   requestGetMyCommentReviewList,
   requestGetMyLikeReviewList,
+  requestGetCommentList,
 };

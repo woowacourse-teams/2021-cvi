@@ -37,7 +37,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
     createdAt,
     hasLiked,
     likeCount,
-    comments,
+    commentCount,
   } = review;
 
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -88,7 +88,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
           </IconContainer>
           <IconContainer>
             <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-            <ViewCount>{comments?.length}</ViewCount>
+            <ViewCount>{commentCount}</ViewCount>
           </IconContainer>
           {path === PATH.MY_PAGE_LIKE_REVIEW && (
             <IconContainer>
@@ -118,7 +118,7 @@ ReviewItem.propTypes = {
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,
     likeCount: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
+    commentCount: PropTypes.number.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
   innerRef: PropTypes.func,
