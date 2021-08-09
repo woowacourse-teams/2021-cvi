@@ -114,16 +114,6 @@ public class PostFindServiceTest {
         return postRepository.saveAll(posts);
     }
 
-    private void modifyPostsCreatedAt(List<Post> posts) {
-        for (int i = posts.size() - 1; i >= 0; i--) {
-            Long id = posts.get(i).getId();
-            Query q = em.createNativeQuery("UPDATE post SET created_at=:created_at WHERE post_id=:post_id");
-            q.setParameter("created_at", LocalDateTime.now().minusHours(posts.size() - i).minusMinutes(30L));
-            q.setParameter("post_id", id);
-            q.executeUpdate();
-        }
-    }
-
     private void initLike(List<User> users, List<Post> posts) {
         List<Like> likes = new ArrayList<>();
         for (int i = 1; i < posts.size(); i++) {
@@ -145,6 +135,16 @@ public class PostFindServiceTest {
                 comments.add(comment);
                 commentRepository.save(comment);
             }
+        }
+    }
+
+    private void modifyPostsCreatedAt(List<Post> posts) {
+        for (int i = posts.size() - 1; i >= 0; i--) {
+            Long id = posts.get(i).getId();
+            Query q = em.createNativeQuery("UPDATE post SET created_at=:created_at WHERE post_id=:post_id");
+            q.setParameter("created_at", LocalDateTime.now().minusHours(posts.size() - i).minusMinutes(30L));
+            q.setParameter("post_id", id);
+            q.executeUpdate();
         }
     }
 
