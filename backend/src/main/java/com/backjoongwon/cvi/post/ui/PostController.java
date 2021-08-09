@@ -39,12 +39,6 @@ public class PostController {
         return postService.findByVaccineType(vaccinationType, user);
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
-        return postService.findById(id, user);
-    }
-
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
@@ -54,6 +48,12 @@ public class PostController {
                                                          @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
                                                          @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PostResponse find(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user) {
+        return postService.findById(id, user);
     }
 
     @PutMapping("/{id}")
@@ -90,6 +90,12 @@ public class PostController {
         CommentResponse commentResponse = postService.createComment(postId, user, commentRequest);
         servletResponse.setHeader("Location", "/api/v1/comments/" + commentResponse.getId());
         return commentResponse;
+    }
+
+    @GetMapping("/{postId}/comments")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentResponse> findCommentsOfPost(@PathVariable Long postId) {
+        return postService.findCommentsById(postId);
     }
 
     @PutMapping("/{postId}/comments/{commentId}")

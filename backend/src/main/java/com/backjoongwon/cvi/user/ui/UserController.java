@@ -2,7 +2,7 @@ package com.backjoongwon.cvi.user.ui;
 
 import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.application.UserService;
 import com.backjoongwon.cvi.user.auth.AuthenticationPrincipal;
 import com.backjoongwon.cvi.user.domain.User;
@@ -40,16 +40,16 @@ public class UserController {
 
     @GetMapping("/me/posts")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findMyPosts(@RequestParam(defaultValue = "NONE") Filter filter, @AuthenticationPrincipal Optional<User> user) {
+    public List<PostWithCommentResponse> findMyPosts(@RequestParam(defaultValue = "NONE") Filter filter, @AuthenticationPrincipal Optional<User> user) {
         return postService.findByUserAndFilter(user, filter);
     }
 
     @GetMapping("/me/posts/paging")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findMyPostsByPaging(@RequestParam(defaultValue = "NONE") Filter filter,
-                                                  @RequestParam(defaultValue = "0") int offset,
-                                                  @RequestParam(defaultValue = "6") int size,
-                                                  @AuthenticationPrincipal Optional<User> user) {
+    public List<PostWithCommentResponse> findMyPostsByPaging(@RequestParam(defaultValue = "NONE") Filter filter,
+                                                             @RequestParam(defaultValue = "0") int offset,
+                                                             @RequestParam(defaultValue = "6") int size,
+                                                             @AuthenticationPrincipal Optional<User> user) {
         return postService.findByUserAndFilter(filter, offset, size, user);
     }
 

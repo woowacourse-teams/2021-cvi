@@ -43,6 +43,39 @@ endif::[]
 ## status code: 500
 ```
 
+== PublicData (공공데이터)
+=== 공통 체크사항
+```
+시간을 Parameter로 넘기지 않을 때, defaultValue = LocalDateTime
+```
+
+```
+ 오전 10시전 당일 데이터 요청시, 전날 데이터 저장/출력
+ ex) 현재 날짜 2021-08-05 09:59:59 요청시 2021-08-04 데이터 저장/출력
+```
+=== 백신 접종률 저장
+==== 성공
+===== Request
+include::{snippets}/publicdata-vaccination-save/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-vaccination-save/http-response.adoc[]
+
+=== 백신 접종률 조회
+==== 성공
+===== Request
+include::{snippets}/publicdata-vaccination-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-vaccination-find/http-response.adoc[]
+
+==== 성공 - 요청 후 api 데이터가 없을 때
+===== Request
+include::{snippets}/publicdata-vaccination-nodata-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/publicdata-vaccination-nodata-find/http-response.adoc[]
+
 == User (사용자)
 === 사용자 OAuth
 ==== 성공
@@ -453,6 +486,7 @@ include::{snippets}/like-delete-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/like-delete-failure/http-response.adoc[]
 
+== Comment (댓글)
 === 게시글 댓글 등록
 ==== 성공
 ===== Request
@@ -467,6 +501,21 @@ include::{snippets}/comment-create-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/comment-create-failure/http-response.adoc[]
+
+=== 게시글 댓글 조회
+==== 성공
+===== Request
+include::{snippets}/comment-find/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-find/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/comment-find-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-find-failure/http-response.adoc[]
 
 === 게시글 댓글 수정
 ==== 성공
@@ -497,38 +546,3 @@ include::{snippets}/comment-delete-failure/http-request.adoc[]
 
 ===== Response
 include::{snippets}/comment-delete-failure/http-response.adoc[]
-
-
-== PublicData (공공데이터)
-=== 공통 체크사항
-```
-시간을 Parameter로 넘기지 않을 때, defaultValue = LocalDateTime
-```
-
-```
- 오전 10시전 당일 데이터 요청시, 전날 데이터 저장/출력
- ex) 현재 날짜 2021-08-05 09:59:59 요청시 2021-08-04 데이터 저장/출력
-```
-=== 백신 접종률 저장
-==== 성공
-===== Request
-include::{snippets}/publicdata-vaccination-save/http-request.adoc[]
-
-===== Response
-include::{snippets}/publicdata-vaccination-save/http-response.adoc[]
-
-=== 백신 접종률 조회
-==== 성공
-===== Request
-include::{snippets}/publicdata-vaccination-find/http-request.adoc[]
-
-===== Response
-include::{snippets}/publicdata-vaccination-find/http-response.adoc[]
-
-==== 성공 - 요청 후 api 데이터가 없을 때
-===== Request
-include::{snippets}/publicdata-vaccination-nodata-find/http-request.adoc[]
-
-===== Response
-include::{snippets}/publicdata-vaccination-nodata-find/http-response.adoc[]
-

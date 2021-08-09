@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.post.application.PostService;
+import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
@@ -72,12 +73,19 @@ abstract class PreprocessPostControllerTest extends ApiDocument {
                 .socialId("{Unique ID received from social provider}")
                 .socialProvider(SocialProvider.KAKAO)
                 .build();
+        Post post = Post.builder()
+                .id(POST_ID)
+                .user(user)
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .content("Post Content")
+                .createdAt(LocalDateTime.now())
+                .viewCount(0)
+                .build();
 
         request = new PostRequest("글 내용", VaccinationType.PFIZER);
 
         userResponse = UserResponse.of(user, null);
-        postResponse = PostResponse.of(1L, userResponse, "내용", 1,
-                1, true, null, VaccinationType.PFIZER, LocalDateTime.now());
+        postResponse = PostResponse.of(post, user);
 
         Comment comment1 = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
         Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(anotherUser).createdAt(LocalDateTime.now()).build();

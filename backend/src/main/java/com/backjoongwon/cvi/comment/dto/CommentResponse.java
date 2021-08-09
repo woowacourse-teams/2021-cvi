@@ -5,6 +5,8 @@ import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class CommentResponse {
@@ -23,5 +25,11 @@ public class CommentResponse {
 
     public static CommentResponse of(Comment comment) {
         return new CommentResponse(comment.getId(), UserResponse.of(comment.getUser()), comment.getContent(), comment.getCreatedAt());
+    }
+
+    public static List<CommentResponse> toList(List<Comment> comments) {
+        return comments.stream()
+                .map(CommentResponse::of)
+                .collect(Collectors.toList());
     }
 }

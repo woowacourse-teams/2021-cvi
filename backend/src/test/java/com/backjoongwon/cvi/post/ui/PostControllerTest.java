@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.ui;
 
+import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -31,8 +32,8 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, false, Collections.emptyList(), request.getVaccinationType(), LocalDateTime.now());
-        given(postService.create(any(), any(PostRequest.class))).willReturn(expectedResponse);
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
+        willReturn(expectedResponse).given(postService).create(any(), any(PostRequest.class));
         //when
         ResultActions response = 글_등록_요청(request);
         //then
@@ -54,12 +55,12 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now());
-        given(postService.findById(any(Long.class), any())).willReturn(expectedPostResponse);
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, 2, false, VaccinationType.PFIZER, LocalDateTime.now());
+        willReturn(expectedPostResponse).given(postService).findById(any(Long.class), any());
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
         //then
-        글_단일_조회_성공함(response, expectedPostResponse);
+        글_단일_조회_성공함(response);
     }
 
     @DisplayName("게시글 단일 조회 - 실패")
@@ -78,28 +79,27 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findAll() throws Exception {
         //given
         UserResponse anotherUserResponse = UserResponse.of(user, null);
-
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+        List<PostResponse> postResponse = new LinkedList<>(Arrays.asList(
+                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, 3, false, VaccinationType.MODERNA, LocalDateTime.now()),
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, 13, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
-        글_전체_조회_성공함(response, postResponses);
+        글_전체_조회_성공함(response, postResponse);
     }
 
     @DisplayName("게시글 전체 조회 - 성공 - 게시글이 하나도 없는 경우")
     @Test
     void findAllWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        List<PostResponse> postResponse = Collections.emptyList();
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_전체_조회_요청();
         //then
-        글_전체_조회_성공함_게시글없음(response, postResponses);
+        글_전체_조회_성공함_게시글없음(response, postResponse);
     }
 
     @DisplayName("게시글 수정 - 성공")
@@ -150,12 +150,12 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void findByVaccineType() throws Exception {
         //given
-        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now())
+        List<PostResponse> postResponse = new LinkedList<>(Arrays.asList(
+                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, 4, true, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, 10, true, VaccinationType.PFIZER, LocalDateTime.now())
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
@@ -166,12 +166,12 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void findByVaccineTypeWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), any());
+        List<PostResponse> postResponse = Collections.emptyList();
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
         ResultActions response = 글_타입별_조회_요청(VaccinationType.PFIZER);
         //then
-        글_타입별_조회_성공함_게시글없음(response, postResponses);
+        글_타입별_조회_성공함_게시글없음(response, postResponse);
     }
 
     @DisplayName("게시글 타입별 조회 페이징 - 성공")
@@ -179,9 +179,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypePaging() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
+                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 4, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
+                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, 2, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -194,12 +194,12 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
         //given
-        List<PostResponse> postResponses = Collections.emptyList();
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        List<PostResponse> postResponse = Collections.emptyList();
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0, 3);
         //then
-        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponses);
+        글_타입별_페이징_조회_요청_성공함_게시글없음(response, postResponse);
     }
 
     @DisplayName("게시글 타입별 조회 좋아요 오름차순 정렬 - 성공")
@@ -207,9 +207,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypeSorting() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 5, true, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 8, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 1, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -223,9 +223,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypeHourFiltering() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7,true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -260,7 +260,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_단일_조회_성공함(ResultActions response, PostResponse postResponse) throws Exception {
+    private void 글_단일_조회_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("post-find"));
@@ -278,16 +278,16 @@ class PostControllerTest extends PreprocessPostControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_전체_조회_성공함(ResultActions response, List<PostResponse> postResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("post-findAll"));
     }
 
-    private void 글_전체_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_전체_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("post-findAll-when-empty"));
     }
@@ -341,9 +341,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
                 .andDo(toDocument("post-findByVaccinationType"));
     }
 
-    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+    private void 글_타입별_조회_성공함_게시글없음(ResultActions response, List<PostResponse> postResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postResponses)))
+                .andExpect(content().json(toJson(postResponse)))
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-when-empty"));
     }
@@ -393,5 +393,58 @@ class PostControllerTest extends PreprocessPostControllerTest {
                 .andExpect(content().json(toJson(postResponses)))
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-paging-when-empty"));
+    }
+
+    private ResultActions 댓글_조회_요청(Long postId) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    private void 댓글_조회_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("comment-find"));
+    }
+
+    private void 댓글_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("comment-find-failure"));
+    }
+
+    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
+        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(request))
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_수정_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-update"));
+    }
+
+    private void 댓글_수정_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-update-failure"));
+    }
+
+    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
+                .header(HttpHeaders.AUTHORIZATION, accessToken));
+    }
+
+    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("comment-delete"));
+    }
+
+    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("comment-delete-failure"));
     }
 }

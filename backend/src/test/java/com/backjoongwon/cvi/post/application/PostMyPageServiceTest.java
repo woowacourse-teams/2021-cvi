@@ -9,7 +9,7 @@ import com.backjoongwon.cvi.post.domain.Filter;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -108,10 +108,10 @@ public class PostMyPageServiceTest {
     void findByUserAndFilterNone() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.NONE);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.NONE);
         //then
         List<String> contents = postResponses.stream()
-                .map(PostResponse::getContent)
+                .map(PostWithCommentResponse::getContent)
                 .collect(Collectors.toList());
         List<Long> userIds = postResponses.stream()
                 .map(postResponse -> postResponse.getWriter().getId())
@@ -127,10 +127,10 @@ public class PostMyPageServiceTest {
     void findByUserAndFilterLikes() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.LIKES);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.LIKES);
         //then
         List<String> contents = postResponses.stream()
-                .map(PostResponse::getContent)
+                .map(PostWithCommentResponse::getContent)
                 .collect(Collectors.toList());
 
         assertThat(contents).containsExactlyInAnyOrder("Test 2", "Test 1", "Test 0");
@@ -141,10 +141,10 @@ public class PostMyPageServiceTest {
     void findByUserAndFilterComments() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.COMMENTS);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(optionalUser, Filter.COMMENTS);
         //then
         List<String> contents = postResponses.stream()
-                .map(PostResponse::getContent)
+                .map(PostWithCommentResponse::getContent)
                 .collect(Collectors.toList());
         List<Long> userIds = postResponses.stream()
                 .flatMap(postResponse -> postResponse.getComments().stream()
@@ -162,7 +162,7 @@ public class PostMyPageServiceTest {
         //given
         Filter filter = Filter.NONE;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
@@ -180,7 +180,7 @@ public class PostMyPageServiceTest {
         //given
         Filter filter = Filter.NONE;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
@@ -198,7 +198,7 @@ public class PostMyPageServiceTest {
         //given
         Filter filter = Filter.LIKES;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
@@ -216,7 +216,7 @@ public class PostMyPageServiceTest {
         //given
         Filter filter = Filter.LIKES;
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(filter, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
@@ -233,7 +233,7 @@ public class PostMyPageServiceTest {
     void findCommentedPostFirstPage(int offset, int size, List<String> expectedContents) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
@@ -250,7 +250,7 @@ public class PostMyPageServiceTest {
     void findCommentedPostNextPage(int offset, int size, List<String> expectedContents) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, offset, size, optionalUser);
+        List<PostWithCommentResponse> postResponses = postService.findByUserAndFilter(Filter.COMMENTS, offset, size, optionalUser);
         //then
         assertThat(postResponses.size()).isEqualTo(expectedContents.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(expectedContents);
