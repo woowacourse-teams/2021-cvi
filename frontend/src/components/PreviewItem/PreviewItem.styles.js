@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { LINE_LIMIT, FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
-  padding: 2rem;
+  padding: 1.6rem 1.6rem 1rem 1.6rem;
   width: 100%;
   cursor: pointer;
 
@@ -17,7 +17,7 @@ const TopContainer = styled.div`
 `;
 
 const Content = styled.div`
-  margin: 1.6rem 0;
+  margin: 1.6rem 0 1rem 0;
   line-height: 1.5;
   min-height: 2.4rem;
   white-space: normal;

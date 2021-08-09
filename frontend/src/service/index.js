@@ -17,6 +17,7 @@ import {
   requestGetMyReviewList,
   requestGetMyCommentReviewList,
   requestGetMyLikeReviewList,
+  requestGetCommentList,
 } from '../requests';
 
 const getAllReviewListAsync = async (accessToken, offset, filteringList) => {
@@ -256,9 +257,9 @@ const deleteLikeAsync = async (accessToken, postId) => {
   }
 };
 
-const getMyReviewListAsync = async (accessToken, lastPostId) => {
+const getMyReviewListAsync = async (accessToken, offset) => {
   try {
-    const response = await requestGetMyReviewList(accessToken, lastPostId);
+    const response = await requestGetMyReviewList(accessToken, offset);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -271,9 +272,10 @@ const getMyReviewListAsync = async (accessToken, lastPostId) => {
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
 };
-const getMyCommentReviewListAsync = async (accessToken, lastPostId) => {
+
+const getMyCommentReviewListAsync = async (accessToken, offset) => {
   try {
-    const response = await requestGetMyCommentReviewList(accessToken, lastPostId);
+    const response = await requestGetMyCommentReviewList(accessToken, offset);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -286,9 +288,26 @@ const getMyCommentReviewListAsync = async (accessToken, lastPostId) => {
     return { state: RESPONSE_STATE.FAILURE, data: error };
   }
 };
-const getMyLikeReviewListAsync = async (accessToken, lastPostId) => {
+
+const getMyLikeReviewListAsync = async (accessToken, offset) => {
   try {
-    const response = await requestGetMyLikeReviewList(accessToken, lastPostId);
+    const response = await requestGetMyLikeReviewList(accessToken, offset);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getCommentListAsync = async (postId, offset) => {
+  try {
+    const response = await requestGetCommentList(postId, offset);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -320,4 +339,5 @@ export {
   getMyReviewListAsync,
   getMyCommentReviewListAsync,
   getMyLikeReviewListAsync,
+  getCommentListAsync,
 };
