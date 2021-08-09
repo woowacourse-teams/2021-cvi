@@ -176,6 +176,8 @@ const requestDeleteLike = (accessToken, postId) =>
 
 const requestVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations`);
 
+const requestWorldVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations/world`);
+
 const requestGetMyReviewList = (accessToken, offset) =>
   fetch(`${BASE_URL}/users/me/posts/paging?filter=NONE&offset=${offset}&size=${PAGING_SIZE}`, {
     method: 'GET',
@@ -223,6 +225,7 @@ export {
   requestPostLike,
   requestDeleteLike,
   requestVaccinationStateList,
+  requestWorldVaccinationStateList,
   requestGetMyReviewList,
   requestGetMyCommentReviewList,
   requestGetMyLikeReviewList,

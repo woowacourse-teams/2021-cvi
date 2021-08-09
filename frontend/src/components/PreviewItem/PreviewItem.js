@@ -24,7 +24,7 @@ const PreviewItem = ({ review, onClick, accessToken }) => {
     content,
     vaccinationType,
     createdAt,
-    comments,
+    commentCount,
     hasLiked,
     likeCount,
     viewCount,
@@ -66,7 +66,7 @@ const PreviewItem = ({ review, onClick, accessToken }) => {
           </IconItem>
           <IconItem>
             <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-            <ViewCount>{comments?.length}</ViewCount>
+            <ViewCount>{commentCount}</ViewCount>
           </IconItem>
         </IconContainer>
         <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
@@ -82,7 +82,7 @@ PreviewItem.propTypes = {
     content: PropTypes.string.isRequired,
     vaccinationType: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
-    comments: PropTypes.array.isRequired,
+    commentCount: PropTypes.number.isRequired,
     likeCount: PropTypes.number.isRequired,
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,

@@ -12,7 +12,7 @@ import {
   IncreaseIcon,
 } from './VaccinationState.styles';
 import { Frame, DonutChart, Button } from '../common';
-import { requestVaccinationStateList } from '../../requests';
+import { requestVaccinationStateList, requestWorldVaccinationStateList } from '../../requests';
 import { useFetch } from '../../hooks';
 import { numberWithCommas } from '../../utils';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
@@ -22,7 +22,11 @@ import { RightArrowIcon } from '../../assets/icons';
 const VaccinationState = ({ title, withWorld, withViewMore }) => {
   const history = useHistory();
 
-  const { response, error, loading } = useFetch([], requestVaccinationStateList);
+  const { response, error } = useFetch([], requestVaccinationStateList);
+  const { response: worldState, error: worldError } = useFetch(
+    [],
+    requestWorldVaccinationStateList,
+  );
   const koreanState = response[0];
 
   const goStatePage = () => {
@@ -51,7 +55,7 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
       <Frame width="100%" showShadow={true}>
         <FrameContent withWorld={withWorld}>
           <PrimaryState>
-            <DonutChart target={koreanState?.totalFirstRate} />
+            <DonutChart target={koreanState?.totalFirstRate ?? 0} />
             <Info>
               <InfoTitle>국내 1차 접종</InfoTitle>
               <div>누적 {numberWithCommas(Number(koreanState?.totalFirstCnt))}</div>
@@ -62,7 +66,7 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
             </Info>
           </PrimaryState>
           <PrimaryState>
-            <DonutChart target={koreanState?.totalSecondRate} />
+            <DonutChart target={koreanState?.totalSecondRate ?? 0} />
             <Info>
               <InfoTitle>국내 완전 접종</InfoTitle>
               <div>누적 {numberWithCommas(Number(koreanState?.totalSecondCnt))}</div>
@@ -74,10 +78,10 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
           </PrimaryState>
           {withWorld && (
             <PrimaryState>
-              <DonutChart target={15.3} />
+              <DonutChart target={worldState[0]?.totalSecondRate ?? 0} />
               <Info>
                 <InfoTitle>세계 완전 접종</InfoTitle>
-                <div>누적 1,096,011,434</div>
+                <div>누적 {numberWithCommas(Number(worldState[0]?.totalSecondCnt))}</div>
               </Info>
             </PrimaryState>
           )}
