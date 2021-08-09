@@ -6,7 +6,6 @@ import { Container, Title, Content } from './StatePage.styles';
 const StatePage = () => {
   const { response, error, loading } = useFetch([], requestVaccinationStateList);
 
-  const koreanState = response[0];
   const regionalState = response.slice(1);
 
   return (

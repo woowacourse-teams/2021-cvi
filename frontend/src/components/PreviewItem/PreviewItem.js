@@ -69,7 +69,7 @@ const PreviewItem = ({ review, onClick, accessToken }) => {
             <ViewCount>{comments?.length}</ViewCount>
           </IconItem>
         </IconContainer>
-        <CreatedAt>{toDate(TO_DATE_TYPE.DATE, createdAt)}</CreatedAt>
+        <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
       </BottomContainer>
     </Container>
   );
