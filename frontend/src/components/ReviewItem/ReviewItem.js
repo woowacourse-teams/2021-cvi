@@ -83,7 +83,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
             <ButtonLike
               hasLiked={updatedHasLiked}
               likeCount={updatedLikeCount}
-              onClickLike={onClickLike}
+              onClickLike={path !== PATH.MY_PAGE_LIKE_REVIEW ? onClickLike : () => {}}
             />
           </IconContainer>
           <IconContainer>
