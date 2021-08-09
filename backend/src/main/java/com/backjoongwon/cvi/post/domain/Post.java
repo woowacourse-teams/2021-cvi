@@ -121,4 +121,14 @@ public class Post extends BaseEntity {
     public List<Comment> getCommentsAsList() {
         return comments.getComments();
     }
+
+    public List<Comment> sliceCommentsAsList(int offset, int size) {
+        List<Comment> comments = this.comments.getComments();
+        int fromIndex = offset;
+        int toIndex = offset + size;
+        if (toIndex > comments.size()) {
+            toIndex = comments.size();
+        }
+        return comments.subList(fromIndex, toIndex);
+    }
 }
