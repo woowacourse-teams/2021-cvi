@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 2rem 1.5rem;
+  margin: 2rem 0;
 
   @media screen and (max-width: 801px) {
     margin: 2rem 0;
@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 `;
 
 export { Title, Container, ButtonContainer };

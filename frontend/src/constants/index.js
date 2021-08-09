@@ -11,7 +11,13 @@ import {
   CONFIRM_MESSAGE,
   PLACEHOLDER,
 } from './message';
-import { BASE_URL, NAVER_LOGIN_URL, KAKAO_LOGIN_URL } from './url';
+import {
+  BASE_URL,
+  NAVER_LOGIN_URL,
+  KAKAO_LOGIN_URL,
+  VACCINATION_RESERVATION_URL,
+  NAVER_LEFT_VACCINATION_URL,
+} from './url';
 import { LOCAL_STORAGE_KEY } from './localStorage';
 import { TO_DATE_TYPE } from './toDateType';
 import { RESPONSE_STATE } from './service';
@@ -33,6 +39,8 @@ export {
   BASE_URL,
   NAVER_LOGIN_URL,
   KAKAO_LOGIN_URL,
+  VACCINATION_RESERVATION_URL,
+  NAVER_LEFT_VACCINATION_URL,
   ERROR_MESSAGE,
   ALERT_MESSAGE,
   SNACKBAR_MESSAGE,

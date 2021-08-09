@@ -114,7 +114,7 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
             limit {
                 counter = 'METHOD'
                 value = 'COVEREDRATIO'
-                minimum = 0.85
+                minimum = 0.80
             }
 
             excludes = [

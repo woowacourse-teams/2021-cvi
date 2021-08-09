@@ -18,7 +18,9 @@ const Container = styled.div`
 
   @media screen and (max-width: 801px) {
     padding: 0 1rem;
-    overflow-x: auto;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 `;
 
@@ -39,6 +41,10 @@ const buttonStyles = css`
     background-color: ${FONT_COLOR.BLUE_GRAY};
     font-size: 1.6rem;
     border: 0.1rem soid ${FONT_COLOR.LIGHT_GRAY};
+  }
+
+  @media screen and (max-width: 801px) {
+    padding: 0.4rem 0 0.4rem 1.6rem;
   }
 `;
 
