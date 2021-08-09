@@ -1,7 +1,6 @@
 package com.backjoongwon.cvi.post.application;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
-import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
@@ -50,14 +49,12 @@ class PostServiceTest {
     private Post post;
     private Post anotherPost;
     private PostRequest postRequest;
-    private CommentRequest commentRequest;
 
     @BeforeEach
     void init() {
         initUser();
         initPost();
         postRequest = new PostRequest("Test Content", VaccinationType.PFIZER);
-        commentRequest = new CommentRequest("댓글");
     }
 
     private void initUser() {
