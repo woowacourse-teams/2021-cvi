@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.publicdata.dto;
 
-import com.backjoongwon.cvi.dto.RegionVaccinationData;
+import com.backjoongwon.cvi.dto.KoreaRegionVaccinationData;
 import com.backjoongwon.cvi.dto.WorldVaccinationData;
 import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
 import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
@@ -42,10 +42,10 @@ public class VaccinationStatisticResponse {
         this.totalSecondRate = totalSecondRate;
     }
 
-    public static VaccinationStatisticResponse from(RegionVaccinationData regionVaccinationData) {
-        return new VaccinationStatisticResponse(regionVaccinationData.getAccumulatedFirstCnt(), regionVaccinationData.getAccumulatedSecondCnt(),
-                DateConverter.convertLocalDateTimeStringToLocalDate(regionVaccinationData.getBaseDate()), regionVaccinationData.getFirstCnt(), regionVaccinationData.getSecondCnt(),
-                regionVaccinationData.getSido(), regionVaccinationData.getTotalFirstCnt(), regionVaccinationData.getTotalSecondCnt(),
+    public static VaccinationStatisticResponse from(KoreaRegionVaccinationData koreaRegionVaccinationData) {
+        return new VaccinationStatisticResponse(koreaRegionVaccinationData.getAccumulatedFirstCnt(), koreaRegionVaccinationData.getAccumulatedSecondCnt(),
+                DateConverter.convertLocalDateTimeStringToLocalDate(koreaRegionVaccinationData.getBaseDate()), koreaRegionVaccinationData.getFirstCnt(), koreaRegionVaccinationData.getSecondCnt(),
+                koreaRegionVaccinationData.getSido(), koreaRegionVaccinationData.getTotalFirstCnt(), koreaRegionVaccinationData.getTotalSecondCnt(),
                 null, null);
     }
 

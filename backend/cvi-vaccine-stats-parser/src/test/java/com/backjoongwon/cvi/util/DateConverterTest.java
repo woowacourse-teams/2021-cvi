@@ -12,9 +12,9 @@ class DateConverterTest {
 
     public static final String ZERO_TIME = " 00:00:00";
 
-    @DisplayName("LocalDateTime 변환 - 성공")
+    @DisplayName("LocalDate를 00:00:00을 포한함 문자열로 변경  - 성공")
     @Test
-    void localDateTimeWithZero() {
+    void convertDateToContainsZeroTime() {
         //given
         LocalDate expect = LocalDate.now();
         //when
@@ -23,10 +23,21 @@ class DateConverterTest {
         assertThat(actual).isEqualTo(LocalDate.now() + ZERO_TIME);
     }
 
+    @DisplayName("00:00:00을 포한함 날짜 문자열, LocalDate로 변경 - 성공")
     @Test
-    void play() {
-        //String localDateTime = DateConverter.convertTimeWithZero(LocalDate.now());
-        LocalDate localDate = DateConverter.convertLocalDateTimeStringToLocalDate("2021-08-01" + ZERO_TIME);
-        System.out.println("localDate.toString() = " + localDate);
+    void convertLocalDateTimeStringToLocalDate() {
+        //given
+        String expect = LocalDate.now() + ZERO_TIME;
+        //when
+        LocalDate actual = DateConverter.convertLocalDateTimeStringToLocalDate(expect);
+        //then
+        assertThat(actual).isEqualTo(LocalDate.now());
+    }
+
+    @Test
+    void toLocalDate() {
+        //given
+        //when
+        //then
     }
 }

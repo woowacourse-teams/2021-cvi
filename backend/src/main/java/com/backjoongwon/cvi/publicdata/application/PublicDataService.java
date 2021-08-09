@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.publicdata.application;
 
-import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.*;
@@ -27,9 +27,9 @@ public class PublicDataService {
 
     @Transactional
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDate targetDate) {
-        VaccineParserResponse vaccineParserResponse = vacinationparser.parseToPublicData(targetDate, publicDataProperties.getVaccination());
+        KoreaVaccineParserResponse koreaVaccineParserResponse = vacinationparser.parseToKoreaPublicData(targetDate, publicDataProperties.getVaccination());
 
-        RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(vaccineParserResponse.getData());
+        RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(koreaVaccineParserResponse.getData());
         VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
         List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(targetDate);
         List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByDate, targetDate);

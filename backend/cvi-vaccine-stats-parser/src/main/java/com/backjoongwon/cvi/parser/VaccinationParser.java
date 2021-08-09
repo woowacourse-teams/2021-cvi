@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.parser;
 
-import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.util.DateConverter;
 import com.backjoongwon.cvi.util.JsonMapper;
@@ -24,12 +24,12 @@ public class VaccinationParser {
         this.jsonMapper = jsonMapper;
     }
 
-    public VaccineParserResponse parseToPublicData(LocalDate targetDate, String apiSecretKey) {
-        VaccineParserResponse vaccineParserResponse = jsonMapper.toObject(getRawData(targetDate, apiSecretKey), VaccineParserResponse.class);
-        if (!vaccineParserResponse.isEmptyData()) {
-            return vaccineParserResponse;
+    public KoreaVaccineParserResponse parseToKoreaPublicData(LocalDate targetDate, String apiSecretKey) {
+        KoreaVaccineParserResponse koreaVaccineParserResponse = jsonMapper.toObject(getRawData(targetDate, apiSecretKey), KoreaVaccineParserResponse.class);
+        if (koreaVaccineParserResponse.isEmptyData()) {
+            return KoreaVaccineParserResponse.empty();
         }
-        return VaccineParserResponse.empty();
+        return koreaVaccineParserResponse;
     }
 
     public WorldVaccinationParserResponse parseToWorldPublicData() {

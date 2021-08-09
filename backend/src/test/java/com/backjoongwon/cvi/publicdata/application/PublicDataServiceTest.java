@@ -125,7 +125,7 @@ class PublicDataServiceTest {
 
     private void 백신_접종률_저장되어_있음(LocalDate targetDate) {
         willReturn(toVaccineParserResponse(targetDate))
-                .given(vaccinationParser).parseToPublicData(any(LocalDate.class), anyString());
+                .given(vaccinationParser).parseToKoreaPublicData(any(LocalDate.class), anyString());
         publicDataService.saveVaccinationStatistics(targetDate);
     }
 

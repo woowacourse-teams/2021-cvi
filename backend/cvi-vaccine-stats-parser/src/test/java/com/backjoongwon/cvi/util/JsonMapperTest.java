@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.util;
 
-import com.backjoongwon.cvi.dto.VaccineParserResponse;
+import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,9 +45,9 @@ class JsonMapperTest {
                 "  \"totalCount\": 2634\n" +
                 "}";
         //when
-        VaccineParserResponse vaccineParserResponse = jsonMapper.toObject(rawData, VaccineParserResponse.class);
+        KoreaVaccineParserResponse koreaVaccineParserResponse = jsonMapper.toObject(rawData, KoreaVaccineParserResponse.class);
         //then
-        assertThat(vaccineParserResponse.getData()).isNotEmpty();
+        assertThat(koreaVaccineParserResponse.getData()).isNotEmpty();
     }
 
     @DisplayName("매핑 - 실패 - 잘못된 json 데이터 입력")
@@ -57,7 +57,7 @@ class JsonMapperTest {
         String rawData = "Strange Data";
         //when
         //then
-        assertThatThrownBy(() -> jsonMapper.toObject(rawData, VaccineParserResponse.class))
+        assertThatThrownBy(() -> jsonMapper.toObject(rawData, KoreaVaccineParserResponse.class))
                 .isInstanceOf(IllegalStateException.class);
     }
 

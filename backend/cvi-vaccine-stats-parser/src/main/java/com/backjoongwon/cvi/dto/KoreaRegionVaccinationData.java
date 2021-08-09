@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.dto;
 
-public class RegionVaccinationData {
+public class KoreaRegionVaccinationData {
 
     private long accumulatedFirstCnt;
     private long accumulatedSecondCnt;
@@ -11,11 +11,11 @@ public class RegionVaccinationData {
     private long totalFirstCnt;
     private long totalSecondCnt;
 
-    public RegionVaccinationData() {
+    public KoreaRegionVaccinationData() {
     }
 
-    public RegionVaccinationData(long accumulatedFirstCnt, long accumulatedSecondCnt, String baseDate, long firstCnt,
-                                 long secondCnt, String sido, long totalFirstCnt, long totalSecondCnt) {
+    public KoreaRegionVaccinationData(long accumulatedFirstCnt, long accumulatedSecondCnt, String baseDate, long firstCnt,
+                                      long secondCnt, String sido, long totalFirstCnt, long totalSecondCnt) {
         this.accumulatedFirstCnt = accumulatedFirstCnt;
         this.accumulatedSecondCnt = accumulatedSecondCnt;
         this.baseDate = baseDate;
