@@ -44,7 +44,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userRequest = new UserRequest("인비", AgeRange.TEENS, false, SocialProvider.NAVER, null, null);
+        userRequest = new UserRequest("인비", AgeRange.TEENS, false, SocialProvider.NAVER, "NAVER_ID", "naver.com/profile");
     }
 
     @DisplayName("사용자 회원가입 - 성공")
@@ -161,7 +161,7 @@ public class UserServiceTest {
         //given
         UserResponse signupResponse1 = userService.signup(userRequest);
         User user1 = userService.findUserById(signupResponse1.getId());
-        UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, false, null, null, null);
+        UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, false, SocialProvider.NAVER, "NAVER_ID", "naver.com/profile");
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
         User user2 = userService.findUserById(signupResponse2.getId());
 
@@ -224,6 +224,10 @@ public class UserServiceTest {
     private Long getLastIndex() {
         User lastUser = User.builder()
                 .nickname("라이언")
+                .ageRange(AgeRange.TWENTIES)
+                .socialProvider(SocialProvider.KAKAO)
+                .socialId("KAKAO_ID")
+                .profileUrl("kakao.com/profile")
                 .build();
         return userRepository.save(lastUser).getId();
     }

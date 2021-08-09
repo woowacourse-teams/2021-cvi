@@ -91,6 +91,34 @@ class PostServiceTest {
         postService.createComment(post5.getId(), optionalUser1, commentRequest);
     }
 
+    private void initUser() {
+        user1 = User.builder()
+                .nickname("테스트유저")
+                .ageRange(AgeRange.FORTIES)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
+                .socialProvider(SocialProvider.NAVER)
+                .build();
+        user2 = User.builder()
+                .nickname("테스트유저2")
+                .ageRange(AgeRange.THIRTIES)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
+                .socialProvider(SocialProvider.NAVER)
+                .build();
+        anotherUser = User.builder()
+                .nickname("다른테스트유저")
+                .ageRange(AgeRange.TWENTIES)
+                .socialId("NAVER_ID")
+                .profileUrl("kakao.com/profile")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
+        userRepository.saveAll(Arrays.asList(user1, user2, anotherUser));
+
+        optionalUser1 = Optional.of(user1);
+        optionalAnotherUser = Optional.of(anotherUser);
+    }
+
     private void initPost() {
         post1 = Post.builder()
                 .content("Test 0")
@@ -124,31 +152,6 @@ class PostServiceTest {
                 .build();
 
         postRepository.saveAll(Arrays.asList(post1, post2, post3, post4, post5));
-    }
-
-    private void initUser() {
-        user1 = User.builder()
-                .nickname("테스트유저")
-                .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
-                .socialProvider(SocialProvider.NAVER)
-                .build();
-        user2 = User.builder()
-                .nickname("테스트유저2")
-                .ageRange(AgeRange.THIRTIES)
-                .profileUrl("")
-                .socialProvider(SocialProvider.NAVER)
-                .build();
-        anotherUser = User.builder()
-                .nickname("다른테스트유저")
-                .ageRange(AgeRange.TWENTIES)
-                .profileUrl("")
-                .socialProvider(SocialProvider.KAKAO)
-                .build();
-        userRepository.saveAll(Arrays.asList(user1, user2, anotherUser));
-
-        optionalUser1 = Optional.of(user1);
-        optionalAnotherUser = Optional.of(anotherUser);
     }
 
     @DisplayName("게시글 생성 - 성공")

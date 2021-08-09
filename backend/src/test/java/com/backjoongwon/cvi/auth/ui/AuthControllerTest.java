@@ -90,14 +90,14 @@ public class AuthControllerTest extends ApiDocument {
     @Test
     void validateAuthRequest() throws Exception {
         //given
-        AuthRequest invalidRequest1 = new AuthRequest(null, "code", "state");
-        AuthRequest invalidRequest2 = new AuthRequest(SocialProvider.NAVER, "", "state");
+        AuthRequest noContainProviderRequest = new AuthRequest(null, "code", "state");
+        AuthRequest noContainCodeRequest = new AuthRequest(SocialProvider.NAVER, "", "state");
         //when
-        ResultActions response1 = 사용자_OAuth_요청(invalidRequest1);
-        ResultActions response2 = 사용자_OAuth_요청(invalidRequest2);
+        ResultActions noContainProviderResponse = 사용자_OAuth_요청(noContainProviderRequest);
+        ResultActions noContainCodeResponse = 사용자_OAuth_요청(noContainCodeRequest);
         //then
-        response1.andExpect(status().isBadRequest());
-        response2.andExpect(status().isBadRequest());
+        noContainProviderResponse.andExpect(status().isBadRequest());
+        noContainCodeResponse.andExpect(status().isBadRequest());
     }
 
     private ResultActions 사용자_OAuth_요청(AuthRequest authRequest) throws Exception {
