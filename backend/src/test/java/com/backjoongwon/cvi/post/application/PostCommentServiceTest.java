@@ -62,16 +62,6 @@ public class PostCommentServiceTest {
         commentRequest = new CommentRequest("테스트 댓글");
     }
 
-    private void initPost() {
-        post = Post.builder()
-                .content("테스트게시글")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .build();
-        postRepository.save(post);
-    }
-
     private void initUsers() {
         user = User.builder()
                 .nickname("테스트유저")
@@ -89,6 +79,16 @@ public class PostCommentServiceTest {
         optionalAnotherUser = Optional.of(anotherUser);
         optionalUserNotSignedIn = Optional.empty();
         userRepository.saveAll(Arrays.asList(user, anotherUser));
+    }
+
+    private void initPost() {
+        post = Post.builder()
+                .content("테스트게시글")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRepository.save(post);
     }
 
     @DisplayName("댓글 생성 - 성공")

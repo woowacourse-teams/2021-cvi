@@ -62,20 +62,6 @@ public class PostLikeServiceTest {
         initLike();
     }
 
-    private void initLike() {
-        post.addLike(Like.builder().user(userWithLike).build());
-    }
-
-    private void initPost() {
-        post = Post.builder()
-                .content("테스트게시글")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(userWithLike)
-                .createdAt(LocalDateTime.now())
-                .build();
-        postRepository.save(post);
-    }
-
     private void initUsers() {
         userWithoutLike = User.builder()
                 .nickname("테스트유저")
@@ -94,6 +80,20 @@ public class PostLikeServiceTest {
         optionalUserWithLike = Optional.of(userWithLike);
         optionalUserNotSignedIn = Optional.empty();
         userRepository.saveAll(Arrays.asList(userWithoutLike, userWithLike));
+    }
+
+    private void initPost() {
+        post = Post.builder()
+                .content("테스트게시글")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .user(userWithLike)
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRepository.save(post);
+    }
+
+    private void initLike() {
+        post.addLike(Like.builder().user(userWithLike).build());
     }
 
     @DisplayName("게시글 좋아요 생성 - 성공")
