@@ -99,6 +99,13 @@ public class PostController {
         return postService.findCommentsById(postId);
     }
 
+    @GetMapping("/{postId}/comments/paging")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentResponse> findCommentsOfPost(@PathVariable Long postId, @RequestParam(defaultValue = "0") int offset,
+                                                    @RequestParam(defaultValue = "6") int size) {
+        return postService.findCommentsById(postId, offset, size);
+    }
+
     @PutMapping("/{postId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@PathVariable Long postId,
