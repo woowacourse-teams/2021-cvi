@@ -12,6 +12,7 @@ spring:
   jpa:
     properties:
       hibernate.default_batch_fetch_size: 500
+
   h2:
     console:
       enabled: false
@@ -27,9 +28,11 @@ security:
     token:
       secret-key: cvi_secret_key
       expire-length: 3600000
+
   auth:
     naver:
       client-secret: client-secret
+
   public:
     data:
       vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
@@ -37,7 +40,8 @@ security:
 spring:
   config:
     activate:
-      on-profile: local,test
+      on-profile: local
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
@@ -47,6 +51,7 @@ spring:
   h2:
     console:
       enabled: true
+
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -48,8 +48,8 @@ public class PostController {
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-                                                         @RequestParam(defaultValue =  "0") int offset,
-                                                         @RequestParam(defaultValue =  "6") int size,
+                                                         @RequestParam(defaultValue = "0") int offset,
+                                                         @RequestParam(defaultValue = "6") int size,
                                                          @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
                                                          @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
                                                          @AuthenticationPrincipal Optional<User> user) {

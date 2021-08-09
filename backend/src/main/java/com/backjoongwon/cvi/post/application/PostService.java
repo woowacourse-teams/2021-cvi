@@ -121,7 +121,8 @@ public class PostService {
     public LikeResponse createLike(Long id, Optional<User> optionalUser) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
-        Post post = findPostWithLikesById(id);
+        Post post = postRepository.findWithLikesById(id)
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         Like like = Like.builder()
                 .user(user)
                 .build();
@@ -134,13 +135,9 @@ public class PostService {
     public void deleteLike(Long id, Optional<User> optionalUser) {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
-        Post post = findPostWithLikesById(id);
-        post.deleteLike(user.getId());
-    }
-
-    private Post findPostWithLikesById(Long id) {
-        return postRepository.findWithLikesById(id)
+        Post post = postRepository.findWithLikesById(id)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        post.deleteLike(user.getId());
     }
 
     private Post findPostWithCommentsById(Long id) {

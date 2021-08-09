@@ -375,6 +375,22 @@ include::{snippets}/post-findByVaccinationType-paging-when-empty/http-request.ad
 ===== Response
 include::{snippets}/post-findByVaccinationType-paging-when-empty/http-response.adoc[]
 
+=== 게시글 타입별 정렬 조회
+==== 성공
+===== Request
+include::{snippets}/post-findByVaccinationType-paging-sorting/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType-paging-sorting/http-response.adoc[]
+
+=== 게시글 타입별 시간필터링 조회
+==== 성공
+===== Request
+include::{snippets}/post-findByVaccinationType-paging-filteringHour/http-request.adoc[]
+
+===== Response
+include::{snippets}/post-findByVaccinationType-paging-filteringHour/http-response.adoc[]
+
 === 게시글 수정
 ==== 성공
 ===== Request

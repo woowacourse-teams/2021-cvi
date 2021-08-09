@@ -13,8 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("deploy profile 체크 테스트 ")
 class ProfileControllerTest {
 
-    @DisplayName("active된 profile들 중에 deploy1이 포함되어 있을 때, deploy1이 반환횐다.")
-    @ParameterizedTest
+    @ParameterizedTest(name = "active된 profile들 중에 deploy1이 포함되어 있을 때, deploy1이 반환횐다.")
     @ValueSource(strings = {"deploy1", "deploy2"})
     void findProfileDeploy1(String expectedProfile) {
         //given

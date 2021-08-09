@@ -305,12 +305,12 @@ class UserControllerTest extends ApiDocument {
                 new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
                 new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
-                new PostResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+                new PostResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(3L))
         ));
         Filter filter = Filter.NONE;
         willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 4);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 4);
         //then
         마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
     }
@@ -322,7 +322,7 @@ class UserControllerTest extends ApiDocument {
         Filter filter = Filter.NONE;
         willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 4);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 4);
         //then
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
     }
@@ -339,7 +339,7 @@ class UserControllerTest extends ApiDocument {
         Filter filter = Filter.LIKES;
         willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 3);
         //then
         마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
     }
@@ -351,7 +351,7 @@ class UserControllerTest extends ApiDocument {
         Filter filter = Filter.LIKES;
         willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 3);
         //then
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
     }
@@ -367,7 +367,7 @@ class UserControllerTest extends ApiDocument {
         Filter filter = Filter.COMMENTS;
         willReturn(postResponses).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 2);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 2);
         //then
         마이페이지_글_타입별_페이징_조회_요청_성공함(response, postResponses, filter);
     }
@@ -379,7 +379,7 @@ class UserControllerTest extends ApiDocument {
         Filter filter = Filter.COMMENTS;
         willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
         //when
-        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 39L, 3);
+        ResultActions response = 마이페이지_글_타입별_페이징_조회_요청(filter, 0, 3);
         //then
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
     }
@@ -489,10 +489,10 @@ class UserControllerTest extends ApiDocument {
                 .queryParam("filter", filter.name()));
     }
 
-    private ResultActions 마이페이지_글_타입별_페이징_조회_요청(Filter filter, Long lastPostId, int size) throws Exception {
+    private ResultActions 마이페이지_글_타입별_페이징_조회_요청(Filter filter, int offset, int size) throws Exception {
         return mockMvc.perform(get("/api/v1/users/me/posts/paging")
                 .queryParam("filter", filter.name())
-                .queryParam("lastPostId", String.valueOf(lastPostId))
+                .queryParam("offset", String.valueOf(offset))
                 .queryParam("size", String.valueOf(size))
                 .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }

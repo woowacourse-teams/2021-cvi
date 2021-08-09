@@ -52,12 +52,14 @@ public class DataLoader implements CommandLineRunner {
             userRepository.saveAll(users);
 
             List<Post> posts = new ArrayList<>();
+            List<Comment> allComments = new ArrayList<>();
             for (int i = 0; i < POST_COUNT; i++) {
                 int randomInt = random.nextInt(USER_COUNT);
                 User user = users.get(i % USER_COUNT);
                 if (randomInt % 4 == 0) {
                     Post post = Post.builder().content("글" + (i + 1)).vaccinationType(VaccinationType.PFIZER).user(user).build();
-                    putLikeAndCommentRandomly(users, USER_COUNT, post, random);
+                    List<Comment> comments = putLikeAndCommentRandomly(users, USER_COUNT, post, random);
+                    allComments.addAll(comments);
                     posts.add(post);
                 }
                 if (randomInt % 4 == 1) {
@@ -82,13 +84,22 @@ public class DataLoader implements CommandLineRunner {
                 q.setParameter("post_id", id);
                 q.executeUpdate();
             }
+
+            for (Comment comment : allComments) {
+                Long id = comment.getId();
+                Query q = em.createNativeQuery("UPDATE comment SET created_at=:created_at WHERE comment_id=:comment_id");
+                q.setParameter("created_at", generateRandomLocalDateTime());
+                q.setParameter("comment_id", id);
+                q.executeUpdate();
+            }
         }
     }
 
-    private void putLikeAndCommentRandomly(List<User> users, int userCount, Post post, Random random) {
+    private List<Comment> putLikeAndCommentRandomly(List<User> users, int userCount, Post post, Random random) {
         Set<User> userSet = new HashSet<>();
+        List<Comment> comments = new ArrayList<>();
 
-        for (int j = 0; j < random.nextInt(10); j++) {
+        for (int j = 0; j < random.nextInt(30); j++) {
             int randomUser = random.nextInt(userCount);
             userSet.add(users.get(randomUser));
         }
@@ -96,9 +107,12 @@ public class DataLoader implements CommandLineRunner {
         for (User user : userSet) {
             Like like = Like.builder().user(user).build();
             post.addLike(like);
-            post.assignComment(Comment.builder().content("댓글").user(user).build());
+            Comment comment = Comment.builder().content("Id:" + user.getId() + " 유저의 댓글").user(user).build();
+            comments.add(comment);
+            post.assignComment(comment);
             likeRepository.save(like);
         }
+        return comments;
     }
 
     private Timestamp generateRandomLocalDateTime() {

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
-import static com.backjoongwon.cvi.post.domain.QPost.*;
+import static com.backjoongwon.cvi.post.domain.QPost.post;
 
 @Getter
 public enum Sort {
@@ -25,11 +25,15 @@ public enum Sort {
         this.sort = sort;
     }
 
-    public static OrderSpecifier toOrderSpecifier(Sort sort) {
+    public static OrderSpecifier toOrderSpecifier(Sort input) {
         return Arrays.stream(values())
-                .filter(it -> it == sort)
+                .filter(Sort::isSameTypeOf)
                 .findAny()
-                .map(it -> it.getSort())
+                .map(sort -> input.getSort())
                 .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
+    }
+
+    private static boolean isSameTypeOf(Sort sort) {
+        return sort == sort;
     }
 }

@@ -3,6 +3,7 @@ package com.backjoongwon.cvi.post.domain;
 
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
@@ -27,7 +28,7 @@ public class Likes {
         return likes.stream()
                 .filter(like -> like.isSameUser(userId))
                 .findAny()
-                .orElseThrow(() -> new NotFoundException("해당 사용자의 좋아요가 글에 존재하지 않습니다."));
+                .orElseThrow(() -> new UnAuthorizedException("해당 사용자의 좋아요가 글에 존재하지 않습니다."));
     }
 
     public void delete(Long userId) {

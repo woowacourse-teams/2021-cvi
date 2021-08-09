@@ -48,6 +48,11 @@ public class PostResponse {
                 post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer), makeCommentResponses(post.getCommentsAsList()), post.getVaccinationType(), post.getCreatedAt());
     }
 
+    public static PostResponse of(Long id, UserResponse user, String content, int viewCount, int likeCount,
+                                  boolean hasLiked, List<CommentResponse> comments, VaccinationType vaccinationType, LocalDateTime createdAt) {
+        return new PostResponse(id, user, content, viewCount, likeCount, hasLiked, comments, vaccinationType, createdAt);
+    }
+
     private static List<CommentResponse> makeCommentResponses(List<Comment> comments) {
         return comments.stream()
                 .map(CommentResponse::of)
