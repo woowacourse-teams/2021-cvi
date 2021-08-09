@@ -6,6 +6,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media screen and (max-width: 1024px) {
+    gap: 2rem;
+  }
 `;
 
 const Img = styled.img`
@@ -33,7 +37,7 @@ const Title = styled.h3`
 `;
 
 const Calendar = styled.div`
-  height: 60%;
+  height: fit-content;
 `;
 
 const A = styled.a`

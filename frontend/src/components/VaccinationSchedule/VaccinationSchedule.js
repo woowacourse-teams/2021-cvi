@@ -17,7 +17,7 @@ const VaccinationSchedule = () => {
     <Container>
       <Calendar>
         <Title>접종 일정</Title>
-        <Frame showShadow={true} height="90%">
+        <Frame showShadow={true} height="fit-content">
           <Img src={calendar} />
         </Frame>
       </Calendar>
