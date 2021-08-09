@@ -183,20 +183,20 @@ const ReviewDetailPage = () => {
                     iconHeight="24"
                     color={FONT_COLOR.BLACK}
                     likeCountSize="1.6rem"
-                    hasLiked={updatedHasLiked}
-                    likeCount={updatedLikeCount}
+                    hasLiked={updatedHasLiked ?? false}
+                    likeCount={updatedLikeCount ?? 0}
                     onClickLike={onClickLike}
                   />
                 </IconContainer>
                 <IconContainer>
                   <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-                  <div>{review?.commentCount}</div>
+                  <div>{review?.commentCount ?? 0}</div>
                 </IconContainer>
               </BottomContainer>
               <Comment
                 accessToken={accessToken}
                 user={user}
-                commentCount={review?.commentCount}
+                commentCount={review?.commentCount ?? 0}
                 reviewId={id}
                 getReview={getReview}
               />

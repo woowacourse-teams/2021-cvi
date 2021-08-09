@@ -36,6 +36,8 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
 
   useEffect(() => {
     getCommentList();
+
+    return () => setCommentList([]);
   }, [getCommentList]);
 
   return (
@@ -46,7 +48,7 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
           accessToken={accessToken}
           reviewId={reviewId}
           nickname={user.nickname}
-          socialProfileUrl={user.socialProfileUrl}
+          socialProfileUrl={user?.socialProfileUrl}
           getReview={getReview}
         />
       </CommentFormContainer>
@@ -54,7 +56,7 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
         <CommentItem
           key={comment.id}
           accessToken={accessToken}
-          userId={user.id}
+          userId={user?.id}
           reviewId={reviewId}
           comment={comment}
           getReview={getReview}
@@ -80,11 +82,11 @@ Comment.propTypes = {
   accessToken: PropTypes.string.isRequired,
   commentCount: PropTypes.number.isRequired,
   getReview: PropTypes.func.isRequired,
-  reviewId: PropTypes.number.isRequired,
+  reviewId: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    nickname: PropTypes.string.isRequired,
-    socialProfileUrl: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    nickname: PropTypes.string,
+    socialProfileUrl: PropTypes.string,
   }).isRequired,
 };
 
