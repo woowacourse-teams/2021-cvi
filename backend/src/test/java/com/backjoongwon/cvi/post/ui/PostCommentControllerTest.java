@@ -81,7 +81,7 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         댓글_삭제_성공함(response);
     }
 
-    @DisplayName("게시글 댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청 ")
+    @DisplayName("게시글 댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청")
     @Test
     void deleteCommentWhenWrongUser() throws Exception {
         //given

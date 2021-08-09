@@ -21,7 +21,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -33,11 +32,11 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-@DisplayName("게시글 조회 비즈니스 흐름 테스트")
+@DisplayName("게시글 - 조회 비즈니스 흐름 테스트")
 public class PostFindServiceTest {
+
     @Autowired
     private PostRepository postRepository;
 
