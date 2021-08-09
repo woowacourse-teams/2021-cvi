@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -17,6 +15,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @DiscriminatorValue(value = "vaccinationStatistic")
+@PrimaryKeyJoinColumn(name = "vaccination_statistic_id", foreignKey = @ForeignKey(name = "fk_vaccination_statistic_public_data"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VaccinationStatistic extends PublicData {
     @Column(updatable = false)

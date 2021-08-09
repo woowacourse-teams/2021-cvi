@@ -23,14 +23,15 @@ import java.util.Objects;
 public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comment_post"))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_user"))
     private User user;
 
     @Lob
+    @Column(name = "content", columnDefinition = "text")
     @Length(max = 300)
     private String content;
 
