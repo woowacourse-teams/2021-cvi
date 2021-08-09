@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
+import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,28 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
         //then
         댓글_등록_실패함(response);
+    }
+
+    @DisplayName("게시글 댓글 조회 - 성공")
+    @Test
+    void findCommentOfPost() throws Exception {
+        //given
+        willReturn(commentResponses).given(postService).findCommentsById(anyLong());
+        //when
+        ResultActions response = 댓글_조회_요청(POST_ID);
+        //then
+        댓글_조회_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 조회 - 실패 - 게시글이 없는 경우")
+    @Test
+    void findCommentOfPostFailure() throws Exception {
+        //given
+        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(postService).findCommentsById(anyLong());
+        //when
+        ResultActions response = 댓글_조회_요청(anyLong());
+        //then
+        댓글_조회_실패함(response);
     }
 
     @DisplayName("게시글 댓글 수정 - 성공")
@@ -110,6 +133,23 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("comment-create-failure"));
+    }
+
+    private ResultActions 댓글_조회_요청(Long postId) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{postId}/comments", postId)
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    private void 댓글_조회_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("comment-find"));
+    }
+
+    private void 댓글_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("comment-find-failure"));
     }
 
     private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
