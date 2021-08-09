@@ -225,7 +225,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7,true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when

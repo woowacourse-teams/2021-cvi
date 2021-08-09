@@ -16,13 +16,19 @@ import com.backjoongwon.cvi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -109,6 +115,49 @@ public class PostCommentServiceTest {
         //then
         assertThatThrownBy(() -> postService.createComment(post.getId(), optionalUserNotSignedIn, commentRequest))
                 .isInstanceOf(UnAuthorizedException.class);
+    }
+
+    @DisplayName("댓글 조회 - 성공")
+    @Test
+    void findComment() {
+        //given
+        postService.createComment(post.getId(), optionalAnotherUser, commentRequest);
+        //when
+        //then
+        Post foundPost = postRepository.findWithCommentsById(post.getId())
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
+
+        assertThat(foundPost.getCommentsAsList()).hasSize(1);
+        assertThat(foundPost.getCommentsAsList()).extracting("content").containsExactly("테스트 댓글");
+    }
+
+    @ParameterizedTest(name = "댓글 조회 페이징 - 성공")
+    @MethodSource
+    void findCommentPaging(int offset, int size, List<String> expectedContents) {
+        //given
+        List<CommentRequest> commentRequests = Arrays.asList(new CommentRequest("댓글1"), new CommentRequest("댓글2"), new CommentRequest("댓글3"));
+        for (CommentRequest commentRequest : commentRequests) {
+            postService.createComment(post.getId(), optionalAnotherUser, commentRequest);
+        }
+        //when
+        //then
+        List<CommentResponse> commentResponses = postService.findCommentsById(post.getId(), offset, size);
+
+        assertThat(commentResponses).hasSize(expectedContents.size());
+        assertThat(commentResponses).extracting("content").containsExactlyElementsOf(expectedContents);
+    }
+
+    static Stream<Arguments> findCommentPaging() {
+        return Stream.of(
+                Arguments.of(0, 3, Arrays.asList("댓글1", "댓글2", "댓글3")),
+                Arguments.of(0, 2, Arrays.asList("댓글1", "댓글2")),
+                Arguments.of(0, 1, Arrays.asList("댓글1")),
+                Arguments.of(0, 0, Collections.emptyList()),
+                Arguments.of(1, 3, Arrays.asList("댓글2", "댓글3")),
+                Arguments.of(1, 2, Arrays.asList("댓글2", "댓글3")),
+                Arguments.of(1, 1, Arrays.asList("댓글2")),
+                Arguments.of(1, 0, Collections.emptyList())
+        );
     }
 
     @DisplayName("댓글 수정 - 성공")
