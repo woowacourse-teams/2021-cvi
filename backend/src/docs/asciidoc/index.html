@@ -454,6 +454,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_common_exceptions">Common Exceptions</a></li>
 </ul>
 </li>
+<li><a href="#_publicdata_공공데이터">PublicData (공공데이터)</a>
+<ul class="sectlevel2">
+<li><a href="#_공통_체크사항">공통 체크사항</a></li>
+<li><a href="#_백신_접종률_저장">백신 접종률 저장</a></li>
+<li><a href="#_백신_접종률_조회">백신 접종률 조회</a></li>
+<li><a href="#_세계_백신_접종률_저장">세계 백신 접종률 저장</a></li>
+<li><a href="#_세계_백신_접종률_조회">세계 백신 접종률 조회</a></li>
+</ul>
+</li>
 <li><a href="#_user_사용자">User (사용자)</a>
 <ul class="sectlevel2">
 <li><a href="#_사용자_oauth">사용자 OAuth</a></li>
@@ -484,16 +493,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_게시글_삭제">게시글 삭제</a></li>
 <li><a href="#_게시글_좋아요_생성">게시글 좋아요 생성</a></li>
 <li><a href="#_게시글_좋아요_삭제">게시글 좋아요 삭제</a></li>
-<li><a href="#_게시글_댓글_등록">게시글 댓글 등록</a></li>
-<li><a href="#_게시글_댓글_수정">게시글 댓글 수정</a></li>
-<li><a href="#_게시글_댓글_삭제">게시글 댓글 삭제</a></li>
 </ul>
 </li>
-<li><a href="#_publicdata_공공데이터">PublicData (공공데이터)</a>
+<li><a href="#_comment_댓글">Comment (댓글)</a>
 <ul class="sectlevel2">
-<li><a href="#_공통_체크사항">공통 체크사항</a></li>
-<li><a href="#_백신_접종률_저장">백신 접종률 저장</a></li>
-<li><a href="#_백신_접종률_조회">백신 접종률 조회</a></li>
+<li><a href="#_게시글_댓글_등록">게시글 댓글 등록</a></li>
+<li><a href="#_게시글_댓글_조회">게시글 댓글 조회</a></li>
+<li><a href="#_게시글_댓글_페이징_조회">게시글 댓글 페이징 조회</a></li>
+<li><a href="#_게시글_댓글_수정">게시글 댓글 수정</a></li>
+<li><a href="#_게시글_댓글_삭제">게시글 댓글 삭제</a></li>
 </ul>
 </li>
 </ul>
@@ -543,14 +551,615 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="_publicdata_공공데이터">PublicData (공공데이터)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_공통_체크사항">공통 체크사항</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">시간을 Parameter로 넘기지 않을 때, defaultValue = LocalDateTime</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"> 오전 10시전 당일 데이터 요청시, 전날 데이터 저장/출력
+ ex) 현재 날짜 2021-08-05 09:59:59 요청시 2021-08-04 데이터 저장/출력</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_백신_접종률_저장">백신 접종률 저장</h3>
+<div class="sect3">
+<h4 id="_성공">성공</h4>
+<div class="sect4">
+<h5 id="_request">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/publicdata/vaccinations HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+targetDate=2021-08-09</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 5173
+
+[ {
+  "accumulatedFirstCnt" : 19473657,
+  "accumulatedSecondCnt" : 7146602,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 473850,
+  "secondCnt" : 35955,
+  "sido" : "전국",
+  "totalFirstCnt" : 19947507,
+  "totalSecondCnt" : 7182557,
+  "totalFirstRate" : 39.2,
+  "totalSecondRate" : 14.3
+}, {
+  "accumulatedFirstCnt" : 3646765,
+  "accumulatedSecondCnt" : 1329982,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 77877,
+  "secondCnt" : 7123,
+  "sido" : "서울특별시",
+  "totalFirstCnt" : 3724642,
+  "totalSecondCnt" : 1337105,
+  "totalFirstRate" : 39.5,
+  "totalSecondRate" : 14.4
+}, {
+  "accumulatedFirstCnt" : 1352394,
+  "accumulatedSecondCnt" : 477845,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 31252,
+  "secondCnt" : 2628,
+  "sido" : "부산광역시",
+  "totalFirstCnt" : 1383646,
+  "totalSecondCnt" : 480473,
+  "totalFirstRate" : 41.8,
+  "totalSecondRate" : 14.6
+}, {
+  "accumulatedFirstCnt" : 848397,
+  "accumulatedSecondCnt" : 309317,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 22726,
+  "secondCnt" : 2688,
+  "sido" : "대구광역시",
+  "totalFirstCnt" : 871123,
+  "totalSecondCnt" : 312005,
+  "totalFirstRate" : 37.0,
+  "totalSecondRate" : 13.4
+}, {
+  "accumulatedFirstCnt" : 1032052,
+  "accumulatedSecondCnt" : 360923,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 27394,
+  "secondCnt" : 1760,
+  "sido" : "인천광역시",
+  "totalFirstCnt" : 1059446,
+  "totalSecondCnt" : 362683,
+  "totalFirstRate" : 39.8,
+  "totalSecondRate" : 14.7
+}, {
+  "accumulatedFirstCnt" : 549706,
+  "accumulatedSecondCnt" : 204415,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 13700,
+  "secondCnt" : 830,
+  "sido" : "광주광역시",
+  "totalFirstCnt" : 563406,
+  "totalSecondCnt" : 205245,
+  "totalFirstRate" : 37.6,
+  "totalSecondRate" : 14.7
+}, {
+  "accumulatedFirstCnt" : 396793,
+  "accumulatedSecondCnt" : 124839,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 11275,
+  "secondCnt" : 471,
+  "sido" : "울산광역시",
+  "totalFirstCnt" : 408068,
+  "totalSecondCnt" : 125310,
+  "totalFirstRate" : 37.6,
+  "totalSecondRate" : 14.0
+}, {
+  "accumulatedFirstCnt" : 523814,
+  "accumulatedSecondCnt" : 197608,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 12990,
+  "secondCnt" : 959,
+  "sido" : "대전광역시",
+  "totalFirstCnt" : 536804,
+  "totalSecondCnt" : 198567,
+  "totalFirstRate" : 36.8,
+  "totalSecondRate" : 12.7
+}, {
+  "accumulatedFirstCnt" : 4636237,
+  "accumulatedSecondCnt" : 1636357,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 118717,
+  "secondCnt" : 7895,
+  "sido" : "경기도",
+  "totalFirstCnt" : 4754954,
+  "totalSecondCnt" : 1644252,
+  "totalFirstRate" : 31.6,
+  "totalSecondRate" : 10.9
+}, {
+  "accumulatedFirstCnt" : 668422,
+  "accumulatedSecondCnt" : 273253,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 14908,
+  "secondCnt" : 1010,
+  "sido" : "강원도",
+  "totalFirstCnt" : 683330,
+  "totalSecondCnt" : 274263,
+  "totalFirstRate" : 36.9,
+  "totalSecondRate" : 11.5
+}, {
+  "accumulatedFirstCnt" : 109202,
+  "accumulatedSecondCnt" : 37624,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 3028,
+  "secondCnt" : 179,
+  "sido" : "세종특별자치시",
+  "totalFirstCnt" : 112230,
+  "totalSecondCnt" : 37803,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 15.8
+}, {
+  "accumulatedFirstCnt" : 639514,
+  "accumulatedSecondCnt" : 240704,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 15886,
+  "secondCnt" : 1324,
+  "sido" : "충청북도",
+  "totalFirstCnt" : 655400,
+  "totalSecondCnt" : 242028,
+  "totalFirstRate" : 42.1,
+  "totalSecondRate" : 16.1
+}, {
+  "accumulatedFirstCnt" : 849914,
+  "accumulatedSecondCnt" : 330591,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 22167,
+  "secondCnt" : 2054,
+  "sido" : "충청남도",
+  "totalFirstCnt" : 872081,
+  "totalSecondCnt" : 332645,
+  "totalFirstRate" : 45.6,
+  "totalSecondRate" : 17.8
+}, {
+  "accumulatedFirstCnt" : 789017,
+  "accumulatedSecondCnt" : 311961,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 17331,
+  "secondCnt" : 1270,
+  "sido" : "전라북도",
+  "totalFirstCnt" : 806348,
+  "totalSecondCnt" : 313231,
+  "totalFirstRate" : 48.4,
+  "totalSecondRate" : 19.1
+}, {
+  "accumulatedFirstCnt" : 859228,
+  "accumulatedSecondCnt" : 344275,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 19083,
+  "secondCnt" : 1378,
+  "sido" : "전라남도",
+  "totalFirstCnt" : 878311,
+  "totalSecondCnt" : 345653,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 16.0
+}, {
+  "accumulatedFirstCnt" : 1070878,
+  "accumulatedSecondCnt" : 409752,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 27263,
+  "secondCnt" : 2016,
+  "sido" : "경상북도",
+  "totalFirstCnt" : 1098141,
+  "totalSecondCnt" : 411768,
+  "totalFirstRate" : 40.4,
+  "totalSecondRate" : 14.8
+}, {
+  "accumulatedFirstCnt" : 1249910,
+  "accumulatedSecondCnt" : 464110,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 31098,
+  "secondCnt" : 1943,
+  "sido" : "경상남도",
+  "totalFirstCnt" : 1281008,
+  "totalSecondCnt" : 466053,
+  "totalFirstRate" : 39.2,
+  "totalSecondRate" : 14.3
+}, {
+  "accumulatedFirstCnt" : 251414,
+  "accumulatedSecondCnt" : 93046,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 7155,
+  "secondCnt" : 427,
+  "sido" : "제주특별자치도",
+  "totalFirstCnt" : 258569,
+  "totalSecondCnt" : 93473,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 17.8
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_백신_접종률_조회">백신 접종률 조회</h3>
+<div class="sect3">
+<h4 id="_성공_2">성공</h4>
+<div class="sect4">
+<h5 id="_request_2">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-09 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_2">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 5173
+
+[ {
+  "accumulatedFirstCnt" : 19473657,
+  "accumulatedSecondCnt" : 7146602,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 473850,
+  "secondCnt" : 35955,
+  "sido" : "전국",
+  "totalFirstCnt" : 19947507,
+  "totalSecondCnt" : 7182557,
+  "totalFirstRate" : 39.2,
+  "totalSecondRate" : 14.3
+}, {
+  "accumulatedFirstCnt" : 3646765,
+  "accumulatedSecondCnt" : 1329982,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 77877,
+  "secondCnt" : 7123,
+  "sido" : "서울특별시",
+  "totalFirstCnt" : 3724642,
+  "totalSecondCnt" : 1337105,
+  "totalFirstRate" : 39.5,
+  "totalSecondRate" : 14.4
+}, {
+  "accumulatedFirstCnt" : 1352394,
+  "accumulatedSecondCnt" : 477845,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 31252,
+  "secondCnt" : 2628,
+  "sido" : "부산광역시",
+  "totalFirstCnt" : 1383646,
+  "totalSecondCnt" : 480473,
+  "totalFirstRate" : 41.8,
+  "totalSecondRate" : 14.6
+}, {
+  "accumulatedFirstCnt" : 848397,
+  "accumulatedSecondCnt" : 309317,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 22726,
+  "secondCnt" : 2688,
+  "sido" : "대구광역시",
+  "totalFirstCnt" : 871123,
+  "totalSecondCnt" : 312005,
+  "totalFirstRate" : 37.0,
+  "totalSecondRate" : 13.4
+}, {
+  "accumulatedFirstCnt" : 1032052,
+  "accumulatedSecondCnt" : 360923,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 27394,
+  "secondCnt" : 1760,
+  "sido" : "인천광역시",
+  "totalFirstCnt" : 1059446,
+  "totalSecondCnt" : 362683,
+  "totalFirstRate" : 39.8,
+  "totalSecondRate" : 14.7
+}, {
+  "accumulatedFirstCnt" : 549706,
+  "accumulatedSecondCnt" : 204415,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 13700,
+  "secondCnt" : 830,
+  "sido" : "광주광역시",
+  "totalFirstCnt" : 563406,
+  "totalSecondCnt" : 205245,
+  "totalFirstRate" : 37.6,
+  "totalSecondRate" : 14.7
+}, {
+  "accumulatedFirstCnt" : 396793,
+  "accumulatedSecondCnt" : 124839,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 11275,
+  "secondCnt" : 471,
+  "sido" : "울산광역시",
+  "totalFirstCnt" : 408068,
+  "totalSecondCnt" : 125310,
+  "totalFirstRate" : 37.6,
+  "totalSecondRate" : 14.0
+}, {
+  "accumulatedFirstCnt" : 523814,
+  "accumulatedSecondCnt" : 197608,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 12990,
+  "secondCnt" : 959,
+  "sido" : "대전광역시",
+  "totalFirstCnt" : 536804,
+  "totalSecondCnt" : 198567,
+  "totalFirstRate" : 36.8,
+  "totalSecondRate" : 12.7
+}, {
+  "accumulatedFirstCnt" : 4636237,
+  "accumulatedSecondCnt" : 1636357,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 118717,
+  "secondCnt" : 7895,
+  "sido" : "경기도",
+  "totalFirstCnt" : 4754954,
+  "totalSecondCnt" : 1644252,
+  "totalFirstRate" : 31.6,
+  "totalSecondRate" : 10.9
+}, {
+  "accumulatedFirstCnt" : 668422,
+  "accumulatedSecondCnt" : 273253,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 14908,
+  "secondCnt" : 1010,
+  "sido" : "강원도",
+  "totalFirstCnt" : 683330,
+  "totalSecondCnt" : 274263,
+  "totalFirstRate" : 36.9,
+  "totalSecondRate" : 11.5
+}, {
+  "accumulatedFirstCnt" : 109202,
+  "accumulatedSecondCnt" : 37624,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 3028,
+  "secondCnt" : 179,
+  "sido" : "세종특별자치시",
+  "totalFirstCnt" : 112230,
+  "totalSecondCnt" : 37803,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 15.8
+}, {
+  "accumulatedFirstCnt" : 639514,
+  "accumulatedSecondCnt" : 240704,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 15886,
+  "secondCnt" : 1324,
+  "sido" : "충청북도",
+  "totalFirstCnt" : 655400,
+  "totalSecondCnt" : 242028,
+  "totalFirstRate" : 42.1,
+  "totalSecondRate" : 16.1
+}, {
+  "accumulatedFirstCnt" : 849914,
+  "accumulatedSecondCnt" : 330591,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 22167,
+  "secondCnt" : 2054,
+  "sido" : "충청남도",
+  "totalFirstCnt" : 872081,
+  "totalSecondCnt" : 332645,
+  "totalFirstRate" : 45.6,
+  "totalSecondRate" : 17.8
+}, {
+  "accumulatedFirstCnt" : 789017,
+  "accumulatedSecondCnt" : 311961,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 17331,
+  "secondCnt" : 1270,
+  "sido" : "전라북도",
+  "totalFirstCnt" : 806348,
+  "totalSecondCnt" : 313231,
+  "totalFirstRate" : 48.4,
+  "totalSecondRate" : 19.1
+}, {
+  "accumulatedFirstCnt" : 859228,
+  "accumulatedSecondCnt" : 344275,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 19083,
+  "secondCnt" : 1378,
+  "sido" : "전라남도",
+  "totalFirstCnt" : 878311,
+  "totalSecondCnt" : 345653,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 16.0
+}, {
+  "accumulatedFirstCnt" : 1070878,
+  "accumulatedSecondCnt" : 409752,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 27263,
+  "secondCnt" : 2016,
+  "sido" : "경상북도",
+  "totalFirstCnt" : 1098141,
+  "totalSecondCnt" : 411768,
+  "totalFirstRate" : 40.4,
+  "totalSecondRate" : 14.8
+}, {
+  "accumulatedFirstCnt" : 1249910,
+  "accumulatedSecondCnt" : 464110,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 31098,
+  "secondCnt" : 1943,
+  "sido" : "경상남도",
+  "totalFirstCnt" : 1281008,
+  "totalSecondCnt" : 466053,
+  "totalFirstRate" : 39.2,
+  "totalSecondRate" : 14.3
+}, {
+  "accumulatedFirstCnt" : 251414,
+  "accumulatedSecondCnt" : 93046,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 7155,
+  "secondCnt" : 427,
+  "sido" : "제주특별자치도",
+  "totalFirstCnt" : 258569,
+  "totalSecondCnt" : 93473,
+  "totalFirstRate" : 42.7,
+  "totalSecondRate" : 17.8
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_성공_요청_후_api_데이터가_없을_때">성공 - 요청 후 api 데이터가 없을 때</h4>
+<div class="sect4">
+<h5 id="_request_3">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-10 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_3">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 3
+
+[ ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_세계_백신_접종률_저장">세계 백신 접종률 저장</h3>
+<div class="sect3">
+<h4 id="_성공_3">성공</h4>
+<div class="sect4">
+<h5 id="_request_4">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/publicdata/vaccinations/world HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+targetDate=2021-08-09</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_4">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 540
+
+[ {
+  "accumulatedFirstCnt" : 0,
+  "accumulatedSecondCnt" : 0,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 0,
+  "secondCnt" : 0,
+  "sido" : "World",
+  "totalFirstCnt" : 2303769251,
+  "totalSecondCnt" : 1191535085,
+  "totalFirstRate" : 29.3,
+  "totalSecondRate" : 15.0
+}, {
+  "accumulatedFirstCnt" : 0,
+  "accumulatedSecondCnt" : 0,
+  "baseDate" : "2021-08-08",
+  "firstCnt" : 0,
+  "secondCnt" : 0,
+  "sido" : "World",
+  "totalFirstCnt" : 2293196690,
+  "totalSecondCnt" : 1175939230,
+  "totalFirstRate" : 28.9,
+  "totalSecondRate" : 14.7
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_세계_백신_접종률_조회">세계 백신 접종률 조회</h3>
+<div class="sect3">
+<h4 id="_성공_4">성공</h4>
+<div class="sect4">
+<h5 id="_request_5">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations/world?targetDate=2021-08-09 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_5">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 271
+
+[ {
+  "accumulatedFirstCnt" : 0,
+  "accumulatedSecondCnt" : 0,
+  "baseDate" : "2021-08-09",
+  "firstCnt" : 0,
+  "secondCnt" : 0,
+  "sido" : "World",
+  "totalFirstCnt" : 2303769251,
+  "totalSecondCnt" : 1191535085,
+  "totalFirstRate" : 29.3,
+  "totalSecondRate" : 15.0
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_user_사용자">User (사용자)</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_사용자_oauth">사용자 OAuth</h3>
 <div class="sect3">
-<h4 id="_성공">성공</h4>
+<h4 id="_성공_5">성공</h4>
 <div class="sect4">
-<h5 id="_request">Request</h5>
+<h5 id="_request_6">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/auth HTTP/1.1
@@ -567,7 +1176,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response">Response</h5>
+<h5 id="_response_6">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -599,7 +1208,7 @@ Content-Length: 343
 <div class="sect3">
 <h4 id="_실패">실패</h4>
 <div class="sect4">
-<h5 id="_request_2">Request</h5>
+<h5 id="_request_7">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/auth HTTP/1.1
@@ -616,7 +1225,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_2">Response</h5>
+<h5 id="_response_7">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -637,9 +1246,9 @@ Content-Length: 58
 <div class="sect2">
 <h3 id="_사용자_가입">사용자 가입</h3>
 <div class="sect3">
-<h4 id="_성공_2">성공</h4>
+<h4 id="_성공_6">성공</h4>
 <div class="sect4">
-<h5 id="_request_3">Request</h5>
+<h5 id="_request_8">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/signup HTTP/1.1
@@ -659,7 +1268,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_3">Response</h5>
+<h5 id="_response_8">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -701,7 +1310,7 @@ Content-Length: 336
 <div class="sect3">
 <h4 id="_실패_2">실패</h4>
 <div class="sect4">
-<h5 id="_request_4">Request</h5>
+<h5 id="_request_9">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/users/signup HTTP/1.1
@@ -721,7 +1330,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_4">Response</h5>
+<h5 id="_response_9">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
@@ -742,9 +1351,9 @@ Content-Length: 59
 <div class="sect2">
 <h3 id="_사용자_내_정보_조회">사용자 내 정보 조회</h3>
 <div class="sect3">
-<h4 id="_성공_3">성공</h4>
+<h4 id="_성공_7">성공</h4>
 <div class="sect4">
-<h5 id="_request_5">Request</h5>
+<h5 id="_request_10">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me HTTP/1.1
@@ -754,7 +1363,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_5">Response</h5>
+<h5 id="_response_10">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -785,7 +1394,7 @@ Content-Length: 307
 <div class="sect3">
 <h4 id="_실패_3">실패</h4>
 <div class="sect4">
-<h5 id="_request_6">Request</h5>
+<h5 id="_request_11">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me HTTP/1.1
@@ -795,7 +1404,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_6">Response</h5>
+<h5 id="_response_11">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -816,9 +1425,9 @@ Content-Length: 59
 <div class="sect2">
 <h3 id="_사용자_내가_작성한_게시글_조회">사용자 내가 작성한 게시글 조회</h3>
 <div class="sect3">
-<h4 id="_성공_4">성공</h4>
+<h4 id="_성공_8">성공</h4>
 <div class="sect4">
-<h5 id="_request_7">Request</h5>
+<h5 id="_request_12">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts HTTP/1.1
@@ -829,7 +1438,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_7">Response</h5>
+<h5 id="_response_12">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -837,7 +1446,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2676
+Content-Length: 2690
 
 [ {
   "id" : 1,
@@ -876,7 +1485,7 @@ Content-Length: 2676
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.668"
+    "createdAt" : "2021-08-09T20:12:50.52731"
   }, {
     "id" : 2,
     "writer" : {
@@ -894,10 +1503,10 @@ Content-Length: 2676
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.668"
+    "createdAt" : "2021-08-09T20:12:50.527319"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:59.669"
+  "createdAt" : "2021-08-08T20:12:50.528811"
 }, {
   "id" : 2,
   "writer" : {
@@ -920,7 +1529,7 @@ Content-Length: 2676
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-05T20:40:59.669"
+  "createdAt" : "2021-08-09T20:12:50.528824"
 }, {
   "id" : 3,
   "writer" : {
@@ -943,7 +1552,7 @@ Content-Length: 2676
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-05T20:40:59.669"
+  "createdAt" : "2021-08-09T20:12:50.528834"
 } ]</code></pre>
 </div>
 </div>
@@ -952,7 +1561,7 @@ Content-Length: 2676
 <div class="sect3">
 <h4 id="_실패_4">실패</h4>
 <div class="sect4">
-<h5 id="_request_8">Request</h5>
+<h5 id="_request_13">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts HTTP/1.1
@@ -963,7 +1572,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_8">Response</h5>
+<h5 id="_response_13">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -984,9 +1593,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_내가_작성한_게시글_페이징_조회">사용자 내가 작성한 게시글 페이징 조회</h3>
 <div class="sect3">
-<h4 id="_성공_5">성공</h4>
+<h4 id="_성공_9">성공</h4>
 <div class="sect4">
-<h5 id="_request_9">Request</h5>
+<h5 id="_request_14">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=NONE&amp;offset=0&amp;size=4 HTTP/1.1
@@ -996,7 +1605,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_9">Response</h5>
+<h5 id="_response_14">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1004,7 +1613,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3322
+Content-Length: 3340
 
 [ {
   "id" : 38,
@@ -1043,7 +1652,7 @@ Content-Length: 3322
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.449"
+    "createdAt" : "2021-08-09T20:12:50.165557"
   }, {
     "id" : 2,
     "writer" : {
@@ -1061,10 +1670,10 @@ Content-Length: 3322
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.449"
+    "createdAt" : "2021-08-09T20:12:50.165563"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:59.449"
+  "createdAt" : "2021-08-09T20:12:50.166439"
 }, {
   "id" : 37,
   "writer" : {
@@ -1087,7 +1696,7 @@ Content-Length: 3322
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-04T20:40:59.449"
+  "createdAt" : "2021-08-08T20:12:50.166462"
 }, {
   "id" : 36,
   "writer" : {
@@ -1110,7 +1719,7 @@ Content-Length: 3322
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-05T18:40:59.449"
+  "createdAt" : "2021-08-09T18:12:50.166474"
 }, {
   "id" : 35,
   "writer" : {
@@ -1133,7 +1742,7 @@ Content-Length: 3322
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-05T17:40:59.449"
+  "createdAt" : "2021-08-09T18:12:50.166478"
 } ]</code></pre>
 </div>
 </div>
@@ -1142,7 +1751,7 @@ Content-Length: 3322
 <div class="sect3">
 <h4 id="_실패_5">실패</h4>
 <div class="sect4">
-<h5 id="_request_10">Request</h5>
+<h5 id="_request_15">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=NONE&amp;offset=0&amp;size=4 HTTP/1.1
@@ -1152,7 +1761,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_10">Response</h5>
+<h5 id="_response_15">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1173,9 +1782,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_내가_좋아요_한_게시글_조회">사용자 내가 좋아요 한 게시글 조회</h3>
 <div class="sect3">
-<h4 id="_성공_6">성공</h4>
+<h4 id="_성공_10">성공</h4>
 <div class="sect4">
-<h5 id="_request_11">Request</h5>
+<h5 id="_request_16">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts?filter=LIKES HTTP/1.1
@@ -1186,7 +1795,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_11">Response</h5>
+<h5 id="_response_16">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1194,7 +1803,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2092
+Content-Length: 2104
 
 [ {
   "id" : 1,
@@ -1233,7 +1842,7 @@ Content-Length: 2092
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.576"
+    "createdAt" : "2021-08-09T20:12:50.313676"
   }, {
     "id" : 2,
     "writer" : {
@@ -1251,10 +1860,10 @@ Content-Length: 2092
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.576"
+    "createdAt" : "2021-08-09T20:12:50.313685"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:59.577"
+  "createdAt" : "2021-08-08T20:12:50.315449"
 }, {
   "id" : 2,
   "writer" : {
@@ -1277,7 +1886,7 @@ Content-Length: 2092
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-05T20:40:59.577"
+  "createdAt" : "2021-08-09T20:12:50.315466"
 } ]</code></pre>
 </div>
 </div>
@@ -1286,7 +1895,7 @@ Content-Length: 2092
 <div class="sect3">
 <h4 id="_실패_6">실패</h4>
 <div class="sect4">
-<h5 id="_request_12">Request</h5>
+<h5 id="_request_17">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts?filter=LIKES HTTP/1.1
@@ -1297,7 +1906,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_12">Response</h5>
+<h5 id="_response_17">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1318,9 +1927,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_내가_좋아요_한_게시글_페이징_조회">사용자 내가 좋아요 한 게시글 페이징 조회</h3>
 <div class="sect3">
-<h4 id="_성공_7">성공</h4>
+<h4 id="_성공_11">성공</h4>
 <div class="sect4">
-<h5 id="_request_13">Request</h5>
+<h5 id="_request_18">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=LIKES&amp;offset=0&amp;size=3 HTTP/1.1
@@ -1330,7 +1939,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_13">Response</h5>
+<h5 id="_response_18">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1338,7 +1947,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2721
+Content-Length: 2735
 
 [ {
   "id" : 38,
@@ -1377,7 +1986,7 @@ Content-Length: 2721
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.693"
+    "createdAt" : "2021-08-09T20:12:50.561111"
   }, {
     "id" : 2,
     "writer" : {
@@ -1395,10 +2004,10 @@ Content-Length: 2721
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.693"
+    "createdAt" : "2021-08-09T20:12:50.561122"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:59.694"
+  "createdAt" : "2021-08-09T20:12:50.562717"
 }, {
   "id" : 37,
   "writer" : {
@@ -1421,7 +2030,7 @@ Content-Length: 2721
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-04T20:40:59.694"
+  "createdAt" : "2021-08-08T20:12:50.562744"
 }, {
   "id" : 36,
   "writer" : {
@@ -1444,7 +2053,7 @@ Content-Length: 2721
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-05T18:40:59.694"
+  "createdAt" : "2021-08-09T18:12:50.56275"
 } ]</code></pre>
 </div>
 </div>
@@ -1453,7 +2062,7 @@ Content-Length: 2721
 <div class="sect3">
 <h4 id="_실패_7">실패</h4>
 <div class="sect4">
-<h5 id="_request_14">Request</h5>
+<h5 id="_request_19">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=LIKES&amp;offset=0&amp;size=3 HTTP/1.1
@@ -1463,7 +2072,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_14">Response</h5>
+<h5 id="_response_19">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1484,9 +2093,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_내가_댓글을_단_게시글_조회">사용자 내가 댓글을 단 게시글 조회</h3>
 <div class="sect3">
-<h4 id="_성공_8">성공</h4>
+<h4 id="_성공_12">성공</h4>
 <div class="sect4">
-<h5 id="_request_15">Request</h5>
+<h5 id="_request_20">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts?filter=COMMENTS HTTP/1.1
@@ -1497,7 +2106,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_15">Response</h5>
+<h5 id="_response_20">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1505,7 +2114,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3028
+Content-Length: 3045
 
 [ {
   "id" : 1,
@@ -1544,7 +2153,7 @@ Content-Length: 3028
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.603"
+    "createdAt" : "2021-08-09T20:12:50.343578"
   }, {
     "id" : 2,
     "writer" : {
@@ -1562,10 +2171,10 @@ Content-Length: 3028
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.603"
+    "createdAt" : "2021-08-09T20:12:50.343585"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:59.604"
+  "createdAt" : "2021-08-08T20:12:50.344502"
 }, {
   "id" : 2,
   "writer" : {
@@ -1603,7 +2212,7 @@ Content-Length: 3028
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.603"
+    "createdAt" : "2021-08-09T20:12:50.343578"
   }, {
     "id" : 2,
     "writer" : {
@@ -1621,10 +2230,10 @@ Content-Length: 3028
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.603"
+    "createdAt" : "2021-08-09T20:12:50.343585"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-05T20:40:59.604"
+  "createdAt" : "2021-08-09T20:12:50.34451"
 } ]</code></pre>
 </div>
 </div>
@@ -1633,7 +2242,7 @@ Content-Length: 3028
 <div class="sect3">
 <h4 id="_실패_8">실패</h4>
 <div class="sect4">
-<h5 id="_request_16">Request</h5>
+<h5 id="_request_21">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts?filter=COMMENTS HTTP/1.1
@@ -1644,7 +2253,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_16">Response</h5>
+<h5 id="_response_21">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1665,9 +2274,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_내가_댓글을_단_게시글_페이징_조회">사용자 내가 댓글을 단 게시글 페이징 조회</h3>
 <div class="sect3">
-<h4 id="_성공_9">성공</h4>
+<h4 id="_성공_13">성공</h4>
 <div class="sect4">
-<h5 id="_request_17">Request</h5>
+<h5 id="_request_22">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=COMMENTS&amp;offset=0&amp;size=2 HTTP/1.1
@@ -1677,7 +2286,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_17">Response</h5>
+<h5 id="_response_22">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1685,7 +2294,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3056
+Content-Length: 3078
 
 [ {
   "id" : 38,
@@ -1724,7 +2333,7 @@ Content-Length: 3056
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.82"
+    "createdAt" : "2021-08-09T20:12:50.798886"
   }, {
     "id" : 2,
     "writer" : {
@@ -1742,10 +2351,10 @@ Content-Length: 3056
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.82"
+    "createdAt" : "2021-08-09T20:12:50.798896"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:59.821"
+  "createdAt" : "2021-08-09T20:12:50.800239"
 }, {
   "id" : 37,
   "writer" : {
@@ -1783,7 +2392,7 @@ Content-Length: 3056
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:59.82"
+    "createdAt" : "2021-08-09T20:12:50.798886"
   }, {
     "id" : 2,
     "writer" : {
@@ -1801,10 +2410,10 @@ Content-Length: 3056
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:59.82"
+    "createdAt" : "2021-08-09T20:12:50.798896"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-04T20:40:59.821"
+  "createdAt" : "2021-08-08T20:12:50.800247"
 } ]</code></pre>
 </div>
 </div>
@@ -1813,7 +2422,7 @@ Content-Length: 3056
 <div class="sect3">
 <h4 id="_실패_9">실패</h4>
 <div class="sect4">
-<h5 id="_request_18">Request</h5>
+<h5 id="_request_23">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/me/posts/paging?filter=COMMENTS&amp;offset=0&amp;size=3 HTTP/1.1
@@ -1823,7 +2432,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_18">Response</h5>
+<h5 id="_response_23">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -1844,9 +2453,9 @@ Content-Length: 56
 <div class="sect2">
 <h3 id="_사용자_정보_조회">사용자 정보 조회</h3>
 <div class="sect3">
-<h4 id="_성공_10">성공</h4>
+<h4 id="_성공_14">성공</h4>
 <div class="sect4">
-<h5 id="_request_19">Request</h5>
+<h5 id="_request_24">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/1 HTTP/1.1
@@ -1856,7 +2465,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_19">Response</h5>
+<h5 id="_response_24">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1887,7 +2496,7 @@ Content-Length: 268
 <div class="sect3">
 <h4 id="_실패_10">실패</h4>
 <div class="sect4">
-<h5 id="_request_20">Request</h5>
+<h5 id="_request_25">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/users/1 HTTP/1.1
@@ -1897,7 +2506,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_20">Response</h5>
+<h5 id="_response_25">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -1918,30 +2527,30 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_사용자_업데이트">사용자 업데이트</h3>
 <div class="sect3">
-<h4 id="_성공_11">성공</h4>
+<h4 id="_성공_15">성공</h4>
 <div class="sect4">
-<h5 id="_request_21">Request</h5>
+<h5 id="_request_26">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 171
+Content-Length: 213
 Host: localhost
 
 {
   "nickname" : "인비",
   "ageRange" : "TWENTIES",
   "shotVerified" : true,
-  "socialProvider" : null,
-  "socialId" : null,
+  "socialProvider" : "KAKAO",
+  "socialId" : "{Unique ID received from social provider}",
   "socialProfileUrl" : "kakao.com/profile"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_21">Response</h5>
+<h5 id="_response_26">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -1955,28 +2564,28 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_11">실패</h4>
 <div class="sect4">
-<h5 id="_request_22">Request</h5>
+<h5 id="_request_27">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/users/me HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 171
+Content-Length: 213
 Host: localhost
 
 {
   "nickname" : "인비",
   "ageRange" : "TWENTIES",
   "shotVerified" : true,
-  "socialProvider" : null,
-  "socialId" : null,
+  "socialProvider" : "KAKAO",
+  "socialId" : "{Unique ID received from social provider}",
   "socialProfileUrl" : "kakao.com/profile"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_22">Response</h5>
+<h5 id="_response_27">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
@@ -1997,9 +2606,9 @@ Content-Length: 59
 <div class="sect2">
 <h3 id="_사용자_삭제">사용자 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_12">성공</h4>
+<h4 id="_성공_16">성공</h4>
 <div class="sect4">
-<h5 id="_request_23">Request</h5>
+<h5 id="_request_28">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users HTTP/1.1
@@ -2009,7 +2618,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_23">Response</h5>
+<h5 id="_response_28">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -2023,7 +2632,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_12">실패</h4>
 <div class="sect4">
-<h5 id="_request_24">Request</h5>
+<h5 id="_request_29">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/users HTTP/1.1
@@ -2033,7 +2642,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_24">Response</h5>
+<h5 id="_response_29">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -2059,9 +2668,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_등록">게시글 등록</h3>
 <div class="sect3">
-<h4 id="_성공_13">성공</h4>
+<h4 id="_성공_17">성공</h4>
 <div class="sect4">
-<h5 id="_request_25">Request</h5>
+<h5 id="_request_30">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts HTTP/1.1
@@ -2078,7 +2687,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_25">Response</h5>
+<h5 id="_response_30">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -2087,7 +2696,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/posts/1
 Content-Type: application/json
-Content-Length: 543
+Content-Length: 548
 
 {
   "id" : 1,
@@ -2108,10 +2717,10 @@ Content-Length: 543
   "content" : "글 내용",
   "viewCount" : 0,
   "likeCount" : 0,
+  "commentCount" : 0,
   "hasLiked" : false,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.841"
+  "createdAt" : "2021-08-09T20:12:35.170955"
 }</code></pre>
 </div>
 </div>
@@ -2120,7 +2729,7 @@ Content-Length: 543
 <div class="sect3">
 <h4 id="_실패_13">실패</h4>
 <div class="sect4">
-<h5 id="_request_26">Request</h5>
+<h5 id="_request_31">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts HTTP/1.1
@@ -2137,7 +2746,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_26">Response</h5>
+<h5 id="_response_31">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -2158,9 +2767,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_전체_조회">게시글 전체 조회</h3>
 <div class="sect3">
-<h4 id="_성공_14">성공</h4>
+<h4 id="_성공_18">성공</h4>
 <div class="sect4">
-<h5 id="_request_27">Request</h5>
+<h5 id="_request_32">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts HTTP/1.1
@@ -2171,7 +2780,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_27">Response</h5>
+<h5 id="_response_32">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2179,7 +2788,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2035
+Content-Length: 1106
 
 [ {
   "id" : 2,
@@ -2200,46 +2809,10 @@ Content-Length: 2035
   "content" : "글 내용2",
   "viewCount" : 12,
   "likeCount" : 0,
+  "commentCount" : 3,
   "hasLiked" : false,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:44.063"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:44.063"
-  } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-05T20:40:44.065"
+  "createdAt" : "2021-08-09T20:12:34.782788"
 }, {
   "id" : 1,
   "writer" : {
@@ -2259,10 +2832,10 @@ Content-Length: 2035
   "content" : "글 내용1",
   "viewCount" : 55,
   "likeCount" : 5,
+  "commentCount" : 13,
   "hasLiked" : true,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:44.065"
+  "createdAt" : "2021-08-08T20:12:34.78282"
 } ]</code></pre>
 </div>
 </div>
@@ -2271,7 +2844,7 @@ Content-Length: 2035
 <div class="sect3">
 <h4 id="_성공_게시글이_하나도_없는_경우">성공 - 게시글이 하나도 없는 경우</h4>
 <div class="sect4">
-<h5 id="_request_28">Request</h5>
+<h5 id="_request_33">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts HTTP/1.1
@@ -2282,7 +2855,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_28">Response</h5>
+<h5 id="_response_33">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2301,9 +2874,9 @@ Content-Length: 3
 <div class="sect2">
 <h3 id="_게시글_단일_조회">게시글 단일 조회</h3>
 <div class="sect3">
-<h4 id="_성공_15">성공</h4>
+<h4 id="_성공_19">성공</h4>
 <div class="sect4">
-<h5 id="_request_29">Request</h5>
+<h5 id="_request_34">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/1 HTTP/1.1
@@ -2314,7 +2887,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_29">Response</h5>
+<h5 id="_response_34">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2322,7 +2895,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1482
+Content-Length: 548
 
 {
   "id" : 1,
@@ -2343,46 +2916,10 @@ Content-Length: 1482
   "content" : "글 내용",
   "viewCount" : 1,
   "likeCount" : 0,
+  "commentCount" : 2,
   "hasLiked" : false,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:44.425"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:44.425"
-  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.428"
+  "createdAt" : "2021-08-09T20:12:35.006009"
 }</code></pre>
 </div>
 </div>
@@ -2391,7 +2928,7 @@ Content-Length: 1482
 <div class="sect3">
 <h4 id="_실패_14">실패</h4>
 <div class="sect4">
-<h5 id="_request_30">Request</h5>
+<h5 id="_request_35">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/1 HTTP/1.1
@@ -2402,7 +2939,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_30">Response</h5>
+<h5 id="_response_35">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -2423,9 +2960,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_타입별_조회">게시글 타입별 조회</h3>
 <div class="sect3">
-<h4 id="_성공_16">성공</h4>
+<h4 id="_성공_20">성공</h4>
 <div class="sect4">
-<h5 id="_request_31">Request</h5>
+<h5 id="_request_36">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts?vaccinationType=PFIZER HTTP/1.1
@@ -2435,7 +2972,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_31">Response</h5>
+<h5 id="_response_36">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2443,7 +2980,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2624
+Content-Length: 1700
 
 [ {
   "id" : 3,
@@ -2464,46 +3001,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.",
   "viewCount" : 100,
   "likeCount" : 10,
+  "commentCount" : 4,
   "hasLiked" : true,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:44.584"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:44.584"
-  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.585"
+  "createdAt" : "2021-08-09T20:12:35.078494"
 }, {
   "id" : 2,
   "writer" : {
@@ -2523,10 +3024,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.2",
   "viewCount" : 200,
   "likeCount" : 20,
+  "commentCount" : 6,
   "hasLiked" : false,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.585"
+  "createdAt" : "2021-08-09T20:12:35.07852"
 }, {
   "id" : 1,
   "writer" : {
@@ -2546,10 +3047,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.3",
   "viewCount" : 300,
   "likeCount" : 30,
+  "commentCount" : 10,
   "hasLiked" : true,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.585"
+  "createdAt" : "2021-08-09T20:12:35.078546"
 } ]</code></pre>
 </div>
 </div>
@@ -2558,7 +3059,7 @@ Content-Length: 2624
 <div class="sect3">
 <h4 id="_성공_게시글이_하나도_없는_경우_2">성공 - 게시글이 하나도 없는 경우</h4>
 <div class="sect4">
-<h5 id="_request_32">Request</h5>
+<h5 id="_request_37">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts?vaccinationType=PFIZER HTTP/1.1
@@ -2568,7 +3069,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_32">Response</h5>
+<h5 id="_response_37">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2742,9 +3243,9 @@ Content-Length: 3
 <div class="sect2">
 <h3 id="_게시글_타입별_페이징_조회">게시글 타입별 페이징 조회</h3>
 <div class="sect3">
-<h4 id="_성공_17">성공</h4>
+<h4 id="_성공_21">성공</h4>
 <div class="sect4">
-<h5 id="_request_33">Request</h5>
+<h5 id="_request_38">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/paging?vaccinationType=PFIZER&amp;offset=0&amp;size=3 HTTP/1.1
@@ -2754,7 +3255,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_33">Response</h5>
+<h5 id="_response_38">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2762,7 +3263,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2627
+Content-Length: 1703
 
 [ {
   "id" : 38,
@@ -2783,46 +3284,10 @@ Content-Length: 2627
   "content" : "이건 내용입니다.",
   "viewCount" : 100,
   "likeCount" : 10,
+  "commentCount" : 3,
   "hasLiked" : true,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:44.666"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:44.666"
-  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.669"
+  "createdAt" : "2021-08-09T20:12:35.108066"
 }, {
   "id" : 37,
   "writer" : {
@@ -2842,10 +3307,10 @@ Content-Length: 2627
   "content" : "이건 내용입니다.2",
   "viewCount" : 200,
   "likeCount" : 20,
+  "commentCount" : 4,
   "hasLiked" : false,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:44.669"
+  "createdAt" : "2021-08-08T20:12:35.108094"
 }, {
   "id" : 36,
   "writer" : {
@@ -2865,10 +3330,10 @@ Content-Length: 2627
   "content" : "이건 내용입니다.3",
   "viewCount" : 300,
   "likeCount" : 30,
+  "commentCount" : 2,
   "hasLiked" : true,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T20:40:44.669"
+  "createdAt" : "2021-08-07T20:12:35.108106"
 } ]</code></pre>
 </div>
 </div>
@@ -2877,7 +3342,7 @@ Content-Length: 2627
 <div class="sect3">
 <h4 id="_성공_게시글이_하나도_없는_경우_3">성공 - 게시글이 하나도 없는 경우</h4>
 <div class="sect4">
-<h5 id="_request_34">Request</h5>
+<h5 id="_request_39">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/paging?vaccinationType=PFIZER&amp;offset=0&amp;size=3 HTTP/1.1
@@ -2887,7 +3352,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_34">Response</h5>
+<h5 id="_response_39">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2906,9 +3371,9 @@ Content-Length: 3
 <div class="sect2">
 <h3 id="_게시글_타입별_정렬_조회">게시글 타입별 정렬 조회</h3>
 <div class="sect3">
-<h4 id="_성공_18">성공</h4>
+<h4 id="_성공_22">성공</h4>
 <div class="sect4">
-<h5 id="_request_35">Request</h5>
+<h5 id="_request_40">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/paging?vaccinationType=PFIZER&amp;sort=LIKE_COUNT_ASC HTTP/1.1
@@ -2918,7 +3383,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_35">Response</h5>
+<h5 id="_response_40">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2926,7 +3391,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2625
+Content-Length: 1703
 
 [ {
   "id" : 1,
@@ -2947,46 +3412,10 @@ Content-Length: 2625
   "content" : "이건 내용입니다.",
   "viewCount" : 100,
   "likeCount" : 10,
+  "commentCount" : 5,
   "hasLiked" : true,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:44.74"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:44.74"
-  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:44.744"
+  "createdAt" : "2021-08-09T20:12:35.138027"
 }, {
   "id" : 37,
   "writer" : {
@@ -3006,10 +3435,10 @@ Content-Length: 2625
   "content" : "이건 내용입니다.2",
   "viewCount" : 200,
   "likeCount" : 20,
+  "commentCount" : 8,
   "hasLiked" : false,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-04T20:40:44.744"
+  "createdAt" : "2021-08-08T20:12:35.138042"
 }, {
   "id" : 146,
   "writer" : {
@@ -3029,10 +3458,10 @@ Content-Length: 2625
   "content" : "이건 내용입니다.3",
   "viewCount" : 300,
   "likeCount" : 30,
+  "commentCount" : 1,
   "hasLiked" : true,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-03T20:40:44.744"
+  "createdAt" : "2021-08-07T20:12:35.138051"
 } ]</code></pre>
 </div>
 </div>
@@ -3042,9 +3471,9 @@ Content-Length: 2625
 <div class="sect2">
 <h3 id="_게시글_타입별_시간필터링_조회">게시글 타입별 시간필터링 조회</h3>
 <div class="sect3">
-<h4 id="_성공_19">성공</h4>
+<h4 id="_성공_23">성공</h4>
 <div class="sect4">
-<h5 id="_request_36">Request</h5>
+<h5 id="_request_41">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/paging?vaccinationType=PFIZER&amp;fromHoursBefore=24 HTTP/1.1
@@ -3054,7 +3483,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_36">Response</h5>
+<h5 id="_response_41">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -3062,7 +3491,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2624
+Content-Length: 1703
 
 [ {
   "id" : 1,
@@ -3083,46 +3512,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.",
   "viewCount" : 100,
   "likeCount" : 10,
+  "commentCount" : 3,
   "hasLiked" : true,
-  "comments" : [ {
-    "id" : 1,
-    "writer" : {
-      "id" : 1,
-      "nickname" : "user",
-      "ageRange" : {
-        "meaning" : "10대",
-        "minAge" : 10,
-        "maxAge" : 20
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "NAVER",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "naver.com/profile"
-    },
-    "content" : "댓글1",
-    "createdAt" : "2021-08-05T20:40:43.918"
-  }, {
-    "id" : 2,
-    "writer" : {
-      "id" : 2,
-      "nickname" : "another_user",
-      "ageRange" : {
-        "meaning" : "20대",
-        "minAge" : 20,
-        "maxAge" : 30
-      },
-      "shotVerified" : false,
-      "accessToken" : null,
-      "socialProvider" : "KAKAO",
-      "socialId" : "{Unique ID received from social provider}",
-      "socialProfileUrl" : "kakao.com/profile"
-    },
-    "content" : "댓글2",
-    "createdAt" : "2021-08-05T20:40:43.918"
-  } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T20:40:43.92"
+  "createdAt" : "2021-08-09T20:12:34.708026"
 }, {
   "id" : 37,
   "writer" : {
@@ -3142,10 +3535,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.2",
   "viewCount" : 200,
   "likeCount" : 20,
+  "commentCount" : 6,
   "hasLiked" : false,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T17:40:43.92"
+  "createdAt" : "2021-08-09T17:12:34.708042"
 }, {
   "id" : 146,
   "writer" : {
@@ -3165,10 +3558,10 @@ Content-Length: 2624
   "content" : "이건 내용입니다.3",
   "viewCount" : 300,
   "likeCount" : 30,
+  "commentCount" : 7,
   "hasLiked" : true,
-  "comments" : [ ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-05T15:40:43.92"
+  "createdAt" : "2021-08-09T15:12:34.708057"
 } ]</code></pre>
 </div>
 </div>
@@ -3178,9 +3571,9 @@ Content-Length: 2624
 <div class="sect2">
 <h3 id="_게시글_수정">게시글 수정</h3>
 <div class="sect3">
-<h4 id="_성공_20">성공</h4>
+<h4 id="_성공_24">성공</h4>
 <div class="sect4">
-<h5 id="_request_37">Request</h5>
+<h5 id="_request_42">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
@@ -3197,7 +3590,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_37">Response</h5>
+<h5 id="_response_42">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -3218,7 +3611,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_15">실패</h4>
 <div class="sect4">
-<h5 id="_request_38">Request</h5>
+<h5 id="_request_43">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
@@ -3235,7 +3628,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_38">Response</h5>
+<h5 id="_response_43">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -3256,9 +3649,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_삭제">게시글 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_21">성공</h4>
+<h4 id="_성공_25">성공</h4>
 <div class="sect4">
-<h5 id="_request_39">Request</h5>
+<h5 id="_request_44">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1 HTTP/1.1
@@ -3269,7 +3662,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_39">Response</h5>
+<h5 id="_response_44">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -3283,7 +3676,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_16">실패</h4>
 <div class="sect4">
-<h5 id="_request_40">Request</h5>
+<h5 id="_request_45">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1 HTTP/1.1
@@ -3294,7 +3687,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_40">Response</h5>
+<h5 id="_response_45">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -3315,9 +3708,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_좋아요_생성">게시글 좋아요 생성</h3>
 <div class="sect3">
-<h4 id="_성공_22">성공</h4>
+<h4 id="_성공_26">성공</h4>
 <div class="sect4">
-<h5 id="_request_41">Request</h5>
+<h5 id="_request_46">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/likes HTTP/1.1
@@ -3328,7 +3721,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_41">Response</h5>
+<h5 id="_response_46">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -3343,7 +3736,7 @@ Location: /api/v1/likes/1</code></pre>
 <div class="sect3">
 <h4 id="_실패_17">실패</h4>
 <div class="sect4">
-<h5 id="_request_42">Request</h5>
+<h5 id="_request_47">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/likes HTTP/1.1
@@ -3354,7 +3747,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_42">Response</h5>
+<h5 id="_response_47">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
@@ -3375,9 +3768,9 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_게시글_좋아요_삭제">게시글 좋아요 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_23">성공</h4>
+<h4 id="_성공_27">성공</h4>
 <div class="sect4">
-<h5 id="_request_43">Request</h5>
+<h5 id="_request_48">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/likes HTTP/1.1
@@ -3388,7 +3781,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_43">Response</h5>
+<h5 id="_response_48">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -3402,7 +3795,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect3">
 <h4 id="_실패_18">실패</h4>
 <div class="sect4">
-<h5 id="_request_44">Request</h5>
+<h5 id="_request_49">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/likes HTTP/1.1
@@ -3413,7 +3806,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_44">Response</h5>
+<h5 id="_response_49">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -3431,12 +3824,17 @@ Content-Length: 56
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_comment_댓글">Comment (댓글)</h2>
+<div class="sectionbody">
 <div class="sect2">
 <h3 id="_게시글_댓글_등록">게시글 댓글 등록</h3>
 <div class="sect3">
-<h4 id="_성공_24">성공</h4>
+<h4 id="_성공_28">성공</h4>
 <div class="sect4">
-<h5 id="_request_45">Request</h5>
+<h5 id="_request_50">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/comments HTTP/1.1
@@ -3452,7 +3850,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_45">Response</h5>
+<h5 id="_response_50">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -3461,7 +3859,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/comments/1
 Content-Type: application/json
-Content-Length: 464
+Content-Length: 466
 
 {
   "id" : 1,
@@ -3480,7 +3878,7 @@ Content-Length: 464
     "socialProfileUrl" : "naver.com/profile"
   },
   "content" : "좋은 정보 공유 감사해요 ㅎㅎㅎ",
-  "createdAt" : "2021-08-05T20:40:43.995"
+  "createdAt" : "2021-08-09T20:12:35.24679"
 }</code></pre>
 </div>
 </div>
@@ -3489,7 +3887,7 @@ Content-Length: 464
 <div class="sect3">
 <h4 id="_실패_19">실패</h4>
 <div class="sect4">
-<h5 id="_request_46">Request</h5>
+<h5 id="_request_51">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts/1/comments HTTP/1.1
@@ -3505,7 +3903,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_46">Response</h5>
+<h5 id="_response_51">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -3524,11 +3922,205 @@ Content-Length: 53
 </div>
 </div>
 <div class="sect2">
+<h3 id="_게시글_댓글_조회">게시글 댓글 조회</h3>
+<div class="sect3">
+<h4 id="_성공_29">성공</h4>
+<div class="sect4">
+<h5 id="_request_52">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/1/comments HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_52">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 876
+
+[ {
+  "id" : 1,
+  "writer" : {
+    "id" : 1,
+    "nickname" : "user",
+    "ageRange" : {
+      "meaning" : "10대",
+      "minAge" : 10,
+      "maxAge" : 20
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "NAVER",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "naver.com/profile"
+  },
+  "content" : "댓글1",
+  "createdAt" : "2021-08-09T20:12:35.479001"
+}, {
+  "id" : 2,
+  "writer" : {
+    "id" : 2,
+    "nickname" : "another_user",
+    "ageRange" : {
+      "meaning" : "20대",
+      "minAge" : 20,
+      "maxAge" : 30
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "KAKAO",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "kakao.com/profile"
+  },
+  "content" : "댓글2",
+  "createdAt" : "2021-08-09T20:12:35.479016"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_20">실패</h4>
+<div class="sect4">
+<h5 id="_request_53">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/0/comments HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_53">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 69
+
+{
+  "message" : "해당 id 게시글이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_댓글_페이징_조회">게시글 댓글 페이징 조회</h3>
+<div class="sect3">
+<h4 id="_성공_30">성공</h4>
+<div class="sect4">
+<h5 id="_request_54">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/1/comments/paging?offset=1&amp;size=2 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_54">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 876
+
+[ {
+  "id" : 1,
+  "writer" : {
+    "id" : 1,
+    "nickname" : "user",
+    "ageRange" : {
+      "meaning" : "10대",
+      "minAge" : 10,
+      "maxAge" : 20
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "NAVER",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "naver.com/profile"
+  },
+  "content" : "댓글1",
+  "createdAt" : "2021-08-09T20:12:35.387349"
+}, {
+  "id" : 2,
+  "writer" : {
+    "id" : 2,
+    "nickname" : "another_user",
+    "ageRange" : {
+      "meaning" : "20대",
+      "minAge" : 20,
+      "maxAge" : 30
+    },
+    "shotVerified" : false,
+    "accessToken" : null,
+    "socialProvider" : "KAKAO",
+    "socialId" : "{Unique ID received from social provider}",
+    "socialProfileUrl" : "kakao.com/profile"
+  },
+  "content" : "댓글2",
+  "createdAt" : "2021-08-09T20:12:35.387366"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_실패_21">실패</h4>
+<div class="sect4">
+<h5 id="_request_55">Request</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/posts/0/comments/paging?offset=0&amp;size=0 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_response_55">Response</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 69
+
+{
+  "message" : "해당 id 게시글이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_게시글_댓글_수정">게시글 댓글 수정</h3>
 <div class="sect3">
-<h4 id="_성공_25">성공</h4>
+<h4 id="_성공_31">성공</h4>
 <div class="sect4">
-<h5 id="_request_47">Request</h5>
+<h5 id="_request_56">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/comments/1 HTTP/1.1
@@ -3544,7 +4136,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_47">Response</h5>
+<h5 id="_response_56">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -3556,9 +4148,9 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_실패_20">실패</h4>
+<h4 id="_실패_22">실패</h4>
 <div class="sect4">
-<h5 id="_request_48">Request</h5>
+<h5 id="_request_57">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1/comments/1 HTTP/1.1
@@ -3574,7 +4166,7 @@ Host: localhost
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_48">Response</h5>
+<h5 id="_response_57">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
@@ -3595,9 +4187,9 @@ Content-Length: 53
 <div class="sect2">
 <h3 id="_게시글_댓글_삭제">게시글 댓글 삭제</h3>
 <div class="sect3">
-<h4 id="_성공_26">성공</h4>
+<h4 id="_성공_32">성공</h4>
 <div class="sect4">
-<h5 id="_request_49">Request</h5>
+<h5 id="_request_58">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/comments/1 HTTP/1.1
@@ -3607,7 +4199,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_response_49">Response</h5>
+<h5 id="_response_58">Response</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content
@@ -3619,536 +4211,14 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_실패_21">실패</h4>
+<h4 id="_실패_23">실패</h4>
 <div class="sect4">
-<h5 id="_request_50">Request</h5>
+<h5 id="_request_59">Request</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/posts/1/comments/1 HTTP/1.1
 Authorization: Bearer another_user_token
 Host: localhost</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_50">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 53
-
-{
-  "message" : "댓글 작성자가 아닙니다."
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_publicdata_공공데이터">PublicData (공공데이터)</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_공통_체크사항">공통 체크사항</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">시간을 Parameter로 넘기지 않을 때, defaultValue = LocalDateTime</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs"> 오전 10시전 당일 데이터 요청시, 전날 데이터 저장/출력
- ex) 현재 날짜 2021-08-05 09:59:59 요청시 2021-08-04 데이터 저장/출력</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_백신_접종률_저장">백신 접종률 저장</h3>
-<div class="sect3">
-<h4 id="_성공_27">성공</h4>
-<div class="sect4">
-<h5 id="_request_51">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/publicdata/vaccinations HTTP/1.1
-Host: localhost
-Content-Type: application/x-www-form-urlencoded
-
-targetDate=2021-08-05T20%3A41%3A01.509</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_51">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 5551
-
-[ {
-  "accumulatedFirstCnt" : 19473657,
-  "accumulatedSecondCnt" : 7146602,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 473850,
-  "secondCnt" : 35955,
-  "sido" : "전국",
-  "totalFirstCnt" : 19947507,
-  "totalSecondCnt" : 7182557,
-  "accumulatedFirstRate" : 39.2,
-  "accumulatedSecondRate" : 14.3
-}, {
-  "accumulatedFirstCnt" : 3646765,
-  "accumulatedSecondCnt" : 1329982,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 77877,
-  "secondCnt" : 7123,
-  "sido" : "서울특별시",
-  "totalFirstCnt" : 3724642,
-  "totalSecondCnt" : 1337105,
-  "accumulatedFirstRate" : 39.5,
-  "accumulatedSecondRate" : 14.4
-}, {
-  "accumulatedFirstCnt" : 1352394,
-  "accumulatedSecondCnt" : 477845,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 31252,
-  "secondCnt" : 2628,
-  "sido" : "부산광역시",
-  "totalFirstCnt" : 1383646,
-  "totalSecondCnt" : 480473,
-  "accumulatedFirstRate" : 41.8,
-  "accumulatedSecondRate" : 14.6
-}, {
-  "accumulatedFirstCnt" : 848397,
-  "accumulatedSecondCnt" : 309317,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 22726,
-  "secondCnt" : 2688,
-  "sido" : "대구광역시",
-  "totalFirstCnt" : 871123,
-  "totalSecondCnt" : 312005,
-  "accumulatedFirstRate" : 37.0,
-  "accumulatedSecondRate" : 13.4
-}, {
-  "accumulatedFirstCnt" : 523814,
-  "accumulatedSecondCnt" : 197608,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 12990,
-  "secondCnt" : 959,
-  "sido" : "대전광역시",
-  "totalFirstCnt" : 536804,
-  "totalSecondCnt" : 198567,
-  "accumulatedFirstRate" : 36.8,
-  "accumulatedSecondRate" : 12.7
-}, {
-  "accumulatedFirstCnt" : 1032052,
-  "accumulatedSecondCnt" : 360923,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 27394,
-  "secondCnt" : 1760,
-  "sido" : "인천광역시",
-  "totalFirstCnt" : 1059446,
-  "totalSecondCnt" : 362683,
-  "accumulatedFirstRate" : 39.8,
-  "accumulatedSecondRate" : 14.7
-}, {
-  "accumulatedFirstCnt" : 549706,
-  "accumulatedSecondCnt" : 204415,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 13700,
-  "secondCnt" : 830,
-  "sido" : "광주광역시",
-  "totalFirstCnt" : 563406,
-  "totalSecondCnt" : 205245,
-  "accumulatedFirstRate" : 37.6,
-  "accumulatedSecondRate" : 14.7
-}, {
-  "accumulatedFirstCnt" : 396793,
-  "accumulatedSecondCnt" : 124839,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 11275,
-  "secondCnt" : 471,
-  "sido" : "울산광역시",
-  "totalFirstCnt" : 408068,
-  "totalSecondCnt" : 125310,
-  "accumulatedFirstRate" : 37.6,
-  "accumulatedSecondRate" : 14.0
-}, {
-  "accumulatedFirstCnt" : 4636237,
-  "accumulatedSecondCnt" : 1636357,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 118717,
-  "secondCnt" : 7895,
-  "sido" : "경기도",
-  "totalFirstCnt" : 4754954,
-  "totalSecondCnt" : 1644252,
-  "accumulatedFirstRate" : 31.6,
-  "accumulatedSecondRate" : 10.9
-}, {
-  "accumulatedFirstCnt" : 668422,
-  "accumulatedSecondCnt" : 273253,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 14908,
-  "secondCnt" : 1010,
-  "sido" : "강원도",
-  "totalFirstCnt" : 683330,
-  "totalSecondCnt" : 274263,
-  "accumulatedFirstRate" : 36.9,
-  "accumulatedSecondRate" : 11.5
-}, {
-  "accumulatedFirstCnt" : 109202,
-  "accumulatedSecondCnt" : 37624,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 3028,
-  "secondCnt" : 179,
-  "sido" : "세종특별자치시",
-  "totalFirstCnt" : 112230,
-  "totalSecondCnt" : 37803,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 15.8
-}, {
-  "accumulatedFirstCnt" : 639514,
-  "accumulatedSecondCnt" : 240704,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 15886,
-  "secondCnt" : 1324,
-  "sido" : "충청북도",
-  "totalFirstCnt" : 655400,
-  "totalSecondCnt" : 242028,
-  "accumulatedFirstRate" : 42.1,
-  "accumulatedSecondRate" : 16.1
-}, {
-  "accumulatedFirstCnt" : 849914,
-  "accumulatedSecondCnt" : 330591,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 22167,
-  "secondCnt" : 2054,
-  "sido" : "충청남도",
-  "totalFirstCnt" : 872081,
-  "totalSecondCnt" : 332645,
-  "accumulatedFirstRate" : 45.6,
-  "accumulatedSecondRate" : 17.8
-}, {
-  "accumulatedFirstCnt" : 789017,
-  "accumulatedSecondCnt" : 311961,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 17331,
-  "secondCnt" : 1270,
-  "sido" : "전라북도",
-  "totalFirstCnt" : 806348,
-  "totalSecondCnt" : 313231,
-  "accumulatedFirstRate" : 48.4,
-  "accumulatedSecondRate" : 19.1
-}, {
-  "accumulatedFirstCnt" : 859228,
-  "accumulatedSecondCnt" : 344275,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 19083,
-  "secondCnt" : 1378,
-  "sido" : "전라남도",
-  "totalFirstCnt" : 878311,
-  "totalSecondCnt" : 345653,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 16.0
-}, {
-  "accumulatedFirstCnt" : 1070878,
-  "accumulatedSecondCnt" : 409752,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 27263,
-  "secondCnt" : 2016,
-  "sido" : "경상북도",
-  "totalFirstCnt" : 1098141,
-  "totalSecondCnt" : 411768,
-  "accumulatedFirstRate" : 40.4,
-  "accumulatedSecondRate" : 14.8
-}, {
-  "accumulatedFirstCnt" : 1249910,
-  "accumulatedSecondCnt" : 464110,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 31098,
-  "secondCnt" : 1943,
-  "sido" : "경상남도",
-  "totalFirstCnt" : 1281008,
-  "totalSecondCnt" : 466053,
-  "accumulatedFirstRate" : 39.2,
-  "accumulatedSecondRate" : 14.3
-}, {
-  "accumulatedFirstCnt" : 251414,
-  "accumulatedSecondCnt" : 93046,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 7155,
-  "secondCnt" : 427,
-  "sido" : "제주특별자치도",
-  "totalFirstCnt" : 258569,
-  "totalSecondCnt" : 93473,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 17.8
-} ]</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_백신_접종률_조회">백신 접종률 조회</h3>
-<div class="sect3">
-<h4 id="_성공_28">성공</h4>
-<div class="sect4">
-<h5 id="_request_52">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-05T20%3A41%3A01.509 HTTP/1.1
-Host: localhost</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_52">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 5551
-
-[ {
-  "accumulatedFirstCnt" : 19473657,
-  "accumulatedSecondCnt" : 7146602,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 473850,
-  "secondCnt" : 35955,
-  "sido" : "전국",
-  "totalFirstCnt" : 19947507,
-  "totalSecondCnt" : 7182557,
-  "accumulatedFirstRate" : 39.2,
-  "accumulatedSecondRate" : 14.3
-}, {
-  "accumulatedFirstCnt" : 3646765,
-  "accumulatedSecondCnt" : 1329982,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 77877,
-  "secondCnt" : 7123,
-  "sido" : "서울특별시",
-  "totalFirstCnt" : 3724642,
-  "totalSecondCnt" : 1337105,
-  "accumulatedFirstRate" : 39.5,
-  "accumulatedSecondRate" : 14.4
-}, {
-  "accumulatedFirstCnt" : 1352394,
-  "accumulatedSecondCnt" : 477845,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 31252,
-  "secondCnt" : 2628,
-  "sido" : "부산광역시",
-  "totalFirstCnt" : 1383646,
-  "totalSecondCnt" : 480473,
-  "accumulatedFirstRate" : 41.8,
-  "accumulatedSecondRate" : 14.6
-}, {
-  "accumulatedFirstCnt" : 848397,
-  "accumulatedSecondCnt" : 309317,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 22726,
-  "secondCnt" : 2688,
-  "sido" : "대구광역시",
-  "totalFirstCnt" : 871123,
-  "totalSecondCnt" : 312005,
-  "accumulatedFirstRate" : 37.0,
-  "accumulatedSecondRate" : 13.4
-}, {
-  "accumulatedFirstCnt" : 523814,
-  "accumulatedSecondCnt" : 197608,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 12990,
-  "secondCnt" : 959,
-  "sido" : "대전광역시",
-  "totalFirstCnt" : 536804,
-  "totalSecondCnt" : 198567,
-  "accumulatedFirstRate" : 36.8,
-  "accumulatedSecondRate" : 12.7
-}, {
-  "accumulatedFirstCnt" : 1032052,
-  "accumulatedSecondCnt" : 360923,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 27394,
-  "secondCnt" : 1760,
-  "sido" : "인천광역시",
-  "totalFirstCnt" : 1059446,
-  "totalSecondCnt" : 362683,
-  "accumulatedFirstRate" : 39.8,
-  "accumulatedSecondRate" : 14.7
-}, {
-  "accumulatedFirstCnt" : 549706,
-  "accumulatedSecondCnt" : 204415,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 13700,
-  "secondCnt" : 830,
-  "sido" : "광주광역시",
-  "totalFirstCnt" : 563406,
-  "totalSecondCnt" : 205245,
-  "accumulatedFirstRate" : 37.6,
-  "accumulatedSecondRate" : 14.7
-}, {
-  "accumulatedFirstCnt" : 396793,
-  "accumulatedSecondCnt" : 124839,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 11275,
-  "secondCnt" : 471,
-  "sido" : "울산광역시",
-  "totalFirstCnt" : 408068,
-  "totalSecondCnt" : 125310,
-  "accumulatedFirstRate" : 37.6,
-  "accumulatedSecondRate" : 14.0
-}, {
-  "accumulatedFirstCnt" : 4636237,
-  "accumulatedSecondCnt" : 1636357,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 118717,
-  "secondCnt" : 7895,
-  "sido" : "경기도",
-  "totalFirstCnt" : 4754954,
-  "totalSecondCnt" : 1644252,
-  "accumulatedFirstRate" : 31.6,
-  "accumulatedSecondRate" : 10.9
-}, {
-  "accumulatedFirstCnt" : 668422,
-  "accumulatedSecondCnt" : 273253,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 14908,
-  "secondCnt" : 1010,
-  "sido" : "강원도",
-  "totalFirstCnt" : 683330,
-  "totalSecondCnt" : 274263,
-  "accumulatedFirstRate" : 36.9,
-  "accumulatedSecondRate" : 11.5
-}, {
-  "accumulatedFirstCnt" : 109202,
-  "accumulatedSecondCnt" : 37624,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 3028,
-  "secondCnt" : 179,
-  "sido" : "세종특별자치시",
-  "totalFirstCnt" : 112230,
-  "totalSecondCnt" : 37803,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 15.8
-}, {
-  "accumulatedFirstCnt" : 639514,
-  "accumulatedSecondCnt" : 240704,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 15886,
-  "secondCnt" : 1324,
-  "sido" : "충청북도",
-  "totalFirstCnt" : 655400,
-  "totalSecondCnt" : 242028,
-  "accumulatedFirstRate" : 42.1,
-  "accumulatedSecondRate" : 16.1
-}, {
-  "accumulatedFirstCnt" : 849914,
-  "accumulatedSecondCnt" : 330591,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 22167,
-  "secondCnt" : 2054,
-  "sido" : "충청남도",
-  "totalFirstCnt" : 872081,
-  "totalSecondCnt" : 332645,
-  "accumulatedFirstRate" : 45.6,
-  "accumulatedSecondRate" : 17.8
-}, {
-  "accumulatedFirstCnt" : 789017,
-  "accumulatedSecondCnt" : 311961,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 17331,
-  "secondCnt" : 1270,
-  "sido" : "전라북도",
-  "totalFirstCnt" : 806348,
-  "totalSecondCnt" : 313231,
-  "accumulatedFirstRate" : 48.4,
-  "accumulatedSecondRate" : 19.1
-}, {
-  "accumulatedFirstCnt" : 859228,
-  "accumulatedSecondCnt" : 344275,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 19083,
-  "secondCnt" : 1378,
-  "sido" : "전라남도",
-  "totalFirstCnt" : 878311,
-  "totalSecondCnt" : 345653,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 16.0
-}, {
-  "accumulatedFirstCnt" : 1070878,
-  "accumulatedSecondCnt" : 409752,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 27263,
-  "secondCnt" : 2016,
-  "sido" : "경상북도",
-  "totalFirstCnt" : 1098141,
-  "totalSecondCnt" : 411768,
-  "accumulatedFirstRate" : 40.4,
-  "accumulatedSecondRate" : 14.8
-}, {
-  "accumulatedFirstCnt" : 1249910,
-  "accumulatedSecondCnt" : 464110,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 31098,
-  "secondCnt" : 1943,
-  "sido" : "경상남도",
-  "totalFirstCnt" : 1281008,
-  "totalSecondCnt" : 466053,
-  "accumulatedFirstRate" : 39.2,
-  "accumulatedSecondRate" : 14.3
-}, {
-  "accumulatedFirstCnt" : 251414,
-  "accumulatedSecondCnt" : 93046,
-  "baseDate" : "2021-08-05 00:00:00",
-  "firstCnt" : 7155,
-  "secondCnt" : 427,
-  "sido" : "제주특별자치도",
-  "totalFirstCnt" : 258569,
-  "totalSecondCnt" : 93473,
-  "accumulatedFirstRate" : 42.7,
-  "accumulatedSecondRate" : 17.8
-} ]</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_성공_요청_후_api_데이터가_없을_때">성공 - 요청 후 api 데이터가 없을 때</h4>
-<div class="sect4">
-<h5 id="_request_53">Request</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-06T20%3A41%3A01.509 HTTP/1.1
-Host: localhost</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_response_53">Response</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 3
-
-[ ]</code></pre>
 </div>
 </div>
 </div>
@@ -4159,7 +4229,7 @@ Content-Length: 3
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-05 20:40:36 +0900
+Last updated 2021-08-09 20:11:05 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

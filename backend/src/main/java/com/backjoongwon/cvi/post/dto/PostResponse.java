@@ -27,7 +27,7 @@ public class PostResponse {
     private LocalDateTime createdAt;
 
     public PostResponse(Long id, UserResponse user, String content, int viewCount, int likeCount, int commentCount,
-                                   boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt) {
+                        boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt) {
         this.id = id;
         this.writer = user;
         this.content = content;

@@ -17,14 +17,14 @@ class VaccinationStatisticTest {
             "21000000, 40.5",
             "11000000, 21.2"
     })
-    void accumulateFirstRate(int totalFirstCnt, double actual) {
+    void accumulateFirstRate(long totalFirstCnt, double actual) {
         //given
         VaccinationStatistic vaccinationStatistic = VaccinationStatistic.builder()
                 .regionPopulation(RegionPopulation.REGION_WIDE)
                 .totalFirstCnt(totalFirstCnt)
                 .build();
         //when
-        BigDecimal accumulateFirstRate = vaccinationStatistic.getAccumulatedFirstRate();
+        BigDecimal accumulateFirstRate = vaccinationStatistic.getTotalFirstRate();
         //then
         assertThat(accumulateFirstRate.doubleValue()).isEqualTo(actual);
     }
@@ -35,14 +35,52 @@ class VaccinationStatisticTest {
             "3000000, 5.8",
             "11000000, 21.2"
     })
-    void accumulateSecondRate(int totalSecondCnt, double actual) {
+    void accumulateSecondRate(long totalSecondCnt, double actual) {
         //given
         VaccinationStatistic vaccinationStatistic = VaccinationStatistic.builder()
                 .regionPopulation(RegionPopulation.REGION_WIDE)
                 .totalSecondCnt(totalSecondCnt)
                 .build();
         //when
-        BigDecimal accumulatedSecondRate = vaccinationStatistic.getAccumulatedSecondRate();
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
+        //then
+        assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
+    }
+
+    @DisplayName("인구수 비례 1차 접종률 계산 - 성공 - 전세계")
+    @ParameterizedTest
+    @CsvSource({
+            "2253618189, 28.6",
+            "2276706840, 28.9",
+            "2303769251, 29.2"
+    })
+    void accumulateWorldFirstRate(long totalSecondCnt, double actual) {
+        //given
+        VaccinationStatistic vaccinationStatistic = VaccinationStatistic.builder()
+                .regionPopulation(RegionPopulation.WORLD)
+                .totalSecondCnt(totalSecondCnt)
+                .build();
+        //when
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
+        //then
+        assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
+    }
+
+    @DisplayName("인구수 비례 2차 접종률 계산 - 성공 - 잔세계")
+    @ParameterizedTest
+    @CsvSource({
+            "1153697698, 14.6",
+            "1175939230, 14.9",
+            "1181952381, 15.0"
+    })
+    void accumulateWorldSecondRate(long totalSecondCnt, double actual) {
+        //given
+        VaccinationStatistic vaccinationStatistic = VaccinationStatistic.builder()
+                .regionPopulation(RegionPopulation.WORLD)
+                .totalSecondCnt(totalSecondCnt)
+                .build();
+        //when
+        BigDecimal accumulatedSecondRate = vaccinationStatistic.getTotalSecondRate();
         //then
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }

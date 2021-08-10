@@ -17,8 +17,8 @@ const ToggleButton = ({ selectionList, selected, toggleSelected }) => (
 );
 
 ToggleButton.propTypes = {
-  selected: PropTypes.array.isRequired,
-  selectionList: PropTypes.bool.isRequired,
+  selected: PropTypes.bool.isRequired,
+  selectionList: PropTypes.array.isRequired,
   toggleSelected: PropTypes.func.isRequired,
 };
 

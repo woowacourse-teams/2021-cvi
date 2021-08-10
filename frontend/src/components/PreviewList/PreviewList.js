@@ -1,13 +1,14 @@
+import PropTypes from 'prop-types';
 import PreviewItem from '../PreviewItem/PreviewItem';
 import { Container, Error } from './PreviewList.styles';
 import { useFetch, useLoading } from '../../hooks';
 import { requestGetAllReviewList } from '../../requests';
-import { ERROR_MESSAGE, PATH, THEME_COLOR } from '../../constants';
+import { ERROR_MESSAGE, FILTER_TYPE, PATH, SORT_TYPE, THEME_COLOR } from '../../constants';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const PreviewList = () => {
+const PreviewList = ({ reviewType }) => {
   const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
@@ -17,7 +18,9 @@ const PreviewList = () => {
     response: reviewList,
     error: reviewError,
     loading,
-  } = useFetch([], () => requestGetAllReviewList(accessToken, offset));
+  } = useFetch([], () =>
+    requestGetAllReviewList(accessToken, offset, [reviewType, SORT_TYPE.DESC]),
+  );
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const goReviewDetailPage = (id) => {
@@ -37,7 +40,7 @@ const PreviewList = () => {
       {isLoading ? (
         <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
       ) : (
-        reviewList.slice(0, 6).map((review) => (
+        reviewList.slice(0, 4).map((review) => (
           <li key={review.id}>
             <PreviewItem review={review} onClick={() => goReviewDetailPage(review.id)} />
           </li>
@@ -45,6 +48,14 @@ const PreviewList = () => {
       )}
     </Container>
   );
+};
+
+PreviewList.propTypes = {
+  reviewType: PropTypes.string,
+};
+
+PreviewList.defaultProps = {
+  reviewType: FILTER_TYPE.CREATED_AT,
 };
 
 export default PreviewList;

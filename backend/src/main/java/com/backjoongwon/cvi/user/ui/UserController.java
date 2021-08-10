@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse signup(@RequestBody UserRequest userRequest, HttpServletResponse servletResponse) {
+    public UserResponse signup(@RequestBody @Valid UserRequest userRequest, HttpServletResponse servletResponse) {
         UserResponse userResponse = userService.signup(userRequest);
         servletResponse.setHeader("Location", "/api/v1/users/" + userResponse.getId());
         return userResponse;
@@ -55,7 +56,7 @@ public class UserController {
 
     @PutMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@AuthenticationPrincipal Optional<User> user, @RequestBody UserRequest userRequest) {
+    public void update(@AuthenticationPrincipal Optional<User> user, @RequestBody @Valid UserRequest userRequest) {
         userService.update(user, userRequest);
     }
 

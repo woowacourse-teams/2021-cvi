@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.common.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,13 @@ public class CVIControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionMessage mappingException(Exception e) {
         LOG.error("Internal Server Exception: {}", e.getMessage(), e);
+        return new ExceptionMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionMessage mappingException(MethodArgumentNotValidException e) {
+        LOG.error("MethodArgumentNotValidException: {}", e.getMessage(), e);
         return new ExceptionMessage(e.getMessage());
     }
 }

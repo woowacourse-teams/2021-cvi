@@ -2,7 +2,6 @@ package com.backjoongwon.cvi.post.domain;
 
 
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.user.domain.User;

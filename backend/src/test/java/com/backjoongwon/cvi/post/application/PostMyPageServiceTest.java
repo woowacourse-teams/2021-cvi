@@ -65,8 +65,9 @@ public class PostMyPageServiceTest {
         user = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
                 .build();
         optionalUser = Optional.of(user);
         return userRepository.save(user);

@@ -1,5 +1,6 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   border-top: 0.15rem solid ${PALETTE.NAVY100};
@@ -23,4 +24,26 @@ const CommentFormContainer = styled.div`
     padding: 2rem;
   }
 `;
-export { Container, CommentCount, CommentFormContainer };
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  border-top: 0.15rem solid ${PALETTE.NAVY100};
+  display: flex;
+  justify-content: center;
+  padding-top: 1.6rem;
+`;
+
+const buttonStyles = css`
+  margin-right: 0.6rem;
+  &::after {
+    content: '';
+    height: 0.6rem;
+    width: 0.6rem;
+    border-left: 0.1rem solid ${FONT_COLOR.GRAY};
+    border-bottom: 0.1rem solid ${FONT_COLOR.GRAY};
+    transform: rotate(-45deg);
+    margin-left: 0.6rem;
+  }
+`;
+
+export { Container, CommentCount, CommentFormContainer, ButtonContainer, buttonStyles };

@@ -64,14 +64,16 @@ class PostServiceTest {
         user = User.builder()
                 .nickname("테스트유저")
                 .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
                 .build();
         anotherUser = User.builder()
-                .nickname("테스트유저-다른유저")
+                .nickname("다른유저")
                 .ageRange(AgeRange.FORTIES)
-                .profileUrl("")
                 .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
                 .build();
         optionalUser = Optional.of(user);
         optionalAnotherUser = Optional.of(anotherUser);

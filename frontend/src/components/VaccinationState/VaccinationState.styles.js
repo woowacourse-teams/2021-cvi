@@ -3,6 +3,12 @@ import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   margin-top: 0.3rem;
+  display: grid;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.h3`
@@ -66,4 +72,13 @@ const IncreaseIcon = styled.span`
   font-size: 1.2rem;
 `;
 
-export { Container, Title, FrameContent, PrimaryState, Info, InfoTitle, IncreaseIcon };
+export {
+  Container,
+  TopContainer,
+  Title,
+  FrameContent,
+  PrimaryState,
+  Info,
+  InfoTitle,
+  IncreaseIcon,
+};

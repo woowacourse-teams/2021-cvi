@@ -77,7 +77,7 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
       ) : (
         <NeedLogin>
           댓글을 작성하려면
-          <LoginLink exact to={PATH.LOGIN}>
+          <LoginLink exact="true" to={PATH.LOGIN}>
             로그인
           </LoginLink>
           해주세요

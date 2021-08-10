@@ -86,6 +86,20 @@ public class AuthControllerTest extends ApiDocument {
         사용자_OAuth_실패함(response);
     }
 
+    @DisplayName("AuthRequest validation - 유효하지 않은 경우")
+    @Test
+    void validateAuthRequest() throws Exception {
+        //given
+        AuthRequest noContainProviderRequest = new AuthRequest(null, "code", "state");
+        AuthRequest noContainCodeRequest = new AuthRequest(SocialProvider.NAVER, "", "state");
+        //when
+        ResultActions noContainProviderResponse = 사용자_OAuth_요청(noContainProviderRequest);
+        ResultActions noContainCodeResponse = 사용자_OAuth_요청(noContainCodeRequest);
+        //then
+        noContainProviderResponse.andExpect(status().isBadRequest());
+        noContainCodeResponse.andExpect(status().isBadRequest());
+    }
+
     private ResultActions 사용자_OAuth_요청(AuthRequest authRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/users/auth")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,5 +118,11 @@ public class AuthControllerTest extends ApiDocument {
         response.andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(toDocument("user-auth-failure"));
+    }
+
+    private ResultActions 잘못된_OAuth_요청(String request) throws Exception {
+        return mockMvc.perform(post("/api/v1/users/auth")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }

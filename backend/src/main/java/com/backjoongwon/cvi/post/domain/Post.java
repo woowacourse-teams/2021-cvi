@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -29,10 +30,12 @@ public class Post extends BaseEntity {
     private final Comments comments = new Comments();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_post_user"))
     private User user;
 
+    @Column(name = "content", columnDefinition = "text")
     @Lob
+    @NotBlank(message = "게시글의 내용은 비어있을 수 없습니다.")
     private String content;
     private int viewCount;
 
@@ -118,5 +121,21 @@ public class Post extends BaseEntity {
 
     public List<Comment> getCommentsAsList() {
         return comments.getComments();
+    }
+
+    public List<Comment> sliceCommentsAsList(int offset, int size) {
+        List<Comment> comments = this.comments.getComments();
+        int fromIndex = offset;
+        fromIndex = resizePagingRange(comments, fromIndex);
+        int toIndex = offset + size;
+        toIndex = resizePagingRange(comments, toIndex);
+        return comments.subList(fromIndex, toIndex);
+    }
+
+    private int resizePagingRange(List<Comment> comments, int fromIndex) {
+        if (fromIndex > comments.size()) {
+            fromIndex = comments.size();
+        }
+        return fromIndex;
     }
 }

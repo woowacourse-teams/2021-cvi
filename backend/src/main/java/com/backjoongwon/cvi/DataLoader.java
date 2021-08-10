@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi;
 
+import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
@@ -43,10 +44,10 @@ public class DataLoader implements CommandLineRunner {
         if (userRepository.findAll().isEmpty()) {
             List<User> users = new ArrayList<>();
             for (int i = 0; i < USER_COUNT; i++) {
-                User user = User.builder().nickname(String.valueOf(i)).ageRange(AgeRange.FIFTIES).build();
+                User user = User.builder().nickname(String.valueOf(i)).socialId("socialId").socialProvider(SocialProvider.KAKAO).profileUrl("pictureUrl").ageRange(AgeRange.FIFTIES).build();
                 users.add(user);
 
-                User updateUser = User.builder().nickname(user.getNickname()).ageRange(AgeRange.FORTIES).shotVerified(true).build();
+                User updateUser = User.builder().nickname(user.getNickname()).socialId("socialId").socialProvider(SocialProvider.NAVER).profileUrl("pictureUrl").ageRange(AgeRange.FORTIES).shotVerified(true).build();
                 user.update(updateUser);
             }
             userRepository.saveAll(users);

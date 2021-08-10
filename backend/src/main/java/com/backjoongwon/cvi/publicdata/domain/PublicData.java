@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorColumn(name = "public_data_type")
 @AttributeOverride(name = "id", column = @Column(name = "public_data_id"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PublicData extends BaseEntity {
@@ -22,5 +22,9 @@ public abstract class PublicData extends BaseEntity {
     public PublicData(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation) {
         super(id, createdAt, lastModifiedAt);
         this.regionPopulation = regionPopulation;
+    }
+
+    public boolean isSameRegionPopulation(RegionPopulation regionPopulation) {
+        return this.regionPopulation.equals(regionPopulation);
     }
 }

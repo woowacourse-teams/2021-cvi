@@ -101,6 +101,11 @@ public class PostService {
         return CommentResponse.toList(post.getCommentsAsList());
     }
 
+    public List<CommentResponse> findCommentsById(Long postId, int offset, int size) {
+        Post post = findPostWithCommentsById(postId);
+        return CommentResponse.toList(post.sliceCommentsAsList(offset, size));
+    }
+
     @Transactional
     public void updateComment(Long id, Long commentId, Optional<User> optionalUser, CommentRequest updateRequest) {
         validateSignedin(optionalUser);
@@ -146,9 +151,9 @@ public class PostService {
         post.deleteLike(user.getId());
     }
 
-    private Post findPostWithCommentsById(Long id) {
-        validateNotNull(id);
-        return postRepository.findWithCommentsById(id)
+    private Post findPostWithCommentsById(Long postId) {
+        validateNotNull(postId);
+        return postRepository.findWithCommentsById(postId)
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 

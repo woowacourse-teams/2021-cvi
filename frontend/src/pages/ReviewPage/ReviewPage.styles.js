@@ -71,19 +71,33 @@ const TabContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  position: relative;
+
+  @media screen and (max-width: 1024px) {
+    padding: 1rem 0;
+  }
 `;
 
 const tabFrameStyles = css`
   display: flex;
   justify-content: flex-start;
   margin-bottom: 2rem;
-  padding-right: 2rem;
   align-items: center;
   min-height: 6rem;
 `;
 
 const filterButtonStyles = css`
   line-height: 2;
+  margin-right: 2rem;
+  position: absolute;
+  top: 0.6rem;
+  right: 0;
+
+  @media screen and (max-width: 1024px) {
+    padding-right: 0;
+    top: 1rem;
+    right: 0;
+  }
 `;
 
 const Option = styled.div`

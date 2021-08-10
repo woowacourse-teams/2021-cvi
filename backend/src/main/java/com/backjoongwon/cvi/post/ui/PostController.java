@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostResponse create(@AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest, HttpServletResponse servletResponse) {
+    public PostResponse create(@AuthenticationPrincipal Optional<User> user, @RequestBody @Valid PostRequest postRequest, HttpServletResponse servletResponse) {
         PostResponse postResponse = postService.create(user, postRequest);
         servletResponse.setHeader("Location", "/api/v1/posts/" + postResponse.getId());
         return postResponse;
@@ -58,7 +59,7 @@ public class PostController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user, @RequestBody PostRequest postRequest) {
+    public void update(@PathVariable Long id, @AuthenticationPrincipal Optional<User> user, @RequestBody @Valid PostRequest postRequest) {
         postService.update(id, user, postRequest);
     }
 
@@ -85,7 +86,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponse createComment(@PathVariable Long postId,
                                          @AuthenticationPrincipal Optional<User> user,
-                                         @RequestBody CommentRequest commentRequest,
+                                         @RequestBody @Valid CommentRequest commentRequest,
                                          HttpServletResponse servletResponse) {
         CommentResponse commentResponse = postService.createComment(postId, user, commentRequest);
         servletResponse.setHeader("Location", "/api/v1/comments/" + commentResponse.getId());
@@ -98,12 +99,19 @@ public class PostController {
         return postService.findCommentsById(postId);
     }
 
+    @GetMapping("/{postId}/comments/paging")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentResponse> findCommentsOfPost(@PathVariable Long postId, @RequestParam(defaultValue = "0") int offset,
+                                                    @RequestParam(defaultValue = "6") int size) {
+        return postService.findCommentsById(postId, offset, size);
+    }
+
     @PutMapping("/{postId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateComment(@PathVariable Long postId,
                               @PathVariable Long commentId,
                               @AuthenticationPrincipal Optional<User> user,
-                              @RequestBody CommentRequest commentRequest) {
+                              @RequestBody @Valid CommentRequest commentRequest) {
         postService.updateComment(postId, commentId, user, commentRequest);
     }
 
