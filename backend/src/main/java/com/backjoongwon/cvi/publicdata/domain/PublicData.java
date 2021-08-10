@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorColumn(name = "public_data_type")
 @AttributeOverride(name = "id", column = @Column(name = "public_data_id"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PublicData extends BaseEntity {
