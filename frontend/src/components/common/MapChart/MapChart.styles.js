@@ -115,6 +115,11 @@ const MapContainer = styled.div`
   }
 `;
 
+const LoadingContainer = styled.div`
+  position: relative;
+  top: 50%;
+`;
+
 const Info = styled.div`
   position: absolute;
   width: 6.4rem;
@@ -172,4 +177,4 @@ const InoculationRateContainer = styled.div`
   }
 `;
 
-export { Container, MapContainer, Info, Region, InoculationRateContainer, Title };
+export { Container, MapContainer, LoadingContainer, Info, Region, InoculationRateContainer, Title };
