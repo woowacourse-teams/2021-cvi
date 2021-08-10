@@ -7,6 +7,7 @@ import {
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
+  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   TO_DATE_TYPE,
   VACCINATION,
@@ -21,7 +22,6 @@ import {
   Info,
   VaccinationInfo,
   ReviewInfo,
-  ShotVerified,
   WriterInfo,
   Writer,
   InfoBottom,
@@ -40,6 +40,7 @@ import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Label } from '../../components/common';
+import { ShotVerificationLabel } from '../../components';
 
 const ReviewEditPage = () => {
   const history = useHistory();
@@ -112,7 +113,12 @@ const ReviewEditPage = () => {
               >
                 {VACCINATION[review.vaccinationType]}
               </Label>
-              <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
+              {review?.writer?.shotVerified && (
+                <ShotVerificationLabel
+                  shotVerification={review?.writer?.shotVerified}
+                  trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                />
+              )}
             </VaccinationInfo>
             <WriterInfo>
               <Avatar src={review?.writer?.socialProfileUrl} />

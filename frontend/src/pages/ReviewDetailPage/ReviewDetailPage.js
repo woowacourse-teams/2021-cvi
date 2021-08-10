@@ -7,7 +7,6 @@ import {
   TopContainer,
   VaccinationInfo,
   ReviewInfo,
-  ShotVerified,
   WriterInfo,
   Writer,
   InfoBottom,
@@ -27,6 +26,7 @@ import {
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
+  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   THEME_COLOR,
   TO_DATE_TYPE,
@@ -41,7 +41,7 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { Comment } from '../../components';
+import { Comment, ShotVerificationLabel } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
 
 // TODO: Comment 컴포넌트 분리
@@ -136,7 +136,12 @@ const ReviewDetailPage = () => {
                   >
                     {VACCINATION[review?.vaccinationType]}
                   </Label>
-                  <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
+                  {review?.writer?.shotVerified && (
+                    <ShotVerificationLabel
+                      shotVerification={review?.writer?.shotVerified}
+                      trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                    />
+                  )}
                 </VaccinationInfo>
                 <WriterInfo>
                   <Avatar src={review?.writer?.socialProfileUrl} />

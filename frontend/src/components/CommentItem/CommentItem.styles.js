@@ -38,9 +38,9 @@ const CreatedAt = styled.div`
 `;
 
 const ShotVerified = styled.span`
-  font-weight: 500;
-  margin-left: 0.8rem;
   color: ${FONT_COLOR.GREEN};
+  font-size: 1.2rem;
+  font-weight: 500;
 `;
 
 const Content = styled.div`
@@ -55,6 +55,12 @@ const buttonStyles = css`
   padding-right: 0;
 `;
 
+const shotVerifiedStyle = css`
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-left: 0.8rem;
+`;
+
 export {
   Container,
   InfoContainer,
@@ -66,4 +72,5 @@ export {
   Content,
   TextArea,
   buttonStyles,
+  shotVerifiedStyle,
 };

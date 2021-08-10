@@ -8,16 +8,18 @@ import {
   avatarStyles,
   NavBar,
   LogoContainer,
+  MyInfoContainer,
 } from './BaseLayout.styles';
 import { useSelector } from 'react-redux';
 import { LogoIcon, MenuIcon } from '../../../assets/icons';
-import { PATH, THEME_COLOR } from '../../../constants';
+import { PATH, SHOT_VERIFICATION, THEME_COLOR } from '../../../constants';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { css } from '@emotion/react';
 import SideBarMobile from '../SideBarMobile/SideBarMobile';
+import ShotVerificationLabel from '../../ShotVerificationLabel/ShotVerificationLabel';
 
 const BaseLayout = ({ children }) => {
   const history = useHistory();
@@ -39,6 +41,7 @@ const BaseLayout = ({ children }) => {
     <Container>
       <SideBar />
       <SideBarMobile isOpenSideBar={isOpenSideBar} setIsOpenSideBar={setIsOpenSideBar} />
+      {/* mobile */}
       <NavBar isOpenSideBar={false}>
         <Button
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
@@ -53,16 +56,31 @@ const BaseLayout = ({ children }) => {
           <LogoIcon width="56" fill={THEME_COLOR.PRIMARY} />
         </LogoContainer>
         {isLogin ? (
-          <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+          <MyInfoContainer>
+            <ShotVerificationLabel
+              shotVerification={user.shotVerified}
+              trueText={SHOT_VERIFICATION.TRUE_TEXT}
+              falseText={SHOT_VERIFICATION.FALSE_TEXT}
+            />
+            <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+          </MyInfoContainer>
         ) : (
           <div style={{ minWidth: '3.6rem' }} />
         )}
       </NavBar>
+      {/* web */}
       <MainContainer>
         {!location.pathname.includes(PATH.MY_PAGE) && (
           <TopContainer isOpenSideBar={isOpenSideBar}>
             {isLogin && (
-              <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+              <>
+                <ShotVerificationLabel
+                  shotVerification={user.shotVerified}
+                  trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                  falseText={SHOT_VERIFICATION.FALSE_TEXT}
+                />
+                <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
+              </>
             )}
           </TopContainer>
         )}

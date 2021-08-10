@@ -45,6 +45,7 @@ const TopContainer = styled.div`
   justify-content: flex-end;
   padding: 2rem 8rem 0 0;
   min-height: 5.6rem;
+  align-items: center;
 
   @media screen and (max-width: 1024px) {
     display: none;
@@ -61,4 +62,18 @@ const LogoContainer = styled.div`
   cursor: pointer;
 `;
 
-export { Container, MainContainer, TopContainer, avatarStyles, NavBar, LogoContainer };
+const MyInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export {
+  Container,
+  MainContainer,
+  TopContainer,
+  avatarStyles,
+  NavBar,
+  LogoContainer,
+  MyInfoContainer,
+};
