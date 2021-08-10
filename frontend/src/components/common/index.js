@@ -18,6 +18,7 @@ import BarChart from './BarChart/BarChart';
 import MapChart from './MapChart/MapChart';
 import MapChartSvg from './MapChartSvg/MapChartSvg';
 import MapChartStandard from './MapChartStandard/MapChartStandard';
+import { PublicRoute, PrivateRoute } from './Route/Route';
 
 export {
   Avatar,
@@ -40,4 +41,6 @@ export {
   MapChart,
   MapChartSvg,
   MapChartStandard,
+  PublicRoute,
+  PrivateRoute,
 };
