@@ -12,3 +12,9 @@ cypress/results/*
 cypress/reports/*
 cypress/screenshots/*
 cypress/videos/*
+
+# environment
+.env
+
+# error
+yarn-error.log

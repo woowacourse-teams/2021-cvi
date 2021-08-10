@@ -16,12 +16,16 @@ const DonutChart = ({
   const [currentNumber, setCurrentNumber] = useState(0);
 
   useEffect(() => {
+    if (!target) return;
+
     const intervalId = setInterval(() => {
       if (currentNumber < target) setCurrentNumber((currentNumber) => currentNumber + 1);
+
+      clearInterval(intervalId);
     }, 10);
 
     return () => clearInterval(intervalId);
-  }, [currentNumber]);
+  }, [currentNumber, target]);
 
   return (
     <Container
@@ -39,7 +43,7 @@ const DonutChart = ({
 };
 
 DonutChart.propTypes = {
-  target: PropTypes.string.isRequired,
+  target: PropTypes.number.isRequired,
   filledColor: PropTypes.string,
   emptyColor: PropTypes.string,
   fontColor: PropTypes.string,

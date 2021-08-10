@@ -1,22 +1,55 @@
-import { BASE_URL } from './constants';
+import { BASE_URL, FILTER_TYPE, PAGING_SIZE, SORT_TYPE } from './constants';
 
-const requestGetAllReviewList = (accessToken) =>
-  fetch(`${BASE_URL}/posts`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+const getFilterQuery = (filteringList) => {
+  const [filterType, sortType] = filteringList;
 
-const requestGetSelectedReviewList = (accessToken, vaccinationType) =>
-  fetch(`${BASE_URL}/posts?vaccinationType=${vaccinationType}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${accessToken}`,
+  if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.ASC) {
+    return 'CREATED_AT_ASC';
+  } else if (filterType === FILTER_TYPE.CREATED_AT && sortType === SORT_TYPE.DESC) {
+    return 'CREATED_AT_DESC';
+  } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.ASC) {
+    return 'LIKE_COUNT_ASC';
+  } else if (filterType === FILTER_TYPE.LIKE_COUNT && sortType === SORT_TYPE.DESC) {
+    return 'LIKE_COUNT_DESC';
+  } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.ASC) {
+    return 'VIEW_COUNT_ASC';
+  } else if (filterType === FILTER_TYPE.VIEW_COUNT && sortType === SORT_TYPE.DESC) {
+    return 'VIEW_COUNT_DESC';
+  } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.ASC) {
+    return 'COMMENT_COUNT_ASC';
+  } else if (filterType === FILTER_TYPE.COMMENT_COUNT && sortType === SORT_TYPE.DESC) {
+    return 'COMMENT_COUNT_DESC';
+  }
+};
+
+const filterQuery = (filteringList) =>
+  filteringList ? `&sort=${getFilterQuery(filteringList)}` : '';
+
+const requestGetAllReviewList = (accessToken, offset, filteringList) =>
+  fetch(
+    `${BASE_URL}/posts/paging?offset=${offset}&size=${PAGING_SIZE}${filterQuery(filteringList)}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
+  );
+
+const requestGetSelectedReviewList = (accessToken, vaccinationType, offset, filteringList) =>
+  fetch(
+    `${BASE_URL}/posts/paging?vaccinationType=${vaccinationType}&offset=${offset}&size=${PAGING_SIZE}${filterQuery(
+      filteringList,
+    )}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
 
 const requestGetReview = (accessToken, id) =>
   fetch(`${BASE_URL}/posts/${id}`, {
@@ -83,8 +116,9 @@ const requestPostOAuthLogin = (data) =>
     body: JSON.stringify(data),
   });
 
+// users -> users/me
 const requestPutAccount = (accessToken, data) =>
-  fetch(`${BASE_URL}/users`, {
+  fetch(`${BASE_URL}/users/me`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -140,6 +174,40 @@ const requestDeleteLike = (accessToken, postId) =>
     },
   });
 
+const requestVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations`);
+
+const requestWorldVaccinationStateList = () => fetch(`${BASE_URL}/publicdata/vaccinations/world`);
+
+const requestGetMyReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=NONE&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestGetMyCommentReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=COMMENTS&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestGetMyLikeReviewList = (accessToken, offset) =>
+  fetch(`${BASE_URL}/users/me/posts/paging?filter=LIKES&offset=${offset}&size=${PAGING_SIZE}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+const requestGetCommentList = (postId, offset) =>
+  fetch(`${BASE_URL}/posts/${postId}/comments/paging?offset=${offset}&size=${PAGING_SIZE}`);
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -156,4 +224,10 @@ export {
   requestDeleteComment,
   requestPostLike,
   requestDeleteLike,
+  requestVaccinationStateList,
+  requestWorldVaccinationStateList,
+  requestGetMyReviewList,
+  requestGetMyCommentReviewList,
+  requestGetMyLikeReviewList,
+  requestGetCommentList,
 };

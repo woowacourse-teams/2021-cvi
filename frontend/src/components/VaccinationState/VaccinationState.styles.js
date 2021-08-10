@@ -1,8 +1,14 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   margin-top: 0.3rem;
+  display: grid;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.h3`
@@ -16,7 +22,7 @@ const Title = styled.h3`
 const FrameContent = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: ${({ withWorld }) => (withWorld ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)')};
   margin: 2.4rem 2.7rem;
   padding: 0 0.6rem;
 
@@ -61,4 +67,18 @@ const InfoTitle = styled.div`
   }
 `;
 
-export { Container, Title, FrameContent, PrimaryState, Info, InfoTitle };
+const IncreaseIcon = styled.span`
+  color: ${PALETTE.RED500};
+  font-size: 1.2rem;
+`;
+
+export {
+  Container,
+  TopContainer,
+  Title,
+  FrameContent,
+  PrimaryState,
+  Info,
+  InfoTitle,
+  IncreaseIcon,
+};

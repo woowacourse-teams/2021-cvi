@@ -20,16 +20,16 @@ import java.util.Objects;
 public class Like extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_likes_post"))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_likes_user"))
     private User user;
 
     @Builder
-    public Like(Long id, LocalDateTime createdAt, Post post, User user) {
-        super(id, createdAt);
+    public Like(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Post post, User user) {
+        super(id, createdAt, lastModifiedAt);
         this.post = post;
         this.user = user;
     }

@@ -9,6 +9,9 @@ const Input = ({
   value,
   inputStyles,
   labelStyles,
+  minLength,
+  maxLength,
+  required,
   onChange,
 }) => (
   <Label labelStyles={labelStyles}>
@@ -19,6 +22,9 @@ const Input = ({
       width={width}
       value={value}
       inputStyles={inputStyles}
+      minLength={minLength}
+      maxLength={maxLength}
+      required={required}
       onChange={onChange}
     />
   </Label>
@@ -32,6 +38,9 @@ Input.propTypes = {
   value: PropTypes.string,
   inputStyles: PropTypes.object,
   labelStyles: PropTypes.object,
+  minLength: PropTypes.number,
+  maxLength: PropTypes.number,
+  required: PropTypes.bool,
   onChange: PropTypes.func,
 };
 
@@ -41,6 +50,9 @@ Input.defaultProps = {
   width: '',
   labelText: '',
   value: '',
+  minLength: 0,
+  maxLength: 100000000,
+  required: false,
   inputStyles: {},
   labelStyles: {},
   onChange: () => {},

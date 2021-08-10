@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.domain;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
@@ -8,8 +9,15 @@ import com.backjoongwon.cvi.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -151,5 +159,36 @@ class PostTest {
         //then
         assertThatThrownBy(() -> post.validateAuthor(otherUser))
                 .isInstanceOf(InvalidOperationException.class);
+    }
+
+    @ParameterizedTest(name = "페이징 요청 값 resize - 성공")
+    @MethodSource
+    void resizePagingRangeTest(int offset, int size, List<String> contentResult) {
+        //given
+        User user = User.builder()
+                .id(1L)
+                .nickname("인비")
+                .build();
+        Post post = Post.builder()
+                .content("내용")
+                .user(user)
+                .build();
+        Comment comment1 = Comment.builder().content("댓글1").user(user).build();
+        Comment comment2 = Comment.builder().content("댓글2").user(user).build();
+        post.assignComment(comment1);
+        post.assignComment(comment2);
+        //when
+        List<Comment> slicedComments = post.sliceCommentsAsList(offset, size);
+        //then
+        assertThat(slicedComments).extracting("content").containsExactlyElementsOf(contentResult);
+    }
+
+    static Stream<Arguments> resizePagingRangeTest() {
+        return Stream.of(
+                Arguments.of(0, 2, Arrays.asList("댓글1", "댓글2")),
+                Arguments.of(1, 1, Arrays.asList("댓글2")),
+                Arguments.of(0, 1, Arrays.asList("댓글1")),
+                Arguments.of(2, 1, Collections.emptyList())
+        );
     }
 }

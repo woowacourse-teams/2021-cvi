@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -13,7 +12,7 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import { useFetch } from '../../hooks';
+import { useFetch, useSnackBar } from '../../hooks';
 import { requestGetReview } from '../../requests';
 import {
   Container,
@@ -46,10 +45,12 @@ const ReviewEditPage = () => {
   const history = useHistory();
   const { id } = useParams();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
-  const { enqueueSnackbar } = useSnackbar();
+  const user = useSelector((state) => state.authReducer.user);
 
   const [content, setContent] = useState('');
+
   const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
+  const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -75,9 +76,16 @@ const ReviewEditPage = () => {
       return;
     }
 
-    enqueueSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
+    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
     goReviewDetailPage();
   };
+
+  useEffect(() => {
+    if (Object.keys(review).length && user?.id !== review?.writer?.id) {
+      alert(ALERT_MESSAGE.FAIL_TO_ACCESS_EDIT_PAGE);
+      history.goBack();
+    }
+  }, [review]);
 
   return (
     <Container>

@@ -1,10 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ButtonLike } from '../components/common';
 import { ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../constants';
 import { deleteLikeAsync, postLikeAsync } from '../service';
 
-const useLike = (accessToken, hasLiked, postId, callback) => {
+const useLike = (accessToken, hasLiked, likeCount, postId) => {
   const history = useHistory();
+  const [updatedHasLiked, setUpdatedHasLiked] = useState(hasLiked);
+  const [updatedLikeCount, setUpdatedLikeCount] = useState(likeCount);
+
+  useEffect(() => {
+    setUpdatedHasLiked(hasLiked);
+    setUpdatedLikeCount(likeCount);
+  }, [hasLiked, likeCount]);
 
   const deleteLike = async () => {
     const response = await deleteLikeAsync(accessToken, postId);
@@ -15,7 +23,8 @@ const useLike = (accessToken, hasLiked, postId, callback) => {
       return;
     }
 
-    callback();
+    setUpdatedHasLiked(false);
+    setUpdatedLikeCount((prevState) => prevState - 1);
   };
 
   const createLike = async () => {
@@ -27,7 +36,8 @@ const useLike = (accessToken, hasLiked, postId, callback) => {
       return;
     }
 
-    callback();
+    setUpdatedHasLiked(true);
+    setUpdatedLikeCount((prevState) => prevState + 1);
   };
 
   const onClickLike = async (event) => {
@@ -40,10 +50,10 @@ const useLike = (accessToken, hasLiked, postId, callback) => {
       return;
     }
 
-    hasLiked ? deleteLike() : createLike();
+    updatedHasLiked ? deleteLike() : createLike();
   };
 
-  return { onClickLike, ButtonLike };
+  return { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount, deleteLike };
 };
 
 export default useLike;

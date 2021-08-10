@@ -41,7 +41,13 @@ const MyPage = ({ children }) => {
           <MenuItem>
             <MenuTitle>글 관리</MenuTitle>
             <div>
-              <Link onClick={() => alert('준비 중인 서비스입니다')}>내가 쓴 글</Link>
+              <Link to={PATH.MY_PAGE_REVIEW}>내가 쓴 글</Link>
+            </div>
+            <div>
+              <Link to={PATH.MY_PAGE_COMMENT_REVIEW}>댓글 단 글</Link>
+            </div>
+            <div>
+              <Link to={PATH.MY_PAGE_LIKE_REVIEW}>좋아요 누른 글</Link>
             </div>
           </MenuItem>
         </MenuContainer>

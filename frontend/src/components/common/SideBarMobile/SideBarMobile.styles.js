@@ -77,7 +77,7 @@ const LogoutButton = styled.button`
   font-size: 1.6rem;
 `;
 
-const MyPageMenuContainer = styled(Link)`
+const MyPageMenuContainer = styled.div`
   margin-top: 2rem;
   font-size: 1.4rem;
   color: ${FONT_COLOR.GRAY};

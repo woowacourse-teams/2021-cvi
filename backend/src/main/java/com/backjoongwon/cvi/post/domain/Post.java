@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -22,29 +23,34 @@ import java.util.Objects;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Lob
-    private String content;
-    private int viewCount;
-
-    @Enumerated(value = EnumType.STRING)
-    private VaccinationType vaccinationType;
-
     @Embedded
     private final Likes likes = new Likes();
 
     @Embedded
     private final Comments comments = new Comments();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_post_user"))
+    private User user;
+
+    @Column(name = "content", columnDefinition = "text")
+    @Lob
+    @NotBlank(message = "게시글의 내용은 비어있을 수 없습니다.")
+    private String content;
+    private int viewCount;
+
+    @Enumerated(value = EnumType.STRING)
+    private VaccinationType vaccinationType;
+
     @Builder
-    public Post(Long id, User user, String content, VaccinationType vaccinationType, LocalDateTime createdAt) {
-        super(id, createdAt);
+    public Post(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, User user,
+                String content, int viewCount, VaccinationType vaccinationType) {
+        super(id, createdAt, lastModifiedAt);
         this.user = user;
         this.content = content;
+        this.viewCount = viewCount;
         this.vaccinationType = vaccinationType;
+        this.createdAt = createdAt;
     }
 
     public void assignUser(User user) {
@@ -115,5 +121,21 @@ public class Post extends BaseEntity {
 
     public List<Comment> getCommentsAsList() {
         return comments.getComments();
+    }
+
+    public List<Comment> sliceCommentsAsList(int offset, int size) {
+        List<Comment> comments = this.comments.getComments();
+        int fromIndex = offset;
+        fromIndex = resizePagingRange(comments, fromIndex);
+        int toIndex = offset + size;
+        toIndex = resizePagingRange(comments, toIndex);
+        return comments.subList(fromIndex, toIndex);
+    }
+
+    private int resizePagingRange(List<Comment> comments, int fromIndex) {
+        if (fromIndex > comments.size()) {
+            fromIndex = comments.size();
+        }
+        return fromIndex;
     }
 }

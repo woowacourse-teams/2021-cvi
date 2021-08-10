@@ -14,11 +14,15 @@ import {
   requestDeleteComment,
   requestGetReview,
   requestPutComment,
+  requestGetMyReviewList,
+  requestGetMyCommentReviewList,
+  requestGetMyLikeReviewList,
+  requestGetCommentList,
 } from '../requests';
 
-const getAllReviewListAsync = async (accessToken) => {
+const getAllReviewListAsync = async (accessToken, offset, filteringList) => {
   try {
-    const response = await requestGetAllReviewList(accessToken);
+    const response = await requestGetAllReviewList(accessToken, offset, filteringList);
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -34,9 +38,19 @@ const getAllReviewListAsync = async (accessToken) => {
   }
 };
 
-const getSelectedReviewListAsync = async (accessToken, selectedVaccination) => {
+const getSelectedReviewListAsync = async (
+  accessToken,
+  selectedVaccination,
+  offset,
+  filteringList,
+) => {
   try {
-    const response = await requestGetSelectedReviewList(accessToken, selectedVaccination);
+    const response = await requestGetSelectedReviewList(
+      accessToken,
+      selectedVaccination,
+      offset,
+      filteringList,
+    );
 
     if (!response.ok) {
       // 에러 메시지 넣어달라고 하기
@@ -243,6 +257,70 @@ const deleteLikeAsync = async (accessToken, postId) => {
   }
 };
 
+const getMyReviewListAsync = async (accessToken, offset) => {
+  try {
+    const response = await requestGetMyReviewList(accessToken, offset);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getMyCommentReviewListAsync = async (accessToken, offset) => {
+  try {
+    const response = await requestGetMyCommentReviewList(accessToken, offset);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getMyLikeReviewListAsync = async (accessToken, offset) => {
+  try {
+    const response = await requestGetMyLikeReviewList(accessToken, offset);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
+const getCommentListAsync = async (postId, offset) => {
+  try {
+    const response = await requestGetCommentList(postId, offset);
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    return { state: RESPONSE_STATE.SUCCESS, data: await response.json() };
+  } catch (error) {
+    console.error(error);
+
+    return { state: RESPONSE_STATE.FAILURE, data: error };
+  }
+};
+
 export {
   getAllReviewListAsync,
   getSelectedReviewListAsync,
@@ -258,4 +336,8 @@ export {
   postLikeAsync,
   deleteLikeAsync,
   putCommentAsync,
+  getMyReviewListAsync,
+  getMyCommentReviewListAsync,
+  getMyLikeReviewListAsync,
+  getCommentListAsync,
 };

@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR, LINE_LIMIT } from '../../constants';
 
@@ -66,6 +67,11 @@ const CreatedAt = styled.div`
   align-items: center;
 `;
 
+const buttonStyles = css`
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  padding-left: 0;
+`;
+
 export {
   Container,
   IconContainer,
@@ -77,4 +83,5 @@ export {
   BottomContainer,
   InfoContainer,
   CreatedAt,
+  buttonStyles,
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -11,15 +10,24 @@ import {
   IconContainer,
   InfoContainer,
   CreatedAt,
+  buttonStyles,
 } from './ReviewItem.styles';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import {
+  VACCINATION_COLOR,
+  VACCINATION,
+  FONT_COLOR,
+  TO_DATE_TYPE,
+  PATH,
+  CONFIRM_MESSAGE,
+} from '../../constants';
 import { toDate } from '../../utils';
-import { Label } from '../common';
+import { Button, Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
+import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 
-const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
+const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
   const {
     id,
     writer,
@@ -29,14 +37,28 @@ const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
     createdAt,
     hasLiked,
     likeCount,
-    comments,
+    commentCount,
   } = review;
-  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
-  const { onClickLike, ButtonLike } = useLike(accessToken, hasLiked, id, getReviewList);
+  const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
+  const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount, deleteLike } = useLike(
+    accessToken,
+    hasLiked,
+    likeCount,
+    id,
+  );
+
+  const cancelLike = (event) => {
+    event.stopPropagation();
+
+    if (!window.confirm(CONFIRM_MESSAGE.CANCEL_LIKE)) return;
+
+    deleteLike();
+    location.reload();
+  };
 
   return (
-    <Container onClick={onClick}>
+    <Container ref={innerRef} onClick={onClick}>
       <TopContainer>
         <Label
           backgroundColor={VACCINATION_COLOR[vaccinationType]}
@@ -58,12 +80,27 @@ const ReviewItem = ({ review, accessToken, getReviewList, onClick }) => {
             <ViewCount>{viewCount}</ViewCount>
           </IconContainer>
           <IconContainer>
-            <ButtonLike hasLiked={hasLiked} likeCount={likeCount} onClickLike={onClickLike} />
+            <ButtonLike
+              hasLiked={updatedHasLiked}
+              likeCount={updatedLikeCount}
+              onClickLike={path !== PATH.MY_PAGE_LIKE_REVIEW ? onClickLike : () => {}}
+            />
           </IconContainer>
           <IconContainer>
             <CommentIcon width="16" height="16" stroke={FONT_COLOR.LIGHT_GRAY} />
-            <ViewCount>{comments?.length}</ViewCount>
+            <ViewCount>{commentCount}</ViewCount>
           </IconContainer>
+          {path === PATH.MY_PAGE_LIKE_REVIEW && (
+            <IconContainer>
+              <Button
+                backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+                styles={buttonStyles}
+                onClick={cancelLike}
+              >
+                좋아요 취소
+              </Button>
+            </IconContainer>
+          )}
         </InfoContainer>
         <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
       </BottomContainer>
@@ -81,15 +118,17 @@ ReviewItem.propTypes = {
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,
     likeCount: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
+    commentCount: PropTypes.number,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
-  getReviewList: PropTypes.func,
+  innerRef: PropTypes.func,
+  path: PropTypes.string,
   onClick: PropTypes.func,
 };
 
 ReviewItem.defaultProps = {
-  getReviewList: () => {},
+  innerRef: null,
+  path: '',
   onClick: () => {},
 };
 export default ReviewItem;

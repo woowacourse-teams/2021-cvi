@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { PALETTE } from '../../constants';
 
@@ -32,6 +33,8 @@ const ButtonWrapper = styled.div`
 const ReviewList = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  position: relative;
+  min-height: 60vh;
 
   & > li:nth-of-type(2n + 1) {
     border-right: 0.15rem solid ${PALETTE.NAVY100};
@@ -59,4 +62,82 @@ const FrameContent = styled.div`
   width: 100%;
 `;
 
-export { Container, Title, ReviewList, FrameContent, ButtonWrapper };
+const ScrollLoadingContainer = styled.div`
+  position: relative;
+  height: 6rem;
+`;
+
+const TabContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+
+  @media screen and (max-width: 1024px) {
+    padding: 1rem 0;
+  }
+`;
+
+const tabFrameStyles = css`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+  align-items: center;
+  min-height: 6rem;
+`;
+
+const filterButtonStyles = css`
+  line-height: 2;
+  margin-right: 2rem;
+  position: absolute;
+  top: 0.6rem;
+  right: 0;
+
+  @media screen and (max-width: 1024px) {
+    padding-right: 0;
+    top: 1rem;
+    right: 0;
+  }
+`;
+
+const Option = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  padding: 1rem 1rem 1rem 3rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+  }
+  & > button {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    justify-self: end;
+  }
+`;
+
+const closeOptionListButtonStyles = css`
+  display: flex;
+  justify-content: flex-end;
+  height: 5.2rem;
+  padding-bottom: 1.2rem;
+  padding-right: 0.4rem;
+`;
+
+export {
+  Container,
+  Title,
+  ReviewList,
+  FrameContent,
+  ButtonWrapper,
+  ScrollLoadingContainer,
+  TabContainer,
+  tabFrameStyles,
+  filterButtonStyles,
+  Option,
+  closeOptionListButtonStyles,
+};

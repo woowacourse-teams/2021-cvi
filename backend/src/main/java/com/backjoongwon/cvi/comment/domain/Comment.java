@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,19 +23,21 @@ import java.util.Objects;
 public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comment_post"))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_user"))
     private User user;
 
     @Lob
+    @Column(name = "content", columnDefinition = "text")
+    @Length(max = 300)
     private String content;
 
     @Builder
-    public Comment(Long id, LocalDateTime createdAt, Post post, User user, String content) {
-        super(id, createdAt);
+    public Comment(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Post post, User user, String content) {
+        super(id, createdAt, lastModifiedAt);
         this.post = post;
         this.user = user;
         this.content = content;

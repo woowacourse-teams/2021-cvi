@@ -1,7 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const isProduction = process.env.NODE_ENV == 'production';
+const dotenv = require('dotenv').config();
 
 const config = {
   entry: './src/index.js',
@@ -21,6 +23,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+    new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed || {})),
   ],
   module: {
     rules: [

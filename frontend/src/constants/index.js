@@ -2,7 +2,7 @@ import PATH from './path';
 import PALETTE from './palette';
 import VACCINATION from './vaccination';
 import { VACCINATION_COLOR, FONT_COLOR, THEME_COLOR } from './theme';
-import { LINE_LIMIT, COMMENT_LIMIT } from './limit';
+import { LINE_LIMIT, COMMENT_LIMIT, NICKNAME_LIMIT, PAGING_SIZE } from './limit';
 import AGE_RANGE from './ageRange';
 import {
   ERROR_MESSAGE,
@@ -11,10 +11,19 @@ import {
   CONFIRM_MESSAGE,
   PLACEHOLDER,
 } from './message';
-import { BASE_URL, NAVER_LOGIN_URL, KAKAO_LOGIN_URL } from './url';
+import {
+  BASE_URL,
+  NAVER_LOGIN_URL,
+  KAKAO_LOGIN_URL,
+  VACCINATION_RESERVATION_URL,
+  NAVER_LEFT_VACCINATION_URL,
+} from './url';
 import { LOCAL_STORAGE_KEY } from './localStorage';
 import { TO_DATE_TYPE } from './toDateType';
 import { RESPONSE_STATE } from './service';
+import REGEX from './regex';
+import { REGION_NAME } from './region';
+import { FILTER_TYPE, SORT_TYPE } from './list';
 
 export {
   PALETTE,
@@ -25,10 +34,13 @@ export {
   THEME_COLOR,
   LINE_LIMIT,
   COMMENT_LIMIT,
+  NICKNAME_LIMIT,
   AGE_RANGE,
   BASE_URL,
   NAVER_LOGIN_URL,
   KAKAO_LOGIN_URL,
+  VACCINATION_RESERVATION_URL,
+  NAVER_LEFT_VACCINATION_URL,
   ERROR_MESSAGE,
   ALERT_MESSAGE,
   SNACKBAR_MESSAGE,
@@ -37,4 +49,9 @@ export {
   LOCAL_STORAGE_KEY,
   TO_DATE_TYPE,
   RESPONSE_STATE,
+  PAGING_SIZE,
+  REGEX,
+  REGION_NAME,
+  FILTER_TYPE,
+  SORT_TYPE,
 };

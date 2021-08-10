@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
 
-@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 @DisplayName("사용자 비즈니스 흐름 테스트")
@@ -44,7 +42,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userRequest = new UserRequest("인비", AgeRange.TEENS, SocialProvider.NAVER, null, null);
+        userRequest = new UserRequest("인비", AgeRange.TEENS, false, SocialProvider.NAVER, "NAVER_ID", "naver.com/profile");
     }
 
     @DisplayName("사용자 회원가입 - 성공")
@@ -128,13 +126,15 @@ public class UserServiceTest {
         UserResponse signupResponse = userService.signup(userRequest);
         User user = userService.findUserById(signupResponse.getId());
         //when
-        UserRequest updateRequest = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
+        UserRequest updateRequest = new UserRequest("검프", AgeRange.THIRTIES, true, null, null, null);
         userService.update(Optional.of(user), updateRequest);
         //then
         User updatedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
+        assertThat(updatedUser.getNickname()).isEqualTo(updateRequest.getNickname());
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
+        assertThat(updatedUser.isShotVerified()).isEqualTo(updateRequest.isShotVerified());
     }
 
     @DisplayName("사용자 수정 - 성공 - 자신의 닉네임을 그대로 수정할 때")
@@ -143,7 +143,7 @@ public class UserServiceTest {
         //given
         UserResponse signupResponse = userService.signup(userRequest);
         User user = userService.findUserById(signupResponse.getId());
-        UserRequest updateRequest = new UserRequest("인비", AgeRange.THIRTIES, null, null, null);
+        UserRequest updateRequest = new UserRequest("인비", AgeRange.THIRTIES, false, null, null, null);
         //when
         userService.update(Optional.of(user), updateRequest);
         //then
@@ -159,7 +159,7 @@ public class UserServiceTest {
         //given
         UserResponse signupResponse1 = userService.signup(userRequest);
         User user1 = userService.findUserById(signupResponse1.getId());
-        UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, null, null, null);
+        UserRequest signUpRequest2 = new UserRequest("검프", AgeRange.THIRTIES, false, SocialProvider.NAVER, "NAVER_ID", "naver.com/profile");
         UserResponse signupResponse2 = userService.signup(signUpRequest2);
         User user2 = userService.findUserById(signupResponse2.getId());
 
@@ -190,7 +190,7 @@ public class UserServiceTest {
         //given
         Long lastIndex = getLastIndex();
         //when
-        UserRequest updateRequest = new UserRequest(null, null, null, null, null);
+        UserRequest updateRequest = new UserRequest(null, null, false, null, null, null);
         //then
         assertThatThrownBy(() -> userService.update(Optional.empty(), updateRequest))
                 .isInstanceOf(UnAuthorizedException.class);
@@ -222,6 +222,10 @@ public class UserServiceTest {
     private Long getLastIndex() {
         User lastUser = User.builder()
                 .nickname("라이언")
+                .ageRange(AgeRange.TWENTIES)
+                .socialProvider(SocialProvider.KAKAO)
+                .socialId("KAKAO_ID")
+                .profileUrl("kakao.com/profile")
                 .build();
         return userRepository.save(lastUser).getId();
     }
