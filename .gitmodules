@@ -1,4 +1,4 @@
 [submodule "backend/cvi-backend-secret"]
 	path = backend/cvi-backend-secret
 	url = https://github.com/taehee-kim-dev/cvi-backend-secret
-        branch = main
+	branch = main
