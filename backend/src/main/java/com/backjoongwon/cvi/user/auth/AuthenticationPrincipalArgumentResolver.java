@@ -1,6 +1,6 @@
 package com.backjoongwon.cvi.user.auth;
 
-import com.backjoongwon.cvi.user.application.UserService;
+import com.backjoongwon.cvi.user.service.UserService;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
