@@ -68,6 +68,30 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         댓글_조회_실패함(response);
     }
 
+    @DisplayName("게시글 댓글 페이징 조회 - 성공")
+    @Test
+    void findCommentOfPostPaging() throws Exception {
+        //given
+        willReturn(commentResponses).given(postService).findCommentsById(anyLong(), anyInt(), anyInt());
+        //when
+        int offset = 1;
+        int size = 2;
+        ResultActions response = 댓글_조회_페이징_요청(POST_ID, offset, size);
+        //then
+        댓글_페이징_조회_성공함(response);
+    }
+
+    @DisplayName("게시글 댓글 페이징 조회 - 실패 - 게시글이 없는 경우")
+    @Test
+    void findCommentOfPostPagingFailure() throws Exception {
+        //given
+        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(postService).findCommentsById(anyLong(), anyInt(), anyInt());
+        //when
+        ResultActions response = 댓글_조회_페이징_요청(anyLong(), anyInt(), anyInt());
+        //then
+        댓글_페이징_조회_실패함(response);
+    }
+
     @DisplayName("게시글 댓글 수정 - 성공")
     @Test
     void putComment() throws Exception {
@@ -140,6 +164,13 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
+    private ResultActions 댓글_조회_페이징_요청(long postId, int offset, int size) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/{postId}/comments/paging", postId)
+                .queryParam("offset", String.valueOf(offset))
+                .queryParam("size", String.valueOf(size))
+                .contentType(MediaType.APPLICATION_JSON));
+    }
+
     private void 댓글_조회_성공함(ResultActions response) throws Exception {
         response.andExpect(status().isOk())
                 .andDo(print())
@@ -150,6 +181,18 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         response.andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(toDocument("comment-find-failure"));
+    }
+
+    private void 댓글_페이징_조회_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("comment-find-paging"));
+    }
+
+    private void 댓글_페이징_조회_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("comment-find-paging-failure"));
     }
 
     private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {

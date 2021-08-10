@@ -533,6 +533,21 @@ include::{snippets}/comment-find-failure/http-request.adoc[]
 ===== Response
 include::{snippets}/comment-find-failure/http-response.adoc[]
 
+=== 게시글 댓글 페이징 조회
+==== 성공
+===== Request
+include::{snippets}/comment-find-paging/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-find-paging/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/comment-find-paging-failure/http-request.adoc[]
+
+===== Response
+include::{snippets}/comment-find-paging-failure/http-response.adoc[]
+
 === 게시글 댓글 수정
 ==== 성공
 ===== Request

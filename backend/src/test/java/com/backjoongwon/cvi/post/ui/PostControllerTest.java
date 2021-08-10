@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.post.ui;
 
-import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -225,7 +224,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
                 new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
                 new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7,true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -393,58 +392,5 @@ class PostControllerTest extends PreprocessPostControllerTest {
                 .andExpect(content().json(toJson(postResponses)))
                 .andDo(print())
                 .andDo(toDocument("post-findByVaccinationType-paging-when-empty"));
-    }
-
-    private ResultActions 댓글_조회_요청(Long postId) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/{postId}/comments", postId)
-                .contentType(MediaType.APPLICATION_JSON));
-    }
-
-    private void 댓글_조회_성공함(ResultActions response) throws Exception {
-        response.andExpect(status().isOk())
-                .andDo(print())
-                .andDo(toDocument("comment-find"));
-    }
-
-    private void 댓글_조회_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isNotFound())
-                .andDo(print())
-                .andDo(toDocument("comment-find-failure"));
-    }
-
-    private ResultActions 댓글_수정_요청(Long postId, Long commentId, CommentRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request))
-                .header(HttpHeaders.AUTHORIZATION, accessToken));
-    }
-
-    private void 댓글_수정_성공함(ResultActions response) throws Exception {
-        response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("comment-update"));
-    }
-
-    private void 댓글_수정_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("comment-update-failure"));
-    }
-
-    private ResultActions 댓글_삭제_요청(Long postId, Long commentId, String accessToken) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/comments/{commentId}", postId, commentId)
-                .header(HttpHeaders.AUTHORIZATION, accessToken));
-    }
-
-    private void 댓글_삭제_성공함(ResultActions response) throws Exception {
-        response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("comment-delete"));
-    }
-
-    private void 댓글_삭제_실패함(ResultActions response) throws Exception {
-        response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("comment-delete-failure"));
     }
 }
