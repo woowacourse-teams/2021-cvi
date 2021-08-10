@@ -24,17 +24,22 @@ const MyPageAccount = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
   const [nickname, setNickname] = useState('');
-  const [ageRange, setAgeRange] = useState('');
+  const [updatedAgeRange, setAgeRange] = useState(user?.ageRange?.meaning ?? '10대');
 
   const { openSnackBar } = useSnackBar();
 
   const editAccount = async (event) => {
     event.preventDefault();
 
+    const { nickname, socialId, socialProvider, socialProfileUrl, shotVerified } = user;
+
     const data = {
       nickname,
-      ageRange: AGE_RANGE[ageRange],
-      socialProfileUrl: user.socialProfileUrl,
+      ageRange: AGE_RANGE[updatedAgeRange],
+      socialId,
+      socialProfileUrl,
+      shotVerified,
+      socialProvider,
     };
     const response = await putAccountAsync(accessToken, data);
 
@@ -49,7 +54,7 @@ const MyPageAccount = () => {
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
   };
 
-  const isDisableButton = nickname === user.nickname && ageRange === user.ageRange?.meaning;
+  const isDisableButton = nickname === user.nickname && updatedAgeRange === user.ageRange?.meaning;
 
   useEffect(() => {
     setNickname(user.nickname);
@@ -72,10 +77,10 @@ const MyPageAccount = () => {
               onChange={(event) => setNickname(event.target.value)}
             />
             <AgeRange>나이대</AgeRange>
-            {ageRange && (
+            {updatedAgeRange && (
               <Selection
                 selectionList={Object.keys(AGE_RANGE)}
-                selectedItem={ageRange}
+                selectedItem={updatedAgeRange}
                 setSelectedItem={setAgeRange}
               />
             )}

@@ -54,7 +54,7 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
 
   const editComment = async () => {
     if (!editedContent.length) {
-      alert(ALERT_MESSAGE.FAIL_TO_FUIFILL_MIN_LENGTH);
+      alert(ALERT_MESSAGE.FAIL_TO_FULFILL_MIN_LENGTH);
 
       return;
     }

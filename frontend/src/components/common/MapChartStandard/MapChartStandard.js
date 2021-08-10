@@ -16,15 +16,16 @@ const MapChartStandard = ({ dataList }) => {
     <Container>
       <Title>완전 접종률(%)</Title>
       <StandardContainer>
-        <div>0 ~ {mean - 2 * standardDeviation}</div>
+        <div>0 ~ {(mean - 2 * standardDeviation).toFixed(1)}</div>
         <div>
-          {(mean - 2 * standardDeviation + 0.1).toFixed(1)} ~ {mean - standardDeviation}
+          {(mean - 2 * standardDeviation + 0.1).toFixed(1)} ~{' '}
+          {(mean - standardDeviation).toFixed(1)}
         </div>
         <div>
           {(mean - standardDeviation + 0.1).toFixed(1)} ~ {mean}
         </div>
         <div>
-          {mean + 0.1} ~ {mean + standardDeviation}
+          {(mean + 0.1).toFixed(1)} ~ {(mean + standardDeviation).toFixed(1)}
         </div>
         <div>
           {(mean + standardDeviation + 0.1).toFixed(1)} ~ {Math.max(...averageInoculationList)}

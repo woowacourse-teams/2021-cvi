@@ -6,6 +6,7 @@ import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants'
 import { useLoading } from '../../hooks';
 import {
   Container,
+  LoadingContainer,
   ScrollLoadingContainer,
   Title,
   MyReviewList,
@@ -67,13 +68,44 @@ const MyPageReview = () => {
     showScrollLoading();
   }, [inView]);
 
+  // return (
+  //   <Container>
+  //     <Title>내가 쓴 글</Title>
+  //     <Frame styles={frameStyle}>
+  //       {isLoading ? (
+  //         <LoadingContainer>
+  //           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
+  //         </LoadingContainer>
+  //       ) : (
+  //         <MyReviewList>
+  //           {myReviewList?.map((myReview, index) => (
+  //             <ReviewItem
+  //               key={myReview.id}
+  //               review={myReview}
+  //               accessToken={accessToken}
+  //               innerRef={isLastPost(index) ? ref : null}
+  //               onClick={() => goReviewDetailPage(myReview.id)}
+  //             />
+  //           ))}
+  //         </MyReviewList>
+  //       )}
+  //       {isScrollLoading && (
+  //         <ScrollLoadingContainer>
+  //           <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
+  //         </ScrollLoadingContainer>
+  //       )}
+  //     </Frame>
+  //   </Container>
+  // );
   return (
     <Container>
       <Title>내가 쓴 글</Title>
-      <Frame styles={frameStyle}>
-        {isLoading ? (
+      {isLoading ? (
+        <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
-        ) : (
+        </LoadingContainer>
+      ) : (
+        <Frame styles={frameStyle}>
           <MyReviewList>
             {myReviewList?.map((myReview, index) => (
               <ReviewItem
@@ -85,13 +117,13 @@ const MyPageReview = () => {
               />
             ))}
           </MyReviewList>
-        )}
-        {isScrollLoading && (
-          <ScrollLoadingContainer>
-            <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
-          </ScrollLoadingContainer>
-        )}
-      </Frame>
+        </Frame>
+      )}
+      {isScrollLoading && (
+        <ScrollLoadingContainer>
+          <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
+        </ScrollLoadingContainer>
+      )}
     </Container>
   );
 };

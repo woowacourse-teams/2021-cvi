@@ -5,6 +5,7 @@ import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants'
 import { useLoading } from '../../hooks';
 import {
   Container,
+  LoadingContainer,
   ScrollLoadingContainer,
   MyCommentReviewListContainer,
   Title,
@@ -70,10 +71,12 @@ const MyPageCommentReview = () => {
   return (
     <Container>
       <Title>댓글 단 글</Title>
-      <Frame styles={frameStyle}>
-        {isLoading ? (
+      {isLoading ? (
+        <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
-        ) : (
+        </LoadingContainer>
+      ) : (
+        <Frame styles={frameStyle}>
           <MyCommentReviewListContainer>
             {myCommentReviewList?.map((myCommentReview, index) => {
               const myComments = myCommentReview.comments.filter(
@@ -91,13 +94,13 @@ const MyPageCommentReview = () => {
               );
             })}
           </MyCommentReviewListContainer>
-        )}
-        {isScrollLoading && (
-          <ScrollLoadingContainer>
-            <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
-          </ScrollLoadingContainer>
-        )}
-      </Frame>
+        </Frame>
+      )}
+      {isScrollLoading && (
+        <ScrollLoadingContainer>
+          <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
+        </ScrollLoadingContainer>
+      )}
     </Container>
   );
 };
