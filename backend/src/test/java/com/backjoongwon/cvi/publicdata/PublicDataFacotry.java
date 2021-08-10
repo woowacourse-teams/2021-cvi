@@ -116,7 +116,7 @@ public class PublicDataFacotry {
         return Arrays.asList(
                 new VaccinationStatisticResponse(0, 0, targetDate,
                         0, 0, "World", 2303769251L, 1191535085L, BigDecimal.valueOf(29.3), BigDecimal.valueOf(15.0)),
-                new VaccinationStatisticResponse(0, 0,targetDate.minusDays(1),
+                new VaccinationStatisticResponse(0, 0, targetDate.minusDays(1),
                         0, 0, "World", 2293196690L, 1175939230L, BigDecimal.valueOf(28.9), BigDecimal.valueOf(14.7))
         );
     }

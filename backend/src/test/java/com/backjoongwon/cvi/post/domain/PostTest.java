@@ -178,8 +178,9 @@ class PostTest {
         post.assignComment(comment1);
         post.assignComment(comment2);
         //when
+        List<Comment> slicedComments = post.sliceCommentsAsList(offset, size);
         //then
-        assertThat(post.sliceCommentsAsList(offset, size)).extracting("content").containsExactlyElementsOf(contentResult);
+        assertThat(slicedComments).extracting("content").containsExactlyElementsOf(contentResult);
     }
 
     static Stream<Arguments> resizePagingRangeTest() {

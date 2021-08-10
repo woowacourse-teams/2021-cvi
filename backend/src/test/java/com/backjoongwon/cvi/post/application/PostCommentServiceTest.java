@@ -123,10 +123,9 @@ public class PostCommentServiceTest {
         //given
         postService.createComment(post.getId(), optionalAnotherUser, commentRequest);
         //when
-        //then
         Post foundPost = postRepository.findWithCommentsById(post.getId())
                 .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
-
+        //then
         assertThat(foundPost.getCommentsAsList()).hasSize(1);
         assertThat(foundPost.getCommentsAsList()).extracting("content").containsExactly("테스트 댓글");
     }
@@ -140,9 +139,8 @@ public class PostCommentServiceTest {
             postService.createComment(post.getId(), optionalAnotherUser, commentRequest);
         }
         //when
-        //then
         List<CommentResponse> commentResponses = postService.findCommentsById(post.getId(), offset, size);
-
+        //then
         assertThat(commentResponses).hasSize(expectedContents.size());
         assertThat(commentResponses).extracting("content").containsExactlyElementsOf(expectedContents);
     }

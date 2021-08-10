@@ -74,7 +74,9 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         //given
         willReturn(commentResponses).given(postService).findCommentsById(anyLong(), anyInt(), anyInt());
         //when
-        ResultActions response = 댓글_조회_페이징_요청(1L,1,2);
+        int offset = 1;
+        int size = 2;
+        ResultActions response = 댓글_조회_페이징_요청(POST_ID, offset, size);
         //then
         댓글_페이징_조회_성공함(response);
     }
