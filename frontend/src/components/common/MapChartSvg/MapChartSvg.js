@@ -4,8 +4,9 @@ import { getStatisticalValues } from '../../../utils';
 import { MAP_CHART_SVG_PATH } from './MapChartSvgPath';
 
 const MapChartSvg = ({ dataList, hoveredRegion, setHoveredRegion }) => {
-  const averageCompletedVaccination = dataList.map((data) => data.accumulatedSecondRate);
-  const { mean, standardDeviation } = getStatisticalValues(averageCompletedVaccination);
+  const averageInoculationList = dataList.map((data) => data.totalSecondRate);
+
+  const { mean, standardDeviation } = getStatisticalValues(averageInoculationList);
 
   const colorClassification = (value) => {
     if (value <= mean - 2 * standardDeviation) return '#D6DFDF';
@@ -33,9 +34,8 @@ const MapChartSvg = ({ dataList, hoveredRegion, setHoveredRegion }) => {
                 id={region.sido}
                 fill={
                   hoveredRegion === region.sido
-                    ? // ? '#35838E'
-                      '#2E6F78'
-                    : colorClassification(region.accumulatedSecondRate)
+                    ? '#2E6F78'
+                    : colorClassification(region.totalSecondRate)
                 }
                 style={{
                   stroke: THEME_COLOR.WHITE,

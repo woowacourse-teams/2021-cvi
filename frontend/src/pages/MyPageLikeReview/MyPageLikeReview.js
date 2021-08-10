@@ -4,6 +4,7 @@ import { Frame } from '../../components/common';
 import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import {
   Container,
+  LoadingContainer,
   ScrollLoadingContainer,
   Title,
   MyLikeReviewList,
@@ -71,10 +72,12 @@ const MyPageLikeReview = () => {
   return (
     <Container>
       <Title>좋아요 누른 글</Title>
-      <Frame styles={frameStyle}>
-        {isLoading ? (
+      {isLoading ? (
+        <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
-        ) : (
+        </LoadingContainer>
+      ) : (
+        <Frame styles={frameStyle}>
           <MyLikeReviewList>
             {myLikeReviewList?.map((myLikeReview, index) => (
               <ReviewItem
@@ -87,13 +90,13 @@ const MyPageLikeReview = () => {
               />
             ))}
           </MyLikeReviewList>
-        )}
-        {isScrollLoading && (
-          <ScrollLoadingContainer>
-            <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
-          </ScrollLoadingContainer>
-        )}
-      </Frame>
+        </Frame>
+      )}
+      {isScrollLoading && (
+        <ScrollLoadingContainer>
+          <ScrollLoading isLoading={isScrollLoading} width="4rem" height="4rem" />
+        </ScrollLoadingContainer>
+      )}
     </Container>
   );
 };

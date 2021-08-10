@@ -30,6 +30,7 @@ const config = {
       {
         test: /\.(js|jsx)$/i,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         options: {
           presets: ['@babel/preset-react', '@babel/preset-env'],
           plugins: ['@babel/plugin-transform-runtime', 'react-require'],
@@ -43,6 +44,10 @@ const config = {
       {
         test: /\.svg$/,
         use: ['@svgr/webpack'],
+      },
+      {
+        test: /\.css$/,
+        use: ['css-loader'],
       },
     ],
   },

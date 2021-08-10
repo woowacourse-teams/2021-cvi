@@ -10,11 +10,12 @@ const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
       throw new Error(response);
     }
 
-    const { id, nickname, ageRange, shotVerified, socialProfileUrl } = await response.json();
+    const { id, nickname, ageRange, shotVerified, socialId, socialProvider, socialProfileUrl } =
+      await response.json();
 
     return {
       accessToken,
-      user: { id, nickname, ageRange, shotVerified, socialProfileUrl },
+      user: { id, nickname, ageRange, shotVerified, socialId, socialProvider, socialProfileUrl },
     };
   } catch (error) {
     console.error(error);

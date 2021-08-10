@@ -15,6 +15,11 @@ const Container = styled.div`
   }
 `;
 
+const LoadingContainer = styled.div`
+  position: relative;
+  top: 35%;
+`;
+
 const ScrollLoadingContainer = styled.div`
   position: relative;
   height: 8rem;
@@ -42,4 +47,11 @@ const frameStyle = css`
   width: 100%;
 `;
 
-export { Container, ScrollLoadingContainer, MyCommentReviewListContainer, Title, frameStyle };
+export {
+  Container,
+  LoadingContainer,
+  ScrollLoadingContainer,
+  MyCommentReviewListContainer,
+  Title,
+  frameStyle,
+};

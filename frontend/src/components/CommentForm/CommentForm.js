@@ -30,7 +30,7 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
 
   const createComment = async () => {
     if (!content.length) {
-      alert(ALERT_MESSAGE.FAIL_TO_FUIFILL_MIN_LENGTH);
+      alert(ALERT_MESSAGE.FAIL_TO_FULFILL_MIN_LENGTH);
 
       return;
     }
