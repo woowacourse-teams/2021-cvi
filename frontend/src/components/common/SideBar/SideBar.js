@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Container,
   LogoContainer,
@@ -22,6 +23,7 @@ import {
 import { useSnackBar } from '../../../hooks';
 
 const SideBar = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
 
@@ -32,6 +34,7 @@ const SideBar = () => {
     dispatch(logoutAction());
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
+    history.push(PATH.HOME);
   };
 
   const isRelatedMyPage = (pathname) =>

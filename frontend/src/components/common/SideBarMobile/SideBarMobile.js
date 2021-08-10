@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Dimmer,
   Container,
@@ -36,6 +37,7 @@ import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { useSnackBar } from '../../../hooks';
 
 const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
 
@@ -47,6 +49,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
     setIsOpenSideBar(false);
+    history.push(PATH.HOME);
   };
 
   const closeSideBar = (event) => {
