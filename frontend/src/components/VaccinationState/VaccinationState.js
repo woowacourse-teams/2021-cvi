@@ -58,9 +58,9 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
             <DonutChart target={koreanState?.totalFirstRate ?? 0} />
             <Info>
               <InfoTitle>국내 1차 접종</InfoTitle>
-              <div>누적 {numberWithCommas(Number(koreanState?.totalFirstCnt))}</div>
+              <div>누적 {numberWithCommas(Number(koreanState?.totalFirstCnt ?? 0))}</div>
               <div>
-                신규 {numberWithCommas(Number(koreanState?.firstCnt))}
+                신규 {numberWithCommas(Number(koreanState?.firstCnt ?? 0))}
                 <IncreaseIcon>▴</IncreaseIcon>
               </div>
             </Info>
@@ -69,9 +69,9 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
             <DonutChart target={koreanState?.totalSecondRate ?? 0} />
             <Info>
               <InfoTitle>국내 완전 접종</InfoTitle>
-              <div>누적 {numberWithCommas(Number(koreanState?.totalSecondCnt))}</div>
+              <div>누적 {numberWithCommas(Number(koreanState?.totalSecondCnt ?? 0))}</div>
               <div>
-                신규 {numberWithCommas(Number(koreanState?.secondCnt))}
+                신규 {numberWithCommas(Number(koreanState?.secondCnt ?? 0))}
                 <IncreaseIcon>▴</IncreaseIcon>
               </div>
             </Info>
@@ -81,7 +81,7 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
               <DonutChart target={worldState[0]?.totalSecondRate ?? 0} />
               <Info>
                 <InfoTitle>세계 완전 접종</InfoTitle>
-                <div>누적 {numberWithCommas(Number(worldState[0]?.totalSecondCnt))}</div>
+                <div>누적 {numberWithCommas(Number(worldState[0]?.totalSecondCnt ?? 0))}</div>
               </Info>
             </PrimaryState>
           )}
