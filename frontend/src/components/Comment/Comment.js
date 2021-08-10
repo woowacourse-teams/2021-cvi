@@ -82,7 +82,7 @@ const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount })
         <CommentItem
           key={comment.id}
           accessToken={accessToken}
-          userId={user?.id}
+          userId={user?.id ?? 0}
           reviewId={reviewId}
           comment={comment}
           setCommentList={setCommentList}
