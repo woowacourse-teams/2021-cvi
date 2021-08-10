@@ -36,8 +36,6 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
 
   useEffect(() => {
     getCommentList();
-
-    return () => setCommentList([]);
   }, [getCommentList]);
 
   return (
