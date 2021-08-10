@@ -27,6 +27,7 @@
     "react-dom": "^17.0.2",
     "react-images-upload": "^1.2.8",
     "react-intersection-observer": "^8.32.0",
+    "react-lottie": "^1.2.3",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "tesseract.js": "^2.1.5"

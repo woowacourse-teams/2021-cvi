@@ -18,6 +18,7 @@ import BarChart from './BarChart/BarChart';
 import MapChart from './MapChart/MapChart';
 import MapChartSvg from './MapChartSvg/MapChartSvg';
 import MapChartStandard from './MapChartStandard/MapChartStandard';
+import LottieAnimation from './LottieAnimation/LottieAnimation';
 
 export {
   Avatar,
@@ -40,4 +41,5 @@ export {
   MapChart,
   MapChartSvg,
   MapChartStandard,
+  LottieAnimation,
 };

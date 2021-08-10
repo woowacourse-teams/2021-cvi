@@ -8,13 +8,14 @@ const ShotVerificationLabel = ({ shotVerification, trueText, falseText, styles }
 );
 
 ShotVerificationLabel.propTypes = {
-  shotVerification: PropTypes.bool.isRequired,
+  shotVerification: PropTypes.bool,
   trueText: PropTypes.string.isRequired,
   falseText: PropTypes.string,
   styles: PropTypes.object,
 };
 
 ShotVerificationLabel.defaultProps = {
+  shotVerification: false,
   falseText: '',
   styles: null,
 };
