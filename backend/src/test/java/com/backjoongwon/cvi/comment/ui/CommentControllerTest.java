@@ -1,11 +1,15 @@
-package com.backjoongwon.cvi.post.ui;
+package com.backjoongwon.cvi.comment.ui;
 
+import com.backjoongwon.cvi.comment.application.CommentService;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.post.ui.PreprocessPostControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,48 +24,52 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("게시글 컨트롤러 Mock 테스트 - 댓글")
-public class PostCommentControllerTest extends PreprocessPostControllerTest {
+@DisplayName("댓글 컨트롤러 Mock 테스트")
+@WebMvcTest(controllers = CommentController.class)
+public class CommentControllerTest extends PreprocessPostControllerTest {
+    
+    @MockBean
+    private CommentService commentService;
 
-    @DisplayName("게시글 댓글 등록 - 성공")
+    @DisplayName("댓글 등록 - 성공")
     @Test
     void createComment() throws Exception {
         //given
         CommentResponse expectedResponse = new CommentResponse(COMMENT_ID, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
-        willReturn(expectedResponse).given(postService).createComment(anyLong(), any(), any(CommentRequest.class));
+        willReturn(expectedResponse).given(commentService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
         //then
         댓글_등록_성공함(response, expectedResponse);
     }
 
-    @DisplayName("게시글 댓글 등록 - 실패 - 비회원이 댓글을 작성할 때")
+    @DisplayName("댓글 등록 - 실패 - 비회원이 댓글을 작성할 때")
     @Test
     void createCommentFailureWhenWrongWriter() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(postService).createComment(anyLong(), any(), any(CommentRequest.class));
+        willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(commentService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
         //then
         댓글_등록_실패함(response);
     }
 
-    @DisplayName("게시글 댓글 조회 - 성공")
+    @DisplayName("댓글 조회 - 성공")
     @Test
     void findCommentOfPost() throws Exception {
         //given
-        willReturn(commentResponses).given(postService).findCommentsById(anyLong());
+        willReturn(commentResponses).given(commentService).findCommentsByPostId(anyLong());
         //when
         ResultActions response = 댓글_조회_요청(POST_ID);
         //then
         댓글_조회_성공함(response);
     }
 
-    @DisplayName("게시글 댓글 조회 - 실패 - 게시글이 없는 경우")
+    @DisplayName("댓글 조회 - 실패 - 게시글이 없는 경우")
     @Test
     void findCommentOfPostFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(postService).findCommentsById(anyLong());
+        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(commentService).findCommentsByPostId(anyLong());
         //when
         ResultActions response = 댓글_조회_요청(anyLong());
         //then
@@ -72,7 +80,7 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
     @Test
     void findCommentOfPostPaging() throws Exception {
         //given
-        willReturn(commentResponses).given(postService).findCommentsById(anyLong(), anyInt(), anyInt());
+        willReturn(commentResponses).given(commentService).findCommentsByPostId(anyLong(), anyInt(), anyInt());
         //when
         int offset = 1;
         int size = 2;
@@ -85,31 +93,31 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
     @Test
     void findCommentOfPostPagingFailure() throws Exception {
         //given
-        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(postService).findCommentsById(anyLong(), anyInt(), anyInt());
+        willThrow(new NotFoundException("해당 id 게시글이 존재하지 않습니다.")).given(commentService).findCommentsByPostId(anyLong(), anyInt(), anyInt());
         //when
         ResultActions response = 댓글_조회_페이징_요청(anyLong(), anyInt(), anyInt());
         //then
         댓글_페이징_조회_실패함(response);
     }
 
-    @DisplayName("게시글 댓글 수정 - 성공")
+    @DisplayName("댓글 수정 - 성공")
     @Test
     void putComment() throws Exception {
         //given
         CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
-        willDoNothing().given(postService).updateComment(anyLong(), anyLong(), any(), any(CommentRequest.class));
+        willDoNothing().given(commentService).updateComment(anyLong(), anyLong(), any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + ACCESS_TOKEN);
         //then
         댓글_수정_성공함(response);
     }
 
-    @DisplayName("게시글 댓글 수정 - 실패 - 작성자가 아닌 사용자가 수정 요청")
+    @DisplayName("댓글 수정 - 실패 - 작성자가 아닌 사용자가 수정 요청")
     @Test
     void putCommentFailureWhenWrongUser() throws Exception {
         //given
         CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
-        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).updateComment(anyLong(), anyLong(),
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(commentService).updateComment(anyLong(), anyLong(),
                 any(), any(CommentRequest.class));
         //when
         ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
@@ -117,22 +125,22 @@ public class PostCommentControllerTest extends PreprocessPostControllerTest {
         댓글_수정_실패함(response);
     }
 
-    @DisplayName("게시글 댓글 삭제 - 성공")
+    @DisplayName("댓글 삭제 - 성공")
     @Test
     void deleteComment() throws Exception {
         //given
-        willDoNothing().given(postService).deleteComment(anyLong(), anyLong(), any());
+        willDoNothing().given(commentService).deleteComment(anyLong(), anyLong(), any());
         //when
         ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + ACCESS_TOKEN);
         //then
         댓글_삭제_성공함(response);
     }
 
-    @DisplayName("게시글 댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청")
+    @DisplayName("댓글 삭제 - 실패 - 작성자가 아닌 사용자가 삭제 요청")
     @Test
     void deleteCommentWhenWrongUser() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(postService).deleteComment(anyLong(), anyLong(), any());
+        willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(commentService).deleteComment(anyLong(), anyLong(), any());
         //when
         ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + "another_user_token");
         //then

@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.ui;
 
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.post.application.PostService;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -8,6 +9,8 @@ import com.backjoongwon.cvi.post.dto.PostResponse;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,7 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("게시글 컨트롤러 Mock 테스트 - 게시글")
+@WebMvcTest(controllers = PostController.class)
 class PostControllerTest extends PreprocessPostControllerTest {
+
+    @MockBean
+    protected PostService postService;
 
     @DisplayName("게시글 등록 - 성공")
     @Test
