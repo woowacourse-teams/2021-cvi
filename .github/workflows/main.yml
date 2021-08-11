@@ -2,7 +2,7 @@ name: test-automation
 
 on:
   push:
-    branches: [refactor/frontend-final]
+    branches: [develop]
 
 defaults:
   run:
