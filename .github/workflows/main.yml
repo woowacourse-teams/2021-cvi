@@ -9,7 +9,7 @@ defaults:
     working-directory: ./frontend
 
 jobs:
-  test-automation:
+  open-localhost:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,9 +19,11 @@ jobs:
       - name: yarn install
         run: yarn
         
-      - name: yarn start
-        run: yarn start
-        
-      - name: yarn test
-        run: cypress run
+      - uses: cypress-io/github-action@v1
+        with:
+          record: true
+          parallel: true
+          start: yarn start
+          wait-on: 'http://localhost:9000'
+
 
