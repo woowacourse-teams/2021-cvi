@@ -1,22 +1,10 @@
 spring:
-  profiles:
-    group:
-      prod:
-        - db
-        - jwt
-        - client-secret
-      local:
-        - jwt
-        - client-secret
-
   jpa:
     properties:
       hibernate.default_batch_fetch_size: 500
-
   h2:
     console:
       enabled: false
-
   flyway:
     enabled: false
 
@@ -32,7 +20,7 @@ security:
 
   public:
     data:
-    vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
+    vaccination: publicdata-secret
 
 server:
   shutdown: graceful
