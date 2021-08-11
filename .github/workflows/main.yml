@@ -2,7 +2,7 @@ name: test-automation
 
 on:
   push:
-    branches: [refactor/frontend-githubactions]
+    branches: [develop]
 
 defaults:
   run:
