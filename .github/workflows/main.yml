@@ -3,6 +3,8 @@ name: test-automation
 on:
   push:
     branches: [develop]
+    paths:
+      - 'frontend/**'
 
 defaults:
   run:
