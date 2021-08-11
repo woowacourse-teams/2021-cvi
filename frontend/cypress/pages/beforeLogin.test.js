@@ -14,9 +14,9 @@ describe('Before Login Test', () => {
 
   it.skip('홈페이지에 접속하여 접종 현황을 본다.', () => {
     cy.waitForReact();
-    cy.react('VaccinationState', { props: { title: '접종 현황' }, exact: true }).contains(
-      '접종 현황',
-    );
+    // cy.react('VaccinationState', { props: { title: '접종 현황' }, exact: true }).contains(
+    //   '접종 현황',
+    // );
   });
 
   it.skip('홈페이지에 접속하여 접종 후기를 본다.', () => {
