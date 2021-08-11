@@ -42,7 +42,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     public List<CommentResponse> findCommentsOfPost(@PathVariable Long postId,
                                                     @RequestParam(defaultValue = "0") int offset,
-                                                    @RequestParam(defaultValue = "6") int size) {
+                                                    @RequestParam(defaultValue = "10") int size) {
         return commentService.findCommentsByPostId(postId, offset, size);
     }
 

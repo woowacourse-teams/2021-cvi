@@ -33,6 +33,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("댓글 비즈니스 흐름 테스트")
 public class CommentServiceTest {
 
+    private static final long COMMENT_ID = 0L;
+
     @Autowired
     private PostRepository postRepository;
 
@@ -136,7 +138,7 @@ public class CommentServiceTest {
         CommentRequest updateRequest = new CommentRequest("업데이트 댓글 실패");
         //when
         //then
-        assertThatThrownBy(() -> commentService.updateComment(post.getId(), 0L, optionalUser, updateRequest))
+        assertThatThrownBy(() -> commentService.updateComment(post.getId(), COMMENT_ID, optionalUser, updateRequest))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
@@ -176,7 +178,7 @@ public class CommentServiceTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> commentService.deleteComment(post.getId(), 0L, optionalUser))
+        assertThatThrownBy(() -> commentService.deleteComment(post.getId(), COMMENT_ID, optionalUser))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("찾을 수 없는 댓글입니다.");
     }
