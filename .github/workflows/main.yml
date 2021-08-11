@@ -20,7 +20,8 @@ jobs:
         run: yarn
 
       - name: test
-      - run: yarn start &
+      - run: |
+          yarn start &
           sleep 10 &&
           curl http://localhost:9000 &&
           cypress run
