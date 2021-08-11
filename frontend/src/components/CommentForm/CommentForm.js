@@ -23,14 +23,21 @@ import { postCommentAsync } from '../../service';
 import { useSnackBar } from '../../hooks';
 
 // TODO: 댓글 최적화
-const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getReview }) => {
+const CommentForm = ({
+  accessToken,
+  reviewId,
+  nickname,
+  socialProfileUrl,
+  setNewComment,
+  setCommentCount,
+}) => {
   const [content, setContent] = useState('');
 
   const { openSnackBar } = useSnackBar();
 
   const createComment = async () => {
     if (!content.length) {
-      alert(ALERT_MESSAGE.FAIL_TO_FUIFILL_MIN_LENGTH);
+      alert(ALERT_MESSAGE.FAIL_TO_FULFILL_MIN_LENGTH);
 
       return;
     }
@@ -45,7 +52,8 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
     }
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
-    getReview();
+    setNewComment(response.data);
+    setCommentCount((prevstate) => prevstate + 1);
     setContent('');
   };
 
@@ -89,10 +97,11 @@ const CommentForm = ({ accessToken, reviewId, nickname, socialProfileUrl, getRev
 
 CommentForm.propTypes = {
   accessToken: PropTypes.string.isRequired,
-  getReview: PropTypes.func.isRequired,
   nickname: PropTypes.string.isRequired,
   reviewId: PropTypes.string.isRequired,
   socialProfileUrl: PropTypes.string.isRequired,
+  setNewComment: PropTypes.func.isRequired,
+  setCommentCount: PropTypes.func.isRequired,
 };
 
 CommentForm.defaultProps = {

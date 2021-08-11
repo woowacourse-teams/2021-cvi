@@ -16,6 +16,16 @@ const Container = styled.div`
   }
 `;
 
+const LottieContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+  position: relative;
+  top: 35%;
+`;
+
 const ScrollLoadingContainer = styled.div`
   position: relative;
   height: 8rem;
@@ -44,7 +54,16 @@ const frameStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   width: 100%;
 `;
 
-export { Container, ScrollLoadingContainer, Title, MyReviewList, frameStyle };
+export {
+  Container,
+  LottieContainer,
+  LoadingContainer,
+  ScrollLoadingContainer,
+  Title,
+  MyReviewList,
+  frameStyle,
+};

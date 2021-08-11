@@ -2,6 +2,10 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR, PALETTE } from '../../constants';
 
+const LoadingContainer = styled.div`
+  position: relative;
+`;
+
 const Table = styled.table`
   width: 100%;
   height: 100%;
@@ -53,4 +57,4 @@ const frameStyle = css`
   padding: 2rem 1rem;
 `;
 
-export { Table, Thead, Tbody, Tr, Span, IncreaseIcon, frameStyle };
+export { LoadingContainer, Table, Thead, Tbody, Tr, Span, IncreaseIcon, frameStyle };

@@ -7,7 +7,6 @@ import {
   TopContainer,
   VaccinationInfo,
   ReviewInfo,
-  ShotVerified,
   WriterInfo,
   Writer,
   InfoBottom,
@@ -27,6 +26,7 @@ import {
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
+  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   THEME_COLOR,
   TO_DATE_TYPE,
@@ -41,7 +41,7 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { Comment } from '../../components';
+import { Comment, ShotVerificationLabel } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
 
 // TODO: Comment 컴포넌트 분리
@@ -52,6 +52,7 @@ const ReviewDetailPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
   const [review, setReview] = useState({});
+  const [commentCount, setCommentCount] = useState(0);
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
@@ -107,6 +108,10 @@ const ReviewDetailPage = () => {
     getReview();
   }, [accessToken]);
 
+  useEffect(() => {
+    setCommentCount(review?.commentCount);
+  }, [review]);
+
   return (
     <Container>
       <Frame width="100%" showShadow={true}>
@@ -136,7 +141,12 @@ const ReviewDetailPage = () => {
                   >
                     {VACCINATION[review?.vaccinationType]}
                   </Label>
-                  <ShotVerified>{review?.writer?.shotVerified && '접종 확인'}</ShotVerified>
+                  {review?.writer?.shotVerified && (
+                    <ShotVerificationLabel
+                      shotVerification={review?.writer?.shotVerified}
+                      trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                    />
+                  )}
                 </VaccinationInfo>
                 <WriterInfo>
                   <Avatar src={review?.writer?.socialProfileUrl} />
@@ -190,13 +200,14 @@ const ReviewDetailPage = () => {
                 </IconContainer>
                 <IconContainer>
                   <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-                  <div>{review?.commentCount ?? 0}</div>
+                  <div>{commentCount}</div>
                 </IconContainer>
               </BottomContainer>
               <Comment
                 accessToken={accessToken}
                 user={user}
-                commentCount={review?.commentCount ?? 0}
+                commentCount={commentCount ?? 0}
+                setCommentCount={setCommentCount}
                 reviewId={id}
                 getReview={getReview}
               />

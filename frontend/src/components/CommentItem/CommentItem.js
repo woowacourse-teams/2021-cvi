@@ -8,10 +8,10 @@ import {
   UpdateButtonContainer,
   Writer,
   CreatedAt,
-  ShotVerified,
   Content,
   TextArea,
   buttonStyles,
+  shotVerifiedStyle,
 } from './CommentItem.styles';
 import { toDate } from '../../utils';
 import {
@@ -20,6 +20,7 @@ import {
   CONFIRM_MESSAGE,
   FONT_COLOR,
   RESPONSE_STATE,
+  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   THEME_COLOR,
   TO_DATE_TYPE,
@@ -27,9 +28,16 @@ import {
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import { deleteCommentAsync, putCommentAsync } from '../../service';
 import { useSnackBar } from '../../hooks';
+import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
-const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
-  // TODO: 규칙 어긋나는데 확인하기
+const CommentItem = ({
+  accessToken,
+  userId,
+  reviewId,
+  comment,
+  setCommentList,
+  setCommentCount,
+}) => {
   const { id: commentId, writer, content, createdAt } = comment;
 
   const [isEditable, setIsEditable] = useState(false);
@@ -49,12 +57,13 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
     }
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_COMMENT);
-    getReview();
+    setCommentList((prevState) => prevState.filter((comment) => comment.id !== commentId));
+    setCommentCount((prevState) => prevState - 1);
   };
 
   const editComment = async () => {
     if (!editedContent.length) {
-      alert(ALERT_MESSAGE.FAIL_TO_FUIFILL_MIN_LENGTH);
+      alert(ALERT_MESSAGE.FAIL_TO_FULFILL_MIN_LENGTH);
 
       return;
     }
@@ -69,18 +78,33 @@ const CommentItem = ({ accessToken, userId, reviewId, comment, getReview }) => {
     }
 
     setIsEditable(false);
+    setCommentList((prevState) => {
+      const targetIndex = prevState.findIndex((comment) => comment.id === commentId);
+
+      prevState.splice(targetIndex, 1, {
+        ...prevState[targetIndex],
+        content: editedContent,
+      });
+
+      return prevState;
+    });
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
-    getReview();
   };
 
   return (
     <Container>
       <InfoContainer>
-        <Avatar src={writer.socialProfileUrl} />
+        <Avatar src={writer?.socialProfileUrl} />
         <Info>
           <Writer>
             {writer.nickname} · {writer.ageRange.meaning}
-            {writer.shotVerified && <ShotVerified>접종 확인</ShotVerified>}
+            {writer.shotVerified && (
+              <ShotVerificationLabel
+                shotVerification={writer.shotVerified}
+                trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                styles={shotVerifiedStyle}
+              />
+            )}
           </Writer>
           <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
         </Info>
@@ -138,7 +162,8 @@ CommentItem.propTypes = {
   userId: PropTypes.number.isRequired,
   reviewId: PropTypes.string.isRequired,
   comment: PropTypes.object.isRequired,
-  getReview: PropTypes.func.isRequired,
+  setCommentList: PropTypes.func.isRequired,
+  setCommentCount: PropTypes.func.isRequired,
 };
 
 export default CommentItem;

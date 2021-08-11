@@ -3,6 +3,7 @@ import { FONT_COLOR, THEME_COLOR } from '../../../constants';
 
 const Container = styled.div`
   width: 60%;
+  min-width: 32rem;
   max-width: 60rem;
   min-height: 3.6rem;
   background-color: #f0f0f0;

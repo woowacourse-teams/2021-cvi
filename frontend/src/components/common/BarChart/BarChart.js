@@ -42,26 +42,20 @@ const BarChart = ({ dataList }) => {
                 isShowing={hoveredRegion === region.sido}
                 onMouseEnter={() => setHoveredRegion(region.sido)}
               >
-                <Line
-                  isShowing={hoveredRegion === region.sido}
-                  percent={region.accumulatedFirstRate}
-                />
-                <Percent>{region.accumulatedFirstRate}%</Percent>
+                <Line isShowing={hoveredRegion === region.sido} percent={region.totalFirstRate} />
+                <Percent>{region.totalFirstRate}%</Percent>
                 <Bar
                   first={true}
                   isShowing={hoveredRegion === region.sido}
-                  percent={region.accumulatedFirstRate}
+                  percent={region.totalFirstRate}
                 />
               </BarContainer>
               <BarContainer
                 isShowing={hoveredRegion === region.sido}
                 onMouseEnter={() => setHoveredRegion(region.sido)}
               >
-                <Percent>{region.accumulatedSecondRate}%</Percent>
-                <Bar
-                  isShowing={hoveredRegion === region.sido}
-                  percent={region.accumulatedSecondRate}
-                />
+                <Percent>{region.totalSecondRate}%</Percent>
+                <Bar isShowing={hoveredRegion === region.sido} percent={region.totalSecondRate} />
               </BarContainer>
             </BarList>
             <Region isShowing={hoveredRegion === region.sido}>{REGION_NAME[region.sido]}</Region>

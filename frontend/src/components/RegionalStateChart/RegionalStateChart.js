@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { THEME_COLOR } from '../../constants';
 import { BarChart, Frame, MapChart, ToggleButton } from '../common';
 import { frameStyle, Content, CountingDate } from './RegionalStateChart.styles';
 
-const RegionalStateChart = ({ vaccinationStateList }) => {
+const RegionalStateChart = ({ vaccinationStateList, isLoading, Loading }) => {
   const [selected, setSelected] = useState(false);
 
   const selectionList = ['막대', '지도'];
@@ -32,7 +33,9 @@ const RegionalStateChart = ({ vaccinationStateList }) => {
         toggleSelected={() => setSelected(!selected)}
       />
       <Content>
-        {selected ? (
+        {isLoading ? (
+          <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
+        ) : selected ? (
           <BarChart dataList={vaccinationStateList} />
         ) : (
           <MapChart dataList={vaccinationStateList} />
@@ -45,6 +48,8 @@ const RegionalStateChart = ({ vaccinationStateList }) => {
 
 RegionalStateChart.propTypes = {
   vaccinationStateList: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  Loading: PropTypes.func.isRequired,
 };
 
 export default RegionalStateChart;

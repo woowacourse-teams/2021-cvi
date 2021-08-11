@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Dimmer,
   Container,
@@ -13,7 +14,13 @@ import {
   ProfileContainer,
   User,
 } from './SideBarMobile.styles';
-import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../../constants';
+import {
+  FONT_COLOR,
+  LOCAL_STORAGE_KEY,
+  PATH,
+  SHOT_VERIFICATION,
+  SNACKBAR_MESSAGE,
+} from '../../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
 import {
   HomeIcon,
@@ -22,10 +29,6 @@ import {
   ReviewIcon,
   MyPageIcon,
   CloseIcon,
-  MyReviewMenuIcon,
-  ShotVerificationMenuIcon,
-  LikeIcon,
-  CommentIcon,
   StateIcon,
 } from '../../../assets/icons';
 import Button from '../Button/Button';
@@ -34,8 +37,10 @@ import { AVATAR_SIZE_TYPE } from '../Avatar/Avatar.styles';
 import Avatar from '../Avatar/Avatar';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { useSnackBar } from '../../../hooks';
+import ShotVerificationLabel from '../../ShotVerificationLabel/ShotVerificationLabel';
 
 const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer?.user);
 
@@ -47,6 +52,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
     setIsOpenSideBar(false);
+    history.push(PATH.HOME);
   };
 
   const closeSideBar = (event) => {
@@ -83,7 +89,11 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
             <User>
               {user.nickname} · {user.ageRange?.meaning}
             </User>
-            <div>{user.shotVerified ? '접종인증 완료' : '접종인증 미완료'}</div>
+            <ShotVerificationLabel
+              shotVerification={user.shotVerified}
+              trueText={SHOT_VERIFICATION.TRUE_TEXT}
+              falseText={SHOT_VERIFICATION.FALSE_TEXT}
+            />
           </ProfileContainer>
         ) : (
           <div style={{ height: '24.2rem' }} />
@@ -101,28 +111,30 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
           </NavLinkElement>
           {!!Object.keys(user).length && (
             <MyPageMenuContainer>
-              마이페이지
+              <NavLinkElement
+                to={PATH.MY_PAGE_SHOT_VERIFICATION}
+                onClick={() => setIsOpenSideBar(false)}
+              >
+                <MyPageIcon width="22" height="22" stroke="currentColor" fill="currentColor" />
+                마이페이지
+              </NavLinkElement>
+
               <MyPageLink to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
-                <MyPageIcon width="22" height="22" stroke="currentColor" fill="currentColor" />내
                 정보 관리
               </MyPageLink>
               <MyPageLink
                 to={PATH.MY_PAGE_SHOT_VERIFICATION}
                 onClick={() => setIsOpenSideBar(false)}
               >
-                <ShotVerificationMenuIcon width="22" height="22" stroke="currentColor" />
                 접종 인증
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
-                <MyReviewMenuIcon width="22" height="22" stroke="currentColor" />
                 내가 쓴 글
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_COMMENT_REVIEW} onClick={() => setIsOpenSideBar(false)}>
-                <CommentIcon width="22" height="22" stroke="currentColor" />
                 댓글 단 글
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_LIKE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
-                <LikeIcon width="22" height="22" stroke="currentColor" />
                 좋아요 누른 글
               </MyPageLink>
             </MyPageMenuContainer>

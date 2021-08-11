@@ -45,6 +45,7 @@ const TopContainer = styled.div`
   justify-content: flex-end;
   padding: 2rem 8rem 0 0;
   min-height: 5.6rem;
+  align-items: center;
 
   @media screen and (max-width: 1024px) {
     display: none;
