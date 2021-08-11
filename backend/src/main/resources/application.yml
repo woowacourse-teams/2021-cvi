@@ -11,16 +11,16 @@ spring:
 security:
   jwt:
     token:
-    secret-key: cvi_secret_key
-    expire-length: 3600000
+      secret-key: cvi_secret_key
+      expire-length: 3600000
 
   auth:
     naver:
-    client-secret: client-secret
+      client-secret: client-secret
 
   public:
     data:
-    vaccination: publicdata-secret
+      vaccination: publicdata-secret
 
 server:
   shutdown: graceful
