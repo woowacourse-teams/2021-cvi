@@ -85,18 +85,6 @@ public class UserServiceTest {
         assertThat(user.getAgeRange().getMeaning()).isEqualTo(AgeRange.TEENS.getMeaning());
     }
 
-    @DisplayName("토큰 검증 - 실패 - 유효하지 않은 토큰인 대우 예외를 던진다.")
-    @Test
-    void validateAccessTokenFailure() {
-        //given
-        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다.")).given(jwtTokenProvider).isValidToken("INVALID_ACCESS_TOKEN");
-        //when
-        //then
-        assertThatThrownBy(() -> userService.isValidAccessToken("INVALID_ACCESS_TOKEN"))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage("유효하지 않은 토큰입니다.");
-    }
-
     @DisplayName("사용자 조회 - 성공")
     @Test
     void findById() {

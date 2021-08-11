@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.thymeleaf.util.StringUtils;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,7 +49,6 @@ public class User extends BaseEntity {
         super(id, createdAt, lastModifiedAt);
         validateNickName(nickname);
         this.nickname = nickname;
-        validateNickName(nickname);
         this.ageRange = ageRange;
         this.shotVerified = shotVerified;
         this.socialProvider = socialProvider;
@@ -57,7 +58,8 @@ public class User extends BaseEntity {
 
     private void validateNickName(String nickname) {
         if (StringUtils.isEmpty(nickname) || nickname.contains(" ")) {
-            throw new InvalidInputException("닉네임에는 공백 문자가 포함될 수 없습니다.");
+            log.info("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: {}", nickname);
+            throw new InvalidInputException(String.format("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: %s", nickname));
         }
     }
 
