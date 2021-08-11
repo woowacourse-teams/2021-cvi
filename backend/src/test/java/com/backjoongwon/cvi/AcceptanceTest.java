@@ -3,6 +3,7 @@ package com.backjoongwon.cvi;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.auth.service.AuthService;
+import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserRequest;
@@ -71,6 +72,24 @@ public class AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(userRequest)
                 .when().post("/api/v1/users/signup")
+                .then().log().all()
+                .extract();
+    }
+
+    protected ExtractableResponse<Response> 게시글_작성_요청(UserResponse user, PostRequest postRequest) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer" + user.getAccessToken())
+                .body(postRequest)
+                .when().post("/api/v1/posts")
+                .then().log().all()
+                .extract();
+    }
+
+    protected ExtractableResponse<Response> 단일_게시글_조회(Long postId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/api/v1/posts/{postId}", postId)
                 .then().log().all()
                 .extract();
     }

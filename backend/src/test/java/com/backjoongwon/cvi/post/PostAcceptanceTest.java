@@ -28,10 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("게시글 관련 인수 테스트")
 public class PostAcceptanceTest extends AcceptanceTest {
 
-    private UserResponse userResponse;
-    private UserResponse anotherUserResponse;
+    protected UserResponse userResponse;
+    protected UserResponse anotherUserResponse;
     private PostRequest invalidPostRequest;
-    private PostRequest postRequestPFIZER;
+    protected PostRequest postRequestPFIZER;
     private PostRequest postRequestAZ;
     private PostRequest postRequestMODERNA;
     private PostRequest postRequestJANSSEN;
@@ -206,24 +206,6 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(noWriterResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(noExistsPostResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    protected ExtractableResponse<Response> 게시글_작성_요청(UserResponse user, PostRequest postRequest) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer" + user.getAccessToken())
-                .body(postRequest)
-                .when().post("/api/v1/posts")
-                .then().log().all()
-                .extract();
-    }
-
-    private ExtractableResponse<Response> 단일_게시글_조회(Long postId) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/v1/posts/{postId}", postId)
-                .then().log().all()
-                .extract();
     }
 
     private ExtractableResponse<Response> 백신_타입별_게시글_조회(VaccinationType vaccinationType, UserResponse user) {
