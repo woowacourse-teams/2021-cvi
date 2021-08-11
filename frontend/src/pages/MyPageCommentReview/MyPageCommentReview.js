@@ -81,7 +81,7 @@ const MyPageCommentReview = () => {
         <LottieContainer>
           <LottieAnimation
             data={NotFoundAnimation}
-            width="40rem"
+            width="26rem"
             mobileWidth="18rem"
             designer="Radhikakpor"
             description="댓글 단 글이 없습니다"
