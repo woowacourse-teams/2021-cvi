@@ -61,8 +61,7 @@ class VaccineParserTest {
         vaccineParser = new VaccinationParser(parser, jsonMapper);
     }
 
-    @DisplayName("백신 접종 데이터 가져오기 - 성공 ")
-    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 ")
+    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공")
     @MethodSource
     void parseToPublicDataToBeforeTenAndAnyDate(LocalDate targetDate) throws JsonProcessingException {
         //given
@@ -92,8 +91,7 @@ class VaccineParserTest {
                 .isNotEmpty();
     }
 
-    @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
-    @ParameterizedTest
+    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDate targetDate) throws JsonProcessingException {
         //given
