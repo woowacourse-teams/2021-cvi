@@ -11,6 +11,7 @@ import {
   SNACKBAR_MESSAGE,
   NICKNAME_LIMIT,
   REGEX,
+  LOCAL_STORAGE_KEY,
 } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';
@@ -68,6 +69,7 @@ const SignupPage = () => {
       return;
     }
 
+    localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(response.data.accessToken));
     dispatch(getMyInfoAsync(response.data.accessToken));
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);
