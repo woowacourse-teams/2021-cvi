@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ShotVerificationLabel } from '../../components';
+import PropTypes from 'prop-types';
 import { Avatar } from '../../components/common';
 import { AVATAR_SIZE_TYPE } from '../../components/common/Avatar/Avatar.styles';
 import { PATH, SHOT_VERIFICATION } from '../../constants';

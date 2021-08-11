@@ -19,6 +19,7 @@ import MapChart from './MapChart/MapChart';
 import MapChartSvg from './MapChartSvg/MapChartSvg';
 import MapChartStandard from './MapChartStandard/MapChartStandard';
 import LottieAnimation from './LottieAnimation/LottieAnimation';
+import { PublicRoute, PrivateRoute } from './Route/Route';
 
 export {
   Avatar,
@@ -42,4 +43,6 @@ export {
   MapChartSvg,
   MapChartStandard,
   LottieAnimation,
+  PublicRoute,
+  PrivateRoute,
 };

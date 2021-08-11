@@ -9,6 +9,7 @@ import {
   FONT_COLOR,
   FILTER_TYPE,
   SORT_TYPE,
+  CONFIRM_MESSAGE,
 } from '../../constants';
 import {
   Container,
@@ -67,12 +68,20 @@ const ReviewPage = () => {
   };
 
   const goLoginPage = () => {
-    history.push(`${PATH.LOGIN}`);
+    history.push(PATH.LOGIN);
+  };
+
+  const goMyPageShotVerification = () => {
+    history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
   };
 
   const onClickButton = () => {
     if (accessToken) {
-      setModalOpen(true);
+      if (window.confirm(CONFIRM_MESSAGE.OFFER_SHOT_VERIFICATION)) {
+        goMyPageShotVerification();
+      } else {
+        setModalOpen(true);
+      }
     } else {
       if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
 
