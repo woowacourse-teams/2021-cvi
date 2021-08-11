@@ -9,7 +9,7 @@ defaults:
     working-directory: ./frontend 
 
 jobs:
-  name: test-automation
+  test-automation:
     runs-on: ubuntu-latest
 
     steps:
