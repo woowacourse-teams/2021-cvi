@@ -37,7 +37,7 @@ public class AcceptanceTest {
     protected Optional<User> 비회원;
 
     @BeforeEach
-    public void setUp() {
+    protected void setUp() {
         RestAssured.port = port;
         User user = User.builder()
                 .id(1L)
