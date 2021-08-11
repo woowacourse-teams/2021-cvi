@@ -3,16 +3,17 @@ name: test-automation
 on:
   push:
     branches: [develop]
-
-defaults:   
-  run: 
-    working-directory: ./frontend 
+  pull_request:
+    branches: [develop]
 
 jobs:
   test-automation:
     runs-on: ubuntu-latest
+    env: 
+      working-directory: ./frontend 
 
     steps:
+      - run: yarn
       - name: start local
         run: yarn start
       - name: test
