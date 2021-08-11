@@ -2,7 +2,7 @@ name: test-automation
 
 on:
   push:
-    branches: [develop]
+    branches: [refactor/frontend-final]
 
 defaults:
   run:
@@ -15,15 +15,11 @@ jobs:
     steps:
       - name: checkout source code
         uses: actions/checkout@v2
-        
+
       - name: yarn install
         run: yarn
-        
-      - uses: cypress-io/github-action@v1
-        with:
-          record: true
-          parallel: true
-          start: yarn start
-          wait-on: 'http://localhost:9000'
 
-
+      - run: yarn start &
+          sleep 10 &&
+          curl http://localhost:9000 &&
+          yarn test
