@@ -1,0 +1,29 @@
+name: test-automation
+
+on:
+  push:
+    branches: [develop]
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  open-localhost:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v2
+        
+      - name: yarn install
+        run: yarn
+        
+      - uses: cypress-io/github-action@v1
+        with:
+          record: true
+          parallel: true
+          start: yarn start
+          wait-on: 'http://localhost:9000'
+
+
