@@ -11,7 +11,16 @@ const Preview = ({ title, reviewType }) => {
   const history = useHistory();
 
   const goReviewPage = () => {
-    history.push(`${PATH.REVIEW}`);
+    if (reviewType === FILTER_TYPE.CREATED_AT) {
+      history.push(`${PATH.REVIEW}`);
+    } else if (reviewType === FILTER_TYPE.LIKE_COUNT) {
+      history.push({
+        pathname: `${PATH.REVIEW}`,
+        state: {
+          selectedFilter: FILTER_TYPE.LIKE_COUNT,
+        },
+      });
+    }
   };
 
   return (

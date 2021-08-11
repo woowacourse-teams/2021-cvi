@@ -26,7 +26,7 @@ import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
@@ -39,12 +39,15 @@ import { FilterIcon } from '../../assets/icons';
 
 const ReviewPage = () => {
   const history = useHistory();
+  const location = useLocation();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
   const user = useSelector((state) => state.authReducer?.user);
 
   const [selectedVaccination, setSelectedVaccination] = useState('전체');
-  const [selectedFilter, setSelectedFilter] = useState('최신순');
-  const [selectedSort, setSelectedSort] = useState('내림차순');
+  const [selectedFilter, setSelectedFilter] = useState(
+    location?.state?.selectedFilter ?? FILTER_TYPE.CREATED_AT,
+  );
+  const [selectedSort, setSelectedSort] = useState(SORT_TYPE.DESC);
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
   const [offset, setOffset] = useState(0);
