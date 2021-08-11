@@ -15,10 +15,6 @@ describe('After Login Test', () => {
         });
       },
     ).as('requestCreatedAtReviewData');
-
-    // {
-    //   fixture: 'reviewList',
-    // }
   };
 
   before(() => {
@@ -26,8 +22,8 @@ describe('After Login Test', () => {
     // console.log(asd);
     // getCreatedAtReviewList();
     cy.visit('');
-    login();
-    cy.setLocalStorage('accessToken', JSON.stringify('accessToken'));
+    // login();
+    // cy.setLocalStorage('accessToken', JSON.stringify('accessToken'));
     // cy.wait('@requestCreatedAtReviewData', { resquestTimeout: 10000 });
   });
 
@@ -52,7 +48,7 @@ describe('After Login Test', () => {
       });
   };
 
-  it('로그인 후 홈화면으로 온다.', () => {
+  it.skip('로그인 후 홈화면으로 온다.', () => {
     login();
     // cy.waitForReact();
 
@@ -82,7 +78,7 @@ describe('After Login Test', () => {
     cy.setLocalStorage('accessToken', JSON.stringify('accessToken'));
   });
 
-  it('접종 후기 메뉴를 클릭하면, 접종 후기 페이지가 보인다.', () => {
+  it.skip('접종 후기 메뉴를 클릭하면, 접종 후기 페이지가 보인다.', () => {
     login();
     cy.waitForReact();
     cy.contains('a', '접종후기').click();
@@ -164,7 +160,7 @@ describe('After Login Test', () => {
     login();
   });
 
-  it('내가 쓴 후기를 삭제한다.', () => {
+  it.skip('내가 쓴 후기를 삭제한다.', () => {
     cy.waitForReact();
 
     cy.contains('button', '삭제').click();

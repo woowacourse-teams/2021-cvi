@@ -19,9 +19,7 @@ jobs:
       - name: yarn install
         run: yarn
 
-      - name: test
-      - run: |
-          yarn start &
+      - run: yarn start &
           sleep 10 &&
           curl http://localhost:9000 &&
-          cypress run
+          npx cypress run

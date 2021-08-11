@@ -12,7 +12,7 @@ describe('Before Login Test', () => {
     // cy.wait('@requestReviewData');
   });
 
-  it.skip.skip('홈페이지에 접속하여 접종 현황을 본다.', () => {
+  it.skip('홈페이지에 접속하여 접종 현황을 본다.', () => {
     cy.waitForReact();
     cy.react('VaccinationState', { props: { title: '접종 현황' }, exact: true }).contains(
       '접종 현황',
