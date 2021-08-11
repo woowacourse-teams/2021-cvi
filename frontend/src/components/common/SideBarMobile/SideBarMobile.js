@@ -143,11 +143,11 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
 
         {Object.keys(user).length ? (
           <LogoutButton onClick={logout}>
-            <LogoutIcon width="28" height="28" stroke="currentColor" /> 로그아웃
+            <LogoutIcon width="24" height="24" stroke="currentColor" /> 로그아웃
           </LogoutButton>
         ) : (
           <NavLinkElement to={PATH.LOGIN} onClick={() => setIsOpenSideBar(false)}>
-            <LoginIcon width="28" height="28" stroke="currentColor" /> 로그인
+            <LoginIcon width="24" height="24" stroke="currentColor" /> 로그인
           </NavLinkElement>
         )}
       </Container>

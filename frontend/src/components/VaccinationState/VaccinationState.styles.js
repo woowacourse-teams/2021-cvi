@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { FONT_COLOR, PALETTE } from '../../constants';
 
@@ -72,6 +73,14 @@ const IncreaseIcon = styled.span`
   font-size: 1.2rem;
 `;
 
+const buttonStyles = css`
+  padding-right: 0;
+
+  @media screen and (max-width: 801px) {
+    margin: auto 0;
+  }
+`;
+
 export {
   Container,
   TopContainer,
@@ -81,4 +90,5 @@ export {
   Info,
   InfoTitle,
   IncreaseIcon,
+  buttonStyles,
 };
