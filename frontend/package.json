@@ -62,7 +62,7 @@
   },
   "description": "My webpack project",
   "scripts": {
-    "build": "cp ./env/.env.production ./.env && webpack --mode=production --node-env=production",
+    "build": "cypress run cp ./env/.env.production ./.env && webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",

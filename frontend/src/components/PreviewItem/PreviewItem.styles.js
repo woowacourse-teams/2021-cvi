@@ -52,6 +52,7 @@ const ViewCount = styled.div`
 const CreatedAt = styled.div`
   display: flex;
   align-items: center;
+  min-width: 7.6rem;
 `;
 
 export {
