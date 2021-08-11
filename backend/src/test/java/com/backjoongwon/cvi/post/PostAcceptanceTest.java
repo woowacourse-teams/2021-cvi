@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post;
 
 import com.backjoongwon.cvi.AcceptanceTest;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
 import com.backjoongwon.cvi.post.dto.PostResponse;
@@ -20,7 +21,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -92,7 +95,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
-    @DisplayName("게시글 작성 - 실패 - 게시글 내용이 유효하지 않은 경")
+    @DisplayName("게시글 작성 - 실패 - 게시글 내용이 유효하지 않은 경우")
     @Test
     void createFailureWhen() {
         //given
@@ -150,6 +153,44 @@ public class PostAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 단일_게시글_조회(999L);
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @DisplayName("게시글 타입별 조회 페이징 - 성공")
+    @Test
+    void findByVaccineTypePaging() {
+        //given
+        List<PostRequest> postRequests = Arrays.asList(
+                new PostRequest("내용1", VaccinationType.PFIZER),
+                new PostRequest("내용2", VaccinationType.PFIZER),
+                new PostRequest("내용3", VaccinationType.PFIZER),
+                new PostRequest("내용4", VaccinationType.MODERNA)
+        );
+
+        for (PostRequest postRequest : postRequests) {
+            게시글_작성_요청(userResponse, postRequest);
+        }
+        //when
+        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, 1, 2, Sort.CREATED_AT_DESC, userResponse);
+        List<String> resultPostContents = response.jsonPath()
+                .getList(".", PostResponse.class)
+                .stream()
+                .map(PostResponse::getContent)
+                .collect(Collectors.toList());
+        //then
+        assertThat(resultPostContents).containsExactly("내용2", "내용1");
+    }
+
+    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, Sort sort, UserResponse user) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer" + user.getAccessToken())
+                .param("vaccinationType", vaccinationType)
+                .queryParam("offset", offset)
+                .param("size", size)
+                .param("sort", sort)
+                .when().get("/api/v1/posts/paging")
+                .then().log().all()
+                .extract();
     }
 
     @DisplayName("게시글 수정 - 성공")
