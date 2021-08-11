@@ -62,18 +62,4 @@ const LogoContainer = styled.div`
   cursor: pointer;
 `;
 
-const MyInfoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-export {
-  Container,
-  MainContainer,
-  TopContainer,
-  avatarStyles,
-  NavBar,
-  LogoContainer,
-  MyInfoContainer,
-};
+export { Container, MainContainer, TopContainer, avatarStyles, NavBar, LogoContainer };

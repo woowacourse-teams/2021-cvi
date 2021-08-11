@@ -6,10 +6,19 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${({ width }) => `width: ${width && width};`}
+
+  @media screen and (max-width: 1024px) {
+    ${({ mobileWidth }) => `width: ${mobileWidth && mobileWidth};`}
+  }
 `;
 
 const Designer = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
+
+  @media screen and (max-width: 1024px) {
+    ${({ mobileWidth }) => `font-size: ${mobileWidth && `1rem`};`}
+  }
 `;
 
 const Description = styled.div`
@@ -18,6 +27,9 @@ const Description = styled.div`
   font-size: 2rem;
 
   ${({ styles }) => styles && styles}
+  @media screen and (max-width: 1024px) {
+    ${({ mobileWidth }) => `font-size: ${mobileWidth && `1.2rem`};`}
+  }
 `;
 
 export { Container, Designer, Description };

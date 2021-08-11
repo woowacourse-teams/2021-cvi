@@ -5,6 +5,7 @@ import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants'
 import { useLoading } from '../../hooks';
 import {
   Container,
+  LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
   MyCommentReviewListContainer,
@@ -76,13 +77,16 @@ const MyPageCommentReview = () => {
         <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
         </LoadingContainer>
-      ) : myCommentReviewList.length === 0 ? (
-        <LottieAnimation
-          data={NotFoundAnimation}
-          width="30rem"
-          designer="Radhikakpor"
-          description="댓글 단 글이 없습니다"
-        />
+      ) : !myCommentReviewList.length ? (
+        <LottieContainer>
+          <LottieAnimation
+            data={NotFoundAnimation}
+            width="40rem"
+            mobileWidth="18rem"
+            designer="Radhikakpor"
+            description="댓글 단 글이 없습니다"
+          />
+        </LottieContainer>
       ) : (
         <Frame styles={frameStyle}>
           <MyCommentReviewListContainer>

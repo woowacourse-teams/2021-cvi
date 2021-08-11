@@ -1,4 +1,4 @@
-import { Button } from '../../components/common';
+import { Button, LottieAnimation } from '../../components/common';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import {
   buttonStyles,
@@ -17,8 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { putAccountAsync } from '../../service';
 import { AGE_RANGE, ALERT_MESSAGE, RESPONSE_STATE, SNACKBAR_MESSAGE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { openSnackBar } from '../../redux/snackbarSlice';
-import { useLoading } from '../../hooks';
+import { useLoading, useSnackBar } from '../../hooks';
+import { ShotVerificationCompletionHeart } from '../../assets/lotties';
 
 const MyPageShotVerification = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ const MyPageShotVerification = () => {
   const [fileUrl, setFileUrl] = useState('');
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
+  const { openSnackBar } = useSnackBar();
 
   const loadPicture = (_, pictureUrl) => {
     setFileUrl(pictureUrl[0]);
@@ -80,6 +81,7 @@ const MyPageShotVerification = () => {
       .then(() => {
         hideLoading();
         setFileUrl('');
+        console.log('성공 로직');
       });
   };
 
@@ -98,29 +100,39 @@ const MyPageShotVerification = () => {
       ) : (
         <>
           <Title>접종 인증</Title>
-          <Content>
-            <Image src={exampleImg} />
-            <ImageContainer isFileSelected={!!fileUrl}>
-              <div>백신 접종을 인증할 수 있는 사진을 올려주세요</div>
-              <ImageUpLoader
-                withIcon={false}
-                buttonText=""
-                imgExtension={['.jpg', '.jpeg', '.png']}
-                maxFileSize={5242880}
-                label=""
-                fileTypeError=" jpg, jpeg, png 확장자만 가능합니다"
-                fileSizeError=" 5MB 이하의 파일만 가능합니다"
-                onChange={loadPicture}
-              />
-            </ImageContainer>
-          </Content>
-          <Button
-            sizeType={BUTTON_SIZE_TYPE.LARGE}
-            styles={buttonStyles}
-            onClick={clickVerificationButton}
-          >
-            인증하기
-          </Button>
+          {user.shotVerified ? (
+            <LottieAnimation
+              data={ShotVerificationCompletionHeart}
+              width="30rem"
+              description="인증 완료된 사용자입니다"
+            />
+          ) : (
+            <>
+              <Content>
+                <Image src={exampleImg} />
+                <ImageContainer isFileSelected={!!fileUrl}>
+                  <div>백신 접종을 인증할 수 있는 사진을 올려주세요</div>
+                  <ImageUpLoader
+                    withIcon={false}
+                    buttonText=""
+                    imgExtension={['.jpg', '.jpeg', '.png']}
+                    maxFileSize={5242880}
+                    label=""
+                    fileTypeError=" jpg, jpeg, png 확장자만 가능합니다"
+                    fileSizeError=" 5MB 이하의 파일만 가능합니다"
+                    onChange={loadPicture}
+                  />
+                </ImageContainer>
+              </Content>
+              <Button
+                sizeType={BUTTON_SIZE_TYPE.LARGE}
+                styles={buttonStyles}
+                onClick={clickVerificationButton}
+              >
+                인증하기
+              </Button>
+            </>
+          )}
         </>
       )}
     </Container>

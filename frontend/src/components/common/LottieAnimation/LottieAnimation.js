@@ -2,7 +2,14 @@ import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
 import { Container, Designer, Description } from './LottieAnimation.styles';
 
-const LottieAnimation = ({ data, width, designer, description, descriptionStyles }) => {
+const LottieAnimation = ({
+  data,
+  width,
+  mobileWidth,
+  designer,
+  description,
+  descriptionStyles,
+}) => {
   const defaultOptions = {
     height: '100%',
     loop: true,
@@ -14,10 +21,14 @@ const LottieAnimation = ({ data, width, designer, description, descriptionStyles
   };
 
   return (
-    <Container>
-      <Lottie options={defaultOptions} width={width} />
-      <Designer>Animation by {designer}</Designer>
-      <Description styles={descriptionStyles}>{description}</Description>
+    <Container width={width} mobileWidth={mobileWidth}>
+      <Lottie options={defaultOptions} />
+      {designer && <Designer mobileWidth={mobileWidth}>Animation by {designer}</Designer>}
+      {description && (
+        <Description mobileWidth={mobileWidth} styles={descriptionStyles}>
+          {description}
+        </Description>
+      )}
     </Container>
   );
 };
@@ -25,13 +36,16 @@ const LottieAnimation = ({ data, width, designer, description, descriptionStyles
 LottieAnimation.propTypes = {
   data: PropTypes.object.isRequired,
   width: PropTypes.string,
-  designer: PropTypes.string.isRequired,
+  mobileWidth: PropTypes.string,
+  designer: PropTypes.string,
   description: PropTypes.string,
   descriptionStyles: PropTypes.object,
 };
 
 LottieAnimation.defaultProps = {
   width: '100%',
+  mobileWidth: '80%',
+  designer: '',
   description: '',
   descriptionStyles: {},
 };

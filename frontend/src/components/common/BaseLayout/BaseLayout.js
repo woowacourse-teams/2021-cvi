@@ -8,7 +8,6 @@ import {
   avatarStyles,
   NavBar,
   LogoContainer,
-  MyInfoContainer,
 } from './BaseLayout.styles';
 import { useSelector } from 'react-redux';
 import { LogoIcon, MenuIcon } from '../../../assets/icons';
@@ -56,14 +55,7 @@ const BaseLayout = ({ children }) => {
           <LogoIcon width="56" fill={THEME_COLOR.PRIMARY} />
         </LogoContainer>
         {isLogin ? (
-          <MyInfoContainer>
-            <ShotVerificationLabel
-              shotVerification={user.shotVerified}
-              trueText={SHOT_VERIFICATION.TRUE_TEXT}
-              falseText={SHOT_VERIFICATION.FALSE_TEXT}
-            />
-            <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
-          </MyInfoContainer>
+          <Avatar src={user.socialProfileUrl} styles={avatarStyles} onClick={goMyPage} />
         ) : (
           <div style={{ minWidth: '3.6rem' }} />
         )}

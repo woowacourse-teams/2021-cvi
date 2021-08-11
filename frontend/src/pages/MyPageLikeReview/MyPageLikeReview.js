@@ -4,6 +4,7 @@ import { Frame, LottieAnimation } from '../../components/common';
 import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import {
   Container,
+  LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
   Title,
@@ -77,13 +78,16 @@ const MyPageLikeReview = () => {
         <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
         </LoadingContainer>
-      ) : myLikeReviewList.length === 0 ? (
-        <LottieAnimation
-          data={NotFoundAnimation}
-          width="30rem"
-          designer="Radhikakpor"
-          description="좋아요 누른 글이 없습니다"
-        />
+      ) : !myLikeReviewList.length ? (
+        <LottieContainer>
+          <LottieAnimation
+            data={NotFoundAnimation}
+            width="26rem"
+            mobileWidth="18rem"
+            designer="Radhikakpor"
+            description="좋아요 누른 글이 없습니다"
+          />
+        </LottieContainer>
       ) : (
         <Frame styles={frameStyle}>
           <MyLikeReviewList>
