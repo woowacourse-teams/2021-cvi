@@ -157,6 +157,25 @@ const ReviewPage = () => {
     showScrollLoading();
   }, [inView]);
 
+  const escFunction = useCallback(
+    (event) => {
+      if (!isModalOpen) return;
+
+      if (event.keyCode === 27) {
+        setModalOpen(false);
+      }
+    },
+    [isModalOpen],
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [isModalOpen]);
+
   return (
     <>
       <Container>
