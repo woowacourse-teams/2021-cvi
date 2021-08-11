@@ -4,7 +4,7 @@ const ERROR_MESSAGE = {
 };
 
 const ALERT_MESSAGE = {
-  SUCCESS_TO_SIGNUP: '회원가입에 성공했습니다',
+  FAIL_TO_SIGNUP: '회원가입에 실패했습니다.',
   FAIL_TO_LOGIN: '닉네임에 공백과 특수문자는 포함할 수 업습니다.',
   FAIL_TO_CREATE_REVIEW: '후기를 작성할 수 없습니다.',
   FAIL_TO_EDIT_REVIEW: '후기를 수정할 수 없습니다.',
@@ -20,6 +20,7 @@ const ALERT_MESSAGE = {
   FAIL_TO_EDIT_SHOT_VERIFICATION: '인증에 실패했습니다.',
   FAIL_TO_SHOT_VERIFICATION: '잘못된 사진입니다. 사진을 다시 확인해주세요.',
   NEED_LOGIN: '로그인이 필요한 서비스입니다.',
+  NEED_FILE: '사진을 첨부해주세요.',
 };
 
 const SNACKBAR_MESSAGE = {

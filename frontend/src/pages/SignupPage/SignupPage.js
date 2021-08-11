@@ -47,7 +47,8 @@ const SignupPage = () => {
   };
 
   const isValidNickname = (nickname) =>
-    nickname.length > NICKNAME_LIMIT.MIN_LENGTH &&
+    nickname.length >= NICKNAME_LIMIT.MIN_LENGTH &&
+    nickname.length <= NICKNAME_LIMIT.MAX_LENGTH &&
     !REGEX.INCLUDE_BLANK.test(nickname) &&
     !REGEX.INCLUDE_SPECIAL_CHARACTER.test(nickname);
 
@@ -64,7 +65,7 @@ const SignupPage = () => {
     const response = await postSignupAsync(data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
-      alert('sign');
+      alert(ALERT_MESSAGE.FAIL_TO_SIGNUP);
 
       return;
     }
