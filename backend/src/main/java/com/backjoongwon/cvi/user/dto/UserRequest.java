@@ -19,7 +19,7 @@ public class UserRequest {
 
     @NotBlank(message = "닉네임은 공백일 수 없습니다.")
     @Length(max = 20, message = "닉네임의 길이는 최소 1자부터 20자까지 입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "닉네임은 특수문자가 포함될 수 없습니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "올바른 닉네임 형식이 아닙니다(자음, 모음만으로 불가).")
     private String nickname;
 
     @NotNull(message = "연령대는 null일 수 없습니다.")
