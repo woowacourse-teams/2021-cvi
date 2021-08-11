@@ -35,11 +35,6 @@ const TopContainer = styled.div`
   justify-content: space-between;
 `;
 
-const ShotVerified = styled.div`
-  font-size: 1.4rem;
-  color: ${FONT_COLOR.GREEN};
-`;
-
 const ReviewContent = styled.div`
   font-size: 1.4rem;
   margin: 2rem 0;
@@ -64,7 +59,6 @@ export {
   CommentContent,
   ReviewContainer,
   TopContainer,
-  ShotVerified,
   ReviewContent,
   Writer,
 };

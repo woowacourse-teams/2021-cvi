@@ -44,11 +44,6 @@ const VaccinationInfo = styled.div`
   margin-bottom: 3rem;
 `;
 
-const ShotVerified = styled.div`
-  font-size: 1.4rem;
-  color: ${FONT_COLOR.GREEN};
-`;
-
 const WriterInfo = styled.div`
   display: flex;
   align-items: center;
@@ -118,7 +113,6 @@ export {
   VaccinationInfo,
   WriterInfo,
   ReviewInfo,
-  ShotVerified,
   Writer,
   InfoBottom,
   CreatedAt,

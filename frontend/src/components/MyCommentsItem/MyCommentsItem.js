@@ -1,8 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FONT_COLOR, TO_DATE_TYPE, VACCINATION, VACCINATION_COLOR } from '../../constants';
+import {
+  FONT_COLOR,
+  SHOT_VERIFICATION,
+  TO_DATE_TYPE,
+  VACCINATION,
+  VACCINATION_COLOR,
+} from '../../constants';
 import { toDate } from '../../utils';
 import { Label } from '../common';
+import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 import {
   Container,
   Content,
@@ -10,7 +17,6 @@ import {
   CommentContent,
   ReviewContainer,
   TopContainer,
-  ShotVerified,
   ReviewContent,
   Writer,
 } from './MyCommentsItem.styles';
@@ -38,7 +44,12 @@ const MyCommentsItem = ({ myCommentReview, myComments, innerRef, onClick }) => {
             >
               {VACCINATION[myCommentReview.vaccinationType]}
             </Label>
-            <ShotVerified>{myCommentReview.writer.shotVerified && '접종 확인'}</ShotVerified>
+            {myCommentReview.writer.shotVerified && (
+              <ShotVerificationLabel
+                shotVerification={myCommentReview.writer.shotVerified}
+                trueText={SHOT_VERIFICATION.TRUE_TEXT}
+              />
+            )}
           </TopContainer>
           <ReviewContent>{myCommentReview.content}</ReviewContent>
           <Writer>

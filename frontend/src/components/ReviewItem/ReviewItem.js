@@ -6,7 +6,6 @@ import {
   ViewCount,
   TopContainer,
   BottomContainer,
-  ShotVerified,
   IconContainer,
   InfoContainer,
   CreatedAt,
@@ -20,12 +19,14 @@ import {
   TO_DATE_TYPE,
   PATH,
   CONFIRM_MESSAGE,
+  SHOT_VERIFICATION,
 } from '../../constants';
 import { toDate } from '../../utils';
 import { Button, Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
+import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
 const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
   const {
@@ -67,7 +68,12 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
         >
           {VACCINATION[vaccinationType]}
         </Label>
-        <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
+        {writer.shotVerified && (
+          <ShotVerificationLabel
+            shotVerification={writer.shotVerified}
+            trueText={SHOT_VERIFICATION.TRUE_TEXT}
+          />
+        )}
       </TopContainer>
       <Content>{content}</Content>
       <Writer>

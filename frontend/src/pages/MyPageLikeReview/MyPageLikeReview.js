@@ -1,9 +1,10 @@
 import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
-import { Frame } from '../../components/common';
+import { Frame, LottieAnimation } from '../../components/common';
 import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import {
   Container,
+  LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
   Title,
@@ -15,6 +16,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useLoading } from '../../hooks';
 import { getMyLikeReviewListAsync } from '../../service';
+import { NotFoundAnimation } from '../../assets/lotties';
 
 const MyPageLikeReview = () => {
   const history = useHistory();
@@ -76,6 +78,16 @@ const MyPageLikeReview = () => {
         <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
         </LoadingContainer>
+      ) : !myLikeReviewList.length ? (
+        <LottieContainer>
+          <LottieAnimation
+            data={NotFoundAnimation}
+            width="26rem"
+            mobileWidth="18rem"
+            designer="Radhikakpor"
+            description="좋아요 누른 글이 없습니다"
+          />
+        </LottieContainer>
       ) : (
         <Frame styles={frameStyle}>
           <MyLikeReviewList>

@@ -29,11 +29,6 @@ const Writer = styled.div`
   font-size: 1.4rem;
 `;
 
-const ShotVerified = styled.div`
-  font-size: 1.4rem;
-  color: ${FONT_COLOR.GREEN};
-`;
-
 const ViewCount = styled.div`
   margin-left: 0.4rem;
 `;
@@ -77,7 +72,6 @@ export {
   IconContainer,
   Content,
   Writer,
-  ShotVerified,
   ViewCount,
   TopContainer,
   BottomContainer,

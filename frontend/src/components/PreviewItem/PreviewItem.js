@@ -4,18 +4,24 @@ import {
   TopContainer,
   Content,
   BottomContainer,
-  ShotVerified,
   IconContainer,
   IconItem,
   ViewCount,
   CreatedAt,
 } from './PreviewItem.styles';
-import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
+import {
+  VACCINATION_COLOR,
+  VACCINATION,
+  FONT_COLOR,
+  TO_DATE_TYPE,
+  SHOT_VERIFICATION,
+} from '../../constants';
 import { toDate } from '../../utils';
 import { Label } from '../common';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import { CommentIcon, EyeIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
+import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
 const PreviewItem = ({ review, onClick, accessToken }) => {
   const {
@@ -48,7 +54,12 @@ const PreviewItem = ({ review, onClick, accessToken }) => {
         >
           {VACCINATION[vaccinationType]}
         </Label>
-        <ShotVerified>{writer?.shotVerified && '접종 확인'}</ShotVerified>
+        {writer.shotVerified && (
+          <ShotVerificationLabel
+            shotVerification={writer.shotVerified}
+            trueText={SHOT_VERIFICATION.TRUE_TEXT}
+          />
+        )}
       </TopContainer>
       <Content>{content}</Content>
       <BottomContainer>

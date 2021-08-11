@@ -34,11 +34,6 @@ const BottomContainer = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
 
-const ShotVerified = styled.div`
-  font-size: 1.4rem;
-  color: ${FONT_COLOR.GREEN};
-`;
-
 const IconContainer = styled.div`
   display: flex;
   gap: 1.6rem;
@@ -64,7 +59,6 @@ export {
   TopContainer,
   Content,
   BottomContainer,
-  ShotVerified,
   IconContainer,
   IconItem,
   ViewCount,

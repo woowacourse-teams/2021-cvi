@@ -1,13 +1,14 @@
-import { Button } from '../../components/common';
+import { Button, LottieAnimation } from '../../components/common';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import {
+  LoadingContainer,
+  ImageContainer,
+  LottieContainer,
   buttonStyles,
   Container,
-  ImageContainer,
   Title,
   Content,
   Image,
-  LoadingContainer,
 } from './MyPageShotVerification.styles';
 import exampleImg from '../../assets/images/vaccination_example.png';
 import Tesseract from 'tesseract.js';
@@ -17,8 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { putAccountAsync } from '../../service';
 import { AGE_RANGE, ALERT_MESSAGE, RESPONSE_STATE, SNACKBAR_MESSAGE } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { openSnackBar } from '../../redux/snackbarSlice';
-import { useLoading } from '../../hooks';
+import { useLoading, useSnackBar } from '../../hooks';
+import { ShotVerificationCompletionHeart } from '../../assets/lotties';
 
 const MyPageShotVerification = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const MyPageShotVerification = () => {
   const [fileUrl, setFileUrl] = useState('');
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
+  const { openSnackBar } = useSnackBar();
 
   const loadPicture = (_, pictureUrl) => {
     setFileUrl(pictureUrl[0]);
@@ -70,7 +72,7 @@ const MyPageShotVerification = () => {
 
         // 잘못된 사진 실패 로직
         if (response.state === RESPONSE_STATE.FAILURE) {
-          alert('잘못된 사진입니다.');
+          alert(ALERT_MESSAGE.FAIL_TO_SHOT_VERIFICATION);
 
           return;
         }
@@ -84,7 +86,8 @@ const MyPageShotVerification = () => {
   };
 
   const checkInfo = (text) =>
-    text.includes('님 은 코 로 나 19 백 신 1차 접 종')
+    text.includes('님 은 코 로 나 19 백 신 1차 접 종') ||
+    (text.includes('예 방 접 종 증 명 서') && text.includes('질 병 관 리청'))
       ? { state: RESPONSE_STATE.SUCCESS }
       : { state: RESPONSE_STATE.FAILURE };
 
@@ -98,29 +101,41 @@ const MyPageShotVerification = () => {
       ) : (
         <>
           <Title>접종 인증</Title>
-          <Content>
-            <Image src={exampleImg} />
-            <ImageContainer isFileSelected={!!fileUrl}>
-              <div>백신 접종을 인증할 수 있는 사진을 올려주세요</div>
-              <ImageUpLoader
-                withIcon={false}
-                buttonText=""
-                imgExtension={['.jpg', '.jpeg', '.png']}
-                maxFileSize={5242880}
-                label=""
-                fileTypeError=" jpg, jpeg, png 확장자만 가능합니다"
-                fileSizeError=" 5MB 이하의 파일만 가능합니다"
-                onChange={loadPicture}
+          {user.shotVerified ? (
+            <LottieContainer>
+              <LottieAnimation
+                data={ShotVerificationCompletionHeart}
+                width="30rem"
+                description="인증 완료된 사용자입니다"
               />
-            </ImageContainer>
-          </Content>
-          <Button
-            sizeType={BUTTON_SIZE_TYPE.LARGE}
-            styles={buttonStyles}
-            onClick={clickVerificationButton}
-          >
-            인증하기
-          </Button>
+            </LottieContainer>
+          ) : (
+            <>
+              <Content>
+                <Image src={exampleImg} />
+                <ImageContainer isFileSelected={!!fileUrl}>
+                  <div>백신 접종을 인증할 수 있는 사진을 올려주세요</div>
+                  <ImageUpLoader
+                    withIcon={false}
+                    buttonText=""
+                    imgExtension={['.jpg', '.jpeg', '.png']}
+                    maxFileSize={5242880}
+                    label=""
+                    fileTypeError=" jpg, jpeg, png 확장자만 가능합니다"
+                    fileSizeError=" 5MB 이하의 파일만 가능합니다"
+                    onChange={loadPicture}
+                  />
+                </ImageContainer>
+              </Content>
+              <Button
+                sizeType={BUTTON_SIZE_TYPE.LARGE}
+                styles={buttonStyles}
+                onClick={clickVerificationButton}
+              >
+                인증하기
+              </Button>
+            </>
+          )}
         </>
       )}
     </Container>
