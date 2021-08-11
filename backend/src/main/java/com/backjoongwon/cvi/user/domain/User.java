@@ -3,10 +3,7 @@ package com.backjoongwon.cvi.user.domain;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.thymeleaf.util.StringUtils;
 
@@ -20,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
+@ToString(of = {"nickname", "ageRange", "shotVerified", "socialProvider"})
 public class User extends BaseEntity {
 
     @Column(unique = true)
