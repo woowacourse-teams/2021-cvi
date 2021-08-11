@@ -124,54 +124,54 @@ describe('After Login Test', () => {
     );
   };
 
-  // it('후기 작성 버튼을 클릭해서, 후기를 작성한다.', () => {
-  //   login();
+  it.skip('후기 작성 버튼을 클릭해서, 후기를 작성한다.', () => {
+    login();
 
-  //   getCreatedAtReviewList();
+    getCreatedAtReviewList();
 
-  //   cy.waitForReact();
+    cy.waitForReact();
 
-  //   cy.contains('button', '후기 작성').click();
+    cy.contains('button', '후기 작성').click();
 
-  //   cy.on('window:confirm', () => false);
-  //   createReview();
-  //   cy.get('textarea').eq(0).type('모더나를 맞았어요. 별로 안 아프더라구요.');
-  //   cy.contains('button', '제출하기').click();
+    cy.on('window:confirm', () => false);
+    createReview();
+    cy.get('textarea').eq(0).type('모더나를 맞았어요. 별로 안 아프더라구요.');
+    cy.contains('button', '제출하기').click();
 
-  //   login();
-  //   getNewReviewList();
-  //   cy.visit('/review');
-  //   cy.wait('@requestNewReviewData');
-  // });
+    login();
+    getNewReviewList();
+    cy.visit('/review');
+    cy.wait('@requestNewReviewData');
+  });
 
-  //   it('접종 후기에 페이지에서 내가 쓴 후기에 들어가서 수정한다.', () => {
-  //     cy.waitForReact();
+  it.skip('접종 후기에 페이지에서 내가 쓴 후기에 들어가서 수정한다.', () => {
+    cy.waitForReact();
 
-  //     getNewReview();
-  //     editReview();
+    getNewReview();
+    editReview();
 
-  //     cy.react('ReviewItem').eq(0).click();
-  //     cy.url().should('include', '/review/7');
+    cy.react('ReviewItem').eq(0).click();
+    cy.url().should('include', '/review/7');
 
-  //     cy.contains('button', '수정').click();
-  //     cy.url().should('include', '/review/7/edit');
+    cy.contains('button', '수정').click();
+    cy.url().should('include', '/review/7/edit');
 
-  //     cy.get('textarea').type('다음날 되니 좀 아픈것 같아요 ㅠ ㅠ');
-  //     cy.contains('button', '수정하기').click();
+    cy.get('textarea').type('다음날 되니 좀 아픈것 같아요 ㅠ ㅠ');
+    cy.contains('button', '수정하기').click();
 
-  //     getEditedReview();
-  //     cy.visit('/review/7');
-  //     login();
-  //   });
+    getEditedReview();
+    cy.visit('/review/7');
+    login();
+  });
 
-  //   it('내가 쓴 후기를 삭제한다.', () => {
-  //     cy.waitForReact();
+  it('내가 쓴 후기를 삭제한다.', () => {
+    cy.waitForReact();
 
-  //     cy.contains('button', '삭제').click();
-  //     getCreatedAtReviewList();
+    cy.contains('button', '삭제').click();
+    getCreatedAtReviewList();
 
-  //     cy.visit('/review');
-  //     login();
-  //     cy.wait('@requestReviewData');
-  //   });
+    cy.visit('/review');
+    login();
+    cy.wait('@requestReviewData');
+  });
 });
