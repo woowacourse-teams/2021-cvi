@@ -1,13 +1,14 @@
 import { Button, LottieAnimation } from '../../components/common';
 import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
 import {
+  LoadingContainer,
+  ImageContainer,
+  LottieContainer,
   buttonStyles,
   Container,
-  ImageContainer,
   Title,
   Content,
   Image,
-  LoadingContainer,
 } from './MyPageShotVerification.styles';
 import exampleImg from '../../assets/images/vaccination_example.png';
 import Tesseract from 'tesseract.js';
@@ -71,7 +72,7 @@ const MyPageShotVerification = () => {
 
         // 잘못된 사진 실패 로직
         if (response.state === RESPONSE_STATE.FAILURE) {
-          alert('잘못된 사진입니다.');
+          alert(ALERT_MESSAGE.FAIL_TO_SHOT_VERIFICATION);
 
           return;
         }
@@ -81,12 +82,12 @@ const MyPageShotVerification = () => {
       .then(() => {
         hideLoading();
         setFileUrl('');
-        console.log('성공 로직');
       });
   };
 
   const checkInfo = (text) =>
-    text.includes('님 은 코 로 나 19 백 신 1차 접 종')
+    text.includes('님 은 코 로 나 19 백 신 1차 접 종') ||
+    (text.includes('예 방 접 종 증 명 서') && text.includes('질 병 관 리청'))
       ? { state: RESPONSE_STATE.SUCCESS }
       : { state: RESPONSE_STATE.FAILURE };
 
@@ -101,11 +102,13 @@ const MyPageShotVerification = () => {
         <>
           <Title>접종 인증</Title>
           {user.shotVerified ? (
-            <LottieAnimation
-              data={ShotVerificationCompletionHeart}
-              width="30rem"
-              description="인증 완료된 사용자입니다"
-            />
+            <LottieContainer>
+              <LottieAnimation
+                data={ShotVerificationCompletionHeart}
+                width="30rem"
+                description="인증 완료된 사용자입니다"
+              />
+            </LottieContainer>
           ) : (
             <>
               <Content>

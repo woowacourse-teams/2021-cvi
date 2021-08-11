@@ -13,6 +13,11 @@ const Container = styled.div`
   }
 `;
 
+const LottieContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const Title = styled.div`
   font-size: 2.8rem;
   margin-bottom: 6.8rem;
@@ -127,4 +132,13 @@ const LoadingContainer = styled.div`
   }
 `;
 
-export { Container, ImageContainer, Title, Content, Image, buttonStyles, LoadingContainer };
+export {
+  Container,
+  ImageContainer,
+  LottieContainer,
+  Title,
+  Content,
+  Image,
+  buttonStyles,
+  LoadingContainer,
+};
