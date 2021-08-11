@@ -78,6 +78,6 @@ class AuthorizationManagerTest {
         //then
         assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE))
                 .isExactlyInstanceOf(InvalidOperationException.class)
-                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다");
+                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
     }
 }
