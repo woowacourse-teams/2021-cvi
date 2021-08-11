@@ -1,15 +1,30 @@
-import { BASE_URL } from '../../src/constants';
+import { PAGING_SIZE } from '../../src/constants';
+
+const BASE_URL = 'https://dev.cvi-korea.kro.kr/api/v1';
 
 describe('After Login Test', () => {
-  const getReviewList = () => {
-    cy.intercept('GET', `${BASE_URL}/posts`, { fixture: 'reviewList' }).as('requestReviewData');
+  const getCreatedAtReviewList = () => {
+    cy.intercept(
+      'GET',
+      `${BASE_URL}/paging?offset=0&size=${PAGING_SIZE}&sort=CREATED_AT_DESC`,
+      (req) => {
+        req.headers['Content-Type'] = 'application/json; charset=UTF-8';
+        req.headers['Authorization'] = 'Bearer ';
+        req.reply({
+          fixture: 'reviewList',
+        });
+      },
+    ).as('requestCreatedAtReviewData');
   };
 
   before(() => {
-    getReviewList();
-
+    // const asd = getCreatedAtReviewList();
+    // console.log(asd);
+    // getCreatedAtReviewList();
     cy.visit('');
-    cy.wait('@requestReviewData');
+    // login();
+    // cy.setLocalStorage('accessToken', JSON.stringify('accessToken'));
+    // cy.wait('@requestCreatedAtReviewData', { resquestTimeout: 10000 });
   });
 
   const login = () => {
@@ -24,6 +39,8 @@ describe('After Login Test', () => {
             nickname: 'nickname',
             ageRange: { meaning: '20대', minAge: 20, maxAge: 30 },
             shotVerified: false,
+            socialProvider: 'KAKAO',
+            socialId: 'socialId',
             socialProfileUrl:
               'http://k.kakaocdn.net/dn/xGvcl/btranGk6QWP/uvRGXQeokXgIhPRD0wTPgk/img_640x640.jpg',
           },
@@ -31,65 +48,48 @@ describe('After Login Test', () => {
       });
   };
 
-  it('카카오로 시작하기 버튼을 누른다.', () => {
-    cy.waitForReact();
-    cy.visit('/login');
-
-    getReviewList();
-
-    cy.visit('');
+  it.skip('로그인 후 홈화면으로 온다.', () => {
     login();
-    cy.wait('@requestReviewData');
+    // cy.waitForReact();
 
-    cy.window()
-      .its('store')
-      .invoke('getState')
-      .should('deep.equal', {
-        authReducer: {
-          accessToken: 'accessToken',
-          user: {
-            id: 8,
-            nickname: 'nickname',
-            ageRange: { meaning: '20대', minAge: 20, maxAge: 30 },
-            shotVerified: false,
-            socialProfileUrl:
-              'http://k.kakaocdn.net/dn/xGvcl/btranGk6QWP/uvRGXQeokXgIhPRD0wTPgk/img_640x640.jpg',
-          },
-        },
-      });
+    // cy.visit('');
+    // getCreatedAtReviewList();
+
+    // cy.wait('@requestCreatedAtReviewData');
+
+    // cy.window()
+    //   .its('store')
+    //   .invoke('getState')
+    //   .should('deep.equal', {
+    //     authReducer: {
+    //       accessToken: 'accessToken',
+    //       user: {
+    //         id: 8,
+    //         nickname: 'nickname',
+    //         ageRange: { meaning: '20대', minAge: 20, maxAge: 30 },
+    //         shotVerified: false,
+    //         socialProvider: 'KAKAO',
+    //         socialId: 'socialId',
+    //         socialProfileUrl:
+    //           'http://k.kakaocdn.net/dn/xGvcl/btranGk6QWP/uvRGXQeokXgIhPRD0wTPgk/img_640x640.jpg',
+    //       },
+    //     },
+    //   });
     cy.setLocalStorage('accessToken', JSON.stringify('accessToken'));
   });
-  // it('회원가입 페이지가 보인다.', () => {
-  //   cy.visit('/signup');
-  // });
-  // it('회원 가입을 진행한다.', () => {
-  //   cy.waitForReact();
 
-  // cy.react('Selection').
-  // cy.react('Input').type('test');
-  // cy.react('Button').eq(0).click();
-
-  // signup();
-  // cy.visit('');
-  // cy.wait('@requestSignup');
-
-  // getReviewList();
-  // cy.visit('');
-  // cy.wait('@requestReviewData');
-  // });
-
-  // it('회원가입을 실패했다는 alert가 보인다.', () => {});
-  // it('회원 가입을 다시 진행한다.', () => {});
-  // it('회원가입을 성공했다는 alert가 보이고, 확인 버튼을 클릭하면 홈페이지가 보인다.', () => {});
-  it('접종 후기 메뉴를 클릭하면, 접종 후기 페이지가 보인다.', () => {
+  it.skip('접종 후기 메뉴를 클릭하면, 접종 후기 페이지가 보인다.', () => {
+    login();
     cy.waitForReact();
-    cy.react('NavLink').eq(1).click();
+    cy.contains('a', '접종후기').click();
 
     cy.url().should('include', '/review');
   });
 
   const createReview = () => {
-    cy.intercept('POST', `${BASE_URL}/posts`, { state: 'SUCCESS' }).as('requestCreateReview');
+    cy.intercept('POST', `${BASE_URL}/posts`, {
+      state: 'SUCCESS',
+    }).as('requestCreateReview');
   };
 
   const editReview = () => {
@@ -97,9 +97,17 @@ describe('After Login Test', () => {
   };
 
   const getNewReviewList = () => {
-    cy.intercept('GET', `${BASE_URL}/posts`, { fixture: 'newReviewList' }).as(
-      'requestNewReviewData',
-    );
+    cy.intercept(
+      'GET',
+      `${BASE_URL}/paging?offset=0&size=${PAGING_SIZE}&sort=CREATED_AT_DESC`,
+      (req) => {
+        req.headers['Content-Type'] = 'application/json; charset=UTF-8';
+        req.headers['Authorization'] = 'Bearer ';
+        req.reply({
+          fixture: 'newReviewList',
+        });
+      },
+    ).as('requestNewReviewData');
   };
 
   const getNewReview = () => {
@@ -112,24 +120,27 @@ describe('After Login Test', () => {
     );
   };
 
-  it('후기 작성 버튼을 클릭해서, 후기를 작성한다.', () => {
-    getReviewList();
+  it.skip('후기 작성 버튼을 클릭해서, 후기를 작성한다.', () => {
+    login();
+
+    getCreatedAtReviewList();
 
     cy.waitForReact();
 
-    cy.react('Button').eq(2).click();
+    cy.contains('button', '후기 작성').click();
 
+    cy.on('window:confirm', () => false);
     createReview();
     cy.get('textarea').eq(0).type('모더나를 맞았어요. 별로 안 아프더라구요.');
     cy.contains('button', '제출하기').click();
 
+    login();
     getNewReviewList();
     cy.visit('/review');
-    login();
     cy.wait('@requestNewReviewData');
   });
 
-  it('접종 후기에 페이지에서 내가 쓴 후기에 들어가서 수정한다.', () => {
+  it.skip('접종 후기에 페이지에서 내가 쓴 후기에 들어가서 수정한다.', () => {
     cy.waitForReact();
 
     getNewReview();
@@ -149,11 +160,11 @@ describe('After Login Test', () => {
     login();
   });
 
-  it('내가 쓴 후기를 삭제한다.', () => {
+  it.skip('내가 쓴 후기를 삭제한다.', () => {
     cy.waitForReact();
 
     cy.contains('button', '삭제').click();
-    getReviewList();
+    getCreatedAtReviewList();
 
     cy.visit('/review');
     login();
