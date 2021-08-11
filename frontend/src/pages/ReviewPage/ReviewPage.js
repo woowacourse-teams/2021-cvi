@@ -40,6 +40,7 @@ import { FilterIcon } from '../../assets/icons';
 const ReviewPage = () => {
   const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
+  const user = useSelector((state) => state.authReducer?.user);
 
   const [selectedVaccination, setSelectedVaccination] = useState('전체');
   const [selectedFilter, setSelectedFilter] = useState('최신순');
@@ -77,10 +78,14 @@ const ReviewPage = () => {
 
   const onClickButton = () => {
     if (accessToken) {
-      if (window.confirm(CONFIRM_MESSAGE.OFFER_SHOT_VERIFICATION)) {
-        goMyPageShotVerification();
-      } else {
+      if (user?.shotVerified) {
         setModalOpen(true);
+      } else {
+        if (window.confirm(CONFIRM_MESSAGE.OFFER_SHOT_VERIFICATION)) {
+          goMyPageShotVerification();
+        } else {
+          setModalOpen(true);
+        }
       }
     } else {
       if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
