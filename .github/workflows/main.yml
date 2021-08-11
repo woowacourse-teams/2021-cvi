@@ -1,0 +1,20 @@
+name: test-automation
+
+on:
+  push:
+    branches: [develop]
+
+defaults:   
+  run: 
+    working-directory: ./frontend 
+
+jobs:
+  name: test-automation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: start local
+        run: yarn start
+      - name: test
+        run: cypress run
+
