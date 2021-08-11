@@ -1,16 +1,20 @@
 package com.backjoongwon.cvi;
 
-import com.backjoongwon.cvi.auth.application.AuthService;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
+import com.backjoongwon.cvi.auth.service.AuthService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
+import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -54,11 +58,20 @@ public class AcceptanceTest {
         비회원 = Optional.empty();
     }
 
-    protected void 가입된_회원_로그인() {
-        willReturn(가입회원).given(authService).authenticate(any(AuthRequest.class));
+    protected UserResponse 가입된_회원_로그인() {
+        return willReturn(가입회원).given(authService).authenticate(any(AuthRequest.class));
     }
 
-    protected void 신규_회원_로그인() {
-        willReturn(신규회원).given(authService).authenticate(any(AuthRequest.class));
+    protected UserResponse 신규_회원_로그인() {
+        return willReturn(신규회원).given(authService).authenticate(any(AuthRequest.class));
+    }
+
+    protected ExtractableResponse<Response> 회원_가입_요청(UserRequest userRequest) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(userRequest)
+                .when().post("/api/v1/users/signup")
+                .then().log().all()
+                .extract();
     }
 }

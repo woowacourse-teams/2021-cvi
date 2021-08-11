@@ -1,5 +1,5 @@
 import GlobalStyles from './GlobalStyles';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import { PATH } from './constants';
 import {
   HomePage,
@@ -17,7 +17,7 @@ import {
   MyPageLikeReview,
   StatePage,
 } from './pages';
-import { BaseLayout } from './components/common';
+import { BaseLayout, PrivateRoute, PublicRoute } from './components/common';
 import { useSnackBar } from './hooks';
 
 const App = () => {
@@ -29,14 +29,13 @@ const App = () => {
       <BrowserRouter>
         <BaseLayout>
           <Switch>
-            <Route exact path={PATH.HOME} component={HomePage} />
-            <Route exact path={PATH.REVIEW} component={ReviewPage} />
-            <Route exact path={`${PATH.REVIEW}/:id`} component={ReviewDetailPage} />
-            <Route exact path={`${PATH.REVIEW}/:id/edit`} component={ReviewEditPage} />
-            <Route exact path={PATH.LOGIN} component={LoginPage} />
-            <Route exact path={PATH.SIGNUP} component={SignupPage} />
-            <Route exact path={PATH.MY_PAGE} component={MyPage} />
-            <Route
+            <PublicRoute exact path={PATH.HOME} component={HomePage} />
+            <PublicRoute exact path={PATH.REVIEW} component={ReviewPage} />
+            <PublicRoute exact path={`${PATH.REVIEW}/:id`} component={ReviewDetailPage} />
+            <PublicRoute exact path={`${PATH.REVIEW}/:id/edit`} component={ReviewEditPage} />
+            <PublicRoute restricted exact path={PATH.LOGIN} component={LoginPage} />
+            <PublicRoute restricted exact path={PATH.SIGNUP} component={SignupPage} />
+            <PrivateRoute
               exact
               path={PATH.MY_PAGE_ACCOUNT}
               render={() => (
@@ -45,7 +44,7 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <Route
+            <PrivateRoute
               exact
               path={PATH.MY_PAGE_SHOT_VERIFICATION}
               render={() => (
@@ -54,7 +53,7 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <Route
+            <PrivateRoute
               exact
               path={PATH.MY_PAGE_REVIEW}
               render={() => (
@@ -63,7 +62,7 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <Route
+            <PrivateRoute
               exact
               path={PATH.MY_PAGE_COMMENT_REVIEW}
               render={() => (
@@ -72,7 +71,7 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <Route
+            <PrivateRoute
               exact
               path={PATH.MY_PAGE_LIKE_REVIEW}
               render={() => (
@@ -81,9 +80,9 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <Route exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
-            <Route exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
-            <Route exact path={PATH.STATE} component={StatePage} />
+            <PublicRoute restricted exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
+            <PublicRoute restricted exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
+            <PublicRoute exact path={PATH.STATE} component={StatePage} />
             <Redirect to={PATH.HOME} />
           </Switch>
         </BaseLayout>

@@ -40,6 +40,7 @@ const CONFIRM_MESSAGE = {
   DELETE_COMMENT: '댓글을 삭제하시겠습니까?',
   CANCEL_LIKE: '좋아요를 취소하시겠습니까?',
   GO_BACK: '현재 화면에서 나가시겠습니까? 변경사항이 저장되지 않을 수 있습니다.',
+  OFFER_SHOT_VERIFICATION: '접종 인증 후 후기 작성을 하시겠습니까?',
 };
 
 const PLACEHOLDER = {

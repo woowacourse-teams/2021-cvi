@@ -163,7 +163,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
-    @DisplayName("사용자 조회 - 성공")
+    @DisplayName("사용자 삭제 - 성공")
     @Test
     void delete() {
         //given
@@ -175,7 +175,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    @DisplayName("사용자 조회 - 실패 - 로그인 유저가 요청한 게 아닌 경우")
+    @DisplayName("사용자 삭제 - 실패 - 로그인 유저가 요청한 게 아닌 경우")
     @Test
     void deleteFailureWhenNoSignedinUser() {
         //given
@@ -185,7 +185,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
-    @DisplayName("사용자 조회 - 실패 - 해당 유저가 존재하지 않는 경우")
+    @DisplayName("사용자 삭제 - 실패 - 해당 유저가 존재하지 않는 경우")
     @Test
     void deleteFailureWhenNoExistsUser() {
         ExtractableResponse<Response> signupResponse = 회원_가입_요청(userRequest);
@@ -196,15 +196,6 @@ public class UserAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 사용자_삭제(userResponse);
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    private ExtractableResponse<Response> 회원_가입_요청(UserRequest userRequest) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(userRequest)
-                .when().post("/api/v1/users/signup")
-                .then().log().all()
-                .extract();
     }
 
     private ExtractableResponse<Response> 내_정보_조회(UserResponse userResponse) {
@@ -226,10 +217,10 @@ public class UserAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private ExtractableResponse<Response> 사용자_조회(Long id) {
+    private ExtractableResponse<Response> 사용자_조회(Long userId) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/v1/users/{id}", id)
+                .when().get("/api/v1/users/{userId}", userId)
                 .then().log().all()
                 .extract();
     }
