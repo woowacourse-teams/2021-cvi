@@ -26,30 +26,37 @@ public class LikeService {
 
     @Transactional
     public LikeResponse createLike(Long postId, Optional<User> optionalUser) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
-        Post post = postRepository.findWithLikesByPostId(postId)
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        User user = getLoginUser(optionalUser);
+        Post post = findPostByPostId(postId);
         Like like = Like.builder()
                 .user(user)
                 .build();
-        post.addLike(like);
+        post.assignLike(like);
         likeRepository.flush();
         return LikeResponse.from(like.getId());
     }
 
     @Transactional
     public void deleteLike(Long postId, Optional<User> optionalUser) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
-        Post post = postRepository.findWithLikesByPostId(postId)
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        User user = getLoginUser(optionalUser);
+        Post post = findPostByPostId(postId);
         post.deleteLike(user.getId());
     }
 
-    private void validateSignedin(Optional<User> user) {
-        if (!user.isPresent()) {
-            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
+    private User getLoginUser(Optional<User> optionalUser) {
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         }
+        log.info("인증되지 안흔 사용자입니다. 입력 값: null");
+        throw new UnAuthorizedException("인증되지 않은 사용자입니다. 입력 값: null");
+    }
+
+    private Post findPostByPostId(Long postId) {
+        Optional<Post> post = postRepository.findWithLikesByPostId(postId);
+        if (post.isPresent()) {
+            return post.get();
+        }
+        log.info("해당 id의 게시글이 존재하지 않습니다. 입력 값: {}", postId);
+        throw new NotFoundException(String.format("해당 id의 게시글이 존재하지 않습니다. %s", postId));
     }
 }

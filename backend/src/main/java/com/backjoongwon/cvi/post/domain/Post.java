@@ -18,7 +18,7 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
-@ToString(of={"content", "viewCount", "vaccinationType"})
+@ToString(of = {"content", "viewCount", "vaccinationType"})
 public class Post extends BaseEntity {
 
     @Embedded
@@ -87,12 +87,6 @@ public class Post extends BaseEntity {
         return likes.isAlreadyLikedBy(user.getId());
     }
 
-    public void addLike(Like like) {
-        likes.validateNotExistsLikeCreatedBy(like.getUser());
-        like.assignPost(this);
-        likes.add(like);
-    }
-
     public void deleteLike(Long userId) {
         likes.delete(userId);
     }
@@ -115,6 +109,14 @@ public class Post extends BaseEntity {
 
     public void deleteComment(Long commentId, User user) {
         comments.delete(commentId, user);
+    }
+
+    public void assignLike(Like like) {
+        likes.assignLike(like, this);
+    }
+
+    public void addLike(Like like) {
+        likes.add(like);
     }
 
     public List<Comment> getCommentsAsList() {

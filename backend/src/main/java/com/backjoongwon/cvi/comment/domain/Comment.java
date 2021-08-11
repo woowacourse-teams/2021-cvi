@@ -44,12 +44,12 @@ public class Comment extends BaseEntity {
 
     public void assignPost(Post post) {
         if (Objects.isNull(post)) {
-            log.info("댓글에 할당하려는 게시글이 없습니다. 입력 값: null");
-            throw new NotFoundException("댓글에 할당하려는 게시글이 없습니다 입력 값: null");
+            log.info("댓글을 저장할 게시글이 없습니다. 입력 값: null");
+            throw new NotFoundException("댓글을 저장할 게시글이 없습니다 입력 값: null");
         }
         if (Objects.nonNull(this.post)) {
-            log.info("한번 할당된 댓글 작성자는 변경할 수 없습니다. 입력 값: {}", this.post);
-            throw new InvalidOperationException(String.format("한번 할당된 댓글 작성자는 변경할 수 없습니다. 입력 값: %s", this.post));
+            log.info("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: {}", this.post);
+            throw new InvalidOperationException(String.format("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: %s", this.post));
         }
         this.post = post;
         post.addComment(this);

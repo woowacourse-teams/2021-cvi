@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post.domain;
 
 
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
+import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.user.domain.User;
@@ -14,6 +15,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,6 +35,17 @@ public class Likes {
     public void delete(Long userId) {
         Like like = findLikeByUserId(userId);
         likes.remove(like);
+    }
+
+    public void assignLike(Like like, Post post) {
+        if (Objects.isNull(like)) {
+            throw new NotFoundException("좋아요가 존재하지 않습니다.");
+        }
+        validateNotExistsLikeCreatedBy(like.getUser());
+        like.assignPost(post);
+        if (!likes.contains(like)) {
+            add(like);
+        }
     }
 
     public void validateNotExistsLikeCreatedBy(User user) {

@@ -1,17 +1,21 @@
 package com.backjoongwon.cvi.like.domain;
 
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
+import com.backjoongwon.cvi.common.exception.InvalidOperationException;
+import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Slf4j
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,11 +39,16 @@ public class Like extends BaseEntity {
     }
 
     public void assignPost(Post post) {
+        if (Objects.isNull(post)) {
+            log.info("좋아요를 저장할 게시글이 없습니다. 입력 값: null");
+            throw new NotFoundException("좋아요를 저장할 게시글이 없습니다. 입력 값: null");
+        }
         if (Objects.nonNull(this.post)) {
-            return;
+            log.info("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: {}", this.post);
+            throw new InvalidOperationException(String.format("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: %s", this.post));
         }
         this.post = post;
-        post.getLikes().add(this);
+        post.addLike(this);
     }
 
     public boolean isSameUser(Long userId) {

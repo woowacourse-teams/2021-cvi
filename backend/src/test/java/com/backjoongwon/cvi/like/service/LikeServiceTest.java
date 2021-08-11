@@ -96,7 +96,7 @@ public class LikeServiceTest {
     }
 
     private void initLike() {
-        post.addLike(Like.builder().user(userWithLike).build());
+        post.assignLike(Like.builder().user(userWithLike).build());
     }
 
     @DisplayName("좋아요 생성 - 성공")
