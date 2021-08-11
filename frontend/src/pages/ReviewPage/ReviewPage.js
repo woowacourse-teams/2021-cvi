@@ -9,7 +9,6 @@ import {
   FONT_COLOR,
   FILTER_TYPE,
   SORT_TYPE,
-  CONFIRM_MESSAGE,
 } from '../../constants';
 import {
   Container,
@@ -41,7 +40,6 @@ const ReviewPage = () => {
   const history = useHistory();
   const location = useLocation();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
-  const user = useSelector((state) => state.authReducer?.user);
 
   const [selectedVaccination, setSelectedVaccination] = useState('전체');
   const [selectedFilter, setSelectedFilter] = useState(
@@ -75,21 +73,9 @@ const ReviewPage = () => {
     history.push(PATH.LOGIN);
   };
 
-  const goMyPageShotVerification = () => {
-    history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
-  };
-
   const onClickButton = () => {
     if (accessToken) {
-      if (user?.shotVerified) {
-        setModalOpen(true);
-      } else {
-        if (window.confirm(CONFIRM_MESSAGE.OFFER_SHOT_VERIFICATION)) {
-          goMyPageShotVerification();
-        } else {
-          setModalOpen(true);
-        }
-      }
+      setModalOpen(true);
     } else {
       if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
 
