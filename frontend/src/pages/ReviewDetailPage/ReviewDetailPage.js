@@ -52,6 +52,7 @@ const ReviewDetailPage = () => {
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
   const [review, setReview] = useState({});
+  const [commentCount, setCommentCount] = useState(0);
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
@@ -106,6 +107,10 @@ const ReviewDetailPage = () => {
     showLoading();
     getReview();
   }, [accessToken]);
+
+  useEffect(() => {
+    setCommentCount(review?.commentCount);
+  }, [review]);
 
   return (
     <Container>
@@ -190,13 +195,14 @@ const ReviewDetailPage = () => {
                 </IconContainer>
                 <IconContainer>
                   <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
-                  <div>{review?.commentCount ?? 0}</div>
+                  <div>{commentCount}</div>
                 </IconContainer>
               </BottomContainer>
               <Comment
                 accessToken={accessToken}
                 user={user}
-                commentCount={review?.commentCount ?? 0}
+                commentCount={commentCount ?? 0}
+                setCommentCount={setCommentCount}
                 reviewId={id}
                 getReview={getReview}
               />

@@ -17,6 +17,7 @@ const Content = styled.div`
   min-height: 58.5rem;
   overflow-x: auto;
   overflow-y: hidden;
+  position: relative;
 `;
 
 const CountingDate = styled.div`

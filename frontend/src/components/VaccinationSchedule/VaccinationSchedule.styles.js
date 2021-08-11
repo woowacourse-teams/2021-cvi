@@ -21,7 +21,7 @@ const Img = styled.img`
 
 const buttonStyles = css`
   width: 100%;
-  height: 5.8rem;
+  height: 4.8rem;
   border-radius: 1.6rem;
   background-color: ${THEME_COLOR.WHITE};
   border: transparent;
@@ -45,7 +45,7 @@ const A = styled.a`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 5.8rem;
+  height: 4.8rem;
   background-color: ${THEME_COLOR.WHITE};
   color: ${THEME_COLOR.PRIMARY};
   border-radius: 1.6rem;

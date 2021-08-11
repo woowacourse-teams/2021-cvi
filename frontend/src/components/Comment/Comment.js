@@ -14,9 +14,12 @@ import { getCommentListAsync } from '../../service';
 import { FONT_COLOR, PAGING_SIZE, RESPONSE_STATE } from '../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 
-const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
+const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount }) => {
   const [offset, setOffset] = useState(0);
   const [commentList, setCommentList] = useState([]);
+  const [newComment, setNewComment] = useState({});
+
+  const isMoreButtonShowing = commentCount > PAGING_SIZE && commentCount > commentList.length;
 
   const getCommentList = useCallback(async () => {
     const response = await getCommentListAsync(reviewId, offset);
@@ -36,9 +39,21 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
 
   useEffect(() => {
     getCommentList();
-
-    return () => setCommentList([]);
   }, [getCommentList]);
+
+  useEffect(() => {
+    if (!Object.keys(newComment).length) return;
+
+    const timeoutId = setTimeout(() => {
+      if (commentList.length < PAGING_SIZE) {
+        setCommentList((prevState) => [...prevState, newComment]);
+      }
+
+      setNewComment({});
+    }, 2000);
+
+    return () => clearInterval(timeoutId);
+  }, [newComment]);
 
   return (
     <Container>
@@ -49,20 +64,32 @@ const Comment = ({ accessToken, user, reviewId, commentCount, getReview }) => {
           reviewId={reviewId}
           nickname={user.nickname}
           socialProfileUrl={user?.socialProfileUrl}
-          getReview={getReview}
+          setNewComment={setNewComment}
+          setCommentCount={setCommentCount}
         />
       </CommentFormContainer>
+      {!!Object.keys(newComment).length && (
+        <CommentItem
+          accessToken={accessToken}
+          userId={user?.id ?? 0}
+          reviewId={reviewId}
+          comment={newComment}
+          setCommentList={setCommentList}
+          setCommentCount={setCommentCount}
+        />
+      )}
       {commentList?.map((comment) => (
         <CommentItem
           key={comment.id}
           accessToken={accessToken}
-          userId={user?.id}
+          userId={user?.id ?? 0}
           reviewId={reviewId}
           comment={comment}
-          getReview={getReview}
+          setCommentList={setCommentList}
+          setCommentCount={setCommentCount}
         />
       ))}
-      {commentCount > commentList.length && (
+      {isMoreButtonShowing && (
         <ButtonContainer>
           <Button
             backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
@@ -88,6 +115,7 @@ Comment.propTypes = {
     nickname: PropTypes.string,
     socialProfileUrl: PropTypes.string,
   }).isRequired,
+  setCommentCount: PropTypes.func.isRequired,
 };
 
 export default Comment;

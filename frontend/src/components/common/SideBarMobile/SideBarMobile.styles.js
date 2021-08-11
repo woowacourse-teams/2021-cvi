@@ -78,19 +78,18 @@ const LogoutButton = styled.button`
 `;
 
 const MyPageMenuContainer = styled.div`
-  margin-top: 2rem;
-  font-size: 1.4rem;
-  color: ${FONT_COLOR.GRAY};
-  padding: 1.2rem 0 0 4rem;
+  font-size: 1.6rem;
+  color: ${FONT_COLOR.BLACK};
 `;
 
 const MyPageLink = styled(Link)`
-  font-size: 1.6rem;
-  color: ${FONT_COLOR.BLACK};
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.GRAY};
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-  height: 4.4rem;
+  gap: 0.2rem;
+  height: 2.8rem;
+  margin-left: 7.4rem;
 `;
 
 const ProfileContainer = styled.div`
