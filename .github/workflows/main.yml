@@ -1,21 +1,27 @@
 name: test-automation
 
 on:
-  push:
-    branches: [develop]
   pull_request:
     branches: [develop]
+
+defaults:
+  run:
+    working-directory: ./frontend
 
 jobs:
   test-automation:
     runs-on: ubuntu-latest
-    env: 
-      working-directory: ./frontend 
 
     steps:
-      - run: yarn
-      - name: start local
+      - name: checkout source code
+        uses: actions/checkout@v2
+        
+      - name: yarn install
+        run: yarn
+        
+      - name: yarn start
         run: yarn start
-      - name: test
+        
+      - name: yarn test
         run: cypress run
 
