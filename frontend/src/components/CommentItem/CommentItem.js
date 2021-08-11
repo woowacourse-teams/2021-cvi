@@ -8,10 +8,10 @@ import {
   UpdateButtonContainer,
   Writer,
   CreatedAt,
-  ShotVerified,
   Content,
   TextArea,
   buttonStyles,
+  shotVerifiedStyle,
 } from './CommentItem.styles';
 import { toDate } from '../../utils';
 import {
@@ -20,6 +20,7 @@ import {
   CONFIRM_MESSAGE,
   FONT_COLOR,
   RESPONSE_STATE,
+  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   THEME_COLOR,
   TO_DATE_TYPE,
@@ -27,6 +28,7 @@ import {
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import { deleteCommentAsync, putCommentAsync } from '../../service';
 import { useSnackBar } from '../../hooks';
+import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
 const CommentItem = ({
   accessToken,
@@ -96,7 +98,13 @@ const CommentItem = ({
         <Info>
           <Writer>
             {writer.nickname} · {writer.ageRange.meaning}
-            {writer.shotVerified && <ShotVerified>접종 확인</ShotVerified>}
+            {writer.shotVerified && (
+              <ShotVerificationLabel
+                shotVerification={writer.shotVerified}
+                trueText={SHOT_VERIFICATION.TRUE_TEXT}
+                styles={shotVerifiedStyle}
+              />
+            )}
           </Writer>
           <CreatedAt>{toDate(TO_DATE_TYPE.TIME, createdAt)}</CreatedAt>
         </Info>

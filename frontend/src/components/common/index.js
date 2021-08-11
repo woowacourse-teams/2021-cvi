@@ -18,6 +18,7 @@ import BarChart from './BarChart/BarChart';
 import MapChart from './MapChart/MapChart';
 import MapChartSvg from './MapChartSvg/MapChartSvg';
 import MapChartStandard from './MapChartStandard/MapChartStandard';
+import LottieAnimation from './LottieAnimation/LottieAnimation';
 import { PublicRoute, PrivateRoute } from './Route/Route';
 
 export {
@@ -41,6 +42,7 @@ export {
   MapChart,
   MapChartSvg,
   MapChartStandard,
+  LottieAnimation,
   PublicRoute,
   PrivateRoute,
 };

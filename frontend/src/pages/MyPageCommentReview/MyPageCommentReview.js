@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Frame } from '../../components/common';
+import { Frame, LottieAnimation } from '../../components/common';
 import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import { useLoading } from '../../hooks';
 import {
   Container,
+  LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
   MyCommentReviewListContainer,
@@ -15,6 +16,7 @@ import MyCommentsItem from '../../components/MyCommentsItem/MyCommentsItem';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { getMyCommentReviewListAsync } from '../../service';
+import { NotFoundAnimation } from '../../assets/lotties';
 
 const MyPageCommentReview = () => {
   const history = useHistory();
@@ -75,6 +77,16 @@ const MyPageCommentReview = () => {
         <LoadingContainer>
           <Loading isLoading={isLoading} backgroundColor={THEME_COLOR.WHITE} />
         </LoadingContainer>
+      ) : !myCommentReviewList.length ? (
+        <LottieContainer>
+          <LottieAnimation
+            data={NotFoundAnimation}
+            width="40rem"
+            mobileWidth="18rem"
+            designer="Radhikakpor"
+            description="댓글 단 글이 없습니다"
+          />
+        </LottieContainer>
       ) : (
         <Frame styles={frameStyle}>
           <MyCommentReviewListContainer>

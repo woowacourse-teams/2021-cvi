@@ -15,6 +15,11 @@ const Container = styled.div`
   }
 `;
 
+const LottieContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const LoadingContainer = styled.div`
   position: relative;
   top: 35%;
@@ -49,6 +54,7 @@ const frameStyle = css`
 
 export {
   Container,
+  LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
   MyCommentReviewListContainer,
