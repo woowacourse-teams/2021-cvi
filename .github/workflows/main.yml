@@ -22,4 +22,4 @@ jobs:
       - run: yarn start &
           sleep 10 &&
           curl http://localhost:9000 &&
-          cypress run
+          npx cypress run
