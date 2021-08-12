@@ -6,6 +6,7 @@ import org.ehcache.event.CacheEventListener;
 
 @Slf4j
 public class CacheEventLogger implements CacheEventListener<Object, Object> {
+
     @Override
     public void onEvent(CacheEvent<?, ?> cacheEvent) {
         log.info("키: {}, 이전 값: {}, 추가된 값: {}",
