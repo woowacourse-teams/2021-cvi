@@ -42,7 +42,11 @@ const PreviewList = ({ reviewType }) => {
       ) : (
         reviewList.slice(0, 4).map((review) => (
           <li key={review.id}>
-            <PreviewItem review={review} onClick={() => goReviewDetailPage(review.id)} />
+            <PreviewItem
+              review={review}
+              accessToken={accessToken}
+              onClick={() => goReviewDetailPage(review.id)}
+            />
           </li>
         ))
       )}
