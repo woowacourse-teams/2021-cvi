@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'org.sonarqube'
 }
 
 group 'com.backjoongwon'
@@ -29,6 +31,46 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:3.11.2'
 }
 
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java"
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
+
+    violationRules { // 위반 규칙
+        rule {
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+
+            excludes = [// 커버리지 제외할 클래스
+            ]
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
+
+    finalizedBy 'jacocoTestReport'
 }
