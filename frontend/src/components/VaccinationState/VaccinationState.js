@@ -1,6 +1,5 @@
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { css } from '@emotion/react';
 import {
   Container,
   TopContainer,
@@ -10,6 +9,7 @@ import {
   Info,
   InfoTitle,
   IncreaseIcon,
+  buttonStyles,
 } from './VaccinationState.styles';
 import { Frame, DonutChart, Button } from '../common';
 import { requestVaccinationStateList, requestWorldVaccinationStateList } from '../../requests';
@@ -42,9 +42,7 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
             backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
             color={FONT_COLOR.BLUE_GRAY}
             withIcon={true}
-            styles={css`
-              padding-right: 0;
-            `}
+            styles={buttonStyles}
             onClick={goStatePage}
           >
             <div>더보기</div>

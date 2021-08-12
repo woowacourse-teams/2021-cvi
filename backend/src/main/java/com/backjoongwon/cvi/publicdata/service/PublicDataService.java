@@ -9,6 +9,8 @@ import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.publicdata.dto.WorldVaccinationDataFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class PublicDataService {
     private final PublicDataProperties publicDataProperties;
 
     @Transactional
+    @CacheEvict(value = "cache::koreaVaccinationStatistics", key = "#targetDate.toString()")
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDate targetDate) {
         KoreaVaccineParserResponse koreaVaccineParserResponse = vacinationparser.parseToKoreaPublicData(targetDate, publicDataProperties.getVaccination());
 
@@ -40,6 +43,7 @@ public class PublicDataService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "cache::koreaVaccinationStatistics", key = "#targetDate.toString()")
     public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDate targetDate) {
         List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findAll();
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
@@ -50,6 +54,7 @@ public class PublicDataService {
     }
 
     @Transactional
+    @CacheEvict(value = "cache::worldVaccinationStatistics", key = "#targetDate.toString()")
     public List<VaccinationStatisticResponse> saveWorldVaccinationStatistics(LocalDate targetDate) {
         WorldVaccinationParserResponse worldVaccinationParserResponse = vacinationparser.parseToWorldPublicData();
 
@@ -64,6 +69,7 @@ public class PublicDataService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "cache::worldVaccinationStatistics", key = "#targetDate.toString()")
     public List<VaccinationStatisticResponse> findWorldVaccinationStatistics(LocalDate targetDate) {
         List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);

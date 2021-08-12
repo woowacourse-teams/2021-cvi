@@ -22,18 +22,24 @@ public class PublicDataScheduler {
         LocalDate today = LocalDate.now();
         log.info("백신접종률 api요청 및 저장 시작:");
         publicDataService.saveVaccinationStatistics(today);
-        log.info("세계 백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveWorldVaccinationStatistics(today);
         log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
     }
 
     @Scheduled(cron = "0 0 10 * * ?")
-    private void scheduleVaccinationData() {
+    private void scheduleKoreaVaccinationData() {
         LocalDate today = LocalDate.now();
         log.info("백신접종률 api요청 및 저장 시작:");
         publicDataService.saveVaccinationStatistics(today);
         log.info("세계 백신접종률 api요청 및 저장 시작:");
         publicDataService.saveWorldVaccinationStatistics(today);
         log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
+    }
+
+    @Scheduled(cron = "0 20 05 * * ?")
+    private void scheduleWorldVaccinationData() {
+        LocalDate today = LocalDate.now();
+        log.info("세계 백신접종률 api요청 및 저장 시작:");
+        publicDataService.saveWorldVaccinationStatistics(today);
+        log.info("세계 api요청 완료 및 데이터베이스 저장 완료");
     }
 }

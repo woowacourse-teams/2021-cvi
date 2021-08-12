@@ -73,8 +73,8 @@ const TabContainer = styled.div`
   width: 100%;
   position: relative;
 
-  @media screen and (max-width: 1024px) {
-    padding: 1rem 0;
+  @media screen and (max-width: 801px) {
+    padding: 1rem 0 1rem 0.6rem;
   }
 `;
 
@@ -93,9 +93,9 @@ const filterButtonStyles = css`
   top: 0.6rem;
   right: 0;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 801px) {
     padding-right: 0;
-    top: 1rem;
+    top: 0.6rem;
     right: 0;
   }
 `;

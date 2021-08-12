@@ -11,6 +11,7 @@ import {
   SNACKBAR_MESSAGE,
   NICKNAME_LIMIT,
   REGEX,
+  LOCAL_STORAGE_KEY,
 } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { postSignupAsync } from '../../service';
@@ -46,7 +47,8 @@ const SignupPage = () => {
   };
 
   const isValidNickname = (nickname) =>
-    nickname.length > NICKNAME_LIMIT.MIN_LENGTH &&
+    nickname.length >= NICKNAME_LIMIT.MIN_LENGTH &&
+    nickname.length <= NICKNAME_LIMIT.MAX_LENGTH &&
     !REGEX.INCLUDE_BLANK.test(nickname) &&
     !REGEX.INCLUDE_SPECIAL_CHARACTER.test(nickname);
 
@@ -63,11 +65,12 @@ const SignupPage = () => {
     const response = await postSignupAsync(data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
-      alert('sign');
+      alert(ALERT_MESSAGE.FAIL_TO_SIGNUP);
 
       return;
     }
 
+    localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(response.data.accessToken));
     dispatch(getMyInfoAsync(response.data.accessToken));
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);

@@ -29,11 +29,11 @@ const Container = styled.div`
       flex-direction: column;
       width: 80%;
       height: 100vh;
-      padding: 1rem 0 12rem 0;
+      padding: 1rem 0 1rem 0;
       background-color: ${THEME_COLOR.WHITE};
 
       & > *:last-child {
-        margin-top: auto;
+        /* margin-top: auto; */
       }
     `}
 

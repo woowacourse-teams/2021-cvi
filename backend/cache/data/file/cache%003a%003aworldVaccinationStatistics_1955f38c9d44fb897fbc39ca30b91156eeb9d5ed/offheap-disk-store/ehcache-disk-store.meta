@@ -1,0 +1,4 @@
+#Key and value types
+#Thu Aug 12 00:46:35 KST 2021
+valueType=java.util.ArrayList
+keyType=java.lang.String

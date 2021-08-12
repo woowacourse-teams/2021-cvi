@@ -9,7 +9,6 @@ import {
   FONT_COLOR,
   FILTER_TYPE,
   SORT_TYPE,
-  CONFIRM_MESSAGE,
 } from '../../constants';
 import {
   Container,
@@ -26,7 +25,7 @@ import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
 } from '../../components/common/Button/Button.styles';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
@@ -39,11 +38,14 @@ import { FilterIcon } from '../../assets/icons';
 
 const ReviewPage = () => {
   const history = useHistory();
+  const location = useLocation();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
   const [selectedVaccination, setSelectedVaccination] = useState('전체');
-  const [selectedFilter, setSelectedFilter] = useState('최신순');
-  const [selectedSort, setSelectedSort] = useState('내림차순');
+  const [selectedFilter, setSelectedFilter] = useState(
+    location?.state?.selectedFilter ?? FILTER_TYPE.CREATED_AT,
+  );
+  const [selectedSort, setSelectedSort] = useState(SORT_TYPE.DESC);
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviewList, setReviewList] = useState([]);
   const [offset, setOffset] = useState(0);
@@ -71,17 +73,9 @@ const ReviewPage = () => {
     history.push(PATH.LOGIN);
   };
 
-  const goMyPageShotVerification = () => {
-    history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
-  };
-
   const onClickButton = () => {
     if (accessToken) {
-      if (window.confirm(CONFIRM_MESSAGE.OFFER_SHOT_VERIFICATION)) {
-        goMyPageShotVerification();
-      } else {
-        setModalOpen(true);
-      }
+      setModalOpen(true);
     } else {
       if (!window.confirm(ALERT_MESSAGE.NEED_LOGIN)) return;
 
@@ -148,6 +142,25 @@ const ReviewPage = () => {
     setOffset((prevState) => prevState + PAGING_SIZE);
     showScrollLoading();
   }, [inView]);
+
+  const escFunction = useCallback(
+    (event) => {
+      if (!isModalOpen) return;
+
+      if (event.keyCode === 27) {
+        setModalOpen(false);
+      }
+    },
+    [isModalOpen],
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [isModalOpen]);
 
   return (
     <>
