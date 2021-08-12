@@ -39,6 +39,5 @@ alter table post
 alter table post
     modify column content text;
 
-
 alter table vaccination_statistic
-    add constraint fk_vaccination_statistic_public_data foreign key (vaccination_statistic_id) references public_data (public_data_id);
+    add constraint fk_vaccination_statistic_public_data foreign key (vaccination_statistic_id) references public_data (public_data_id) on delete cascade on update cascade;
