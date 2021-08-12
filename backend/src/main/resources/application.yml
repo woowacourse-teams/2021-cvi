@@ -8,6 +8,10 @@ spring:
   flyway:
     enabled: false
 
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
 security:
   jwt:
     token:
@@ -21,6 +25,7 @@ security:
   public:
     data:
       vaccination: publicdata-secret
+
 
 server:
   shutdown: graceful
