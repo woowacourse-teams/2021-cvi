@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Component
@@ -19,27 +20,25 @@ public class PublicDataScheduler {
 
     @PostConstruct
     private void initializeVaccinationDate() {
-        LocalDate today = LocalDate.now();
-        log.info("백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveVaccinationStatistics(today);
-        log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
+        LocalDateTime today = LocalDateTime.now();
+        log.info("백신접종률 api요청 및 저장 시작. 시간: {}", today);
+        publicDataService.saveVaccinationStatistics(today.toLocalDate());
+        log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", today);
     }
 
     @Scheduled(cron = "0 0 10 * * ?")
     private void scheduleKoreaVaccinationData() {
-        LocalDate today = LocalDate.now();
-        log.info("백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveVaccinationStatistics(today);
-        log.info("세계 백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveWorldVaccinationStatistics(today);
-        log.info("백신접종률 api요청 완료 및 데이터베이스 저장 완료");
+        LocalDateTime today = LocalDateTime.now();
+        log.info("[스케쥴러] 백신접종률 api요청 및 저장 시작. 시간: {}", today);
+        publicDataService.saveVaccinationStatistics(today.toLocalDate());
+        log.info("[스케쥴러] 백신접종률 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", today);
     }
 
     @Scheduled(cron = "0 20 05 * * ?")
     private void scheduleWorldVaccinationData() {
-        LocalDate today = LocalDate.now();
-        log.info("세계 백신접종률 api요청 및 저장 시작:");
-        publicDataService.saveWorldVaccinationStatistics(today);
-        log.info("세계 api요청 완료 및 데이터베이스 저장 완료");
+        LocalDateTime today = LocalDateTime.now();
+        log.info("[스케쥴러] 세계 백신접종률 api요청 및 저장 시작. 시간: {}", today);
+        publicDataService.saveWorldVaccinationStatistics(today.toLocalDate());
+        log.info("[스케쥴러] 세계 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", today);
     }
 }
