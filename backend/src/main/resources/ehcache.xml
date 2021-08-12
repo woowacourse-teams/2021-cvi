@@ -5,8 +5,6 @@
             http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
     <!-- 캐시 파일이 생성되는 경로 -->
-    <persistence directory="cache/data"/>
-
       <cache-template name="template">
         <!--  캐시가 생성되고 삭제되고 하는 이벤트를 모니터링 하고 싶으면 org.ehcache.event.CacheEventListener 를 구현하는 클래스를 만들어서 설정 (태그 순서가 중요)-->
         <listeners>
