@@ -1,71 +1,82 @@
 package com.backjoongwon.cvi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class WorldVaccinationData {
 
     private String date;
-    private long total_vaccinations;
-    private long people_vaccinated;
-    private long people_fully_vaccinated;
-    private long daily_vaccinations_raw;
-    private long daily_vaccinations;
-    private double total_vaccinations_per_hundred;
-    private double people_vaccinated_per_hundred;
-    private double people_fully_vaccinated_per_hundred;
-    private long daily_vaccinations_per_million;
+    @JsonProperty(value = "total_vaccinations")
+    private long totalVaccinations;
+    @JsonProperty(value = "people_vaccinated")
+    private long peopleVaccinated;
+    @JsonProperty(value = "people_fully_vaccinated")
+    private long peopleFullyVaccinated;
+    @JsonProperty(value = "daily_vaccinations_raw")
+    private long dailyVaccinationsRaw;
+    @JsonProperty(value = "daily_vaccinations")
+    private long dailyVaccinations;
+    @JsonProperty(value = "total_vaccinations_per_hundred")
+    private double totalVaccinationsPerHundred;
+    @JsonProperty(value = "people_vaccinated_per_hundred")
+    private double peopleVaccinatedPerHundred;
+    @JsonProperty(value = "peopleFullyVaccinated_per_hundred")
+    private double peopleFullyVaccinatedPerHundred;
+    @JsonProperty(value = "daily_vaccinations_per_million")
+    private long dailyVaccinationsPerMillion;
 
     public WorldVaccinationData() {
     }
 
-    public WorldVaccinationData(String date, long total_vaccinations, long people_vaccinated, long people_fully_vaccinated, long daily_vaccinations_raw, long daily_vaccinations, double total_vaccinations_per_hundred, double people_vaccinated_per_hundred, double people_fully_vaccinated_per_hundred, long daily_vaccinations_per_million) {
+    public WorldVaccinationData(String date, long totalVaccinations, long peopleVaccinated, long peopleFullyVaccinated, long dailyVaccinationsRaw, long dailyVaccinations, double totalVaccinationsPerHundred, double peopleVaccinatedPerHundred, double peopleFullyVaccinatedPerHundred, long dailyVaccinationsPerMillion) {
         this.date = date;
-        this.total_vaccinations = total_vaccinations;
-        this.people_vaccinated = people_vaccinated;
-        this.people_fully_vaccinated = people_fully_vaccinated;
-        this.daily_vaccinations_raw = daily_vaccinations_raw;
-        this.daily_vaccinations = daily_vaccinations;
-        this.total_vaccinations_per_hundred = total_vaccinations_per_hundred;
-        this.people_vaccinated_per_hundred = people_vaccinated_per_hundred;
-        this.people_fully_vaccinated_per_hundred = people_fully_vaccinated_per_hundred;
-        this.daily_vaccinations_per_million = daily_vaccinations_per_million;
+        this.totalVaccinations = totalVaccinations;
+        this.peopleVaccinated = peopleVaccinated;
+        this.peopleFullyVaccinated = peopleFullyVaccinated;
+        this.dailyVaccinationsRaw = dailyVaccinationsRaw;
+        this.dailyVaccinations = dailyVaccinations;
+        this.totalVaccinationsPerHundred = totalVaccinationsPerHundred;
+        this.peopleVaccinatedPerHundred = peopleVaccinatedPerHundred;
+        this.peopleFullyVaccinatedPerHundred = peopleFullyVaccinatedPerHundred;
+        this.dailyVaccinationsPerMillion = dailyVaccinationsPerMillion;
     }
 
     public String getDate() {
         return date;
     }
 
-    public long getTotal_vaccinations() {
-        return total_vaccinations;
+    public long getTotalVaccinations() {
+        return totalVaccinations;
     }
 
-    public long getPeople_vaccinated() {
-        return people_vaccinated;
+    public long getPeopleVaccinated() {
+        return peopleVaccinated;
     }
 
-    public long getPeople_fully_vaccinated() {
-        return people_fully_vaccinated;
+    public long getPeopleFullyVaccinated() {
+        return peopleFullyVaccinated;
     }
 
-    public long getDaily_vaccinations_raw() {
-        return daily_vaccinations_raw;
+    public long getDailyVaccinationsRaw() {
+        return dailyVaccinationsRaw;
     }
 
-    public long getDaily_vaccinations() {
-        return daily_vaccinations;
+    public long getDailyVaccinations() {
+        return dailyVaccinations;
     }
 
-    public double getTotal_vaccinations_per_hundred() {
-        return total_vaccinations_per_hundred;
+    public double getTotalVaccinationsPerHundred() {
+        return totalVaccinationsPerHundred;
     }
 
-    public double getPeople_vaccinated_per_hundred() {
-        return people_vaccinated_per_hundred;
+    public double getPeopleVaccinatedPerHundred() {
+        return peopleVaccinatedPerHundred;
     }
 
-    public double getPeople_fully_vaccinated_per_hundred() {
-        return people_fully_vaccinated_per_hundred;
+    public double getPeopleFullyVaccinatedPerHundred() {
+        return peopleFullyVaccinatedPerHundred;
     }
 
-    public long getDaily_vaccinations_per_million() {
-        return daily_vaccinations_per_million;
+    public long getDailyVaccinationsPerMillion() {
+        return dailyVaccinationsPerMillion;
     }
 }
