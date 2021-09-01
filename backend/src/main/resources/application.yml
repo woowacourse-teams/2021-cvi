@@ -26,7 +26,6 @@ security:
     data:
       vaccination: publicdata-secret
 
-
 server:
   shutdown: graceful
 ---
