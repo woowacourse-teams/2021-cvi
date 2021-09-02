@@ -57,6 +57,6 @@ public class LikeService {
             return post.get();
         }
         log.info("해당 id의 게시글이 존재하지 않습니다. 입력 값: {}", postId);
-        throw new NotFoundException(String.format("해당 id의 게시글이 존재하지 않습니다. %s", postId));
+        throw new NotFoundException(String.format("해당 id의 게시글이 존재하지 않습니다. 입력 값: %s", postId));
     }
 }
