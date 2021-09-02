@@ -4,26 +4,24 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.15">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <meta name="author" content="Team CVI">
 <title>Team CVI Api Specification</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
-/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
-/* Uncomment @import statement to use as custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
-article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
-audio,video{display:inline-block}
-audio:not([controls]){display:none;height:0}
-html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
 a{background:none}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
 h1{font-size:2em;margin:.67em 0}
-abbr[title]{border-bottom:1px dotted}
 b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
 dfn{font-style:italic}
-hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+hr{height:0}
 mark{background:#ff0;color:#000}
 code,kbd,pre,samp{font-family:monospace;font-size:1em}
 pre{white-space:pre-wrap}
@@ -35,20 +33,22 @@ sub{bottom:-.25em}
 img{border:0}
 svg:not(:root){overflow:hidden}
 figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
 fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
 legend{border:0;padding:0}
 button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
 button,input{line-height:normal}
 button,select{text-transform:none}
-button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
 button[disabled],html input[disabled]{cursor:default}
-input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type=checkbox],input[type=radio]{padding:0}
 button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
 textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
-*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+*,::before,::after{box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -68,7 +68,7 @@ div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,
 a{color:#2156a5;text-decoration:underline;line-height:inherit}
 a:hover,a:focus{color:#1d4b8f}
 a img{border:0}
-p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
 p aside{font-size:.875em;line-height:1.35;font-style:italic}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
 h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
@@ -77,14 +77,14 @@ h2{font-size:1.6875em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
 h4,h5{font-size:1.125em}
 h6{font-size:1em}
-hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
 em,i{font-style:italic;line-height:inherit}
 strong,b{font-weight:bold;line-height:inherit}
 small{font-size:60%;line-height:inherit}
 code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
-ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
-ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
 ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
 ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
@@ -92,8 +92,6 @@ ul.disc{list-style-type:disc}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
-abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
-abbr{text-transform:none}
 blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
 blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
 @media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
@@ -101,7 +99,7 @@ h1{font-size:2.75em}
 h2{font-size:2.3125em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
 h4{font-size:1.4375em}}
-table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede;word-wrap:normal}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
 table thead,table tfoot{background:#f7f8f7}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
@@ -116,7 +114,7 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre).nobreak{word-wrap:normal}
 :not(pre).nowrap{white-space:nowrap}
 :not(pre).pre-wrap{white-space:pre-wrap}
-:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
 pre>code{display:block}
@@ -124,7 +122,7 @@ pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menuref{color:#000}
@@ -136,7 +134,7 @@ b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
 b.button::before{content:"[";padding:0 3px 0 2px}
 b.button::after{content:"]";padding:0 2px 0 3px}
 p a>code:hover{color:rgba(0,0,0,.9)}
-#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
 #header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
 #header::after,#content::after,#footnotes::after,#footer::after{clear:both}
 #content{margin-top:1.25em}
@@ -144,7 +142,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
 #header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
-#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
 #header .details br{display:none}
@@ -178,11 +176,11 @@ body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
 body.toc2.toc-right{padding-left:0;padding-right:20em}}
-#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
 #footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
-#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
 #content{margin-bottom:.625em}
 .sect1{padding-bottom:.625em}
 @media screen and (min-width:768px){#content{margin-bottom:1.25em}
@@ -195,29 +193,32 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
-details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
 .admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
 table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
-.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
-table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
 .admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
 .admonitionblock>table td.icon{text-align:center;width:80px}
 .admonitionblock>table td.icon img{max-width:none}
 .admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
-.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
 .exampleblock>.content>:first-child{margin-top:0}
 .exampleblock>.content>:last-child{margin-bottom:0}
-.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
 .sidebarblock>:first-child{margin-top:0}
 .sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
 .exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
-.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
-.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
@@ -225,7 +226,7 @@ table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
 .listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
 .listingblock pre.highlightjs{padding:0}
-.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
 .listingblock pre.prettyprint{border-width:0}
 .prettyprint{background:#f7f7f8}
 pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
@@ -235,8 +236,8 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
-pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
 pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
@@ -246,7 +247,7 @@ pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
 .quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
 .verseblock{margin:0 1em 1.25em}
-.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
 .verseblock pre strong{font-weight:400}
 .verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
 .quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
@@ -294,10 +295,10 @@ ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ul
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
-ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
 ul.inline>li{margin-left:1.25em}
 .unstyled dl dt{font-weight:400;font-style:normal}
 ol.arabic{list-style-type:decimal}
@@ -316,7 +317,7 @@ td.hdlist2{word-wrap:anywhere}
 .colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
 .colist td:not([class]):first-child img{max-width:none}
 .colist td:not([class]):last-child{padding:.25em 0}
-.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
 .imageblock.left{margin:.25em .625em 1.25em 0}
 .imageblock.right{margin:.25em 0 1.25em .625em}
 .imageblock>.title{margin-bottom:0}
@@ -384,7 +385,7 @@ a span.icon>.fa{cursor:inherit}
 .admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
 .admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
 .admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
-.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:50%;border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
 .conum[data-value] *{color:#fff!important}
 .conum[data-value]+b{display:none}
 .conum[data-value]::after{content:attr(data-value)}
@@ -392,19 +393,20 @@ pre .conum[data-value]{position:relative;top:-.125em}
 b.conum *{color:inherit!important}
 .conum:not([data-value]):empty{display:none}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
-h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
-.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
 .print-only{display:none!important}
 @page{margin:1.25cm .75cm}
-@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
 html{font-size:80%}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
 a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
 abbr[title]::after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -428,7 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .print-only{display:block!important}
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
-@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
 .sect1{padding:0!important}
 .sect1+.sect1{border:0}
 #footer{background:none}
@@ -579,7 +581,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Host: localhost
 Content-Type: application/x-www-form-urlencoded
 
-targetDate=2021-08-09</code></pre>
+targetDate=2021-09-02</code></pre>
 </div>
 </div>
 </div>
@@ -597,7 +599,7 @@ Content-Length: 5173
 [ {
   "accumulatedFirstCnt" : 19473657,
   "accumulatedSecondCnt" : 7146602,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 473850,
   "secondCnt" : 35955,
   "sido" : "전국",
@@ -608,7 +610,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 3646765,
   "accumulatedSecondCnt" : 1329982,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 77877,
   "secondCnt" : 7123,
   "sido" : "서울특별시",
@@ -619,7 +621,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1352394,
   "accumulatedSecondCnt" : 477845,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 31252,
   "secondCnt" : 2628,
   "sido" : "부산광역시",
@@ -630,7 +632,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 848397,
   "accumulatedSecondCnt" : 309317,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 22726,
   "secondCnt" : 2688,
   "sido" : "대구광역시",
@@ -641,7 +643,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1032052,
   "accumulatedSecondCnt" : 360923,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 27394,
   "secondCnt" : 1760,
   "sido" : "인천광역시",
@@ -652,7 +654,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 549706,
   "accumulatedSecondCnt" : 204415,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 13700,
   "secondCnt" : 830,
   "sido" : "광주광역시",
@@ -663,7 +665,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 396793,
   "accumulatedSecondCnt" : 124839,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 11275,
   "secondCnt" : 471,
   "sido" : "울산광역시",
@@ -674,7 +676,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 523814,
   "accumulatedSecondCnt" : 197608,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 12990,
   "secondCnt" : 959,
   "sido" : "대전광역시",
@@ -685,7 +687,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 4636237,
   "accumulatedSecondCnt" : 1636357,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 118717,
   "secondCnt" : 7895,
   "sido" : "경기도",
@@ -696,7 +698,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 668422,
   "accumulatedSecondCnt" : 273253,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 14908,
   "secondCnt" : 1010,
   "sido" : "강원도",
@@ -707,7 +709,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 109202,
   "accumulatedSecondCnt" : 37624,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 3028,
   "secondCnt" : 179,
   "sido" : "세종특별자치시",
@@ -718,7 +720,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 639514,
   "accumulatedSecondCnt" : 240704,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 15886,
   "secondCnt" : 1324,
   "sido" : "충청북도",
@@ -729,7 +731,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 849914,
   "accumulatedSecondCnt" : 330591,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 22167,
   "secondCnt" : 2054,
   "sido" : "충청남도",
@@ -740,7 +742,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 789017,
   "accumulatedSecondCnt" : 311961,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 17331,
   "secondCnt" : 1270,
   "sido" : "전라북도",
@@ -751,7 +753,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 859228,
   "accumulatedSecondCnt" : 344275,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 19083,
   "secondCnt" : 1378,
   "sido" : "전라남도",
@@ -762,7 +764,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1070878,
   "accumulatedSecondCnt" : 409752,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 27263,
   "secondCnt" : 2016,
   "sido" : "경상북도",
@@ -773,7 +775,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1249910,
   "accumulatedSecondCnt" : 464110,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 31098,
   "secondCnt" : 1943,
   "sido" : "경상남도",
@@ -784,7 +786,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 251414,
   "accumulatedSecondCnt" : 93046,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 7155,
   "secondCnt" : 427,
   "sido" : "제주특별자치도",
@@ -806,7 +808,7 @@ Content-Length: 5173
 <h5 id="_request_2">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-09 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-09-02 HTTP/1.1
 Host: localhost</code></pre>
 </div>
 </div>
@@ -825,7 +827,7 @@ Content-Length: 5173
 [ {
   "accumulatedFirstCnt" : 19473657,
   "accumulatedSecondCnt" : 7146602,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 473850,
   "secondCnt" : 35955,
   "sido" : "전국",
@@ -836,7 +838,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 3646765,
   "accumulatedSecondCnt" : 1329982,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 77877,
   "secondCnt" : 7123,
   "sido" : "서울특별시",
@@ -847,7 +849,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1352394,
   "accumulatedSecondCnt" : 477845,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 31252,
   "secondCnt" : 2628,
   "sido" : "부산광역시",
@@ -858,7 +860,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 848397,
   "accumulatedSecondCnt" : 309317,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 22726,
   "secondCnt" : 2688,
   "sido" : "대구광역시",
@@ -869,7 +871,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1032052,
   "accumulatedSecondCnt" : 360923,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 27394,
   "secondCnt" : 1760,
   "sido" : "인천광역시",
@@ -880,7 +882,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 549706,
   "accumulatedSecondCnt" : 204415,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 13700,
   "secondCnt" : 830,
   "sido" : "광주광역시",
@@ -891,7 +893,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 396793,
   "accumulatedSecondCnt" : 124839,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 11275,
   "secondCnt" : 471,
   "sido" : "울산광역시",
@@ -902,7 +904,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 523814,
   "accumulatedSecondCnt" : 197608,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 12990,
   "secondCnt" : 959,
   "sido" : "대전광역시",
@@ -913,7 +915,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 4636237,
   "accumulatedSecondCnt" : 1636357,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 118717,
   "secondCnt" : 7895,
   "sido" : "경기도",
@@ -924,7 +926,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 668422,
   "accumulatedSecondCnt" : 273253,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 14908,
   "secondCnt" : 1010,
   "sido" : "강원도",
@@ -935,7 +937,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 109202,
   "accumulatedSecondCnt" : 37624,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 3028,
   "secondCnt" : 179,
   "sido" : "세종특별자치시",
@@ -946,7 +948,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 639514,
   "accumulatedSecondCnt" : 240704,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 15886,
   "secondCnt" : 1324,
   "sido" : "충청북도",
@@ -957,7 +959,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 849914,
   "accumulatedSecondCnt" : 330591,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 22167,
   "secondCnt" : 2054,
   "sido" : "충청남도",
@@ -968,7 +970,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 789017,
   "accumulatedSecondCnt" : 311961,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 17331,
   "secondCnt" : 1270,
   "sido" : "전라북도",
@@ -979,7 +981,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 859228,
   "accumulatedSecondCnt" : 344275,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 19083,
   "secondCnt" : 1378,
   "sido" : "전라남도",
@@ -990,7 +992,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1070878,
   "accumulatedSecondCnt" : 409752,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 27263,
   "secondCnt" : 2016,
   "sido" : "경상북도",
@@ -1001,7 +1003,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 1249910,
   "accumulatedSecondCnt" : 464110,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 31098,
   "secondCnt" : 1943,
   "sido" : "경상남도",
@@ -1012,7 +1014,7 @@ Content-Length: 5173
 }, {
   "accumulatedFirstCnt" : 251414,
   "accumulatedSecondCnt" : 93046,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 7155,
   "secondCnt" : 427,
   "sido" : "제주특별자치도",
@@ -1031,7 +1033,7 @@ Content-Length: 5173
 <h5 id="_request_3">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-08-10 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations?targetDate=2021-09-03 HTTP/1.1
 Host: localhost</code></pre>
 </div>
 </div>
@@ -1065,7 +1067,7 @@ Content-Length: 3
 Host: localhost
 Content-Type: application/x-www-form-urlencoded
 
-targetDate=2021-08-09</code></pre>
+targetDate=2021-09-02</code></pre>
 </div>
 </div>
 </div>
@@ -1083,7 +1085,7 @@ Content-Length: 540
 [ {
   "accumulatedFirstCnt" : 0,
   "accumulatedSecondCnt" : 0,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 0,
   "secondCnt" : 0,
   "sido" : "World",
@@ -1094,7 +1096,7 @@ Content-Length: 540
 }, {
   "accumulatedFirstCnt" : 0,
   "accumulatedSecondCnt" : 0,
-  "baseDate" : "2021-08-08",
+  "baseDate" : "2021-09-01",
   "firstCnt" : 0,
   "secondCnt" : 0,
   "sido" : "World",
@@ -1116,7 +1118,7 @@ Content-Length: 540
 <h5 id="_request_5">Request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations/world?targetDate=2021-08-09 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/publicdata/vaccinations/world?targetDate=2021-09-02 HTTP/1.1
 Host: localhost</code></pre>
 </div>
 </div>
@@ -1135,7 +1137,7 @@ Content-Length: 271
 [ {
   "accumulatedFirstCnt" : 0,
   "accumulatedSecondCnt" : 0,
-  "baseDate" : "2021-08-09",
+  "baseDate" : "2021-09-02",
   "firstCnt" : 0,
   "secondCnt" : 0,
   "sido" : "World",
@@ -1446,7 +1448,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2690
+Content-Length: 2676
 
 [ {
   "id" : 1,
@@ -1485,7 +1487,7 @@ Content-Length: 2690
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.52731"
+    "createdAt" : "2021-09-02T14:04:41.196"
   }, {
     "id" : 2,
     "writer" : {
@@ -1503,10 +1505,10 @@ Content-Length: 2690
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.527319"
+    "createdAt" : "2021-09-02T14:04:41.196"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:50.528811"
+  "createdAt" : "2021-09-01T14:04:41.198"
 }, {
   "id" : 2,
   "writer" : {
@@ -1529,7 +1531,7 @@ Content-Length: 2690
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-09T20:12:50.528824"
+  "createdAt" : "2021-09-02T14:04:41.198"
 }, {
   "id" : 3,
   "writer" : {
@@ -1552,7 +1554,7 @@ Content-Length: 2690
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-09T20:12:50.528834"
+  "createdAt" : "2021-09-02T14:04:41.198"
 } ]</code></pre>
 </div>
 </div>
@@ -1613,7 +1615,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3340
+Content-Length: 3322
 
 [ {
   "id" : 38,
@@ -1652,7 +1654,7 @@ Content-Length: 3340
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.165557"
+    "createdAt" : "2021-09-02T14:04:40.675"
   }, {
     "id" : 2,
     "writer" : {
@@ -1670,10 +1672,10 @@ Content-Length: 3340
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.165563"
+    "createdAt" : "2021-09-02T14:04:40.675"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:50.166439"
+  "createdAt" : "2021-09-02T14:04:40.677"
 }, {
   "id" : 37,
   "writer" : {
@@ -1696,7 +1698,7 @@ Content-Length: 3340
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-08T20:12:50.166462"
+  "createdAt" : "2021-09-01T14:04:40.677"
 }, {
   "id" : 36,
   "writer" : {
@@ -1719,7 +1721,7 @@ Content-Length: 3340
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-09T18:12:50.166474"
+  "createdAt" : "2021-09-02T12:04:40.678"
 }, {
   "id" : 35,
   "writer" : {
@@ -1742,7 +1744,7 @@ Content-Length: 3340
   "hasLiked" : false,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-09T18:12:50.166478"
+  "createdAt" : "2021-09-02T12:04:40.678"
 } ]</code></pre>
 </div>
 </div>
@@ -1803,7 +1805,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2104
+Content-Length: 2092
 
 [ {
   "id" : 1,
@@ -1842,7 +1844,7 @@ Content-Length: 2104
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.313676"
+    "createdAt" : "2021-09-02T14:04:40.868"
   }, {
     "id" : 2,
     "writer" : {
@@ -1860,10 +1862,10 @@ Content-Length: 2104
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.313685"
+    "createdAt" : "2021-09-02T14:04:40.868"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:50.315449"
+  "createdAt" : "2021-09-01T14:04:40.872"
 }, {
   "id" : 2,
   "writer" : {
@@ -1886,7 +1888,7 @@ Content-Length: 2104
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-09T20:12:50.315466"
+  "createdAt" : "2021-09-02T14:04:40.872"
 } ]</code></pre>
 </div>
 </div>
@@ -1947,7 +1949,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 2735
+Content-Length: 2721
 
 [ {
   "id" : 38,
@@ -1986,7 +1988,7 @@ Content-Length: 2735
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.561111"
+    "createdAt" : "2021-09-02T14:04:41.233"
   }, {
     "id" : 2,
     "writer" : {
@@ -2004,10 +2006,10 @@ Content-Length: 2735
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.561122"
+    "createdAt" : "2021-09-02T14:04:41.233"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:50.562717"
+  "createdAt" : "2021-09-02T14:04:41.234"
 }, {
   "id" : 37,
   "writer" : {
@@ -2030,7 +2032,7 @@ Content-Length: 2735
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-08T20:12:50.562744"
+  "createdAt" : "2021-09-01T14:04:41.234"
 }, {
   "id" : 36,
   "writer" : {
@@ -2053,7 +2055,7 @@ Content-Length: 2735
   "hasLiked" : true,
   "comments" : [ ],
   "vaccinationType" : "ASTRAZENECA",
-  "createdAt" : "2021-08-09T18:12:50.56275"
+  "createdAt" : "2021-09-02T12:04:41.234"
 } ]</code></pre>
 </div>
 </div>
@@ -2114,7 +2116,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3045
+Content-Length: 3028
 
 [ {
   "id" : 1,
@@ -2153,7 +2155,7 @@ Content-Length: 3045
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.343578"
+    "createdAt" : "2021-09-02T14:04:40.916"
   }, {
     "id" : 2,
     "writer" : {
@@ -2171,10 +2173,10 @@ Content-Length: 3045
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.343585"
+    "createdAt" : "2021-09-02T14:04:40.916"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:50.344502"
+  "createdAt" : "2021-09-01T14:04:40.918"
 }, {
   "id" : 2,
   "writer" : {
@@ -2212,7 +2214,7 @@ Content-Length: 3045
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.343578"
+    "createdAt" : "2021-09-02T14:04:40.916"
   }, {
     "id" : 2,
     "writer" : {
@@ -2230,10 +2232,10 @@ Content-Length: 3045
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.343585"
+    "createdAt" : "2021-09-02T14:04:40.916"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-09T20:12:50.34451"
+  "createdAt" : "2021-09-02T14:04:40.918"
 } ]</code></pre>
 </div>
 </div>
@@ -2294,7 +2296,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 3078
+Content-Length: 3060
 
 [ {
   "id" : 38,
@@ -2333,7 +2335,7 @@ Content-Length: 3078
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.798886"
+    "createdAt" : "2021-09-02T14:04:41.622"
   }, {
     "id" : 2,
     "writer" : {
@@ -2351,10 +2353,10 @@ Content-Length: 3078
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.798896"
+    "createdAt" : "2021-09-02T14:04:41.622"
   } ],
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:50.800239"
+  "createdAt" : "2021-09-02T14:04:41.623"
 }, {
   "id" : 37,
   "writer" : {
@@ -2392,7 +2394,7 @@ Content-Length: 3078
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글1",
-    "createdAt" : "2021-08-09T20:12:50.798886"
+    "createdAt" : "2021-09-02T14:04:41.622"
   }, {
     "id" : 2,
     "writer" : {
@@ -2410,10 +2412,10 @@ Content-Length: 3078
       "socialProfileUrl" : "kakao.com/profile"
     },
     "content" : "댓글2",
-    "createdAt" : "2021-08-09T20:12:50.798896"
+    "createdAt" : "2021-09-02T14:04:41.622"
   } ],
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-08T20:12:50.800247"
+  "createdAt" : "2021-09-01T14:04:41.623"
 } ]</code></pre>
 </div>
 </div>
@@ -2676,12 +2678,25 @@ Content-Length: 72
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 62
+Content-Length: 352
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "PFIZER"
+  "vaccinationType" : "PFIZER",
+  "images" : [ {
+    "type" : "JPG",
+    "data" : "{이미지1 문자열값}"
+  }, {
+    "type" : "JPEG",
+    "data" : "{이미지2 문자열값}"
+  }, {
+    "type" : "PNG",
+    "data" : "{이미지3 문자열값}"
+  }, {
+    "type" : "SVG",
+    "data" : "{이미지3 문자열값}"
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -2696,7 +2711,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/posts/1
 Content-Type: application/json
-Content-Length: 548
+Content-Length: 666
 
 {
   "id" : 1,
@@ -2720,7 +2735,8 @@ Content-Length: 548
   "commentCount" : 0,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.170955"
+  "createdAt" : "2021-09-02T14:04:28.438",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }</code></pre>
 </div>
 </div>
@@ -2735,12 +2751,25 @@ Content-Length: 548
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/posts HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 62
+Content-Length: 352
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "PFIZER"
+  "vaccinationType" : "PFIZER",
+  "images" : [ {
+    "type" : "JPG",
+    "data" : "{이미지1 문자열값}"
+  }, {
+    "type" : "JPEG",
+    "data" : "{이미지2 문자열값}"
+  }, {
+    "type" : "PNG",
+    "data" : "{이미지3 문자열값}"
+  }, {
+    "type" : "SVG",
+    "data" : "{이미지3 문자열값}"
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -2788,7 +2817,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1106
+Content-Length: 1343
 
 [ {
   "id" : 2,
@@ -2812,7 +2841,8 @@ Content-Length: 1106
   "commentCount" : 3,
   "hasLiked" : false,
   "vaccinationType" : "MODERNA",
-  "createdAt" : "2021-08-09T20:12:34.782788"
+  "createdAt" : "2021-09-02T14:04:28.095",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 1,
   "writer" : {
@@ -2835,7 +2865,8 @@ Content-Length: 1106
   "commentCount" : 13,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:34.78282"
+  "createdAt" : "2021-09-01T14:04:28.095",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 } ]</code></pre>
 </div>
 </div>
@@ -2895,7 +2926,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 548
+Content-Length: 666
 
 {
   "id" : 1,
@@ -2919,7 +2950,8 @@ Content-Length: 548
   "commentCount" : 2,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.006009"
+  "createdAt" : "2021-09-02T14:04:28.248",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }</code></pre>
 </div>
 </div>
@@ -2980,7 +3012,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1700
+Content-Length: 2052
 
 [ {
   "id" : 3,
@@ -3004,7 +3036,8 @@ Content-Length: 1700
   "commentCount" : 4,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.078494"
+  "createdAt" : "2021-09-02T14:04:28.32",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 2,
   "writer" : {
@@ -3027,7 +3060,8 @@ Content-Length: 1700
   "commentCount" : 6,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.07852"
+  "createdAt" : "2021-09-02T14:04:28.32",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 1,
   "writer" : {
@@ -3050,7 +3084,8 @@ Content-Length: 1700
   "commentCount" : 10,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.078546"
+  "createdAt" : "2021-09-02T14:04:28.32",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 } ]</code></pre>
 </div>
 </div>
@@ -3263,7 +3298,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1703
+Content-Length: 2057
 
 [ {
   "id" : 38,
@@ -3287,7 +3322,8 @@ Content-Length: 1703
   "commentCount" : 3,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.108066"
+  "createdAt" : "2021-09-02T14:04:28.347",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 37,
   "writer" : {
@@ -3310,7 +3346,8 @@ Content-Length: 1703
   "commentCount" : 4,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:35.108094"
+  "createdAt" : "2021-09-01T14:04:28.347",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 36,
   "writer" : {
@@ -3333,7 +3370,8 @@ Content-Length: 1703
   "commentCount" : 2,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-07T20:12:35.108106"
+  "createdAt" : "2021-08-31T14:04:28.347",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 } ]</code></pre>
 </div>
 </div>
@@ -3391,7 +3429,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1703
+Content-Length: 2057
 
 [ {
   "id" : 1,
@@ -3415,7 +3453,8 @@ Content-Length: 1703
   "commentCount" : 5,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:35.138027"
+  "createdAt" : "2021-09-02T14:04:28.392",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 37,
   "writer" : {
@@ -3438,7 +3477,8 @@ Content-Length: 1703
   "commentCount" : 8,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-08T20:12:35.138042"
+  "createdAt" : "2021-09-01T14:04:28.392",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 146,
   "writer" : {
@@ -3461,7 +3501,8 @@ Content-Length: 1703
   "commentCount" : 1,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-07T20:12:35.138051"
+  "createdAt" : "2021-08-31T14:04:28.392",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 } ]</code></pre>
 </div>
 </div>
@@ -3491,7 +3532,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1703
+Content-Length: 2057
 
 [ {
   "id" : 1,
@@ -3515,7 +3556,8 @@ Content-Length: 1703
   "commentCount" : 3,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T20:12:34.708026"
+  "createdAt" : "2021-09-02T14:04:27.998",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 37,
   "writer" : {
@@ -3538,7 +3580,8 @@ Content-Length: 1703
   "commentCount" : 6,
   "hasLiked" : false,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T17:12:34.708042"
+  "createdAt" : "2021-09-02T11:04:27.999",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 }, {
   "id" : 146,
   "writer" : {
@@ -3561,7 +3604,8 @@ Content-Length: 1703
   "commentCount" : 7,
   "hasLiked" : true,
   "vaccinationType" : "PFIZER",
-  "createdAt" : "2021-08-09T15:12:34.708057"
+  "createdAt" : "2021-09-02T09:04:27.999",
+  "images" : [ "{이미지1 S3 링크}", "{이미지2 S3 링크}", "{이미지3 S3 링크}", "{이미지3 S3 링크}" ]
 } ]</code></pre>
 </div>
 </div>
@@ -3579,12 +3623,25 @@ Content-Length: 1703
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 62
+Content-Length: 352
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "PFIZER"
+  "vaccinationType" : "PFIZER",
+  "images" : [ {
+    "type" : "JPG",
+    "data" : "{이미지1 문자열값}"
+  }, {
+    "type" : "JPEG",
+    "data" : "{이미지2 문자열값}"
+  }, {
+    "type" : "PNG",
+    "data" : "{이미지3 문자열값}"
+  }, {
+    "type" : "SVG",
+    "data" : "{이미지3 문자열값}"
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -3617,12 +3674,25 @@ Vary: Access-Control-Request-Headers</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/posts/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS TOKEN generated by JWT}
-Content-Length: 62
+Content-Length: 352
 Host: localhost
 
 {
   "content" : "글 내용",
-  "vaccinationType" : "PFIZER"
+  "vaccinationType" : "PFIZER",
+  "images" : [ {
+    "type" : "JPG",
+    "data" : "{이미지1 문자열값}"
+  }, {
+    "type" : "JPEG",
+    "data" : "{이미지2 문자열값}"
+  }, {
+    "type" : "PNG",
+    "data" : "{이미지3 문자열값}"
+  }, {
+    "type" : "SVG",
+    "data" : "{이미지3 문자열값}"
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -3859,7 +3929,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Location: /api/v1/comments/1
 Content-Type: application/json
-Content-Length: 466
+Content-Length: 464
 
 {
   "id" : 1,
@@ -3878,7 +3948,7 @@ Content-Length: 466
     "socialProfileUrl" : "naver.com/profile"
   },
   "content" : "좋은 정보 공유 감사해요 ㅎㅎㅎ",
-  "createdAt" : "2021-08-09T20:12:35.24679"
+  "createdAt" : "2021-09-02T14:04:39.229"
 }</code></pre>
 </div>
 </div>
@@ -3942,47 +4012,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 876
-
-[ {
-  "id" : 1,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "user",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "NAVER",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "naver.com/profile"
-  },
-  "content" : "댓글1",
-  "createdAt" : "2021-08-09T20:12:35.479001"
-}, {
-  "id" : 2,
-  "writer" : {
-    "id" : 2,
-    "nickname" : "another_user",
-    "ageRange" : {
-      "meaning" : "20대",
-      "minAge" : 20,
-      "maxAge" : 30
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "KAKAO",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "kakao.com/profile"
-  },
-  "content" : "댓글2",
-  "createdAt" : "2021-08-09T20:12:35.479016"
-} ]</code></pre>
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -4039,47 +4069,7 @@ Host: localhost</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 876
-
-[ {
-  "id" : 1,
-  "writer" : {
-    "id" : 1,
-    "nickname" : "user",
-    "ageRange" : {
-      "meaning" : "10대",
-      "minAge" : 10,
-      "maxAge" : 20
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "NAVER",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "naver.com/profile"
-  },
-  "content" : "댓글1",
-  "createdAt" : "2021-08-09T20:12:35.387349"
-}, {
-  "id" : 2,
-  "writer" : {
-    "id" : 2,
-    "nickname" : "another_user",
-    "ageRange" : {
-      "meaning" : "20대",
-      "minAge" : 20,
-      "maxAge" : 30
-    },
-    "shotVerified" : false,
-    "accessToken" : null,
-    "socialProvider" : "KAKAO",
-    "socialId" : "{Unique ID received from social provider}",
-    "socialProfileUrl" : "kakao.com/profile"
-  },
-  "content" : "댓글2",
-  "createdAt" : "2021-08-09T20:12:35.387366"
-} ]</code></pre>
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -4229,7 +4219,7 @@ Host: localhost</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-09 20:11:05 +0900
+Last updated 2021-08-11 19:21:55 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
