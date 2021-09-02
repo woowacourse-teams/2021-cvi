@@ -78,10 +78,11 @@ const FileUploadContainer = styled.div`
   border: 0.1rem solid ${FONT_COLOR.BLUE_GRAY};
   margin: 0 0 2rem 0;
   border-radius: 1.6rem;
-  height: 8.4rem;
+  min-height: 8.4rem;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
 `;
 
 const FileUploadTitle = styled.div`
