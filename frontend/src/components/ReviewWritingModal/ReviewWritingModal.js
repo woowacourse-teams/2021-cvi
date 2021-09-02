@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import {
   ALERT_MESSAGE,
+  FONT_COLOR,
   RESPONSE_STATE,
   REVIEW_IMAGE_LIMIT,
   SNACKBAR_MESSAGE,
@@ -15,10 +16,12 @@ import {
   buttonStyles,
   inputStyles,
   PreviewImage,
-  PreviewImageContainer,
+  PreviewListContainer,
   labelStyles,
   FileUploadContainer,
   FileUploadTitle,
+  deleteImageButtonStyles,
+  PreviewImageContainer,
 } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
 import { postReviewAsync } from '../../service';
@@ -72,6 +75,11 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     });
   };
 
+  const deleteImage = (index) => {
+    const updatedImages = [...images.slice(0, index), ...images.slice(index + 1, images.length)];
+    setImages(updatedImages);
+  };
+
   const createReview = async () => {
     const updatedImageFormat = images.map((image) => updateImageFormat(image));
     const vaccinationType = findKey(VACCINATION, selectedVaccine);
@@ -104,12 +112,21 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
         <TextArea width="100%" onChange={(event) => setContent(event.target.value)} />
         <FileUploadTitle>사진 첨부</FileUploadTitle>
         <FileUploadContainer>
-          <PreviewImageContainer>
+          <PreviewListContainer>
             {!!images.length &&
               images.map((image, index) => (
-                <PreviewImage key={`preview-image-${index + 1}`} src={image} />
+                <PreviewImageContainer key={`preview-image-${index + 1}`}>
+                  <Button
+                    color={FONT_COLOR.BLUE_GRAY}
+                    styles={deleteImageButtonStyles}
+                    onClick={() => deleteImage(index)}
+                  >
+                    +
+                  </Button>
+                  <PreviewImage src={image} />
+                </PreviewImageContainer>
               ))}
-          </PreviewImageContainer>
+          </PreviewListContainer>
           {images.length < REVIEW_IMAGE_LIMIT.MAX_COUNT && (
             <Input
               type="file"

@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  margin: 2.4rem 0;
+  margin: 2.4rem 0 2rem 0;
   height: 36rem;
   border: 0.1rem solid ${FONT_COLOR.BLUE_GRAY};
   border-radius: 1.6rem;
@@ -41,7 +41,7 @@ const labelStyles = css`
   display: block;
   width: 3rem;
   height: 3rem;
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 100;
   display: flex;
   justify-content: center;
@@ -49,20 +49,24 @@ const labelStyles = css`
   border-radius: 50%;
   cursor: pointer;
   color: ${FONT_COLOR.WHITE};
-  padding: 0 0.3rem 0.1rem 0;
-  margin-left: 1.6rem;
+  padding: 0.1rem 0.3rem 0 0;
+  margin-left: 2.2rem;
   background-color: ${FONT_COLOR.BLUE_GRAY};
+
+  &:hover {
+    background-color: #9da5ad;
+  }
 `;
 
 const PreviewImage = styled.img`
-  width: 6.8rem;
-  height: 6.8rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 0.6rem;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.04);
   object-fit: cover;
 `;
 
-const PreviewImageContainer = styled.div`
+const PreviewListContainer = styled.div`
   display: flex;
 
   & > *:not(:last-child) {
@@ -74,7 +78,7 @@ const FileUploadContainer = styled.div`
   border: 0.1rem solid ${FONT_COLOR.BLUE_GRAY};
   margin: 0 0 2rem 0;
   border-radius: 1.6rem;
-  height: 8rem;
+  height: 8.4rem;
   display: flex;
   align-items: center;
   padding-left: 1rem;
@@ -86,6 +90,23 @@ const FileUploadTitle = styled.div`
   margin-bottom: 0.4rem;
 `;
 
+const deleteImageButtonStyles = css`
+  position: absolute;
+  top: -0.6rem;
+  right: -0.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  padding: 0 0 0.2rem 0;
+  transform: rotate(45deg);
+  font-weight: 100;
+`;
+
+const PreviewImageContainer = styled.div`
+  position: relative;
+`;
+
 export {
   Container,
   TextArea,
@@ -94,7 +115,9 @@ export {
   inputStyles,
   labelStyles,
   PreviewImage,
-  PreviewImageContainer,
+  PreviewListContainer,
   FileUploadContainer,
   FileUploadTitle,
+  deleteImageButtonStyles,
+  PreviewImageContainer,
 };
