@@ -24,7 +24,7 @@ public class KakaoAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-    private static final String REDIRECT_URL = "https://cvi.p-e.kr/auth/kakao/callback";
+    private static final String REDIRECT_URL = "https://vaccine-review.com/auth/kakao/callback";
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
