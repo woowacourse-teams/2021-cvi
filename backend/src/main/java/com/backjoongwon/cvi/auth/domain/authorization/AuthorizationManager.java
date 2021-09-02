@@ -1,14 +1,16 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
+import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class AuthorizationManager {
 
@@ -22,15 +24,17 @@ public class AuthorizationManager {
     private Authorization extractAuthorization(SocialProvider provider) {
         validateSocialProvider(provider);
         String key = provider.convertToComponentName();
-        if (authorizationMap.containsKey(key)) {
-            return authorizationMap.get(key);
+        if (!authorizationMap.containsKey(key)) {
+            log.info(String.format("해당 OAuth 제공자가 존재하지 않습니다 입력값: %s", key));
+            throw new InvalidOperationException(String.format("해당 OAuth 제공자가 존재하지 않습니다 입력값: %s", key));
         }
-        throw new InvalidOperationException("해당 OAuth 제공자가 존재하지 않습니다");
+        return authorizationMap.get(key);
     }
 
     private void validateSocialProvider(SocialProvider provider) {
         if (Objects.isNull(provider)) {
-            throw new InvalidOperationException("해당 OAuth 제공자가 존재하지 않습니다");
+            log.info("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
+            throw new InvalidOperationException("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
         }
     }
 }

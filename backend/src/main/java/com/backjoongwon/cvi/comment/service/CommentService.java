@@ -29,13 +29,10 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(Long postId, Optional<User> optionalUser, CommentRequest commentRequest) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         Post post = findPostWithCommentsById(postId);
-
         Comment comment = commentRequest.toEntity();
         comment.assignUser(user);
-
         post.assignComment(comment);
         commentRepository.flush();
         return CommentResponse.of(comment);
@@ -53,36 +50,40 @@ public class CommentService {
 
     @Transactional
     public void updateComment(Long postId, Long commentId, Optional<User> optionalUser, CommentRequest updateRequest) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         Post post = findPostWithCommentsById(postId);
         post.updateComment(commentId, updateRequest.toEntity(), user);
     }
 
     @Transactional
     public void deleteComment(Long postId, Long commentId, Optional<User> optionalUser) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         Post post = findPostWithCommentsById(postId);
         post.deleteComment(commentId, user);
     }
 
-    private void validateSignedin(Optional<User> user) {
-        if (!user.isPresent()) {
-            throw new UnAuthorizedException("인증되지 않은 사용자입니다.");
+    private User getLoginUser(Optional<User> optionalUser) {
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         }
+        log.info("인증되지 않음 사용자입니다. 입력값: null");
+        throw new UnAuthorizedException("인증되지 않은 사용자입니다. 입력값: null");
     }
 
     private Post findPostWithCommentsById(Long postId) {
         validateNotNull(postId);
-        return postRepository.findWithCommentsByPostId(postId)
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+        Optional<Post> post = postRepository.findWithCommentsByPostId(postId);
+        if (post.isPresent()) {
+            return post.get();
+        }
+        log.info("해당 id의 게시글이 존재하지 않습니다. 입력값: {}", postId);
+        throw new NotFoundException(String.format("해당 id의 게시글이 존재하지 않습니다. 입력값: %s", postId));
     }
 
     private void validateNotNull(Long id) {
         if (Objects.isNull(id)) {
-            log.info("id는 null이 될 수 없습니다.");
-            throw new NotFoundException("id는 null이 될 수 없습니다.");
+            log.info("id는 null이 될 수 없습니다. 입력값: null");
+            throw new NotFoundException("id는 null이 될 수 없습니다. 입력값: null");
         }
     }
 }

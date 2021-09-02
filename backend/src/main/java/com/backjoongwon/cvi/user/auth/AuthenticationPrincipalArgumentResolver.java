@@ -30,7 +30,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Optional<User> resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String accessToken = AuthorizationExtractor.extract(Objects.requireNonNull(webRequest.getNativeRequest(HttpServletRequest.class)));
-
         if (jwtTokenProvider.isValidToken(accessToken)) {
             String id = jwtTokenProvider.getPayload(accessToken);
             User user = userService.findUserById(Long.valueOf(id));

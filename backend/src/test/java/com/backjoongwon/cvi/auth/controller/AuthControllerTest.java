@@ -101,7 +101,7 @@ public class AuthControllerTest extends ApiDocument {
     }
 
     private ResultActions 사용자_OAuth_요청(AuthRequest authRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/users/auth")
+        return mockMvc.perform(post("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(authRequest)));
     }
@@ -121,7 +121,7 @@ public class AuthControllerTest extends ApiDocument {
     }
 
     private ResultActions 잘못된_OAuth_요청(String request) throws Exception {
-        return mockMvc.perform(post("/api/v1/users/auth")
+        return mockMvc.perform(post("/api/v1/auth")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON));
     }

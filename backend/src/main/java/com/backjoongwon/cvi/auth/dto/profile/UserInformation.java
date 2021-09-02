@@ -1,4 +1,4 @@
-package com.backjoongwon.cvi.auth.domain.profile;
+package com.backjoongwon.cvi.auth.dto.profile;
 
 import lombok.Getter;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class UserInformation {
 
-    @NotBlank(message = "socialId(OAuth 고유의 id)는 null일 수 없습니다.")
+    @NotBlank(message = "socialId(OAuth 고유의 id)는 null, '', ' ' 일 수 없습니다.")
     private final String socialId;
 
     @NotBlank(message = "socialProfileUrl(OAuth profile url)은 null일 수 없습니다.")

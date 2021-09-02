@@ -119,7 +119,7 @@ public class PostFindServiceTest {
         for (int i = 1; i < posts.size(); i++) {
             for (int j = 1; j <= i; j++) {
                 Like like = Like.builder().user(users.get(j)).build();
-                posts.get(i).addLike(like);
+                posts.get(i).assignLike(like);
                 likes.add(like);
                 likeRepository.save(like);
             }

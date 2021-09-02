@@ -1,8 +1,8 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
-import com.backjoongwon.cvi.auth.domain.profile.KakaoProfile;
-import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
+import com.backjoongwon.cvi.auth.dto.profile.KakaoProfile;
+import com.backjoongwon.cvi.auth.dto.profile.NaverProfile;
+import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,6 +78,6 @@ class AuthorizationManagerTest {
         //then
         assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE))
                 .isExactlyInstanceOf(InvalidOperationException.class)
-                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다");
+                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
     }
 }
