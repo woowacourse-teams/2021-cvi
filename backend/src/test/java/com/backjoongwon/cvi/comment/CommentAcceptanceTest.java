@@ -51,11 +51,8 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                 .socialProfileUrl("naver.com/profile")
                 .build();
 
-        ExtractableResponse<Response> signupResponse = 회원_가입_요청(userRequest);
-        userResponse = signupResponse.as(UserResponse.class);
-
-        ExtractableResponse<Response> anotherSignupResponse = 회원_가입_요청(anotherUserRequest);
-        anotherUserResponse = anotherSignupResponse.as(UserResponse.class);
+        userResponse = 회원_가입_되어있음(userRequest);
+        anotherUserResponse = 회원_가입_되어있음(anotherUserRequest);
 
         postRequestPFIZER = new PostRequest("게시글 내용1", VaccinationType.PFIZER);
         commentRequest = new CommentRequest("댓글 내용");
@@ -66,8 +63,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void createLike() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         //when
         ExtractableResponse<Response> response = 게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         //then
@@ -79,8 +75,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void createLikeFailure() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_댓글_생성(postResponse.getId(), 신규회원, commentRequest);
         ExtractableResponse<Response> NoExistsPostResponse = 게시글_댓글_생성(INVALID_ID, userResponse, commentRequest);
@@ -93,8 +88,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void findCommentsOfPost() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         //when
         ExtractableResponse<Response> response = 게시글_댓글_조회(postResponse.getId());
@@ -117,8 +111,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void updateComment() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         ExtractableResponse<Response> createCommentResponse = 게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
@@ -131,8 +124,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void updateCommentFailure() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         ExtractableResponse<Response> createCommentResponse = 게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
@@ -151,8 +143,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLike() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         ExtractableResponse<Response> createCommentResponse = 게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
@@ -166,8 +157,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteLikeFailure() {
         //given
-        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
-        PostResponse postResponse = createPostResponse.as(PostResponse.class);
+        PostResponse postResponse = 게시글_작성_되어있음();
         ExtractableResponse<Response> createCommentResponse = 게시글_댓글_생성(postResponse.getId(), userResponse, commentRequest);
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
@@ -178,6 +168,11 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(NoExistsPostResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(alreadyLikedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    private PostResponse 게시글_작성_되어있음() {
+        ExtractableResponse<Response> createPostResponse = 게시글_작성_요청(userResponse, postRequestPFIZER);
+        return createPostResponse.as(PostResponse.class);
     }
 
     private ExtractableResponse<Response> 게시글_댓글_생성(Long postId, UserResponse user, CommentRequest commentRequest) {

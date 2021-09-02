@@ -85,6 +85,11 @@ public class AcceptanceTest {
         return willReturn(신규회원).given(authService).authenticate(any(AuthRequest.class));
     }
 
+    protected UserResponse 회원_가입_되어있음(UserRequest signupRequest) {
+        ExtractableResponse<Response> signupResponse = 회원_가입_요청(signupRequest);
+        return signupResponse.as(UserResponse.class);
+    }
+
     protected ExtractableResponse<Response> 회원_가입_요청(UserRequest userRequest) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

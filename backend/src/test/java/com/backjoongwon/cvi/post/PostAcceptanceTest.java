@@ -31,6 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("게시글 관련 인수 테스트")
 public class PostAcceptanceTest extends AcceptanceTest {
 
+    private static final int OFFSET_IS_ONE = 1;
+    private static final int SIZE_IS_TWO = 2;
+
     protected UserResponse userResponse;
     protected UserResponse anotherUserResponse;
     private PostRequest invalidPostRequest;
@@ -59,11 +62,8 @@ public class PostAcceptanceTest extends AcceptanceTest {
                 .socialProfileUrl("naver.com/profile")
                 .build();
 
-        ExtractableResponse<Response> signupResponse = 회원_가입_요청(userRequest);
-        userResponse = signupResponse.as(UserResponse.class);
-
-        ExtractableResponse<Response> anotherSignupResponse = 회원_가입_요청(anotherUserRequest);
-        anotherUserResponse = anotherSignupResponse.as(UserResponse.class);
+        userResponse = 회원_가입_되어있음(userRequest);
+        anotherUserResponse = 회원_가입_되어있음(anotherUserRequest);
 
         invalidPostRequest = new PostRequest("     ", VaccinationType.PFIZER);
         postRequestPFIZER = new PostRequest("게시글 내용1", VaccinationType.PFIZER);
@@ -114,8 +114,8 @@ public class PostAcceptanceTest extends AcceptanceTest {
         게시글_작성_요청(userResponse, postRequestMODERNA);
         게시글_작성_요청(userResponse, postRequestJANSSEN);
         //when
-        ExtractableResponse<Response> responseOfAllType = 백신_타입별_게시글_조회(null, userResponse);
-        ExtractableResponse<Response> responseOfType = 백신_타입별_게시글_조회(vaccinationType, userResponse);
+        ExtractableResponse<Response> responseOfAllType = 백신_타입별_게시글_조회(null);
+        ExtractableResponse<Response> responseOfType = 백신_타입별_게시글_조회(vaccinationType);
         //then
         assertThat(responseOfAllType.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(responseOfAllType.as(List.class)).hasSize(4);
@@ -170,7 +170,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
             게시글_작성_요청(userResponse, postRequest);
         }
         //when
-        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, 1, 2, Sort.CREATED_AT_DESC, userResponse);
+        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, OFFSET_IS_ONE, SIZE_IS_TWO, Sort.CREATED_AT_DESC, userResponse);
         List<String> resultPostContents = response.jsonPath()
                 .getList(".", PostResponse.class)
                 .stream()
@@ -249,7 +249,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(noExistsPostResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
-    private ExtractableResponse<Response> 백신_타입별_게시글_조회(VaccinationType vaccinationType, UserResponse user) {
+    private ExtractableResponse<Response> 백신_타입별_게시글_조회(VaccinationType vaccinationType) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .param("vaccinationType", vaccinationType)
