@@ -232,7 +232,7 @@ const ReviewPage = () => {
           </FrameContent>
         </Frame>
       </Container>
-      {true && (
+      {isModalOpen && (
         <ReviewWritingModal
           getReviewList={getReviewList}
           setOffset={setOffset}

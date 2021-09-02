@@ -111,16 +111,32 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  height: 3.6rem;
 `;
 
 const BottomContainer = styled.div`
   display: flex;
   padding: 2rem 3rem;
   gap: 2rem;
+  align-items: flex-end;
 
   @media screen and (max-width: 1024px) {
     padding: 2rem;
   }
+`;
+
+const Image = styled.img`
+  width: 10rem;
+  height: 10rem;
+  margin-left: 1.6rem;
+  border: 0.1rem solid ${PALETTE.NAVY100};
+  border-radius: 0.6rem;
+  cursor: pointer;
+  object-fit: cover;
+`;
+
+const ImageContainer = styled.div`
+  margin-left: auto;
 `;
 
 export {
@@ -141,4 +157,6 @@ export {
   buttonStyles,
   IconContainer,
   BottomContainer,
+  Image,
+  ImageContainer,
 };
