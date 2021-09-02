@@ -158,7 +158,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
     void findFailure() {
         //given
         //when
-        ExtractableResponse<Response> response = 사용자_조회(999L);
+        ExtractableResponse<Response> response = 사용자_조회(INVALID_ID);
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }

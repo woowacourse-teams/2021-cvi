@@ -33,6 +33,8 @@ import static org.mockito.BDDMockito.willReturn;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptanceTest {
 
+    protected static final long INVALID_ID = 999L;
+
     @LocalServerPort
     int port;
 

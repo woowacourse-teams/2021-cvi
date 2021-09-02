@@ -150,7 +150,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
     void findByIdFailure() {
         //given
         //when
-        ExtractableResponse<Response> response = 단일_게시글_조회(999L);
+        ExtractableResponse<Response> response = 단일_게시글_조회(INVALID_ID);
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -214,7 +214,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_수정_요청(postResponse.getId(), 신규회원, updateRequest);
         ExtractableResponse<Response> noWriterResponse = 게시글_수정_요청(postResponse.getId(), anotherUserResponse, updateRequest);
-        ExtractableResponse<Response> noExistsPostResponse = 게시글_수정_요청(999L, userResponse, updateRequest);
+        ExtractableResponse<Response> noExistsPostResponse = 게시글_수정_요청(INVALID_ID, userResponse, updateRequest);
         //then
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(noWriterResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -242,7 +242,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_삭제_요청(postResponse.getId(), 신규회원);
         ExtractableResponse<Response> noWriterResponse = 게시글_삭제_요청(postResponse.getId(), anotherUserResponse);
-        ExtractableResponse<Response> noExistsPostResponse = 게시글_삭제_요청(999L, userResponse);
+        ExtractableResponse<Response> noExistsPostResponse = 게시글_삭제_요청(INVALID_ID, userResponse);
         //then
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(noWriterResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

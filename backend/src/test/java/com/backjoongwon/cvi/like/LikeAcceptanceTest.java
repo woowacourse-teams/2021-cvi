@@ -75,7 +75,7 @@ public class LikeAcceptanceTest extends AcceptanceTest {
         PostResponse postResponse = createPostResponse.as(PostResponse.class);
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_좋아요_생성(postResponse.getId(), 신규회원);
-        ExtractableResponse<Response> NoExistsPostResponse = 게시글_좋아요_생성(999L, userResponse);
+        ExtractableResponse<Response> NoExistsPostResponse = 게시글_좋아요_생성(INVALID_ID, userResponse);
         게시글_좋아요_생성(postResponse.getId(), userResponse);
         ExtractableResponse<Response> alreadyLikedResponse = 게시글_좋아요_생성(postResponse.getId(), userResponse);
         //then
@@ -106,7 +106,7 @@ public class LikeAcceptanceTest extends AcceptanceTest {
         PostResponse postResponse = createPostResponse.as(PostResponse.class);
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_좋아요_삭제(postResponse.getId(), 신규회원);
-        ExtractableResponse<Response> NoExistsPostResponse = 게시글_좋아요_삭제(999L, userResponse);
+        ExtractableResponse<Response> NoExistsPostResponse = 게시글_좋아요_삭제(INVALID_ID, userResponse);
         ExtractableResponse<Response> alreadyLikedResponse = 게시글_좋아요_삭제(postResponse.getId(), anotherUserResponse);
         //then
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());

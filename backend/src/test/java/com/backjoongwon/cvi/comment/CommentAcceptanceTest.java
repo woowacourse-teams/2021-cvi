@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("댓글 관련 인수 테스트")
 public class CommentAcceptanceTest extends AcceptanceTest {
-    
+
     private UserResponse userResponse;
     private UserResponse anotherUserResponse;
     private PostRequest postRequestPFIZER;
@@ -83,7 +83,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         PostResponse postResponse = createPostResponse.as(PostResponse.class);
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_댓글_생성(postResponse.getId(), 신규회원, commentRequest);
-        ExtractableResponse<Response> NoExistsPostResponse = 게시글_댓글_생성(999L, userResponse, commentRequest);
+        ExtractableResponse<Response> NoExistsPostResponse = 게시글_댓글_생성(INVALID_ID, userResponse, commentRequest);
         //then
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(NoExistsPostResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -108,7 +108,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     void findCommentsOfPostFailure() {
         //given
         //when
-        ExtractableResponse<Response> response = 게시글_댓글_조회(999L);
+        ExtractableResponse<Response> response = 게시글_댓글_조회(INVALID_ID);
         //then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
@@ -137,8 +137,8 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
         ExtractableResponse<Response> unAuthorizedResponse = 게시글_댓글_수정(postResponse.getId(), commentResponse.getId(), 신규회원, updateRequest);
-        ExtractableResponse<Response> noExistsPostResponse = 게시글_댓글_수정(999L, commentResponse.getId(), userResponse, updateRequest);
-        ExtractableResponse<Response> noExistsCommentResponse = 게시글_댓글_수정(postResponse.getId(), 999L, userResponse, updateRequest);
+        ExtractableResponse<Response> noExistsPostResponse = 게시글_댓글_수정(INVALID_ID, commentResponse.getId(), userResponse, updateRequest);
+        ExtractableResponse<Response> noExistsCommentResponse = 게시글_댓글_수정(postResponse.getId(), INVALID_ID, userResponse, updateRequest);
         ExtractableResponse<Response> noWriterResponse = 게시글_댓글_수정(postResponse.getId(), commentResponse.getId(), anotherUserResponse, updateRequest);
         //then
         assertThat(unAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
@@ -172,7 +172,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         CommentResponse commentResponse = createCommentResponse.as(CommentResponse.class);
         //when
         ExtractableResponse<Response> UnAuthorizedResponse = 게시글_댓글_삭제(postResponse.getId(), commentResponse.getId(), 신규회원);
-        ExtractableResponse<Response> NoExistsPostResponse = 게시글_댓글_삭제(999L, commentResponse.getId(), userResponse);
+        ExtractableResponse<Response> NoExistsPostResponse = 게시글_댓글_삭제(INVALID_ID, commentResponse.getId(), userResponse);
         ExtractableResponse<Response> alreadyLikedResponse = 게시글_댓글_삭제(postResponse.getId(), commentResponse.getId(), anotherUserResponse);
         //then
         assertThat(UnAuthorizedResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
