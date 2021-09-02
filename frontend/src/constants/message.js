@@ -21,6 +21,7 @@ const ALERT_MESSAGE = {
   FAIL_TO_SHOT_VERIFICATION: '잘못된 사진입니다. 사진을 다시 확인해주세요.',
   NEED_LOGIN: '로그인이 필요한 서비스입니다.',
   NEED_FILE: '사진을 첨부해주세요.',
+  OVER_IMAGE_COUNT: '사진 첨부는 최대 5개까지 가능합니다.',
 };
 
 const SNACKBAR_MESSAGE = {
