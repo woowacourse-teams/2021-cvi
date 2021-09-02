@@ -12,6 +12,7 @@ import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
 import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
 import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
 import ShotVerificationLabel from './ShotVerificationLabel/ShotVerificationLabel';
+import ImageModal from './ImageModal/ImageModal';
 
 export {
   Preview,
@@ -28,4 +29,5 @@ export {
   RegionalStateTable,
   ReviewFilterList,
   ShotVerificationLabel,
+  ImageModal,
 };
