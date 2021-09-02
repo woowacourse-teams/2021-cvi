@@ -66,7 +66,7 @@ public class CommentService {
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         }
-        log.info("인증되지 안흔 사용자입니다. 입력값: null");
+        log.info("인증되지 않음 사용자입니다. 입력값: null");
         throw new UnAuthorizedException("인증되지 않은 사용자입니다. 입력값: null");
     }
 

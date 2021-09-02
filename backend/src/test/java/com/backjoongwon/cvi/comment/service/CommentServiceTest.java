@@ -153,7 +153,7 @@ public class CommentServiceTest {
         //then
         assertThatThrownBy(() -> commentService.updateComment(post.getId(), commentResponse.getId(), optionalAnotherUser, updateRequest))
                 .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: User(nickname=테스트유저, ageRange=FORTIES, shotVerified=false, socialProvider=NAVER)");
+                .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: " + user.toString());
     }
 
     @DisplayName("댓글 삭제 - 성공")

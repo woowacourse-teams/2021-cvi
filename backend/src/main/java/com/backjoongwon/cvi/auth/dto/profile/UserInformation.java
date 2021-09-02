@@ -10,7 +10,7 @@ public class UserInformation {
     @NotBlank(message = "socialId(OAuth 고유의 id)는 null, '', ' ' 일 수 없습니다.")
     private final String socialId;
 
-    @NotBlank(message = "socialId(OAuth 고유의 id)는 null, '', ' ' 일 수 없습니다.")
+    @NotBlank(message = "socialProfileUrl(OAuth profile url)은 null일 수 없습니다.")
     private final String socialProfileUrl;
 
     private UserInformation(String socialId, String socialProfileUrl) {

@@ -6,12 +6,12 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
-import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.LikeResponse;
 import com.backjoongwon.cvi.post.dto.PostResponse;
+import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -172,7 +172,7 @@ public class LikeServiceTest {
         //then
         assertThatThrownBy(() -> likeService.deleteLike(Long.MAX_VALUE, optionalUserWithoutLike))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("해당 id의 게시글이 존재하지 않습니다.");
+                .hasMessage("해당 id의 게시글이 존재하지 않습니다. 입력 값: " + Long.MAX_VALUE);
     }
 
     @DisplayName("좋아요 누른 유저 hasLiked 상태값(true) 확인 - 성공")
