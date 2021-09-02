@@ -52,7 +52,7 @@ public class Comment extends BaseEntity {
             throw new InvalidOperationException(String.format("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: %s", this.post));
         }
         this.post = post;
-        post.addComment(this);
+        post.getComments().add(this);
     }
 
     public void assignUser(User user) {

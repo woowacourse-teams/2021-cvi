@@ -102,10 +102,6 @@ public class Post extends BaseEntity {
         comments.assignComment(comment, this);
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
-
     public void updateComment(Long commentId, Comment updateComment, User user) {
         comments.update(commentId, updateComment, user);
     }
@@ -116,10 +112,6 @@ public class Post extends BaseEntity {
 
     public void assignLike(Like like) {
         likes.assignLike(like, this);
-    }
-
-    public void addLike(Like like) {
-        likes.add(like);
     }
 
     public List<Comment> getCommentsAsList() {

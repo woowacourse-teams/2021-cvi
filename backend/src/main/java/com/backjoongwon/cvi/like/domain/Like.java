@@ -48,7 +48,7 @@ public class Like extends BaseEntity {
             throw new InvalidOperationException(String.format("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: %s", this.post));
         }
         this.post = post;
-        post.addLike(this);
+        post.getLikes().add(this);
     }
 
     public boolean isSameUser(Long userId) {

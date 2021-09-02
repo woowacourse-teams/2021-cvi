@@ -44,7 +44,7 @@ public class Likes {
         validateNotExistsLikeCreatedBy(like.getUser());
         like.assignPost(post);
         if (!likes.contains(like)) {
-            add(like);
+            likes.add(like);
         }
     }
 
@@ -60,9 +60,7 @@ public class Likes {
     }
 
     public void add(Like like) {
-        if (!likes.contains(like)) {
-            likes.add(like);
-        }
+        likes.add(like);
     }
 
     public int getSize() {

@@ -27,7 +27,7 @@ public class Comments {
         }
         comment.assignPost(post);
         if (!comments.contains(comment)) {
-            add(comment);
+            comments.add(comment);
         }
     }
 
