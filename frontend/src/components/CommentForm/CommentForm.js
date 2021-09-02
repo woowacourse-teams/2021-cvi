@@ -28,8 +28,8 @@ const CommentForm = ({
   reviewId,
   nickname,
   socialProfileUrl,
-  setNewComment,
   setCommentCount,
+  setCommentList,
 }) => {
   const [content, setContent] = useState('');
 
@@ -52,8 +52,8 @@ const CommentForm = ({
     }
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
-    setNewComment(response.data);
     setCommentCount((prevstate) => prevstate + 1);
+    setCommentList((prevState) => [response.data, ...prevState]);
     setContent('');
   };
 
@@ -100,7 +100,7 @@ CommentForm.propTypes = {
   nickname: PropTypes.string.isRequired,
   reviewId: PropTypes.string.isRequired,
   socialProfileUrl: PropTypes.string.isRequired,
-  setNewComment: PropTypes.func.isRequired,
+  setCommentList: PropTypes.func.isRequired,
   setCommentCount: PropTypes.func.isRequired,
 };
 

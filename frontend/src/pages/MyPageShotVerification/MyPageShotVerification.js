@@ -62,6 +62,11 @@ const MyPageShotVerification = () => {
   };
 
   const clickVerificationButton = () => {
+    if (!fileUrl) {
+      alert(ALERT_MESSAGE.NEED_FILE);
+
+      return;
+    }
     showLoading();
 
     // ocr 실행 로직

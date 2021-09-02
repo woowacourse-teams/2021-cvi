@@ -17,7 +17,6 @@ import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount }) => {
   const [offset, setOffset] = useState(0);
   const [commentList, setCommentList] = useState([]);
-  const [newComment, setNewComment] = useState({});
 
   const isMoreButtonShowing = commentCount > PAGING_SIZE && commentCount > commentList.length;
 
@@ -41,20 +40,6 @@ const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount })
     getCommentList();
   }, [getCommentList]);
 
-  useEffect(() => {
-    if (!Object.keys(newComment).length) return;
-
-    const timeoutId = setTimeout(() => {
-      if (commentList.length < PAGING_SIZE) {
-        setCommentList((prevState) => [...prevState, newComment]);
-      }
-
-      setNewComment({});
-    }, 2000);
-
-    return () => clearInterval(timeoutId);
-  }, [newComment]);
-
   return (
     <Container>
       <CommentCount>댓글 {commentCount}</CommentCount>
@@ -64,20 +49,10 @@ const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount })
           reviewId={reviewId}
           nickname={user.nickname}
           socialProfileUrl={user?.socialProfileUrl}
-          setNewComment={setNewComment}
           setCommentCount={setCommentCount}
+          setCommentList={setCommentList}
         />
       </CommentFormContainer>
-      {!!Object.keys(newComment).length && (
-        <CommentItem
-          accessToken={accessToken}
-          userId={user?.id ?? 0}
-          reviewId={reviewId}
-          comment={newComment}
-          setCommentList={setCommentList}
-          setCommentCount={setCommentCount}
-        />
-      )}
       {commentList?.map((comment) => (
         <CommentItem
           key={comment.id}

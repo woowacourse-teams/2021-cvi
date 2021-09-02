@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 const Title = styled.h3`
@@ -25,4 +26,12 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
-export { Title, Container, ButtonContainer };
+const buttonStyles = css`
+  padding-right: 0;
+
+  @media screen and (max-width: 801px) {
+    margin: auto 0;
+  }
+`;
+
+export { Title, Container, ButtonContainer, buttonStyles };

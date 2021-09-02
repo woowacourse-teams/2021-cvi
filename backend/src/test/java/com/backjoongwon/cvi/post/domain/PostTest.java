@@ -173,8 +173,8 @@ class PostTest {
                 .content("내용")
                 .user(user)
                 .build();
-        Comment comment1 = Comment.builder().content("댓글1").user(user).build();
-        Comment comment2 = Comment.builder().content("댓글2").user(user).build();
+        Comment comment1 = Comment.builder().content("댓글1").user(user).createdAt(LocalDateTime.now().minusHours(1L)).build();
+        Comment comment2 = Comment.builder().content("댓글2").user(user).createdAt(LocalDateTime.now().minusHours(2L)).build();
         post.assignComment(comment1);
         post.assignComment(comment2);
         //when

@@ -8,6 +8,10 @@ spring:
   flyway:
     enabled: false
 
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
 security:
   jwt:
     token:
@@ -51,7 +55,6 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.type: trace
 ---
 spring:
   config:

@@ -11,8 +11,11 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -125,6 +128,9 @@ public class Post extends BaseEntity {
 
     public List<Comment> sliceCommentsAsList(int offset, int size) {
         List<Comment> comments = this.comments.getComments();
+        comments = comments.stream()
+                .sorted(Comparator.comparing(Comment::getCreatedAt).reversed())
+                .collect(Collectors.toList());
         int fromIndex = offset;
         fromIndex = resizePagingRange(comments, fromIndex);
         int toIndex = offset + size;

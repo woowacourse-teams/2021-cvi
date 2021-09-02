@@ -23,7 +23,7 @@ import { CommentIcon, EyeIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
-const PreviewItem = ({ review, onClick, accessToken }) => {
+const PreviewItem = ({ review, accessToken, onClick }) => {
   const {
     id,
     writer,
