@@ -4,7 +4,14 @@ import { THEME_COLOR } from '../../../constants';
 import Frame from '../Frame/Frame';
 import { Container, modalFrameStyles, CloseButton } from './Modal.styles';
 
-const Modal = ({ children, showCloseButton, showShadow, backgroundColor, onClickClose }) => {
+const Modal = ({
+  children,
+  showCloseButton,
+  showShadow,
+  backgroundColor,
+  frameColor,
+  onClickClose,
+}) => {
   const closeModal = (event) => {
     if (event.target !== event.currentTarget) return;
 
@@ -12,8 +19,8 @@ const Modal = ({ children, showCloseButton, showShadow, backgroundColor, onClick
   };
 
   return (
-    <Container onClick={closeModal}>
-      <Frame styles={modalFrameStyles} showShadow={showShadow} backgroundColor={backgroundColor}>
+    <Container backgroundColor={backgroundColor} onClick={closeModal}>
+      <Frame styles={modalFrameStyles} showShadow={showShadow} backgroundColor={frameColor}>
         {showCloseButton && (
           <CloseButton onClick={onClickClose}>
             <CloseIcon />
@@ -29,6 +36,7 @@ Modal.propTypes = {
   children: PropTypes.node.isRequired,
   showCloseButton: PropTypes.bool,
   showShadow: PropTypes.bool,
+  frameColor: PropTypes.string,
   backgroundColor: PropTypes.string,
   onClickClose: PropTypes.func,
 };
@@ -36,7 +44,8 @@ Modal.propTypes = {
 Modal.defaultProps = {
   showCloseButton: false,
   showShadow: false,
-  backgroundColor: THEME_COLOR.WHITE,
+  frameColor: THEME_COLOR.WHITE,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
   onClickClose: () => {},
 };
 

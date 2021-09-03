@@ -17,7 +17,6 @@ import {
   buttonStyles,
   IconContainer,
   BottomContainer,
-  Image,
   ImageContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
@@ -43,7 +42,7 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { Comment, ShotVerificationLabel, ImageModal } from '../../components';
+import { Comment, ShotVerificationLabel, ImageModal, ReviewImage } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
 import example from '../../assets/images/calendar.png';
 import defaultt from '../../assets/images/default_profile.png';
@@ -199,6 +198,13 @@ const ReviewDetailPage = () => {
                   </InfoBottom>
                 </TopContainer>
                 <Content>{review?.content}</Content>
+                <ImageContainer>
+                  <ReviewImage src={vaccineImage} onClick={() => clickImage(0)} />
+                  <ReviewImage src={defaultt} onClick={() => clickImage(1)} />
+                  <ReviewImage src={example} onClick={() => clickImage(2)} />
+                  <ReviewImage src={defaultt} onClick={() => clickImage(3)} />
+                  <ReviewImage src={example} onClick={() => clickImage(4)} />
+                </ImageContainer>
                 <BottomContainer>
                   <IconContainer>
                     <ButtonLike
@@ -215,13 +221,6 @@ const ReviewDetailPage = () => {
                     <CommentIcon width="20" height="20" stroke={FONT_COLOR.BLACK} />
                     <div>{commentCount}</div>
                   </IconContainer>
-                  <ImageContainer>
-                    <Image src={vaccineImage} onClick={() => clickImage(0)} />
-                    <Image src={defaultt} onClick={() => clickImage(1)} />
-                    <Image src={example} onClick={() => clickImage(2)} />
-                    <Image src={defaultt} onClick={() => clickImage(3)} />
-                    <Image src={example} onClick={() => clickImage(4)} />
-                  </ImageContainer>
                 </BottomContainer>
                 <Comment
                   accessToken={accessToken}
@@ -238,11 +237,8 @@ const ReviewDetailPage = () => {
       </Container>
       {isOpenImageModal && (
         <ImageModal
-          imageList={exampleImageSrcs}
-          openedImageIndex={openedImageIndex}
+          src={exampleImageSrcs[openedImageIndex]}
           onClickClose={() => setIsOpenImageModal(false)}
-          onClickPrevious={() => setOpenedImageIndex((prevState) => prevState - 1)}
-          onClickNext={() => setOpenedImageIndex((prevState) => prevState + 1)}
         />
       )}
     </>

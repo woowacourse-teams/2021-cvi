@@ -23,6 +23,7 @@ import StateIcon from './state.svg';
 import MapIcon from './map.svg';
 import BarChartIcon from './bar-chart.svg';
 import FilterIcon from './filter.svg';
+import ImageDetailIcon from './image-detail.svg';
 
 export {
   KakaoIcon,
@@ -50,4 +51,5 @@ export {
   MapIcon,
   BarChartIcon,
   FilterIcon,
+  ImageDetailIcon,
 };

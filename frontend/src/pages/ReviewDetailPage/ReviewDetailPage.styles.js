@@ -125,18 +125,12 @@ const BottomContainer = styled.div`
   }
 `;
 
-const Image = styled.img`
-  width: 10rem;
-  height: 10rem;
-  margin-left: 1.6rem;
-  border: 0.1rem solid ${PALETTE.NAVY100};
-  border-radius: 0.6rem;
-  cursor: pointer;
-  object-fit: cover;
-`;
-
 const ImageContainer = styled.div`
-  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 68rem;
+  margin: 3rem auto 0 auto;
+  align-items: center;
 `;
 
 export {
@@ -157,6 +151,5 @@ export {
   buttonStyles,
   IconContainer,
   BottomContainer,
-  Image,
   ImageContainer,
 };
