@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ShotVerificationLabel } from '../../components';
 import PropTypes from 'prop-types';
 import { Avatar } from '../../components/common';
 import { AVATAR_SIZE_TYPE } from '../../components/common/Avatar/Avatar.styles';
-import { PATH, SHOT_VERIFICATION } from '../../constants';
+import { PATH } from '../../constants';
 import {
   Container,
   RightSideBar,
@@ -27,11 +26,6 @@ const MyPage = ({ children }) => {
           <User>
             {user.nickname} · {user.ageRange?.meaning}
           </User>
-          <ShotVerificationLabel
-            shotVerification={user.shotVerified}
-            trueText={SHOT_VERIFICATION.TRUE_TEXT}
-            falseText={SHOT_VERIFICATION.FALSE_TEXT}
-          />
         </ProfileContainer>
         <MenuContainer>
           <MenuItem>

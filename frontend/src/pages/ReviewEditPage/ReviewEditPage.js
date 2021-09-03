@@ -7,7 +7,6 @@ import {
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
-  SHOT_VERIFICATION,
   SNACKBAR_MESSAGE,
   TO_DATE_TYPE,
   VACCINATION,
@@ -40,7 +39,6 @@ import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Label } from '../../components/common';
-import { ShotVerificationLabel } from '../../components';
 
 const ReviewEditPage = () => {
   const history = useHistory();
@@ -50,7 +48,7 @@ const ReviewEditPage = () => {
 
   const [content, setContent] = useState('');
 
-  const { response: review, error } = useFetch({}, () => requestGetReview(accessToken, id));
+  const { response: review } = useFetch({}, () => requestGetReview(accessToken, id));
   const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
@@ -113,12 +111,6 @@ const ReviewEditPage = () => {
               >
                 {VACCINATION[review.vaccinationType]}
               </Label>
-              {review?.writer?.shotVerified && (
-                <ShotVerificationLabel
-                  shotVerification={review?.writer?.shotVerified}
-                  trueText={SHOT_VERIFICATION.TRUE_TEXT}
-                />
-              )}
             </VaccinationInfo>
             <WriterInfo>
               <Avatar src={review?.writer?.socialProfileUrl} />

@@ -9,32 +9,16 @@ import {
   ViewCount,
   CreatedAt,
 } from './PreviewItem.styles';
-import {
-  VACCINATION_COLOR,
-  VACCINATION,
-  FONT_COLOR,
-  TO_DATE_TYPE,
-  SHOT_VERIFICATION,
-} from '../../constants';
+import { VACCINATION_COLOR, VACCINATION, FONT_COLOR, TO_DATE_TYPE } from '../../constants';
 import { toDate } from '../../utils';
 import { Label } from '../common';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import { CommentIcon, EyeIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
-import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
 
 const PreviewItem = ({ review, accessToken, onClick }) => {
-  const {
-    id,
-    writer,
-    content,
-    vaccinationType,
-    createdAt,
-    commentCount,
-    hasLiked,
-    likeCount,
-    viewCount,
-  } = review;
+  const { id, content, vaccinationType, createdAt, commentCount, hasLiked, likeCount, viewCount } =
+    review;
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
   const { onClickLike, ButtonLike, updatedHasLiked, updatedLikeCount } = useLike(
@@ -54,12 +38,6 @@ const PreviewItem = ({ review, accessToken, onClick }) => {
         >
           {VACCINATION[vaccinationType]}
         </Label>
-        {writer.shotVerified && (
-          <ShotVerificationLabel
-            shotVerification={writer.shotVerified}
-            trueText={SHOT_VERIFICATION.TRUE_TEXT}
-          />
-        )}
       </TopContainer>
       <Content>{content}</Content>
       <BottomContainer>
@@ -89,7 +67,6 @@ const PreviewItem = ({ review, accessToken, onClick }) => {
 PreviewItem.propTypes = {
   review: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    writer: PropTypes.object.isRequired,
     content: PropTypes.string.isRequired,
     vaccinationType: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,

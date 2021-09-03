@@ -50,14 +50,13 @@ const MyPageAccount = () => {
       return;
     }
 
-    const { socialId, socialProvider, socialProfileUrl, shotVerified } = user;
+    const { socialId, socialProvider, socialProfileUrl } = user;
 
     const data = {
       nickname: updatedNickname,
       ageRange: AGE_RANGE[updatedAgeRange],
       socialId,
       socialProfileUrl,
-      shotVerified,
       socialProvider,
     };
     const response = await putAccountAsync(accessToken, data);

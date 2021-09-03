@@ -37,12 +37,6 @@ const CreatedAt = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
 
-const ShotVerified = styled.span`
-  color: ${FONT_COLOR.GREEN};
-  font-size: 1.2rem;
-  font-weight: 500;
-`;
-
 const Content = styled.div`
   font-size: 1.4rem;
 `;
@@ -55,12 +49,6 @@ const buttonStyles = css`
   padding-right: 0;
 `;
 
-const shotVerifiedStyle = css`
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-left: 0.8rem;
-`;
-
 export {
   Container,
   InfoContainer,
@@ -68,9 +56,7 @@ export {
   Info,
   Writer,
   CreatedAt,
-  ShotVerified,
   Content,
   TextArea,
   buttonStyles,
-  shotVerifiedStyle,
 };
