@@ -4,12 +4,15 @@ import {
   Content,
   Writer,
   ViewCount,
-  TopContainer,
+  ContentContainer,
   BottomContainer,
   IconContainer,
   InfoContainer,
   CreatedAt,
   buttonStyles,
+  PreviewImage,
+  PreviewImageContainer,
+  MoreImageCount,
 } from './ReviewItem.styles';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import {
@@ -27,6 +30,7 @@ import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import ShotVerificationLabel from '../ShotVerificationLabel/ShotVerificationLabel';
+import example from '../../assets/images/calendar.png';
 
 const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
   const {
@@ -60,22 +64,28 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
 
   return (
     <Container ref={innerRef} onClick={onClick}>
-      <TopContainer>
-        <Label
-          backgroundColor={VACCINATION_COLOR[vaccinationType]}
-          sizeType={LABEL_SIZE_TYPE.MEDIUM}
-          fontColor={labelFontColor}
-        >
-          {VACCINATION[vaccinationType]}
-        </Label>
-        {writer.shotVerified && (
+      <Label
+        backgroundColor={VACCINATION_COLOR[vaccinationType]}
+        sizeType={LABEL_SIZE_TYPE.MEDIUM}
+        fontColor={labelFontColor}
+      >
+        {VACCINATION[vaccinationType]}
+      </Label>
+      {/* {writer.shotVerified && (
           <ShotVerificationLabel
-            shotVerification={writer.shotVerified}
-            trueText={SHOT_VERIFICATION.TRUE_TEXT}
+          shotVerification={writer.shotVerified}
+          trueText={SHOT_VERIFICATION.TRUE_TEXT}
           />
+        )} */}
+      <ContentContainer>
+        <Content>{content}</Content>
+        {example && (
+          <PreviewImageContainer>
+            <PreviewImage src={example} />
+            {[1, 2].length > 1 && <MoreImageCount>+ {[1, 2].length - 1}</MoreImageCount>}
+          </PreviewImageContainer>
         )}
-      </TopContainer>
-      <Content>{content}</Content>
+      </ContentContainer>
       <Writer>
         {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>

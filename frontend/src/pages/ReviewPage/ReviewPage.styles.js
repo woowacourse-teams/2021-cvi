@@ -32,7 +32,7 @@ const ButtonWrapper = styled.div`
 
 const ReviewList = styled.ul`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 50% 50%;
   position: relative;
   min-height: 60vh;
 
@@ -46,7 +46,7 @@ const ReviewList = styled.ul`
 
   @media screen and (max-width: 801px) {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 100%;
 
     & > li:not(:last-child) {
       border-bottom: 0.15rem solid ${PALETTE.NAVY100};
