@@ -39,9 +39,6 @@ const MyPage = ({ children }) => {
             <div>
               <Link to={PATH.MY_PAGE_ACCOUNT}>내 정보 관리</Link>
             </div>
-            <div>
-              <Link to={PATH.MY_PAGE_SHOT_VERIFICATION}>접종 인증</Link>
-            </div>
           </MenuItem>
           <MenuItem>
             <MenuTitle>글 관리</MenuTitle>

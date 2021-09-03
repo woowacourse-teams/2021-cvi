@@ -111,22 +111,13 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
           </NavLinkElement>
           {!!Object.keys(user).length && (
             <MyPageMenuContainer>
-              <NavLinkElement
-                to={PATH.MY_PAGE_SHOT_VERIFICATION}
-                onClick={() => setIsOpenSideBar(false)}
-              >
+              <NavLinkElement to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
                 <MyPageIcon width="22" height="22" stroke="currentColor" fill="currentColor" />
                 마이페이지
               </NavLinkElement>
 
               <MyPageLink to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
                 정보 관리
-              </MyPageLink>
-              <MyPageLink
-                to={PATH.MY_PAGE_SHOT_VERIFICATION}
-                onClick={() => setIsOpenSideBar(false)}
-              >
-                접종 인증
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
                 내가 쓴 글

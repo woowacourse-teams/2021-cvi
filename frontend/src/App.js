@@ -11,7 +11,6 @@ import {
   OAuthPage,
   MyPage,
   MyPageAccount,
-  MyPageShotVerification,
   MyPageReview,
   MyPageCommentReview,
   MyPageLikeReview,
@@ -41,15 +40,6 @@ const App = () => {
               render={() => (
                 <MyPage>
                   <MyPageAccount />
-                </MyPage>
-              )}
-            />
-            <PrivateRoute
-              exact
-              path={PATH.MY_PAGE_SHOT_VERIFICATION}
-              render={() => (
-                <MyPage>
-                  <MyPageShotVerification />
                 </MyPage>
               )}
             />

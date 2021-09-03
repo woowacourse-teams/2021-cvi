@@ -29,7 +29,7 @@ const BaseLayout = ({ children }) => {
   const [isOpenSideBar, setIsOpenSideBar] = useState(false);
 
   const goMyPage = () => {
-    history.push(PATH.MY_PAGE_SHOT_VERIFICATION);
+    history.push(PATH.MY_PAGE_ACCOUNT);
   };
 
   const goHomePage = () => {
