@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -28,7 +29,9 @@ public class AwsS3Uploader {
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
-    public String s3Bucket;
+    private String s3Bucket;
+    @Value("${cloud.aws.cloudfront.url}")
+    private String cloudFrontUrl;
 
     public String upload(ImageType imageType, byte[] imageBytes) {
         final File uploadFile = convert(imageType, imageBytes);
@@ -38,9 +41,9 @@ public class AwsS3Uploader {
     private String uploadToS3(File uploadFile) {
         final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3Client.putObject(putObjectRequest);
-        final String url = amazonS3Client.getUrl(s3Bucket, uploadFile.getPath()).toString();
+        final String url = uploadFile.getPath();
         removeLocalSavedImageFile(uploadFile);
-        return url;
+        return cloudFrontUrl + "/" + url;
     }
 
     private void removeLocalSavedImageFile(File targetFile) {
@@ -54,7 +57,7 @@ public class AwsS3Uploader {
     private File convert(ImageType imageType, byte[] imageBytes) {
         final String fileNameExtension = imageType.getFileNameExtension();
         try {
-            final File imageFile = new File("post-image-" + UUID.randomUUID() + "." + fileNameExtension);
+            final File imageFile = new File("post-image-" + LocalDateTime.now() + "-" + UUID.randomUUID() + "." + fileNameExtension);
             final BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
             ImageIO.write(bufferedImage, fileNameExtension, imageFile);
             return imageFile;
