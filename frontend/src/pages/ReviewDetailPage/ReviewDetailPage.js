@@ -192,11 +192,15 @@ const ReviewDetailPage = () => {
                 </TopContainer>
                 <Content>{review?.content}</Content>
                 <ImageContainer>
-                  <ReviewImage src={vaccineImage} onClick={() => clickImage(0)} />
-                  <ReviewImage src={defaultt} onClick={() => clickImage(1)} />
-                  <ReviewImage src={example} onClick={() => clickImage(2)} />
-                  <ReviewImage src={defaultt} onClick={() => clickImage(3)} />
-                  <ReviewImage src={example} onClick={() => clickImage(4)} />
+                  <ReviewImage
+                    src={vaccineImage}
+                    showDetailIcon={true}
+                    onClick={() => clickImage(0)}
+                  />
+                  <ReviewImage src={defaultt} showDetailIcon={true} onClick={() => clickImage(1)} />
+                  <ReviewImage src={example} showDetailIcon={true} onClick={() => clickImage(2)} />
+                  <ReviewImage src={defaultt} showDetailIcon={true} onClick={() => clickImage(3)} />
+                  <ReviewImage src={example} showDetailIcon={true} onClick={() => clickImage(4)} />
                 </ImageContainer>
                 <BottomContainer>
                   <IconContainer>

@@ -110,7 +110,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
           setSelectedItem={setSelectedVaccine}
         />
         <TextArea width="100%" onChange={(event) => setContent(event.target.value)} />
-        <FileUploadTitle>사진 첨부</FileUploadTitle>
+        <FileUploadTitle>사진 첨부(최대 5개)</FileUploadTitle>
         <FileUploadContainer>
           <PreviewListContainer>
             {!!images.length &&

@@ -16,7 +16,7 @@ const FrameContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 55rem;
+  min-height: 55rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -75,7 +75,7 @@ const CreatedAt = styled.div`
 `;
 const TextArea = styled.textarea`
   margin: 3rem;
-  height: 100%;
+  min-height: 40rem;
   padding: 2rem 3rem;
   font-size: 1.6rem;
   color: ${FONT_COLOR.BLACK};
@@ -105,6 +105,18 @@ const EditButtonContainer = styled.div`
   }
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+  margin: 2rem;
+  gap: 3.6rem;
+  align-items: center;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
+`;
+
 export {
   Container,
   FrameContent,
@@ -120,4 +132,5 @@ export {
   ViewCount,
   editButtonStyles,
   EditButtonContainer,
+  ImageContainer,
 };

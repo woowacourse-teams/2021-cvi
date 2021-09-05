@@ -29,6 +29,7 @@ import {
   ViewCount,
   editButtonStyles,
   EditButtonContainer,
+  ImageContainer,
 } from './ReviewEditPage.styles';
 import toDate from '../../utils/toDate';
 import {
@@ -39,6 +40,10 @@ import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Label } from '../../components/common';
+import { ReviewImage } from '../../components';
+import example from '../../assets/images/calendar.png';
+import defaultt from '../../assets/images/default_profile.png';
+import vaccineImage from '../../assets/images/vaccination_example.png';
 
 const ReviewEditPage = () => {
   const history = useHistory();
@@ -47,6 +52,7 @@ const ReviewEditPage = () => {
   const user = useSelector((state) => state.authReducer.user);
 
   const [content, setContent] = useState('');
+  const [images, setImages] = useState([]);
 
   const { response: review } = useFetch({}, () => requestGetReview(accessToken, id));
   const { openSnackBar } = useSnackBar();
@@ -79,11 +85,29 @@ const ReviewEditPage = () => {
     goReviewDetailPage();
   };
 
+  const deleteImage = async (index) => {
+    const url = 'http://localhost:9000/e4ad4523f0abddbd3b1b.png';
+    const response = await fetch(url);
+    const data = await response.blob();
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(data);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        console.log(base64data);
+        resolve(base64data);
+      };
+    });
+  };
+
   useEffect(() => {
     if (Object.keys(review).length && user?.id !== review?.writer?.id) {
       alert(ALERT_MESSAGE.FAIL_TO_ACCESS_EDIT_PAGE);
       history.goBack();
     }
+
+    setContent(review?.content);
   }, [review]);
 
   return (
@@ -129,9 +153,41 @@ const ReviewEditPage = () => {
               </ReviewInfo>
             </InfoBottom>
           </Info>
-          <TextArea onChange={(event) => setContent(event.target.value)}>
+          <TextArea value={content} onChange={(event) => setContent(event.target.value)}>
             {review?.content}
           </TextArea>
+          <ImageContainer>
+            <ReviewImage
+              src={vaccineImage}
+              width="24rem"
+              showCloseIcon={true}
+              onClickDeleteButton={() => deleteImage(0)}
+            />
+            <ReviewImage
+              src={defaultt}
+              width="24rem"
+              showCloseIcon={true}
+              onClickDeleteButton={() => deleteImage(1)}
+            />
+            <ReviewImage
+              src={example}
+              width="24rem"
+              showCloseIcon={true}
+              onClickDeleteButton={() => deleteImage(2)}
+            />
+            <ReviewImage
+              src={defaultt}
+              width="24rem"
+              showCloseIcon={true}
+              onClickDeleteButton={() => deleteImage(3)}
+            />
+            <ReviewImage
+              src={example}
+              width="24rem"
+              showCloseIcon={true}
+              onClickDeleteButton={() => deleteImage(4)}
+            />
+          </ImageContainer>
         </FrameContent>
       </Frame>
       <EditButtonContainer>

@@ -1,19 +1,58 @@
 import PropTypes from 'prop-types';
 import { ImageDetailIcon } from '../../assets/icons';
-import { Container, Image, IconWrapper } from './ReviewImage.styles';
+import { FONT_COLOR } from '../../constants';
+import { Button } from '../common';
+import {
+  Container,
+  Image,
+  DetailIconWrapper,
+  CloseIconWrapper,
+  deleteImageButtonStyles,
+} from './ReviewImage.styles';
 
-const ReviewImage = ({ src, onClick }) => (
+const ReviewImage = ({
+  src,
+  width,
+  showDetailIcon,
+  showCloseIcon,
+  onClick,
+  onClickDeleteButton,
+}) => (
   <Container onClick={onClick}>
-    <IconWrapper>
-      <ImageDetailIcon />
-    </IconWrapper>
-    <Image src={src} />
+    {showDetailIcon && (
+      <DetailIconWrapper>
+        <ImageDetailIcon />
+      </DetailIconWrapper>
+    )}
+    {showCloseIcon && (
+      <CloseIconWrapper>
+        <Button
+          color={FONT_COLOR.BLUE_GRAY}
+          styles={deleteImageButtonStyles}
+          onClick={onClickDeleteButton}
+        >
+          +
+        </Button>
+      </CloseIconWrapper>
+    )}
+    <Image src={src} width={width} />
   </Container>
 );
 
 ReviewImage.propTypes = {
   src: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  showDetailIcon: PropTypes.bool,
+  showCloseIcon: PropTypes.bool,
+  onClickDeleteButton: PropTypes.func,
+  width: PropTypes.string,
+};
+
+ReviewImage.defaultProps = {
+  showDetailIcon: false,
+  showCloseIcon: false,
+  onClickDeleteButton: () => {},
+  width: '',
 };
 
 export default ReviewImage;
