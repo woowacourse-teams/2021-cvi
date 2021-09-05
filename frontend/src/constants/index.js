@@ -30,7 +30,6 @@ import { RESPONSE_STATE } from './service';
 import REGEX from './regex';
 import { REGION_NAME } from './region';
 import { FILTER_TYPE, SORT_TYPE } from './list';
-import { SHOT_VERIFICATION } from './shotVerification';
 
 export {
   PALETTE,
@@ -61,6 +60,5 @@ export {
   REGION_NAME,
   FILTER_TYPE,
   SORT_TYPE,
-  SHOT_VERIFICATION,
   REVIEW_IMAGE_LIMIT,
 };

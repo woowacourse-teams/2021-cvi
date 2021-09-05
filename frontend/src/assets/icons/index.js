@@ -18,7 +18,6 @@ import LikeTrueIcon from './like-true.svg';
 import LoadingIcon from './loading100.gif';
 import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
-import ShotVerificationMenuIcon from './shot-verification-menu.svg';
 import StateIcon from './state.svg';
 import MapIcon from './map.svg';
 import BarChartIcon from './bar-chart.svg';
@@ -45,7 +44,6 @@ export {
   LikeTrueIcon,
   MenuIcon,
   MyReviewMenuIcon,
-  ShotVerificationMenuIcon,
   LoadingIcon,
   StateIcon,
   MapIcon,

@@ -47,8 +47,7 @@ class VaccinationStatisticTest {
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
 
-    @DisplayName("인구수 비례 1차 접종률 계산 - 성공 - 전세계")
-    @ParameterizedTest
+    @ParameterizedTest(name = "인구수 비례 1차 접종률 계산 - 성공 - 전세계")
     @CsvSource({
             "2253618189, 28.6",
             "2276706840, 28.9",
@@ -66,8 +65,7 @@ class VaccinationStatisticTest {
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
 
-    @DisplayName("인구수 비례 2차 접종률 계산 - 성공 - 잔세계")
-    @ParameterizedTest
+    @ParameterizedTest(name = "인구수 비례 2차 접종률 계산 - 성공 - 잔세계")
     @CsvSource({
             "1153697698, 14.6",
             "1175939230, 14.9",

@@ -17,8 +17,6 @@ const ALERT_MESSAGE = {
   FAIL_TO_FULFILL_MIN_LENGTH: '최소 1자 이상 입력해야 합니다.',
   FAIL_TO_ACCESS_EDIT_PAGE: '본인이 작성하지 않은 글은 수정할 수 없습니다.',
   FAIL_TO_ACCESS_SIGNUP_PAGE: '회원가입 페이지에 접근할 수 없습니다.',
-  FAIL_TO_EDIT_SHOT_VERIFICATION: '인증에 실패했습니다.',
-  FAIL_TO_SHOT_VERIFICATION: '잘못된 사진입니다. 사진을 다시 확인해주세요.',
   NEED_LOGIN: '로그인이 필요한 서비스입니다.',
   NEED_FILE: '사진을 첨부해주세요.',
   OVER_IMAGE_COUNT: '사진 첨부는 최대 5개까지 가능합니다.',
@@ -35,7 +33,6 @@ const SNACKBAR_MESSAGE = {
   SUCCESS_TO_CREATE_COMMENT: '댓글을 작성했습니다.',
   SUCCESS_TO_EDIT_COMMENT: '댓글을 수정했습니다.',
   SUCCESS_TO_DELETE_COMMENT: '댓글을 삭제했습니다.',
-  SUCCESS_TO_EDIT_SHOT_VERIFICATION: '인증되었습니다.',
 };
 
 const CONFIRM_MESSAGE = {
@@ -43,7 +40,6 @@ const CONFIRM_MESSAGE = {
   DELETE_COMMENT: '댓글을 삭제하시겠습니까?',
   CANCEL_LIKE: '좋아요를 취소하시겠습니까?',
   GO_BACK: '현재 화면에서 나가시겠습니까? 변경사항이 저장되지 않을 수 있습니다.',
-  OFFER_SHOT_VERIFICATION: '접종 인증 후 후기 작성을 하시겠습니까?',
 };
 
 const PLACEHOLDER = {

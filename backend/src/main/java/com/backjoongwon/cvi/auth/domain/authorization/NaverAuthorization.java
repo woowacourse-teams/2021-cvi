@@ -1,10 +1,10 @@
 package com.backjoongwon.cvi.auth.domain.authorization;
 
-import com.backjoongwon.cvi.auth.domain.oauthtoken.NaverOAuthToken;
-import com.backjoongwon.cvi.auth.domain.oauthtoken.OAuthToken;
-import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
-import com.backjoongwon.cvi.auth.domain.profile.SocialProfile;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
+import com.backjoongwon.cvi.auth.dto.oauthtoken.NaverOAuthToken;
+import com.backjoongwon.cvi.auth.dto.oauthtoken.OAuthToken;
+import com.backjoongwon.cvi.auth.dto.profile.NaverProfile;
+import com.backjoongwon.cvi.auth.dto.profile.SocialProfile;
+import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +23,9 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class NaverAuthorization implements Authorization {
 
+    private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
+    private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -36,27 +39,17 @@ public class NaverAuthorization implements Authorization {
     }
 
     @Override
-    public OAuthToken requestToken(String code, String state) {
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = createTokenRequest(code, state);
-        ResponseEntity<String> response = sendRequest(naverTokenRequest, "https://nid.naver.com/oauth2.0/token");
-
-        return mapToOAuthToken(response);
+    public UserInformation parseProfile(OAuthToken oAuthToken) {
+        HttpEntity<MultiValueMap<String, String>> naverProfileRequest = createProfileRequest(oAuthToken);
+        ResponseEntity<String> response = sendRequest(naverProfileRequest, PROFILE_REQUEST_URL);
+        return UserInformation.of(mapToProfile(response));
     }
 
     @Override
-    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
-        params.add("client_secret", clientSecret);
-        params.add("code", code);
-        params.add("state", state);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params, headers);
-        return naverTokenRequest;
+    public OAuthToken requestToken(String code, String state) {
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = createTokenRequest(code, state);
+        ResponseEntity<String> response = sendRequest(naverTokenRequest, TOKEN_REQUEST_URL);
+        return mapToOAuthToken(response);
     }
 
     @Override
@@ -70,12 +63,27 @@ public class NaverAuthorization implements Authorization {
     }
 
     @Override
-    public UserInformation parseProfile(OAuthToken oAuthToken) {
-        HttpEntity<MultiValueMap<String, String>> naverProfileRequest = createProfileRequest(oAuthToken);
-        ResponseEntity<String> response = sendRequest(naverProfileRequest, "https://openapi.naver.com/v1/nid/me");
+    public SocialProfile mapToProfile(ResponseEntity<String> response) {
+        try {
+            return objectMapper.readValue(response.getBody(), NaverProfile.class);
+        } catch (JsonProcessingException e) {
+            log.info("토근 정보를 매핑하는데 실패했습니다. {}", response.getBody());
+            throw new MappingFailureException("프로필을 매핑하는데 실패했습니다.");
+        }
+    }
 
-        SocialProfile socialProfile = mapToProfile(response);
-        return UserInformation.of(socialProfile);
+    @Override
+    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
+        params.add("client_secret", clientSecret);
+        params.add("code", code);
+        params.add("state", state);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        return new HttpEntity<>(params, headers);
     }
 
     @Override
@@ -83,18 +91,7 @@ public class NaverAuthorization implements Authorization {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         headers.add("Authorization", "Bearer " + naverOAuthToken.getAccess_token());
-
-        HttpEntity<MultiValueMap<String, String>> naverProfileRequest = new HttpEntity<>(headers);
-        return naverProfileRequest;
-    }
-
-    @Override
-    public SocialProfile mapToProfile(ResponseEntity<String> response) {
-        try {
-            return objectMapper.readValue(response.getBody(), NaverProfile.class);
-        } catch (JsonProcessingException e) {
-            throw new MappingFailureException("프로필을 매핑하는데 실패했습니다.");
-        }
+        return new HttpEntity<>(headers);
     }
 
     @Override

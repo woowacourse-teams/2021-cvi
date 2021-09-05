@@ -2,8 +2,8 @@ package com.backjoongwon.cvi.auth.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
-import com.backjoongwon.cvi.auth.domain.profile.NaverProfile;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
+import com.backjoongwon.cvi.auth.dto.profile.NaverProfile;
+import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.backjoongwon.cvi.user.domain.AgeRange;

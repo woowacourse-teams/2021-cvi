@@ -91,7 +91,7 @@ public class PostMyPageServiceTest {
     private void initLikes(List<Post> posts) {
         posts.forEach(post -> {
             Like like = Like.builder().user(user).build();
-            post.addLike(like);
+            post.assignLike(like);
             likeRepository.save(like);
         });
     }

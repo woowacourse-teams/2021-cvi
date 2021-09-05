@@ -60,8 +60,7 @@ class PublicDataServiceTest {
         vaccinationStatisticRepository.deleteAll();
     }
 
-    @DisplayName("백신 정종률 데이터 저장 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "백신 정종률 데이터 저장 - 성공")
     @MethodSource("targetDate")
     void saveVaccinationStatistics(LocalDate targetDate) {
         //given
@@ -73,8 +72,7 @@ class PublicDataServiceTest {
                 .contains(targetDate);
     }
 
-    @DisplayName("백신 정종률 데이터 조회 - 성공")
-    @ParameterizedTest
+    @ParameterizedTest(name = "백신 정종률 데이터 조회 - 성공")
     @MethodSource("targetDate")
     void findVaccinationStatistics(LocalDate targetDate) {
         //given

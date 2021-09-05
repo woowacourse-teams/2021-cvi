@@ -42,7 +42,6 @@ const SideBar = () => {
       PATH.MY_PAGE,
       PATH.MY_PAGE_ACCOUNT,
       PATH.MY_PAGE_REVIEW,
-      PATH.MY_PAGE_SHOT_VERIFICATION,
       PATH.MY_PAGE_COMMENT_REVIEW,
       PATH.MY_PAGE_LIKE_REVIEW,
     ].includes(pathname);
@@ -72,7 +71,7 @@ const SideBar = () => {
         </NavLinkElement>
         {!!Object.keys(user).length && (
           <NavLinkElement
-            to={PATH.MY_PAGE_SHOT_VERIFICATION}
+            to={PATH.MY_PAGE_ACCOUNT}
             activeStyle={selectedNavStyles}
             isActive={(_, { pathname }) => isRelatedMyPage(pathname)}
           >

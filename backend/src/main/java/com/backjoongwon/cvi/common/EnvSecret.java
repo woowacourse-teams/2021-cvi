@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.common;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -9,10 +10,10 @@ import javax.annotation.PostConstruct;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class EnvSecret {
 
-    @Autowired
-    Environment env;
+    private final Environment env;
 
     @PostConstruct
     public void init() {
