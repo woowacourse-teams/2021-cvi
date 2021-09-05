@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.like.domain.Like;
@@ -21,6 +22,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -36,6 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @DisplayName("게시글 - 조회 비즈니스 흐름 테스트")
 public class PostFindServiceTest {
+
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
 
     @Autowired
     private PostRepository postRepository;
