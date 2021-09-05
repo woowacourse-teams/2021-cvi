@@ -2,6 +2,14 @@ spring:
   profiles:
     active: test
 
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.aws.autoconfigure.context.ContextCredentialsAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextResourceLoaderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
@@ -32,7 +40,7 @@ security:
 
   public:
     data:
-      vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
+      vaccination: publicdata-secret
 
 logging:
   level:

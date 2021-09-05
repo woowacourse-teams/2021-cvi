@@ -26,6 +26,18 @@ security:
     data:
       vaccination: publicdata-secret
 
+cloud:
+  aws:
+    credentials:
+      accessKey: access-key
+      secretKey: access-key
+    s3:
+      bucket: bucket-name
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 server:
   shutdown: graceful
 ---
@@ -54,6 +66,7 @@ spring:
 
 logging:
   level:
+    root: debug
     org.hibernate.SQL: debug
 ---
 spring:
