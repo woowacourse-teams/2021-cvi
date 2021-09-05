@@ -29,7 +29,7 @@ public class PostResponse {
     private List<String> images;
 
     @Builder
-    public PostResponse(Long id, UserResponse writer, String content, int viewCount, int likeCount, int commentCount, boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt, List<String> images) {
+    public PostResponse(Long id, UserResponse writer, String content, int viewCount, int likeCount, int commentCount, boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt, List<String> imageUrls) {
         this.id = id;
         this.writer = writer;
         this.content = content;
@@ -39,7 +39,7 @@ public class PostResponse {
         this.hasLiked = hasLiked;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
-        this.images = images;
+        this.images = imageUrls;
     }
 
     public PostResponse(Long id, UserResponse user, String content, int viewCount, int likeCount, int commentCount,
@@ -57,7 +57,7 @@ public class PostResponse {
 
     public static PostResponse of(Post post, User viewer) {
         return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
-                post.getViewCount(), post.getLikesCount(), post.getCommentsAsList().size(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt());
+                post.getViewCount(), post.getLikesCount(), post.getCommentsAsList().size(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt(), post.getImagesAsUrlList());
     }
 
     public static PostResponse of(Post post, User viewer, List<String> imageResponses) {

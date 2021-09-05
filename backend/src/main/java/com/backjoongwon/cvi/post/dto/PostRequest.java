@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -29,8 +30,7 @@ public class PostRequest {
     }
 
     public PostRequest(String content, VaccinationType vaccinationType) {
-        this.content = content;
-        this.vaccinationType = vaccinationType;
+        this(content, vaccinationType, Collections.emptyList());
     }
 
     public Post toEntity() {
