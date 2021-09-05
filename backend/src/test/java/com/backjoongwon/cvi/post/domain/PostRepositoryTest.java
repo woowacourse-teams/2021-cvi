@@ -178,7 +178,7 @@ class PostRepositoryTest {
         assertThat(likeRepository.findById(like2.getId())).isEmpty();
     }
 
-    @DisplayName("Post 에서 Comment, Like, Image 를 제거하면 DB에서 삭제되지 않는다.")
+    @DisplayName("Post Collection 에서 Comment, Like, Image 를 제거해도 DB에서 삭제되지 않는다.")
     @Test
     void deleteFromPost() {
         //given
@@ -196,16 +196,16 @@ class PostRepositoryTest {
         assertThat(postRepository.findById(post1.getId())).isNotEmpty();
 
         assertThat(commentRepository.findById(comment1.getId())).isNotEmpty();
-//        assertThat(commentRepository.findById(comment2.getId())).isNotEmpty();
-//
-//        assertThat(likeRepository.findById(like1.getId())).isNotEmpty();
-//        assertThat(likeRepository.findById(like2.getId())).isNotEmpty();
-//
-//        assertThat(imageRepository.findById(image1.getId())).isNotEmpty();
-//        assertThat(imageRepository.findById(image2.getId())).isNotEmpty();
+        assertThat(commentRepository.findById(comment2.getId())).isNotEmpty();
+
+        assertThat(likeRepository.findById(like1.getId())).isNotEmpty();
+        assertThat(likeRepository.findById(like2.getId())).isNotEmpty();
+
+        assertThat(imageRepository.findById(image1.getId())).isNotEmpty();
+        assertThat(imageRepository.findById(image2.getId())).isNotEmpty();
     }
 
-    @DisplayName("Image 삭제 테스트")
+    @DisplayName("Image 삭제 쿼리 확인 테스트")
     @Test
     void deleteImage() {
         //given
