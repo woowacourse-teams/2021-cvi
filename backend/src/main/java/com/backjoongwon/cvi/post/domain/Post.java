@@ -4,6 +4,7 @@ import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.common.domain.entity.BaseEntity;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.image.domain.Image;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 public class Post extends BaseEntity {
+
+    @Embedded
+    private final Images images = new Images();
 
     @Embedded
     private final Likes likes = new Likes();
@@ -68,7 +72,7 @@ public class Post extends BaseEntity {
         this.user = user;
     }
 
-    public void update(Post updatePost, User user) {
+    public void updateContent(Post updatePost, User user) {
         if (!this.user.equals(user)) {
             throw new InvalidOperationException("다른 사용자의 게시글은 수정할 수 없습니다.");
         }
@@ -143,5 +147,31 @@ public class Post extends BaseEntity {
             fromIndex = comments.size();
         }
         return fromIndex;
+    }
+
+    public void assignImages(List<Image> images) {
+        this.images.addAll(images, this);
+    }
+
+    public List<String> getImagesAsUrlList() {
+        return images.getImages().stream()
+                .map(Image::getUrl)
+                .collect(Collectors.toList());
+    }
+
+    public boolean hasImages() {
+        return images.size() > 0;
+    }
+
+    public List<Image> getAllImagesAsList() {
+        return new ArrayList<>(images.getImages());
+    }
+
+    public List<String> getS3PathsOfAllImages() {
+        return images.getS3PathsOfAllImages();
+    }
+
+    public void deleteAllImages() {
+        images.clear();
     }
 }
