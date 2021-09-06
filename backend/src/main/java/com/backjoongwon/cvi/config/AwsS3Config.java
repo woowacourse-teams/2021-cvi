@@ -1,8 +1,6 @@
 package com.backjoongwon.cvi.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,10 +23,9 @@ public class AwsS3Config {
 
     @Bean
     public AmazonS3Client amazonS3Client() {
-        final ProfileCredentialsProvider profileCredentialsProvider = new ProfileCredentialsProvider("cvis3");
-        final AWSCredentials credentials = profileCredentialsProvider.getCredentials();
+        final InstanceProfileCredentialsProvider credentialsProvider = InstanceProfileCredentialsProvider.getInstance();
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
+                .withCredentials(credentialsProvider)
                 .withRegion(region)
                 .build();
     }
