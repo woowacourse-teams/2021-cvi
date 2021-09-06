@@ -2,7 +2,9 @@ package com.backjoongwon.cvi.aws.s3;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.backjoongwon.cvi.common.exception.FileConvertException;
 import com.backjoongwon.cvi.image.ImageType;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,9 @@ public class AwsS3Uploader {
 
     private final AmazonS3Client amazonS3Client;
 
-    @Value("${aws.s3.bucket.url}")
-    private String s3BucketUrl;
-    @Value("${aws.cloudfront.url}")
+    @Value("${cloud.aws.s3.bucket}")
+    private String s3Bucket;
+    @Value("${cloud.aws.cloudfront.url}")
     private String cloudFrontUrl;
 
     public String upload(ImageType imageType, byte[] imageBytes) {
@@ -35,60 +37,10 @@ public class AwsS3Uploader {
     }
 
     private String uploadToS3(File uploadFile) {
-//        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
-//        amazonS3Client.putObject(putObjectRequest);
-        final String commandLine = String.format("sudo aws s3 mv ~/%s %s", uploadFile.getPath(), s3BucketUrl);
-        log.info("S3로 파일 전송 명령어 : {}", commandLine);
-        System.out.println("S3로 파일 전송 명령어 : " + commandLine);
-
-        ProcessBuilder processBuilder = new ProcessBuilder();
-
-        // -- Linux --
-
-        // Run a shell command
-        processBuilder.command(commandLine);
-
-        // Run a shell script
-        //processBuilder.command("path/to/hello.sh");
-
-        // -- Windows --
-
-        // Run a command
-        //processBuilder.command("cmd.exe", "/c", "dir C:\\Users\\mkyong");
-
-        // Run a bat file
-        //processBuilder.command("C:\\Users\\mkyong\\hello.bat");
-
-        try {
-
-            Process process = processBuilder.start();
-
-            StringBuilder output = new StringBuilder();
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line + "\n");
-            }
-
-            int exitVal = process.waitFor();
-            if (exitVal == 0) {
-                System.out.println("Success!");
-                System.out.println(output);
-                System.exit(0);
-            } else {
-                //abnormal...
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
+        amazonS3Client.putObject(putObjectRequest);
         final String url = uploadFile.getPath();
-        //removeLocalSavedImageFile(uploadFile);
+        removeLocalSavedImageFile(uploadFile);
         return cloudFrontUrl + "/" + url;
     }
 
@@ -116,7 +68,7 @@ public class AwsS3Uploader {
     public void delete(String imageS3Path) {
         try {
             log.debug("S3에서 삭제할 이미지 경로: {}", imageS3Path);
-            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3BucketUrl, imageS3Path);
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3Bucket, imageS3Path);
             amazonS3Client.deleteObject(deleteObjectRequest);
             log.debug("S3의 {} 파일 삭제 성공", imageS3Path);
         } catch (AmazonServiceException e) {
