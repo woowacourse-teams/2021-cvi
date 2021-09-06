@@ -27,7 +27,7 @@ public class AwsS3Uploader {
     public String upload(String s3DirPath, File file) {
         final PutObjectRequest putObjectRequest = new PutObjectRequest(s3BucketName, s3DirPath + file.getName(), file);
         amazonS3.putObject(putObjectRequest);
-        return cloudFrontUrl + "/" + file.getName();
+        return cloudFrontUrl + "/" + s3DirPath + file.getName();
     }
 
     public void delete(String s3DirPath, String fileName) {
