@@ -1,5 +1,8 @@
 package com.backjoongwon.cvi.aws.s3;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.backjoongwon.cvi.common.exception.FileConvertException;
 import com.backjoongwon.cvi.image.ImageType;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,7 @@ import java.util.UUID;
 @Component
 public class AwsS3Uploader {
 
-    //private final AmazonS3Client amazonS3Client;
+    private final AmazonS3Client amazonS3Client;
 
     @Value("${aws.s3.bucket.url}")
     private String s3BucketUrl;
@@ -69,14 +72,14 @@ public class AwsS3Uploader {
         }
     }
 
-//    public void delete(String imageS3Path) {
-//        try {
-//            log.debug("S3에서 삭제할 이미지 경로: {}", imageS3Path);
-//            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3BucketUrl, imageS3Path);
-//            amazonS3Client.deleteObject(deleteObjectRequest);
-//            log.debug("S3의 {} 파일 삭제 성공", imageS3Path);
-//        } catch (AmazonServiceException e) {
-//            log.debug("S3의 {} 파일 삭제 실패", imageS3Path);
-//        }
-//    }
+    public void delete(String imageS3Path) {
+        try {
+            log.debug("S3에서 삭제할 이미지 경로: {}", imageS3Path);
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3BucketUrl, imageS3Path);
+            amazonS3Client.deleteObject(deleteObjectRequest);
+            log.debug("S3의 {} 파일 삭제 성공", imageS3Path);
+        } catch (AmazonServiceException e) {
+            log.debug("S3의 {} 파일 삭제 실패", imageS3Path);
+        }
+    }
 }
