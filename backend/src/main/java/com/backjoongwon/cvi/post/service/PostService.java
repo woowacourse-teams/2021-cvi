@@ -126,7 +126,7 @@ public class PostService {
 
     private void deleteImagesFromAwsS3(List<String> s3PathsToDelete) {
         for (String path : s3PathsToDelete) {
-            awsS3Uploader.delete(path);
+//            awsS3Uploader.delete(path);
         }
     }
 
