@@ -60,7 +60,7 @@ const IconContainer = styled.div`
 const CreatedAt = styled.div`
   display: flex;
   align-items: center;
-  min-width: 7.6rem;
+  white-space: nowrap;
 `;
 
 const buttonStyles = css`

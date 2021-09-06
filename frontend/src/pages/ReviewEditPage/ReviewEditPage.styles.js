@@ -72,7 +72,9 @@ const CreatedAt = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
   padding-bottom: 0.2rem;
   margin: 0 1.6rem 0 0.3rem;
+  white-space: nowrap;
 `;
+
 const TextArea = styled.textarea`
   margin: 3rem;
   height: 100%;

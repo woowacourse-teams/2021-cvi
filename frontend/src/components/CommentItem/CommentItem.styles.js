@@ -34,6 +34,7 @@ const Writer = styled.div`
 `;
 
 const CreatedAt = styled.div`
+  white-space: nowrap;
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
 

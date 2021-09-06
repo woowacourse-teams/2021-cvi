@@ -22,6 +22,7 @@ const ReviewContainer = styled.div`
 `;
 
 const CreatedAt = styled.div`
+  white-space: nowrap;
   font-size: 1.4rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
 `;
