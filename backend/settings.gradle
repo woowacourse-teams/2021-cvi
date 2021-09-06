@@ -1,3 +1,12 @@
 rootProject.name = 'cvi'
 include 'cvi-vaccine-stats-parser'
-
+include 'cvi-publicdata-parser'
+include 'cvi-oauth-parser'
+include 'common-cvi'
+include 'domain-cvi'
+include 'domain-cvi-service'
+include 'domain-cvi-oauth-service'
+include 'domain-cvi-publicdata-service'
+include 'domain-cvi-scheduler'
+include 'app-cvi-api'
+include 'app-cvi-admin'
