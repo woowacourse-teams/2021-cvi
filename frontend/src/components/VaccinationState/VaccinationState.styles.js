@@ -26,6 +26,7 @@ const FrameContent = styled.div`
   grid-template-columns: ${({ withWorld }) => (withWorld ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)')};
   margin: 2.4rem 2.7rem;
   padding: 0 0.6rem;
+  position: relative;
 
   @media screen and (max-width: 801px) {
     margin: 2rem 0rem;
@@ -81,6 +82,15 @@ const buttonStyles = css`
   }
 `;
 
+const Source = styled.span`
+  position: absolute;
+  font-size: 1.2rem;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  /* font-weight: 400; */
+  bottom: -1rem;
+  right: 0;
+`;
+
 export {
   Container,
   TopContainer,
@@ -91,4 +101,5 @@ export {
   InfoTitle,
   IncreaseIcon,
   buttonStyles,
+  Source,
 };

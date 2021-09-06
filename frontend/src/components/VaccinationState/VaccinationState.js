@@ -10,6 +10,7 @@ import {
   InfoTitle,
   IncreaseIcon,
   buttonStyles,
+  Source,
 } from './VaccinationState.styles';
 import { Frame, DonutChart, Button } from '../common';
 import { requestVaccinationStateList, requestWorldVaccinationStateList } from '../../requests';
@@ -19,7 +20,7 @@ import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
 import { FONT_COLOR, PATH } from '../../constants';
 import { RightArrowIcon } from '../../assets/icons';
 
-const VaccinationState = ({ title, withWorld, withViewMore }) => {
+const VaccinationState = ({ title, withWorld, withViewMore, withSource }) => {
   const history = useHistory();
 
   const { response, error } = useFetch([], requestVaccinationStateList);
@@ -83,6 +84,7 @@ const VaccinationState = ({ title, withWorld, withViewMore }) => {
               </Info>
             </PrimaryState>
           )}
+          {withSource && <Source>출처: 질병관리청, Our World in Data</Source>}
         </FrameContent>
       </Frame>
     </Container>
@@ -93,12 +95,14 @@ VaccinationState.propTypes = {
   title: PropTypes.string,
   withWorld: PropTypes.bool,
   withViewMore: PropTypes.bool,
+  withSource: PropTypes.bool,
 };
 
 VaccinationState.defaultProps = {
   title: '',
   withWorld: true,
   withViewMore: false,
+  withSource: false,
 };
 
 export default VaccinationState;
