@@ -1,7 +1,7 @@
 package com.backjoongwon.cvi.aws.s3;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ import java.util.UUID;
 @Component
 public class AwsS3Uploader {
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String s3Bucket;
@@ -38,7 +40,7 @@ public class AwsS3Uploader {
 
     private String uploadToS3(File uploadFile) {
         final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
-        amazonS3Client.putObject(putObjectRequest);
+        amazonS3.putObject(putObjectRequest);
         final String url = uploadFile.getPath();
         removeLocalSavedImageFile(uploadFile);
         return cloudFrontUrl + "/" + url;
@@ -69,7 +71,7 @@ public class AwsS3Uploader {
         try {
             log.debug("S3에서 삭제할 이미지 경로: {}", imageS3Path);
             final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3Bucket, imageS3Path);
-            amazonS3Client.deleteObject(deleteObjectRequest);
+            amazonS3.deleteObject(deleteObjectRequest);
             log.debug("S3의 {} 파일 삭제 성공", imageS3Path);
         } catch (AmazonServiceException e) {
             log.debug("S3의 {} 파일 삭제 실패", imageS3Path);
