@@ -58,6 +58,10 @@ const Source = styled.div`
   font-size: 1.2rem;
   color: ${FONT_COLOR.GRAY};
   margin: 3.2rem auto 0 auto;
+
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 2rem;
+  }
 `;
 
 export { Container, Content, Title, Source };

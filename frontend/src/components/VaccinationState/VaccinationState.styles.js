@@ -29,8 +29,7 @@ const FrameContent = styled.div`
   position: relative;
 
   @media screen and (max-width: 801px) {
-    margin: 2rem 0rem;
-    display: grid;
+    margin: 2rem 0 6rem 0;
     gap: 1rem;
   }
 `;
@@ -86,9 +85,16 @@ const Source = styled.span`
   position: absolute;
   font-size: 1.2rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
-  /* font-weight: 400; */
   bottom: -1rem;
   right: 0;
+  white-space: nowrap;
+
+  @media screen and (max-width: 801px) {
+    left: 50%;
+    right: unset;
+    transform: translateX(-50%);
+    bottom: -5rem;
+  }
 `;
 
 export {
