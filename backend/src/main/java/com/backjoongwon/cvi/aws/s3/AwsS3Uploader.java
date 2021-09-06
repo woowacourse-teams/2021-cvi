@@ -40,7 +40,7 @@ public class AwsS3Uploader {
 //        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
 //        amazonS3Client.putObject(putObjectRequest);
         final String commandLine = String.format("sudo aws s3 mv ~/%s %s", uploadFile.getPath(), s3BucketUrl);
-        log.debug("S3로 파일 전송 명령어 : {}", commandLine);
+        log.info("S3로 파일 전송 명령어 : {}", commandLine);
         try {
             Runtime.getRuntime().exec(commandLine);
         } catch (IOException e) {
