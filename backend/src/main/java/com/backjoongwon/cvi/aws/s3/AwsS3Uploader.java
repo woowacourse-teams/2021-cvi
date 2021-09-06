@@ -28,7 +28,7 @@ public class AwsS3Uploader {
     private final AmazonS3Client amazonS3;
 
     @Value("${aws.s3.bucket_name}")
-    private String s3Bucket;
+    private String s3BucketName;
     @Value("${aws.cloudfront.url}")
     private String cloudFrontUrl;
 
@@ -38,7 +38,7 @@ public class AwsS3Uploader {
     }
 
     private String uploadToS3(File uploadFile) {
-        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile);
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3BucketName, uploadFile.getPath(), uploadFile);
         amazonS3.putObject(putObjectRequest);
         final String url = uploadFile.getPath();
         removeLocalSavedImageFile(uploadFile);
@@ -69,7 +69,7 @@ public class AwsS3Uploader {
     public void delete(String imageS3Path) {
         try {
             log.debug("S3에서 삭제할 이미지 경로: {}", imageS3Path);
-            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3Bucket, imageS3Path);
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3BucketName, imageS3Path);
             amazonS3.deleteObject(deleteObjectRequest);
             log.debug("S3의 {} 파일 삭제 성공", imageS3Path);
         } catch (AmazonServiceException e) {
