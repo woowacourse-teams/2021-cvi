@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -41,10 +39,53 @@ public class AwsS3Uploader {
 //        amazonS3Client.putObject(putObjectRequest);
         final String commandLine = String.format("sudo aws s3 mv ~/%s %s", uploadFile.getPath(), s3BucketUrl);
         log.info("S3로 파일 전송 명령어 : {}", commandLine);
+        System.out.println("S3로 파일 전송 명령어 : " + commandLine);
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+
+        // -- Linux --
+
+        // Run a shell command
+        processBuilder.command(commandLine);
+
+        // Run a shell script
+        //processBuilder.command("path/to/hello.sh");
+
+        // -- Windows --
+
+        // Run a command
+        //processBuilder.command("cmd.exe", "/c", "dir C:\\Users\\mkyong");
+
+        // Run a bat file
+        //processBuilder.command("C:\\Users\\mkyong\\hello.bat");
+
         try {
-            Runtime.getRuntime().exec(commandLine);
+
+            Process process = processBuilder.start();
+
+            StringBuilder output = new StringBuilder();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+            }
+
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                System.out.println("Success!");
+                System.out.println(output);
+                System.exit(0);
+            } else {
+                //abnormal...
+            }
+
         } catch (IOException e) {
-            log.error("Command line 실행 실패 : {}", commandLine);
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         final String url = uploadFile.getPath();
         //removeLocalSavedImageFile(uploadFile);
