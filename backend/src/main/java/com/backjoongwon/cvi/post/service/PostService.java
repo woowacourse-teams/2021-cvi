@@ -17,10 +17,10 @@ import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +33,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
+    private static final String AWS_S3_POSTS_IMAGES_DIR_PATH = "posts/images/";
+
+    private final ImageConverter imageConverter;
     private final AwsS3Uploader awsS3Uploader;
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
@@ -61,8 +64,10 @@ public class PostService {
     private List<String> getUploadedImageUrls(List<ImageRequest> imageRequests) {
         final List<String> imageUrls = new ArrayList<>();
         for (ImageRequest imageRequest : imageRequests) {
-            final byte[] imageBytes = Base64.decodeBase64(imageRequest.getData());
-            final String imageUrl = awsS3Uploader.upload(imageRequest.getType(), imageBytes);
+            final ImageFile imageFile = imageConverter.convertBytesToImageFile(imageRequest.getData(), imageRequest.getType());
+            final File file = imageFile.getFile();
+            final String imageUrl = awsS3Uploader.upload(AWS_S3_POSTS_IMAGES_DIR_PATH, file);
+            imageFile.delete();
             imageUrls.add(imageUrl);
         }
         return imageUrls;
@@ -126,7 +131,7 @@ public class PostService {
 
     private void deleteImagesFromAwsS3(List<String> s3PathsToDelete) {
         for (String path : s3PathsToDelete) {
-            awsS3Uploader.delete(path);
+            awsS3Uploader.delete(AWS_S3_POSTS_IMAGES_DIR_PATH, path);
         }
     }
 

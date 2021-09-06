@@ -44,7 +44,7 @@ public class Image extends BaseEntity {
         return this.id.equals(id);
     }
 
-    public String getS3Path() {
+    public String getName() {
         final String[] splitUrl = url.split("/");
         return splitUrl[splitUrl.length - 1];
     }

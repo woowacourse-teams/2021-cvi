@@ -62,7 +62,7 @@ public class Images {
 
     public List<String> getS3PathsOfAllImages() {
         return images.stream()
-                .map(Image::getS3Path)
+                .map(Image::getName)
                 .collect(Collectors.toList());
     }
 }
