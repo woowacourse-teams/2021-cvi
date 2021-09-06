@@ -48,7 +48,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(authRequest)
-                .when().post("/api/v1/users/auth")
+                .when().post("/api/v1/auth")
                 .then().log().all()
                 .extract();
     }
