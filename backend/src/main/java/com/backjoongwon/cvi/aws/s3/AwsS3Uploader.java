@@ -2,7 +2,6 @@ package com.backjoongwon.cvi.aws.s3;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.backjoongwon.cvi.common.exception.FileConvertException;
@@ -39,7 +38,7 @@ public class AwsS3Uploader {
     }
 
     private String uploadToS3(File uploadFile) {
-        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, uploadFile.getPath(), uploadFile);
         amazonS3.putObject(putObjectRequest);
         final String url = uploadFile.getPath();
         removeLocalSavedImageFile(uploadFile);
