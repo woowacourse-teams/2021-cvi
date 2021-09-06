@@ -1,7 +1,7 @@
 package com.backjoongwon.cvi.aws.s3;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.backjoongwon.cvi.common.exception.FileConvertException;
@@ -25,11 +25,11 @@ import java.util.UUID;
 @Component
 public class AwsS3Uploader {
 
-    private final AmazonS3 amazonS3;
+    private final AmazonS3Client amazonS3;
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${aws.s3.bucket_name}")
     private String s3Bucket;
-    @Value("${cloud.aws.cloudfront.url}")
+    @Value("${aws.cloudfront.url}")
     private String cloudFrontUrl;
 
     public String upload(ImageType imageType, byte[] imageBytes) {

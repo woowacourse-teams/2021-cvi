@@ -13,7 +13,8 @@ public class AwsS3Config {
 
     @Bean
     public AmazonS3 amazonS3Client() {
-        return AmazonS3ClientBuilder.standard()
+        return AmazonS3ClientBuilder
+                .standard()
                 .withRegion(Regions.AP_NORTHEAST_2)
                 .build();
     }
