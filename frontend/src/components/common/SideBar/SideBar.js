@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import {
   Container,
   LogoContainer,
@@ -9,8 +9,7 @@ import {
   LogoutButton,
   selectedNavStyles,
 } from './SideBar.styles';
-import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../../constants';
-import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
+import { PATH, THEME_COLOR } from '../../../constants';
 import {
   HomeIcon,
   LoginIcon,
@@ -20,22 +19,9 @@ import {
   MyPageIcon,
   StateIcon,
 } from '../../../assets/icons';
-import { useSnackBar } from '../../../hooks';
 
-const SideBar = () => {
-  const history = useHistory();
-  const dispatch = useDispatch();
+const SideBar = ({ logout }) => {
   const user = useSelector((state) => state.authReducer?.user);
-
-  const { openSnackBar } = useSnackBar();
-
-  const logout = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
-    dispatch(logoutAction());
-
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
-    history.push(PATH.HOME);
-  };
 
   const isRelatedMyPage = (pathname) =>
     [
@@ -45,14 +31,6 @@ const SideBar = () => {
       PATH.MY_PAGE_COMMENT_REVIEW,
       PATH.MY_PAGE_LIKE_REVIEW,
     ].includes(pathname);
-
-  useEffect(() => {
-    const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
-
-    if (!accessToken) return;
-
-    dispatch(getMyInfoAsync(accessToken));
-  }, []);
 
   return (
     <Container>
@@ -93,5 +71,7 @@ const SideBar = () => {
     </Container>
   );
 };
+
+SideBar.propTypes = { logout: PropTypes.func.isRequired };
 
 export default SideBar;
