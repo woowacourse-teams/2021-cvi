@@ -6,16 +6,15 @@ import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.user.domain.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Slf4j
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,30 +44,33 @@ public class Comment extends BaseEntity {
 
     public void assignPost(Post post) {
         if (Objects.isNull(post)) {
-            throw new NotFoundException("댓글에 할당하려는 게시글이 없습니다");
+            log.info("댓글을 저장할 게시글이 없습니다. 입력 값: null");
+            throw new NotFoundException("댓글을 저장할 게시글이 없습니다 입력 값: null");
         }
         if (Objects.nonNull(this.post)) {
-            return;
+            log.info("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: {}", this.post);
+            throw new InvalidOperationException(String.format("한번 할당된 게시글은 변경할 수 없습니다. 입력 값: %s", this.post));
         }
-
         this.post = post;
-        post.addComment(this);
+        post.getComments().add(this);
     }
 
     public void assignUser(User user) {
         if (Objects.isNull(user)) {
-            throw new NotFoundException("댓글을 작성하려는 사용자가 존재하지 않습니다.");
+            log.info("댓글을 작성하려는 사용자가 존재하지 않습니다.입력 값: null");
+            throw new NotFoundException("댓글을 작성하려는 사용자가 존재하지 않습니다.입력 값: null");
         }
         if (Objects.nonNull(this.user)) {
-            throw new InvalidOperationException("한번 할당된 댓글 작성자는 변경할 수 없습니다.");
+            log.info("한번 할당된 댓글 작성자는 변경할 수 없습니다. 입력 값: {}", this.user);
+            throw new InvalidOperationException(String.format("한번 할당된 댓글 작성자는 변경할 수 없습니다. 입력 값: %s", this.user));
         }
-
         this.user = user;
     }
 
     public void update(Comment updateComment, User user) {
         if (!isSameUser(user)) {
-            throw new UnAuthorizedException("다른 사용자의 게시글은 수정할 수 없습니다.");
+            log.info("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: {}", this.user);
+            throw new UnAuthorizedException(String.format("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: %s", this.user));
         }
         this.content = updateComment.content;
     }

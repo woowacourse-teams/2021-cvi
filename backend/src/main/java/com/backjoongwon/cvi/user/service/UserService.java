@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.user.service;
 
-
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
@@ -11,11 +10,13 @@ import com.backjoongwon.cvi.user.domain.UserRepository;
 import com.backjoongwon.cvi.user.dto.UserRequest;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -33,29 +34,27 @@ public class UserService {
         return UserResponse.of(user, accessToken);
     }
 
-    public boolean isValidAccessToken(String accessToken) {
-        return jwtTokenProvider.isValidToken(accessToken);
-    }
-
     public UserResponse findById(Long id) {
         return UserResponse.of(findUserById(id), null);
     }
 
     public UserResponse findUser(Optional<User> optionalUser) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         return UserResponse.of(findUserById(user.getId()), null);
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 id의 사용자가 없습니다."));
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        log.info("해당 id의 사용자가 없습니다. 입력값: {}", id);
+        throw new NotFoundException(String.format("해당 id의 사용자가 없습니다. 입력값: %s", id));
     }
 
     @Transactional
     public void update(Optional<User> optionalUser, UserRequest userRequest) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         String nickname = user.getNickname();
         if (!nickname.equals(userRequest.getNickname())) {
             validateDuplicateNickname(userRequest.getNickname());
@@ -65,14 +64,14 @@ public class UserService {
 
     private void validateDuplicateNickname(String nickname) {
         if (userRepository.existsByNickname(nickname)) {
-            throw new DuplicateException("닉네임이 이미 사용중입니다.");
+            log.info("닉네임이 이미 사용중입니다. 입력값: {}", nickname);
+            throw new DuplicateException(String.format("닉네임이 이미 사용중입니다. 입력값: %s", nickname));
         }
     }
 
     @Transactional
     public void delete(Optional<User> optionalUser) {
-        validateSignedin(optionalUser);
-        User user = optionalUser.get();
+        User user = getLoginUser(optionalUser);
         if (!userRepository.existsById(user.getId())) {
             throw new NotFoundException("해당 id의 사용자가 없습니다.");
         }
@@ -80,7 +79,11 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    private void validateSignedin(Optional<User> optionalUser) {
-        optionalUser.orElseThrow(() -> new UnAuthorizedException("인증되지 않은 사용자입니다."));
+    private User getLoginUser(Optional<User> optionalUser) {
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        }
+        log.info("인증되지 않음 사용자입니다. 입력값: null");
+        throw new UnAuthorizedException("인증되지 않은 사용자입니다. 입력값: null");
     }
 }

@@ -1,8 +1,8 @@
 package com.backjoongwon.cvi.auth.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
-import com.backjoongwon.cvi.auth.domain.profile.UserInformation;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
+import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -15,17 +15,16 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthorizationManager authorizationManager;
 
+    @Transactional
     public UserResponse authenticate(AuthRequest authRequest) {
         UserInformation userInformation =
                 authorizationManager.requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
-
         return createUserResponse(authRequest, userInformation);
     }
 

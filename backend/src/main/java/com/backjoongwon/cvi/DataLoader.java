@@ -107,7 +107,7 @@ public class DataLoader implements CommandLineRunner {
 
         for (User user : userSet) {
             Like like = Like.builder().user(user).build();
-            post.addLike(like);
+            post.assignLike(like);
             Comment comment = Comment.builder().content("Id:" + user.getId() + " 유저의 댓글").user(user).build();
             comments.add(comment);
             post.assignComment(comment);

@@ -108,7 +108,7 @@ const requestGetMyInfo = (accessToken) =>
   });
 
 const requestPostOAuthLogin = (data) =>
-  fetch(`${BASE_URL}/users/auth`, {
+  fetch(`${BASE_URL}/auth`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',

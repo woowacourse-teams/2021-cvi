@@ -14,8 +14,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/posts/{postId}/comments")
 public class CommentController {
 

@@ -61,8 +61,7 @@ class VaccineParserTest {
         vaccineParser = new VaccinationParser(parser, jsonMapper);
     }
 
-    @DisplayName("백신 접종 데이터 가져오기 - 성공 ")
-    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 ")
+    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공")
     @MethodSource
     void parseToPublicDataToBeforeTenAndAnyDate(LocalDate targetDate) throws JsonProcessingException {
         //given
@@ -92,8 +91,7 @@ class VaccineParserTest {
                 .isNotEmpty();
     }
 
-    @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
-    @ParameterizedTest
+    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDate targetDate) throws JsonProcessingException {
         //given
@@ -126,15 +124,15 @@ class VaccineParserTest {
         //then
         assertThat(actual.getCountry()).isEqualTo("World");
         assertThat(actualData).extracting("date").contains("2021-08-04", "2021-08-05");
-        assertThat(actualData).extracting(WorldVaccinationData::getTotal_vaccinations).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getPeople_vaccinated).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getPeople_fully_vaccinated).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations_raw).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getTotal_vaccinations_per_hundred).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getPeople_vaccinated_per_hundred).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getPeople_fully_vaccinated_per_hundred).isNotEmpty();
-        assertThat(actualData).extracting(WorldVaccinationData::getDaily_vaccinations_per_million).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getTotalVaccinations).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeopleVaccinated).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeopleFullyVaccinated).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDailyVaccinationsRaw).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDailyVaccinations).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getTotalVaccinationsPerHundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeopleVaccinatedPerHundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getPeopleFullyVaccinatedPerHundred).isNotEmpty();
+        assertThat(actualData).extracting(WorldVaccinationData::getDailyVaccinationsPerMillion).isNotEmpty();
     }
 
     @DisplayName("세계 백신 접종 데이터 - 성공 - 데이터 업데이트 전 요청")

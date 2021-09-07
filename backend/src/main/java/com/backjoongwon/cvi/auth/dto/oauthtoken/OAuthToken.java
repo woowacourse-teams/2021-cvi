@@ -1,4 +1,4 @@
-package com.backjoongwon.cvi.auth.domain.oauthtoken;
+package com.backjoongwon.cvi.auth.dto.oauthtoken;
 
 import lombok.Getter;
 

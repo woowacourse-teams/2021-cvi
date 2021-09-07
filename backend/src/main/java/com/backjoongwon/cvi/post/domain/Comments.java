@@ -25,10 +25,9 @@ public class Comments {
         if (Objects.isNull(comment)) {
             throw new NotFoundException("댓글이 존재하지 않습니다.");
         }
-
         comment.assignPost(post);
         if (!comments.contains(comment)) {
-            add(comment);
+            comments.add(comment);
         }
     }
 
@@ -37,7 +36,8 @@ public class Comments {
     }
 
     public void update(Long commentId, Comment updateComment, User user) {
-        findById(commentId).update(updateComment, user);
+        Comment comment = findById(commentId);
+        comment.update(updateComment, user);
     }
 
     public void delete(Long commentId, User user) {

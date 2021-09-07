@@ -1,20 +1,23 @@
 package com.backjoongwon.cvi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collections;
 import java.util.List;
 
 public class WorldVaccinationParserResponse {
 
     private String country;
-    private String iso_code;
+    @JsonProperty(value = "iso_code")
+    private String isoCode;
     private List<WorldVaccinationData> data;
 
     public WorldVaccinationParserResponse() {
     }
 
-    public WorldVaccinationParserResponse(String country, String iso_code, List<WorldVaccinationData> data) {
+    public WorldVaccinationParserResponse(String country, String isoCode, List<WorldVaccinationData> data) {
         this.country = country;
-        this.iso_code = iso_code;
+        this.isoCode = isoCode;
         this.data = data;
     }
 
@@ -26,8 +29,8 @@ public class WorldVaccinationParserResponse {
         return country;
     }
 
-    public String getIso_code() {
-        return iso_code;
+    public String getIsoCode() {
+        return isoCode;
     }
 
     public List<WorldVaccinationData> getData() {

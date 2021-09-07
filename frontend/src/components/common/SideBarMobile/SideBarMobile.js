@@ -14,13 +14,7 @@ import {
   ProfileContainer,
   User,
 } from './SideBarMobile.styles';
-import {
-  FONT_COLOR,
-  LOCAL_STORAGE_KEY,
-  PATH,
-  SHOT_VERIFICATION,
-  SNACKBAR_MESSAGE,
-} from '../../../constants';
+import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../../constants';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
 import {
   HomeIcon,
@@ -37,7 +31,6 @@ import { AVATAR_SIZE_TYPE } from '../Avatar/Avatar.styles';
 import Avatar from '../Avatar/Avatar';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { useSnackBar } from '../../../hooks';
-import ShotVerificationLabel from '../../ShotVerificationLabel/ShotVerificationLabel';
 
 const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
   const history = useHistory();
@@ -89,11 +82,6 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
             <User>
               {user.nickname} · {user.ageRange?.meaning}
             </User>
-            <ShotVerificationLabel
-              shotVerification={user.shotVerified}
-              trueText={SHOT_VERIFICATION.TRUE_TEXT}
-              falseText={SHOT_VERIFICATION.FALSE_TEXT}
-            />
           </ProfileContainer>
         ) : (
           <div style={{ height: '24.2rem' }} />
@@ -111,22 +99,13 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
           </NavLinkElement>
           {!!Object.keys(user).length && (
             <MyPageMenuContainer>
-              <NavLinkElement
-                to={PATH.MY_PAGE_SHOT_VERIFICATION}
-                onClick={() => setIsOpenSideBar(false)}
-              >
+              <NavLinkElement to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
                 <MyPageIcon width="22" height="22" stroke="currentColor" fill="currentColor" />
                 마이페이지
               </NavLinkElement>
 
               <MyPageLink to={PATH.MY_PAGE_ACCOUNT} onClick={() => setIsOpenSideBar(false)}>
                 정보 관리
-              </MyPageLink>
-              <MyPageLink
-                to={PATH.MY_PAGE_SHOT_VERIFICATION}
-                onClick={() => setIsOpenSideBar(false)}
-              >
-                접종 인증
               </MyPageLink>
               <MyPageLink to={PATH.MY_PAGE_REVIEW} onClick={() => setIsOpenSideBar(false)}>
                 내가 쓴 글

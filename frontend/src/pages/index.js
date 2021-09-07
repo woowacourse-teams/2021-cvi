@@ -7,7 +7,6 @@ import SignupPage from './SignupPage/SignupPage';
 import OAuthPage from './OAuthPage/OAuthPage';
 import MyPage from './MyPage/MyPage';
 import MyPageAccount from './MyPageAccount/MyPageAccount';
-import MyPageShotVerification from './MyPageShotVerification/MyPageShotVerification';
 import MyPageReview from './MyPageReview/MyPageReview';
 import MyPageCommentReview from './MyPageCommentReview/MyPageCommentReview';
 import MyPageLikeReview from './MyPageLikeReview/MyPageLikeReview';
@@ -23,7 +22,6 @@ export {
   OAuthPage,
   MyPage,
   MyPageAccount,
-  MyPageShotVerification,
   MyPageReview,
   MyPageCommentReview,
   MyPageLikeReview,
