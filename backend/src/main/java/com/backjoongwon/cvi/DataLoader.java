@@ -25,7 +25,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile("local")
 public class DataLoader implements CommandLineRunner {
 
     private static final int USER_COUNT = 50;
