@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    include:
+      - domain-cvi
+      - domain-cvi-oauth
+      - domain-cvi-publicdata
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+server:
+  shutdown: graceful
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy1
+
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy2
+
+server:
+  port: 8082

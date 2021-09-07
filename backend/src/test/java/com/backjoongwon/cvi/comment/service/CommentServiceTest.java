@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.comment.service;
 
-import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;

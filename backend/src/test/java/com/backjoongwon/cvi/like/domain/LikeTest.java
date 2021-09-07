@@ -1,6 +1,5 @@
 package com.backjoongwon.cvi.like.domain;
 
-import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.user.domain.AgeRange;

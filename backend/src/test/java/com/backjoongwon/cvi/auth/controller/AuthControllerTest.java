@@ -1,8 +1,6 @@
 package com.backjoongwon.cvi.auth.controller;
 
 import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.auth.service.AuthService;
-import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
 import com.backjoongwon.cvi.user.service.UserService;

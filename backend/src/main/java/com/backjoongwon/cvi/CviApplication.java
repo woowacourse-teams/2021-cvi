@@ -1,3 +1,4 @@
+/*
 package com.backjoongwon.cvi;
 
 import org.springframework.boot.SpringApplication;
@@ -10,3 +11,4 @@ public class CviApplication {
         SpringApplication.run(CviApplication.class, args);
     }
 }
+*/

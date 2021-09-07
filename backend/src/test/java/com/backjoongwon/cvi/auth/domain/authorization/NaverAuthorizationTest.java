@@ -2,8 +2,8 @@ package com.backjoongwon.cvi.auth.domain.authorization;
 
 import com.backjoongwon.cvi.auth.dto.oauthtoken.NaverOAuthToken;
 import com.backjoongwon.cvi.auth.dto.oauthtoken.OAuthToken;
-import com.backjoongwon.cvi.auth.dto.profile.SocialProfile;
-import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
+import com.cvi.dto.profile.SocialProfile;
+import com.cvi.dto.profile.UserInformation;
 import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

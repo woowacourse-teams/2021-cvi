@@ -1,3 +1,4 @@
+/*
 package com.backjoongwon.cvi;
 
 public class DummyData {
@@ -37,3 +38,4 @@ public class DummyData {
             "\n" +
             "Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed tellus nulla, fringilla ut tortor ut, pellentesque faucibus dui. Donec posuere risus ut enim fermentum tristique. Nullam a erat nec massa rutrum bibendum. Duis rutrum porttitor massa nunc.";
 }
+*/

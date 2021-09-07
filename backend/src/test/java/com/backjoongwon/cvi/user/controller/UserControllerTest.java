@@ -2,7 +2,6 @@ package com.backjoongwon.cvi.user.controller;
 
 
 import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.InvalidInputException;

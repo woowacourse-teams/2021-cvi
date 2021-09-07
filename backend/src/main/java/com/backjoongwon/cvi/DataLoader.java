@@ -1,6 +1,6 @@
+/*
 package com.backjoongwon.cvi;
 
-import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
@@ -124,3 +124,4 @@ public class DataLoader implements CommandLineRunner {
         return Timestamp.valueOf(localDateTime);
     }
 }
+*/
