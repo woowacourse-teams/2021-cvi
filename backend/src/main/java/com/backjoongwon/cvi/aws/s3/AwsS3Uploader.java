@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -37,7 +36,7 @@ public class AwsS3Uploader {
             amazonS3.deleteObject(deleteObjectRequest);
             log.debug("S3의 {} 파일 삭제 성공", s3DirPath + fileName);
         } catch (AmazonServiceException e) {
-            log.debug("S3의 {} 파일 삭제 실패", s3DirPath + fileName);
+            log.info("S3의 {} 파일 삭제 실패", s3DirPath + fileName);
         }
     }
 }

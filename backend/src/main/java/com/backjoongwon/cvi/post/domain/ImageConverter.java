@@ -36,7 +36,7 @@ public class ImageConverter {
             ImageIO.write(bufferedImage, fileNameExtension, imageFile);
             return imageFile;
         } catch (IOException e) {
-            log.debug("이미지 파일을 로컬에 저장하는데에 실패했습니다.");
+            log.info("이미지 파일을 로컬에 저장하는데에 실패했습니다.");
             throw new FileConvertException("이미지 로컬 저장 중 예외 발생");
         }
     }

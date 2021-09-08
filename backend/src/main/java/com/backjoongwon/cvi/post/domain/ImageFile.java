@@ -23,7 +23,7 @@ public class ImageFile {
             log.debug("로컬에 저장되어있는 이미지 파일 삭제 성공");
             return;
         }
-        log.debug("로컬에 저장되어있는 이미지 파일 삭제 실패");
+        log.info("로컬에 저장되어있는 이미지 파일 삭제 실패");
         throw new IllegalStateException("로컬에 저장되어있는 이미지 파일 삭제에 실패했습니다.");
     }
 }
