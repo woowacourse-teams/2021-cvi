@@ -48,7 +48,6 @@ import static org.mockito.Mockito.*;
 @DisplayName("게시글 - 생성/수정/삭제 비즈니스 흐름 테스트")
 class PostServiceTest {
 
-    private static final String AWS_S3_POSTS_IMAGES_DIR_PATH = "posts/images/";
     private static final String IMAGE1_S3_URL = "image1 s3 url";
     private static final String IMAGE2_S3_URL = "image2 s3 url";
     private static final String IMAGE3_S3_URL = "image3 s3 url";
@@ -291,11 +290,11 @@ class PostServiceTest {
     }
 
     private void initMockAwsS3Uploader() {
-        willReturn(IMAGE1_S3_URL).given(awsS3Uploader).upload(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), same(file1));
-        willReturn(IMAGE2_S3_URL).given(awsS3Uploader).upload(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), same(file2));
-        willReturn(IMAGE3_S3_URL).given(awsS3Uploader).upload(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), same(file3));
-        willReturn(IMAGE4_S3_URL).given(awsS3Uploader).upload(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), same(file4));
-        willReturn(IMAGE5_S3_URL).given(awsS3Uploader).upload(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), same(file5));
+        willReturn(IMAGE1_S3_URL).given(awsS3Uploader).upload(any(String.class), same(file1));
+        willReturn(IMAGE2_S3_URL).given(awsS3Uploader).upload(any(String.class), same(file2));
+        willReturn(IMAGE3_S3_URL).given(awsS3Uploader).upload(any(String.class), same(file3));
+        willReturn(IMAGE4_S3_URL).given(awsS3Uploader).upload(any(String.class), same(file4));
+        willReturn(IMAGE5_S3_URL).given(awsS3Uploader).upload(any(String.class), same(file5));
     }
 
     private void assertIdAssigned() {
@@ -415,9 +414,9 @@ class PostServiceTest {
         assertThat(imageRepository.findById(image2.getId())).isEmpty();
         assertThat(imageRepository.findById(image3.getId())).isEmpty();
         verify(awsS3Uploader, times(3)).delete(any(String.class), any(String.class));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image1.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image2.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image3.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image1.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image2.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image3.getName()));
     }
 
     @DisplayName("게시글 수정 - 이미지 수정 - 성공")
@@ -436,9 +435,9 @@ class PostServiceTest {
                 .extracting("url").containsExactly(IMAGE4_S3_URL, IMAGE5_S3_URL);
         assertThat(imageRepository.findAll()).extracting("url").containsExactly(IMAGE4_S3_URL, IMAGE5_S3_URL);
         verify(awsS3Uploader, times(3)).delete(any(String.class), any(String.class));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image1.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image2.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image3.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image1.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image2.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image3.getName()));
         verify(awsS3Uploader, times(2)).upload(any(String.class), any(File.class));
     }
 
@@ -519,9 +518,9 @@ class PostServiceTest {
         assertThat(imageRepository.findById(image3.getId())).isEmpty();
 
         verify(awsS3Uploader, times(3)).delete(any(String.class), any(String.class));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image1.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image2.getName()));
-        verify(awsS3Uploader, times(1)).delete(eq(AWS_S3_POSTS_IMAGES_DIR_PATH), eq(image3.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image1.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image2.getName()));
+        verify(awsS3Uploader, times(1)).delete(any(String.class), eq(image3.getName()));
     }
 
     private void resetEntityManager() {

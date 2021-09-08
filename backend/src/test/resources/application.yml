@@ -42,6 +42,14 @@ security:
     data:
       vaccination: publicdata-secret
 
+aws:
+  s3:
+    bucket_name: bucket-name
+    directory:
+      path:
+        posts:
+          images: dir-path
+
 logging:
   level:
     org.hibernate.SQL: debug
