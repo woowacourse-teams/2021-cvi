@@ -28,7 +28,7 @@ public class ImageConverter {
     }
 
     private File saveLocal(byte[] imageBytes, ImageType imageType) {
-        final String fileNameExtension = imageType.getFileNameExtension();
+        final String fileNameExtension = imageType.name().toLowerCase();
         try {
             final String formattedDateTime = LocalDateTime.now().format(DATE_TIME_FORMATTER);
             final File imageFile = new File("post-image_" + formattedDateTime + "_" + UUID.randomUUID() + "." + fileNameExtension);
