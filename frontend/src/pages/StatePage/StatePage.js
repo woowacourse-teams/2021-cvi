@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { RegionalStateChart, RegionalStateTable, VaccinationState } from '../../components';
 import { useFetch, useLoading } from '../../hooks';
 import { requestVaccinationStateList } from '../../requests';
-import { Container, Title, Content } from './StatePage.styles';
+import { Container, Title, Content, Source } from './StatePage.styles';
 
 const StatePage = () => {
   const { response, error, loading } = useFetch([], requestVaccinationStateList);
@@ -26,6 +26,7 @@ const StatePage = () => {
         />
         <RegionalStateTable vaccinationStateList={regionalState} />
       </Content>
+      <Source>출처: 질병관리청</Source>
     </Container>
   );
 };

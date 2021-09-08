@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
-@AutoConfigureRestDocs
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
 public class ApiDocument {
 
     @Autowired

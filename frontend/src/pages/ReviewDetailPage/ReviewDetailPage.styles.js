@@ -77,8 +77,9 @@ const CreatedAt = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
   padding-bottom: 0.2rem;
   margin: 0 1.6rem 0 0.3rem;
-  min-width: 6.5rem;
+  white-space: nowrap;
 `;
+
 const Content = styled.div`
   min-height: 30rem;
   padding: 2rem 3rem;
