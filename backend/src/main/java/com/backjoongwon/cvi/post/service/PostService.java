@@ -17,6 +17,7 @@ import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
-    private static final String AWS_S3_POSTS_IMAGES_DIR_PATH = "posts/images/";
+    @Value("${aws.s3.directory.path.posts.images}")
+    private String awsS3PostsImagesDirPath;
 
     private final ImageConverter imageConverter;
     private final AwsS3Uploader awsS3Uploader;
@@ -66,7 +68,7 @@ public class PostService {
         for (ImageRequest imageRequest : imageRequests) {
             final ImageFile imageFile = imageConverter.convertBytesToImageFile(imageRequest.getData(), imageRequest.getType());
             final File file = imageFile.getFile();
-            final String imageUrl = awsS3Uploader.upload(AWS_S3_POSTS_IMAGES_DIR_PATH, file);
+            final String imageUrl = awsS3Uploader.upload(awsS3PostsImagesDirPath, file);
             imageFile.delete();
             imageUrls.add(imageUrl);
         }
@@ -131,7 +133,7 @@ public class PostService {
 
     private void deleteImagesFromAwsS3(List<String> s3PathsToDelete) {
         for (String path : s3PathsToDelete) {
-            awsS3Uploader.delete(AWS_S3_POSTS_IMAGES_DIR_PATH, path);
+            awsS3Uploader.delete(awsS3PostsImagesDirPath, path);
         }
     }
 
