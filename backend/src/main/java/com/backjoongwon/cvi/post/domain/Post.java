@@ -170,8 +170,4 @@ public class Post extends BaseEntity {
     public List<String> getS3PathsOfAllImages() {
         return images.getS3PathsOfAllImages();
     }
-
-    public void deleteAllImages() {
-        images.clear();
-    }
 }

@@ -52,10 +52,6 @@ public class Images {
                 .orElseThrow(() -> new NotFoundException("찾을 수 없는 이미지 입니다."));
     }
 
-    public void clear() {
-        images.clear();
-    }
-
     public int size() {
         return images.size();
     }

@@ -185,7 +185,7 @@ class PostRepositoryTest {
         //when
         post1.deleteLike(user1.getId());
         post1.deleteComment(comment1.getId(), user1);
-        post1.deleteAllImages();
+        post1.getImages().getImages().clear();
         resetEntityManager();
         //then
         assertThat(post1.hasImages()).isFalse();
@@ -210,7 +210,7 @@ class PostRepositoryTest {
     void deleteImage() {
         //given
         //when
-        post1.deleteAllImages();
+        post1.getImages().getImages().clear();
         //then
     }
 
