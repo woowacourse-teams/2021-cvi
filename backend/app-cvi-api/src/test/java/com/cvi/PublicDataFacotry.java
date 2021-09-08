@@ -1,11 +1,7 @@
-package com.backjoongwon.cvi.publicdata;
+package com.cvi;
 
-import com.backjoongwon.cvi.dto.KoreaRegionVaccinationData;
-import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
-import com.backjoongwon.cvi.dto.WorldVaccinationData;
-import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
-import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
-import com.backjoongwon.cvi.util.DateConverter;
+import com.cvi.dto.*;
+import com.cvi.util.DateConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

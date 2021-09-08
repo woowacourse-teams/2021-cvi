@@ -1,11 +1,12 @@
-package com.backjoongwon.cvi.publicdata.service;
+package com.cvi.service;
 
-import com.backjoongwon.cvi.parser.VaccinationParser;
-import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
-import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatistic;
-import com.backjoongwon.cvi.publicdata.domain.VaccinationStatisticRepository;
-import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
+import com.cvi.PublicDataFacotry;
+import com.cvi.dto.VaccinationStatisticResponse;
+import com.cvi.parser.VaccinationParser;
+import com.cvi.properties.PublicDataProperties;
+import com.cvi.publicdata.domain.model.RegionPopulation;
+import com.cvi.publicdata.domain.model.VaccinationStatistic;
+import com.cvi.publicdata.domain.repository.VaccinationStatisticRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +16,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,6 +40,10 @@ class PublicDataServiceTest {
     private PublicDataProperties publicDataProperties;
     @Autowired
     private PublicDataService publicDataService;
+
+    @MockBean
+    private PublicDataScheduler publicDataScheduler;
+
     private VaccinationParser vaccinationParser;
 
     public static Stream<Arguments> targetDate() {
@@ -88,7 +93,7 @@ class PublicDataServiceTest {
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getBaseDate)
                 .contains(targetDate);
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getSido)
-                .containsAll(REGIONS);
+                .containsAll(PublicDataFacotry.REGIONS);
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getFirstCnt)
                 .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getSecondCnt)
@@ -120,13 +125,13 @@ class PublicDataServiceTest {
     }
 
     private void 백신_접종률_저장되어_있음(LocalDate targetDate) {
-        willReturn(toVaccineParserResponse(targetDate))
+        willReturn(PublicDataFacotry.toVaccineParserResponse(targetDate))
                 .given(vaccinationParser).parseToKoreaPublicData(any(LocalDate.class), anyString());
         publicDataService.saveVaccinationStatistics(targetDate);
     }
 
     private void 세계_백신_접종률_저장되어_있음(LocalDate targetDate) {
-        willReturn(toWorldVaccinationParserResponse(targetDate)).given(vaccinationParser).parseToWorldPublicData();
+        willReturn(PublicDataFacotry.toWorldVaccinationParserResponse(targetDate)).given(vaccinationParser).parseToWorldPublicData();
         publicDataService.saveWorldVaccinationStatistics(targetDate);
     }
 }

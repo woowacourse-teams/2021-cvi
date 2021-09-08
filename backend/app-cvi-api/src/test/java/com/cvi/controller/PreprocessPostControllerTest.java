@@ -1,24 +1,28 @@
-package com.backjoongwon.cvi.post.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.comment.dto.CommentResponse;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.service.UserService;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.ApiDocument;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.dto.CommentResponse;
+import com.cvi.dto.PostRequest;
+import com.cvi.dto.PostResponse;
+import com.cvi.dto.UserResponse;
+import com.cvi.post.domain.model.Post;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.service.UserService;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("게시글, 좋아요, 댓글 컨트롤러 Mock 테스트 - 환경설정")
@@ -33,6 +37,9 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
 
     @MockBean
     protected UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     protected JwtTokenProvider jwtTokenProvider;
@@ -81,5 +88,6 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
         given(userService.findUserById(any(Long.class))).willReturn(user);
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     }
 }

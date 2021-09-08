@@ -1,10 +1,9 @@
-package com.backjoongwon.cvi.like.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.like.service.LikeService;
-import com.backjoongwon.cvi.post.dto.LikeResponse;
-import com.backjoongwon.cvi.post.controller.PreprocessPostControllerTest;
+import com.cvi.dto.LikeResponse;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.service.LikeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,12 +31,12 @@ public class LikeControllerTest extends PreprocessPostControllerTest {
     @Test
     void createLike() throws Exception {
         //given
-        LikeResponse likeResponse = LikeResponse.from(LIKE_ID);
+        LikeResponse likeResponse = LikeResponse.from(PreprocessPostControllerTest.LIKE_ID);
         willReturn(likeResponse).given(likeService).createLike(any(Long.class), any());
         //when
         ResultActions actualResponse = 좋아요_생성_요청(postResponse.getId());
         //then
-        좋아요_생성_성공(actualResponse, LIKE_ID);
+        좋아요_생성_성공(actualResponse, PreprocessPostControllerTest.LIKE_ID);
     }
 
     @DisplayName("좋아요 생성 - 실패 - 게시글이 없는 경우")
@@ -77,7 +76,7 @@ public class LikeControllerTest extends PreprocessPostControllerTest {
     private ResultActions 좋아요_생성_요청(Long postId) throws Exception {
         return mockMvc.perform(post("/api/v1/posts/{postId}/likes", postId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+                .header(HttpHeaders.AUTHORIZATION, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN));
     }
 
     private void 좋아요_생성_성공(ResultActions actualResponse, Long likeId) throws Exception {
@@ -94,9 +93,9 @@ public class LikeControllerTest extends PreprocessPostControllerTest {
     }
 
     private ResultActions 좋아요_삭제_요청() throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes", POST_ID)
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes", PreprocessPostControllerTest.POST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+                .header(HttpHeaders.AUTHORIZATION, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN));
     }
 
     private void 좋아요_삭제_성공함(ResultActions response) throws Exception {

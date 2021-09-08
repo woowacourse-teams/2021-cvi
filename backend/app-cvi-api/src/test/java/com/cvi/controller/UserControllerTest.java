@@ -1,22 +1,23 @@
-package com.backjoongwon.cvi.user.controller;
+package com.cvi.controller;
 
-
-import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.comment.domain.Comment;
-import com.backjoongwon.cvi.comment.dto.CommentResponse;
-import com.backjoongwon.cvi.common.exception.InvalidInputException;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.post.service.PostService;
-import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
-import com.backjoongwon.cvi.user.service.UserService;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.UserRequest;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.ApiDocument;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.comment.domain.model.Comment;
+import com.cvi.dto.CommentResponse;
+import com.cvi.dto.PostWithCommentResponse;
+import com.cvi.dto.UserRequest;
+import com.cvi.dto.UserResponse;
+import com.cvi.exception.InvalidInputException;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.post.domain.model.Filter;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.service.PostService;
+import com.cvi.service.UserService;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,10 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,6 +59,9 @@ class UserControllerTest extends ApiDocument {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     private PostService postService;
@@ -99,6 +100,7 @@ class UserControllerTest extends ApiDocument {
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
         given(userService.findUserById(any(Long.class))).willReturn(user);
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     }
 
     @DisplayName("사용자 가입 - 성공")

@@ -1,10 +1,12 @@
-package com.backjoongwon.cvi.publicdata.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.publicdata.service.PublicDataService;
-import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
-import com.backjoongwon.cvi.user.service.UserService;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
+import com.cvi.ApiDocument;
+import com.cvi.PublicDataFacotry;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.dto.VaccinationStatisticResponse;
+import com.cvi.service.PublicDataService;
+import com.cvi.service.UserService;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,7 +17,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-import static com.backjoongwon.cvi.publicdata.PublicDataFacotry.*;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,13 +36,16 @@ class PublicDataControllerTest extends ApiDocument {
     private UserService userService;
 
     @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
     @DisplayName("백신 접종률 저장 - 성공")
     @Test
     void saveVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponse(TARGET_DATE);
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = PublicDataFacotry.toVaccinationStatisticResponse(TARGET_DATE);
         //when
         willReturn(vaccinationStatisticResponse).given(publicDataService).saveVaccinationStatistics(TARGET_DATE);
         ResultActions response = 백신_접종률_저장_요청(TARGET_DATE);
@@ -53,7 +57,7 @@ class PublicDataControllerTest extends ApiDocument {
     @Test
     void findVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationStatisticResponse> vaccinationStatisticResponse = toVaccinationStatisticResponse(TARGET_DATE);
+        List<VaccinationStatisticResponse> vaccinationStatisticResponse = PublicDataFacotry.toVaccinationStatisticResponse(TARGET_DATE);
         //when
         willReturn(vaccinationStatisticResponse).given(publicDataService).findVaccinationStatistics(TARGET_DATE);
         ResultActions response = 백신_접종률_조회_요청(TARGET_DATE);
@@ -78,7 +82,7 @@ class PublicDataControllerTest extends ApiDocument {
     void saveWorldVaccinationStatistic() throws Exception {
         //given
         //when
-        willReturn(toVaccinationStatisticResponseOnlyWorldRegion(TARGET_DATE)).given(publicDataService).saveWorldVaccinationStatistics(TARGET_DATE);
+        willReturn(PublicDataFacotry.toVaccinationStatisticResponseOnlyWorldRegion(TARGET_DATE)).given(publicDataService).saveWorldVaccinationStatistics(TARGET_DATE);
         ResultActions response = 세계_백신_접종률_저장_요청(TARGET_DATE);
         //then
         세계_백신_접종률_저장_성공함(response);
@@ -88,7 +92,7 @@ class PublicDataControllerTest extends ApiDocument {
     @Test
     void findWorldVaccinationStatistic() throws Exception {
         //given
-        List<VaccinationStatisticResponse> expect = Collections.singletonList(toSingleWorldVaccinationStatisticResponse(TARGET_DATE));
+        List<VaccinationStatisticResponse> expect = Collections.singletonList(PublicDataFacotry.toSingleWorldVaccinationStatisticResponse(TARGET_DATE));
         //when
         willReturn(expect).given(publicDataService).findWorldVaccinationStatistics(TARGET_DATE);
         ResultActions response = 세계_백신_접종률_조회_요청(TARGET_DATE);

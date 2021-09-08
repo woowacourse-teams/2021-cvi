@@ -1,11 +1,10 @@
-package com.backjoongwon.cvi.comment.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.comment.service.CommentService;
-import com.backjoongwon.cvi.comment.dto.CommentRequest;
-import com.backjoongwon.cvi.comment.dto.CommentResponse;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.post.controller.PreprocessPostControllerTest;
+import com.cvi.dto.CommentRequest;
+import com.cvi.dto.CommentResponse;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("댓글 컨트롤러 Mock 테스트")
 @WebMvcTest(controllers = CommentController.class)
 public class CommentControllerTest extends PreprocessPostControllerTest {
-    
+
     @MockBean
     private CommentService commentService;
 
@@ -35,10 +34,10 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
     @Test
     void createComment() throws Exception {
         //given
-        CommentResponse expectedResponse = new CommentResponse(COMMENT_ID, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
+        CommentResponse expectedResponse = new CommentResponse(PreprocessPostControllerTest.COMMENT_ID, userResponse, "좋은 정보 공유 감사해요 ㅎㅎㅎ", LocalDateTime.now());
         willReturn(expectedResponse).given(commentService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
-        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), BEARER + ACCESS_TOKEN);
+        ResultActions response = 댓글_등록_요청(PreprocessPostControllerTest.POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN);
         //then
         댓글_등록_성공함(response, expectedResponse);
     }
@@ -49,7 +48,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         //given
         willThrow(new UnAuthorizedException("가입된 유저가 아닙니다.")).given(commentService).createComment(anyLong(), any(), any(CommentRequest.class));
         //when
-        ResultActions response = 댓글_등록_요청(POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
+        ResultActions response = 댓글_등록_요청(PreprocessPostControllerTest.POST_ID, new CommentRequest("좋은 정보 공유 감사해요 ㅎㅎㅎ"), "null");
         //then
         댓글_등록_실패함(response);
     }
@@ -60,7 +59,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         //given
         willReturn(commentResponses).given(commentService).findCommentsByPostId(anyLong());
         //when
-        ResultActions response = 댓글_조회_요청(POST_ID);
+        ResultActions response = 댓글_조회_요청(PreprocessPostControllerTest.POST_ID);
         //then
         댓글_조회_성공함(response);
     }
@@ -84,7 +83,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         //when
         int offset = 1;
         int size = 2;
-        ResultActions response = 댓글_조회_페이징_요청(POST_ID, offset, size);
+        ResultActions response = 댓글_조회_페이징_요청(PreprocessPostControllerTest.POST_ID, offset, size);
         //then
         댓글_페이징_조회_성공함(response);
     }
@@ -107,7 +106,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         CommentRequest updateRequest = new CommentRequest("수정된 좋은 정보 공유 감사해요 ㅎㅎ");
         willDoNothing().given(commentService).updateComment(anyLong(), anyLong(), any(), any(CommentRequest.class));
         //when
-        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + ACCESS_TOKEN);
+        ResultActions response = 댓글_수정_요청(PreprocessPostControllerTest.POST_ID, PreprocessPostControllerTest.COMMENT_ID, updateRequest, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN);
         //then
         댓글_수정_성공함(response);
     }
@@ -120,7 +119,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(commentService).updateComment(anyLong(), anyLong(),
                 any(), any(CommentRequest.class));
         //when
-        ResultActions response = 댓글_수정_요청(POST_ID, COMMENT_ID, updateRequest, BEARER + "another_user_token");
+        ResultActions response = 댓글_수정_요청(PreprocessPostControllerTest.POST_ID, PreprocessPostControllerTest.COMMENT_ID, updateRequest, PreprocessPostControllerTest.BEARER + "another_user_token");
         //then
         댓글_수정_실패함(response);
     }
@@ -131,7 +130,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         //given
         willDoNothing().given(commentService).deleteComment(anyLong(), anyLong(), any());
         //when
-        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + ACCESS_TOKEN);
+        ResultActions response = 댓글_삭제_요청(PreprocessPostControllerTest.POST_ID, PreprocessPostControllerTest.COMMENT_ID, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN);
         //then
         댓글_삭제_성공함(response);
     }
@@ -142,7 +141,7 @@ public class CommentControllerTest extends PreprocessPostControllerTest {
         //given
         willThrow(new UnAuthorizedException("댓글 작성자가 아닙니다.")).given(commentService).deleteComment(anyLong(), anyLong(), any());
         //when
-        ResultActions response = 댓글_삭제_요청(POST_ID, COMMENT_ID, BEARER + "another_user_token");
+        ResultActions response = 댓글_삭제_요청(PreprocessPostControllerTest.POST_ID, PreprocessPostControllerTest.COMMENT_ID, PreprocessPostControllerTest.BEARER + "another_user_token");
         //then
         댓글_삭제_실패함(response);
     }

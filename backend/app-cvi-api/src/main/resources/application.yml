@@ -9,6 +9,12 @@ spring:
     jcache:
       config: classpath:ehcache.xml
 
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000
+
 server:
   shutdown: graceful
 

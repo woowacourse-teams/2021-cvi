@@ -1,13 +1,17 @@
-package com.backjoongwon.cvi.auth.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.ApiDocument;
-import com.backjoongwon.cvi.auth.dto.AuthRequest;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.user.service.UserService;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.ApiDocument;
+import com.cvi.auth.AuthenticationPrincipalArgumentResolver;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.dto.AuthRequest;
+import com.cvi.dto.UserResponse;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.service.AuthService;
+import com.cvi.service.UserService;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +48,10 @@ public class AuthControllerTest extends ApiDocument {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
+
     private User user;
     private UserResponse userResponse;
     private AuthRequest authRequest;

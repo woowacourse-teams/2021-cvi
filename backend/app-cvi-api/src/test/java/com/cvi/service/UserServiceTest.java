@@ -1,14 +1,15 @@
-package com.backjoongwon.cvi.user.service;
+package com.cvi.service;
 
-import com.backjoongwon.cvi.common.exception.DuplicateException;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.UserRequest;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.dto.UserRequest;
+import com.cvi.dto.UserResponse;
+import com.cvi.exception.DuplicateException;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,10 @@ public class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private PublicDataScheduler publicDataScheduler;
+
     private UserRequest userRequest;
 
     @BeforeEach

@@ -1,12 +1,12 @@
-package com.backjoongwon.cvi.post.controller;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.post.service.PostService;
-import com.backjoongwon.cvi.post.domain.Sort;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.dto.PostRequest;
+import com.cvi.dto.PostResponse;
+import com.cvi.dto.UserResponse;
+import com.cvi.exception.NotFoundException;
+import com.cvi.post.domain.model.Sort;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

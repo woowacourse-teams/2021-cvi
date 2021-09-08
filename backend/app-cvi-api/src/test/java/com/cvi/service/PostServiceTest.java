@@ -1,21 +1,23 @@
-package com.backjoongwon.cvi.post.service;
+package com.cvi.service;
 
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.PostRepository;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostRequest;
-import com.backjoongwon.cvi.post.dto.PostResponse;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.cvi.dto.PostRequest;
+import com.cvi.dto.PostResponse;
+import com.cvi.exception.InvalidOperationException;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.post.domain.model.Post;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.post.domain.repository.PostRepository;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -39,6 +41,9 @@ class PostServiceTest {
 
     @Autowired
     private PostService postService;
+
+    @MockBean
+    private PublicDataScheduler publicDataScheduler;
 
     private User user;
     private User anotherUser;

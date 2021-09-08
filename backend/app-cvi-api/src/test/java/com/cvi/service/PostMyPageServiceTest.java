@@ -1,17 +1,18 @@
-package com.backjoongwon.cvi.post.service;
+package com.cvi.service;
 
-import com.backjoongwon.cvi.comment.domain.Comment;
-import com.backjoongwon.cvi.comment.domain.CommentRepository;
-import com.backjoongwon.cvi.like.domain.Like;
-import com.backjoongwon.cvi.like.domain.LikeRepository;
-import com.backjoongwon.cvi.post.domain.Filter;
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.PostRepository;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.domain.UserRepository;
+import com.cvi.comment.domain.model.Comment;
+import com.cvi.comment.domain.repository.CommentRepository;
+import com.cvi.dto.PostWithCommentResponse;
+import com.cvi.like.domain.model.Like;
+import com.cvi.like.domain.repository.LikeRepository;
+import com.cvi.post.domain.model.Filter;
+import com.cvi.post.domain.model.Post;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.post.domain.repository.PostRepository;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -48,6 +50,9 @@ public class PostMyPageServiceTest {
 
     @Autowired
     private PostService postService;
+
+    @MockBean
+    private PublicDataScheduler publicDataScheduler;
 
     private User user;
     private Optional<User> optionalUser;

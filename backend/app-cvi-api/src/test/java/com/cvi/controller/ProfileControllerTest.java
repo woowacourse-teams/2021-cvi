@@ -1,6 +1,6 @@
-package com.backjoongwon.cvi.deploy;
+package com.cvi.controller;
 
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
+import com.cvi.exception.InvalidOperationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

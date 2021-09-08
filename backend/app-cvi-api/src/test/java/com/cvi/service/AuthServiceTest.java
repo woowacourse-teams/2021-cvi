@@ -1,15 +1,16 @@
-package com.backjoongwon.cvi.auth.service;
+package com.cvi.service;
 
-import com.backjoongwon.cvi.auth.domain.authorization.AuthorizationManager;
+import com.cvi.auth.JwtTokenProvider;
+import com.cvi.dto.AuthRequest;
+import com.cvi.dto.UserResponse;
 import com.cvi.dto.profile.NaverProfile;
 import com.cvi.dto.profile.UserInformation;
-import com.backjoongwon.cvi.auth.dto.AuthRequest;
-import com.backjoongwon.cvi.common.exception.MappingFailureException;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
-import com.backjoongwon.cvi.user.domain.User;
-import com.backjoongwon.cvi.user.domain.UserRepository;
-import com.backjoongwon.cvi.user.dto.UserResponse;
+import com.cvi.exception.MappingFailureException;
+import com.cvi.parser.AuthorizationManager;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
+import com.cvi.user.domain.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,10 @@ class AuthServiceTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private PublicDataScheduler publicDataScheduler;
+
     private AuthRequest authRequest;
     private User user;
     private String token;

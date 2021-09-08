@@ -5,8 +5,12 @@ plugins {
     id 'jacoco'
     id 'org.sonarqube' version '3.0'
     id 'org.asciidoctor.convert' version '1.5.8'
+    id 'application'
 }
 
+application {
+    mainClass = 'com.cvi.CentralVaccinationInformationApplication'
+}
 
 subprojects {
     group = 'com.backjoongwon'
