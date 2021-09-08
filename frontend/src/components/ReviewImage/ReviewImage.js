@@ -41,7 +41,7 @@ const ReviewImage = ({
 
 ReviewImage.propTypes = {
   src: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   showDetailIcon: PropTypes.bool,
   showCloseIcon: PropTypes.bool,
   onClickDeleteButton: PropTypes.func,
@@ -51,8 +51,9 @@ ReviewImage.propTypes = {
 ReviewImage.defaultProps = {
   showDetailIcon: false,
   showCloseIcon: false,
-  onClickDeleteButton: () => {},
   width: '',
+  onClickDeleteButton: () => {},
+  onClick: () => {},
 };
 
 export default ReviewImage;

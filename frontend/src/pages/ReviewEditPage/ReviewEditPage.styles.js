@@ -109,13 +109,34 @@ const EditButtonContainer = styled.div`
 
 const ImageContainer = styled.div`
   display: flex;
-  margin: 2rem;
-  gap: 3.6rem;
+  flex-direction: column;
+  max-width: 68rem;
+  margin: 3rem auto 0 auto;
   align-items: center;
-  justify-content: flex-start;
+`;
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
+const inputStyles = css`
+  display: none;
+`;
+
+const labelStyles = css`
+  display: block;
+  width: 5.2rem;
+  height: 5.2rem;
+  font-size: 3.8rem;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: ${FONT_COLOR.WHITE};
+  padding: 0.1rem 0.3rem 0 0;
+  margin: 0 auto 3.2rem auto;
+  background-color: ${FONT_COLOR.BLUE_GRAY};
+
+  &:hover {
+    background-color: #9da5ad;
   }
 `;
 
@@ -135,4 +156,6 @@ export {
   editButtonStyles,
   EditButtonContainer,
   ImageContainer,
+  inputStyles,
+  labelStyles,
 };

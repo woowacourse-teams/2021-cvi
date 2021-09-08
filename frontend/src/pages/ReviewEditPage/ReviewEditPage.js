@@ -7,13 +7,14 @@ import {
   FONT_COLOR,
   PATH,
   RESPONSE_STATE,
+  REVIEW_IMAGE_LIMIT,
   SNACKBAR_MESSAGE,
   TO_DATE_TYPE,
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
 import { useFetch, useSnackBar } from '../../hooks';
-import { requestGetReview } from '../../requests';
+import { requestGetImage, requestGetReview } from '../../requests';
 import {
   Container,
   FrameContent,
@@ -30,6 +31,8 @@ import {
   editButtonStyles,
   EditButtonContainer,
   ImageContainer,
+  inputStyles,
+  labelStyles,
 } from './ReviewEditPage.styles';
 import toDate from '../../utils/toDate';
 import {
@@ -39,11 +42,8 @@ import {
 import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
-import { Avatar, Button, Frame, Label } from '../../components/common';
+import { Avatar, Button, Frame, Input, Label } from '../../components/common';
 import { ReviewImage } from '../../components';
-import example from '../../assets/images/calendar.png';
-import defaultt from '../../assets/images/default_profile.png';
-import vaccineImage from '../../assets/images/vaccination_example.png';
 
 const ReviewEditPage = () => {
   const history = useHistory();
@@ -70,8 +70,32 @@ const ReviewEditPage = () => {
     history.push(`${PATH.REVIEW}/${id}`);
   };
 
+  const changeImageToBase64 = async (images) =>
+    images?.forEach(async (image) => {
+      const response = await requestGetImage(image);
+      const blobData = await response.blob();
+
+      const reader = new FileReader();
+
+      reader.readAsDataURL(blobData);
+      reader.onload = () => {
+        setImages((prevState) => [...prevState, reader.result]);
+      };
+    });
+
+  const updateImageFormat = (image) => {
+    const [type, data] = image.split(',');
+
+    const startIndex = type.indexOf('/');
+    const endIndex = type.indexOf(';');
+
+    return { type: type.substring(startIndex + 1, endIndex).toUpperCase(), data };
+  };
+
   const editReview = async () => {
-    const data = { content, vaccinationType: review?.vaccinationType };
+    const updatedImageFormat = images.map((image) => updateImageFormat(image));
+
+    const data = { content, vaccinationType: review?.vaccinationType, images: updatedImageFormat };
 
     const response = await putReviewAsync(accessToken, id, data);
 
@@ -85,18 +109,32 @@ const ReviewEditPage = () => {
     goReviewDetailPage();
   };
 
-  const deleteImage = async (index) => {
-    const url = 'http://localhost:9000/e4ad4523f0abddbd3b1b.png';
-    const response = await fetch(url);
-    const data = await response.blob();
+  const deleteImage = async (src) => {
+    setImages((prevState) => prevState.filter((state) => state !== src));
+  };
 
-    return new Promise((resolve) => {
+  const uploadImages = (event) => {
+    if (images.length === REVIEW_IMAGE_LIMIT) {
+      alert(ALERT_MESSAGE.OVER_IMAGE_COUNT);
+
+      return;
+    }
+
+    let files = [...event.target.files];
+    const leftImageCount = REVIEW_IMAGE_LIMIT.MAX_COUNT - images.length;
+
+    if (files.length > leftImageCount) {
+      files = files.slice(0, leftImageCount);
+
+      alert(ALERT_MESSAGE.OVER_IMAGE_COUNT);
+    }
+
+    files.forEach((file) => {
       const reader = new FileReader();
-      reader.readAsDataURL(data);
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        console.log(base64data);
-        resolve(base64data);
+
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setImages((prevState) => [...prevState, reader.result]);
       };
     });
   };
@@ -108,6 +146,7 @@ const ReviewEditPage = () => {
     }
 
     setContent(review?.content);
+    changeImageToBase64(review?.images);
   }, [review]);
 
   return (
@@ -153,41 +192,29 @@ const ReviewEditPage = () => {
               </ReviewInfo>
             </InfoBottom>
           </Info>
-          <TextArea value={content} onChange={(event) => setContent(event.target.value)}>
-            {review?.content}
-          </TextArea>
+          <TextArea value={content} onChange={(event) => setContent(event.target.value)} />
           <ImageContainer>
-            <ReviewImage
-              src={vaccineImage}
-              width="24rem"
-              showCloseIcon={true}
-              onClickDeleteButton={() => deleteImage(0)}
-            />
-            <ReviewImage
-              src={defaultt}
-              width="24rem"
-              showCloseIcon={true}
-              onClickDeleteButton={() => deleteImage(1)}
-            />
-            <ReviewImage
-              src={example}
-              width="24rem"
-              showCloseIcon={true}
-              onClickDeleteButton={() => deleteImage(2)}
-            />
-            <ReviewImage
-              src={defaultt}
-              width="24rem"
-              showCloseIcon={true}
-              onClickDeleteButton={() => deleteImage(3)}
-            />
-            <ReviewImage
-              src={example}
-              width="24rem"
-              showCloseIcon={true}
-              onClickDeleteButton={() => deleteImage(4)}
-            />
+            {images?.map((image, index) => (
+              <ReviewImage
+                key={index}
+                src={image}
+                showCloseIcon={true}
+                onClickDeleteButton={() => deleteImage(image)}
+              />
+            ))}
           </ImageContainer>
+          {images?.length < 5 && (
+            <Input
+              type="file"
+              name="review-image"
+              multiple
+              accept="image/jpg, image/png, image/jpeg"
+              inputStyles={inputStyles}
+              labelStyles={labelStyles}
+              labelText="+"
+              onChange={uploadImages}
+            />
+          )}
         </FrameContent>
       </Frame>
       <EditButtonContainer>
