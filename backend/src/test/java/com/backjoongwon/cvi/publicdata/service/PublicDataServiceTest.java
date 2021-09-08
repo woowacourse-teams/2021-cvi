@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.publicdata.service;
 
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.PublicDataProperties;
 import com.backjoongwon.cvi.publicdata.domain.RegionPopulation;
@@ -15,6 +16,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -33,12 +35,15 @@ import static org.mockito.Mockito.mock;
 @Transactional
 class PublicDataServiceTest {
 
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
     @Autowired
     private VaccinationStatisticRepository vaccinationStatisticRepository;
     @Autowired
     private PublicDataProperties publicDataProperties;
     @Autowired
     private PublicDataService publicDataService;
+
     private VaccinationParser vaccinationParser;
 
     public static Stream<Arguments> targetDate() {

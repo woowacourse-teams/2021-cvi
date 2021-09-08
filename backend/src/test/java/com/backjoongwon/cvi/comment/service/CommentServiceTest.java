@@ -1,16 +1,17 @@
 package com.backjoongwon.cvi.comment.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.comment.dto.CommentRequest;
 import com.backjoongwon.cvi.comment.dto.CommentResponse;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
-import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.post.domain.Post;
 import com.backjoongwon.cvi.post.domain.PostRepository;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
+import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -34,6 +36,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class CommentServiceTest {
 
     private static final long COMMENT_ID = 0L;
+
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
 
     @Autowired
     private PostRepository postRepository;

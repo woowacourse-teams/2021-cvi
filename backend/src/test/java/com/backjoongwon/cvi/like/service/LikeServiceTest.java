@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.like.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.common.exception.InvalidOperationException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Transactional
 @DisplayName("좋아요 비즈니스 흐름 테스트")
 public class LikeServiceTest {
+
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
 
     @Autowired
     private PostRepository postRepository;

@@ -20,6 +20,9 @@
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>
+        <logger name="com.backjoongwon.cvi" level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
     </springProfile>
 
     <springProfile name="prod">
