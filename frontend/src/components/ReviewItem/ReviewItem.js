@@ -28,7 +28,6 @@ import { Button, Label } from '../common';
 import { EyeIcon, CommentIcon } from '../../assets/icons';
 import { useLike } from '../../hooks';
 import { BUTTON_BACKGROUND_TYPE } from '../common/Button/Button.styles';
-import example from '../../assets/images/calendar.png';
 
 const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
   const {
@@ -41,6 +40,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
     hasLiked,
     likeCount,
     commentCount,
+    images,
   } = review;
 
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -69,18 +69,12 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
       >
         {VACCINATION[vaccinationType]}
       </Label>
-      {/* {writer.shotVerified && (
-          <ShotVerificationLabel
-          shotVerification={writer.shotVerified}
-          trueText={SHOT_VERIFICATION.TRUE_TEXT}
-          />
-        )} */}
       <ContentContainer>
         <Content>{content}</Content>
-        {example && (
+        {!!images?.length && (
           <PreviewImageContainer>
-            <PreviewImage src={example} />
-            {[1, 2].length > 1 && <MoreImageCount>+ {[1, 2].length - 1}</MoreImageCount>}
+            <PreviewImage src={images[0]} />
+            {images?.length > 1 && <MoreImageCount>+ {images?.length - 1}</MoreImageCount>}
           </PreviewImageContainer>
         )}
       </ContentContainer>
@@ -132,7 +126,8 @@ ReviewItem.propTypes = {
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,
     likeCount: PropTypes.number.isRequired,
-    commentCount: PropTypes.number,
+    commentCount: PropTypes.number.isRequired,
+    images: PropTypes.array.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
   innerRef: PropTypes.func,
