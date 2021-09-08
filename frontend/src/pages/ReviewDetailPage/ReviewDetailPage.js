@@ -43,9 +43,6 @@ import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/common';
 import { Comment, ImageModal, ReviewImage } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
-import example from '../../assets/images/calendar.png';
-import defaultt from '../../assets/images/default_profile.png';
-import vaccineImage from '../../assets/images/vaccination_example.png';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -56,8 +53,7 @@ const ReviewDetailPage = () => {
   const [review, setReview] = useState({});
   const [commentCount, setCommentCount] = useState(0);
   const [isOpenImageModal, setIsOpenImageModal] = useState(false);
-  const [openedImageIndex, setOpenedImageIndex] = useState(0);
-  const exampleImageSrcs = [vaccineImage, defaultt, example, defaultt, example];
+  const [openedImageSrc, setOpenedImageSrc] = useState('');
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
@@ -108,8 +104,8 @@ const ReviewDetailPage = () => {
     goReviewPage();
   };
 
-  const clickImage = (index) => {
-    setOpenedImageIndex(index);
+  const clickImage = (src) => {
+    setOpenedImageSrc(src);
     setIsOpenImageModal(true);
   };
 
@@ -192,15 +188,14 @@ const ReviewDetailPage = () => {
                 </TopContainer>
                 <Content>{review?.content}</Content>
                 <ImageContainer>
-                  <ReviewImage
-                    src={vaccineImage}
-                    showDetailIcon={true}
-                    onClick={() => clickImage(0)}
-                  />
-                  <ReviewImage src={defaultt} showDetailIcon={true} onClick={() => clickImage(1)} />
-                  <ReviewImage src={example} showDetailIcon={true} onClick={() => clickImage(2)} />
-                  <ReviewImage src={defaultt} showDetailIcon={true} onClick={() => clickImage(3)} />
-                  <ReviewImage src={example} showDetailIcon={true} onClick={() => clickImage(4)} />
+                  {review?.images?.map((image, index) => (
+                    <ReviewImage
+                      key={index}
+                      src={image}
+                      showDetailIcon={true}
+                      onClick={() => clickImage(image)}
+                    />
+                  ))}
                 </ImageContainer>
                 <BottomContainer>
                   <IconContainer>
@@ -233,10 +228,7 @@ const ReviewDetailPage = () => {
         </Frame>
       </Container>
       {isOpenImageModal && (
-        <ImageModal
-          src={exampleImageSrcs[openedImageIndex]}
-          onClickClose={() => setIsOpenImageModal(false)}
-        />
+        <ImageModal src={openedImageSrc} onClickClose={() => setIsOpenImageModal(false)} />
       )}
     </>
   );

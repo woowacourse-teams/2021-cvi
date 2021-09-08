@@ -84,7 +84,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     const updatedImageFormat = images.map((image) => updateImageFormat(image));
     const vaccinationType = findKey(VACCINATION, selectedVaccine);
     const data = { content, vaccinationType, images: updatedImageFormat };
-
+    console.log(data);
     const response = await postReviewAsync(accessToken, data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
