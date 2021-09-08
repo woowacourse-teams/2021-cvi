@@ -54,7 +54,6 @@ spring:
 
 logging:
   level:
-    com.backjoongwon.cvi: debug
     org.hibernate.SQL: debug
 ---
 spring:
