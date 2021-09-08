@@ -26,10 +26,10 @@ const FrameContent = styled.div`
   grid-template-columns: ${({ withWorld }) => (withWorld ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)')};
   margin: 2.4rem 2.7rem;
   padding: 0 0.6rem;
+  position: relative;
 
   @media screen and (max-width: 801px) {
-    margin: 2rem 0rem;
-    display: grid;
+    margin: 2rem 0 6rem 0;
     gap: 1rem;
   }
 `;
@@ -81,6 +81,22 @@ const buttonStyles = css`
   }
 `;
 
+const Source = styled.span`
+  position: absolute;
+  font-size: 1.2rem;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+  bottom: -1rem;
+  right: 0;
+  white-space: nowrap;
+
+  @media screen and (max-width: 801px) {
+    left: 50%;
+    right: unset;
+    transform: translateX(-50%);
+    bottom: -5rem;
+  }
+`;
+
 export {
   Container,
   TopContainer,
@@ -91,4 +107,5 @@ export {
   InfoTitle,
   IncreaseIcon,
   buttonStyles,
+  Source,
 };
