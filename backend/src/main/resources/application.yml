@@ -26,6 +26,23 @@ security:
     data:
       vaccination: publicdata-secret
 
+aws:
+  s3:
+    bucket_name: bucket-name
+    directory:
+      path:
+        posts:
+          images: dir-path
+  cloudfront:
+    url: https://cloudfront.net
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 server:
   shutdown: graceful
 ---

@@ -52,6 +52,15 @@ aws:
       path:
         posts:
           images: dir-path
+  cloudfront:
+    url: https://cloudfront.net
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 logging:
   level:
