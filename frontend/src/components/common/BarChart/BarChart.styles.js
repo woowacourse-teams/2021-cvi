@@ -92,7 +92,7 @@ const BarContainer = styled.div`
 
 const Line = styled.div`
   border: 1px dashed ${THEME_COLOR.PLACEHOLDER};
-  height: ${({ percent }) => 100 - percent * 1.5}%;
+  height: ${({ percent }) => 100 - percent * 1.1}%;
   display: ${({ isShowing }) => (isShowing ? 'block' : 'none')};
 `;
 
@@ -105,7 +105,7 @@ const Bar = styled.div`
   width: 0.8rem;
   background-color: ${({ isShowing, first }) =>
     isShowing ? (first ? '#5A78AB' : THEME_COLOR.PRIMARY) : first ? '#A1B8DF' : '#96cdd5'};
-  height: ${({ percent }) => (percent ? percent * 1.4 : '0')}%;
+  height: ${({ percent }) => (percent ? percent : '0')}%;
   ${({ first }) => first && 'margin-right: 0.4rem'};
 `;
 
