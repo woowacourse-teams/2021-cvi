@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import {
@@ -10,7 +10,7 @@ import {
   VACCINATION,
 } from '../../constants';
 import {
-  Container,
+  Form,
   TextArea,
   ButtonWrapper,
   buttonStyles,
@@ -22,12 +22,13 @@ import {
   FileUploadTitle,
   deleteImageButtonStyles,
   PreviewImageContainer,
+  CurrentImageCount,
 } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
 import { postReviewAsync } from '../../service';
 import { findKey } from '../../utils';
 import { Button, Input, Modal, Selection } from '../common';
-import { useSnackBar } from '../../hooks';
+import { useLoading, useSnackBar } from '../../hooks';
 
 const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
@@ -37,6 +38,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
   const [images, setImages] = useState([]);
 
   const { openSnackBar } = useSnackBar();
+  const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const vaccinationList = Object.values(VACCINATION);
 
@@ -65,14 +67,20 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
       alert(ALERT_MESSAGE.OVER_IMAGE_COUNT);
     }
 
-    files.forEach((file) => {
+    for (let file of files) {
+      if (file.size > REVIEW_IMAGE_LIMIT.MAX_SIZE) {
+        alert(ALERT_MESSAGE.OVER_IMAGE_SIZE);
+
+        continue;
+      }
+
       const reader = new FileReader();
 
       reader.readAsDataURL(file);
       reader.onload = () => {
         setImages((prevState) => [...prevState, reader.result]);
       };
-    });
+    }
   };
 
   const deleteImage = (index) => {
@@ -80,20 +88,33 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     setImages(updatedImages);
   };
 
-  const createReview = async () => {
+  const createReview = async (event) => {
+    event.preventDefault();
+
+    if (!content) {
+      alert(ALERT_MESSAGE.NEED_REVIEW_CONTENT);
+
+      return;
+    }
+
+    showLoading();
+
     const updatedImageFormat = images.map((image) => updateImageFormat(image));
     const vaccinationType = findKey(VACCINATION, selectedVaccine);
     const data = { content, vaccinationType, images: updatedImageFormat };
-    console.log(data);
+
     const response = await postReviewAsync(accessToken, data);
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_CREATE_REVIEW);
+      hideLoading();
 
       return;
     }
 
     onClickClose();
+    hideLoading();
+
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
     setReviewList([]);
@@ -101,16 +122,26 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     getReviewList();
   };
 
+  useEffect(() => {
+    return () => {
+      setContent('');
+      setImages([]);
+    };
+  }, []);
+
   return (
     <Modal showCloseButton={true} showShadow={true} onClickClose={onClickClose}>
-      <Container>
+      <Form onSubmit={createReview}>
         <Selection
           selectionList={vaccinationList}
           selectedItem={selectedVaccine}
           setSelectedItem={setSelectedVaccine}
         />
-        <TextArea width="100%" onChange={(event) => setContent(event.target.value)} />
-        <FileUploadTitle>사진 첨부(최대 5개)</FileUploadTitle>
+        <TextArea width="100%" isRequired onChange={(event) => setContent(event.target.value)} />
+        <FileUploadTitle>
+          사진 첨부 <CurrentImageCount>{images.length}</CurrentImageCount>
+          {`/${REVIEW_IMAGE_LIMIT.MAX_COUNT}`}
+        </FileUploadTitle>
         <FileUploadContainer>
           <PreviewListContainer>
             {!!images.length &&
@@ -141,11 +172,12 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
           )}
         </FileUploadContainer>
         <ButtonWrapper>
-          <Button sizeType={BUTTON_SIZE_TYPE.LARGE} styles={buttonStyles} onClick={createReview}>
+          <Button sizeType={BUTTON_SIZE_TYPE.LARGE} styles={buttonStyles}>
             제출하기
           </Button>
         </ButtonWrapper>
-      </Container>
+      </Form>
+      {isLoading && <Loading isLoading={isLoading} />}
     </Modal>
   );
 };

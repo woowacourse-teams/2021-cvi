@@ -93,6 +93,12 @@ const ReviewEditPage = () => {
   };
 
   const editReview = async () => {
+    if (!content) {
+      alert(ALERT_MESSAGE.NEED_REVIEW_CONTENT);
+
+      return;
+    }
+
     const updatedImageFormat = images.map((image) => updateImageFormat(image));
 
     const data = { content, vaccinationType: review?.vaccinationType, images: updatedImageFormat };
@@ -129,14 +135,20 @@ const ReviewEditPage = () => {
       alert(ALERT_MESSAGE.OVER_IMAGE_COUNT);
     }
 
-    files.forEach((file) => {
+    for (let file of files) {
+      if (file.size > REVIEW_IMAGE_LIMIT.MAX_SIZE) {
+        alert(ALERT_MESSAGE.OVER_IMAGE_SIZE);
+
+        continue;
+      }
+
       const reader = new FileReader();
 
       reader.readAsDataURL(file);
       reader.onload = () => {
         setImages((prevState) => [...prevState, reader.result]);
       };
-    });
+    }
   };
 
   useEffect(() => {

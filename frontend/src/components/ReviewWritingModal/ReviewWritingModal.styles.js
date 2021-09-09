@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR, THEME_COLOR } from '../../constants';
 
-const Container = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin: 2rem 0 0 0;
@@ -108,8 +108,12 @@ const PreviewImageContainer = styled.div`
   position: relative;
 `;
 
+const CurrentImageCount = styled.span`
+  color: ${THEME_COLOR.PRIMARY};
+`;
+
 export {
-  Container,
+  Form,
   TextArea,
   ButtonWrapper,
   buttonStyles,
@@ -121,4 +125,5 @@ export {
   FileUploadTitle,
   deleteImageButtonStyles,
   PreviewImageContainer,
+  CurrentImageCount,
 };
