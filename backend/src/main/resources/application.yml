@@ -12,6 +12,11 @@ spring:
     jcache:
       config: classpath:ehcache.xml
 
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 100MB
+
 security:
   jwt:
     token:
