@@ -75,6 +75,7 @@ class UserControllerTest extends ApiDocument {
     private UserResponse userResponse;
     private UserResponse userMeResponse;
     private List<CommentResponse> commentResponses;
+    private List<String> imageUrls;
 
     @BeforeEach
     void beforeEach() {
@@ -91,6 +92,7 @@ class UserControllerTest extends ApiDocument {
         updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
+        imageUrls = Arrays.asList("{이미지1 S3 URL}", "{이미지2 S3 URL}", "{이미지3 S3 URL}");
 
         Comment comment1 = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
         Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(user).createdAt(LocalDateTime.now()).build();
@@ -226,9 +228,9 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsNone() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostWithCommentResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now()));
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now(), imageUrls),
+                new PostWithCommentResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.NONE;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -254,8 +256,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsLikes() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.LIKES;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -281,8 +283,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsComments() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()));
+                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.COMMENTS;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -308,10 +310,10 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsNonePaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
-                new PostWithCommentResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls),
+                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls),
+                new PostWithCommentResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls)
         ));
         Filter filter = Filter.NONE;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
@@ -338,9 +340,9 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsLikesPaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls),
+                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls)
         ));
         Filter filter = Filter.LIKES;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
@@ -367,8 +369,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsCommentsPaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls)
         ));
         Filter filter = Filter.COMMENTS;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
