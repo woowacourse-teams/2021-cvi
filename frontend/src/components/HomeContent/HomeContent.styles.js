@@ -42,7 +42,7 @@ const Title = styled.h3`
   }
 `;
 
-const Calendar = styled.div`
+const Content = styled.div`
   height: fit-content;
 `;
 
@@ -71,4 +71,4 @@ const Source = styled.div`
   right: 3rem;
 `;
 
-export { Container, Img, buttonStyles, frameStyles, Title, Calendar, A, Source };
+export { Container, Img, buttonStyles, frameStyles, Title, Content, A, Source };

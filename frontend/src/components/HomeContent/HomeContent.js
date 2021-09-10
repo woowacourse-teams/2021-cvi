@@ -8,10 +8,10 @@ import {
   frameStyles,
   Title,
   Container,
-  Calendar,
+  Content,
   A,
   Source,
-} from './VaccinationSchedule.styles';
+} from './HomeContent.styles';
 import { NAVER_LEFT_VACCINATION_URL, PATH, VACCINATION_RESERVATION_URL } from '../../constants';
 import { VaccinationSideEffectChart } from '..';
 
@@ -38,7 +38,7 @@ const sideEffectsData = [
   },
 ];
 
-const VaccinationSchedule = ({ withSource }) => {
+const HomeContent = ({ withSource }) => {
   const history = useHistory();
 
   const goReviewPage = () => {
@@ -47,13 +47,13 @@ const VaccinationSchedule = ({ withSource }) => {
 
   return (
     <Container>
-      <Calendar>
+      <Content>
         <Title>접종 부작용</Title>
         <Frame showShadow={true} width="100%" height="30rem" styles={frameStyles}>
           <VaccinationSideEffectChart sideEffects={sideEffectsData} />
           {withSource && <Source>출처: 자체 설문 조사</Source>}
         </Frame>
-      </Calendar>
+      </Content>
       <A type="button" href={VACCINATION_RESERVATION_URL}>
         접종 예약 하러가기
       </A>
@@ -72,12 +72,12 @@ const VaccinationSchedule = ({ withSource }) => {
   );
 };
 
-VaccinationSchedule.propTypes = {
+HomeContent.propTypes = {
   withSource: PropTypes.bool,
 };
 
-VaccinationSchedule.defaultProps = {
+HomeContent.defaultProps = {
   withSource: false,
 };
 
-export default VaccinationSchedule;
+export default HomeContent;
