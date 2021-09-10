@@ -1,12 +1,44 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Button, Frame } from '../common';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
-import { Img, buttonStyles, Title, Container, Calendar, A } from './VaccinationSchedule.styles';
-import calendar from '../../assets/images/calendar.png';
+import {
+  buttonStyles,
+  frameStyles,
+  Title,
+  Container,
+  Calendar,
+  A,
+  Source,
+} from './VaccinationSchedule.styles';
 import { NAVER_LEFT_VACCINATION_URL, PATH, VACCINATION_RESERVATION_URL } from '../../constants';
+import { VaccinationSideEffectChart } from '..';
 
-const VaccinationSchedule = () => {
+const sideEffectsData = [
+  {
+    symptom: '접종 부위 통증',
+    percentage: 66.67,
+  },
+  {
+    symptom: '근육통',
+    percentage: 33.33,
+  },
+  {
+    symptom: '피로감',
+    percentage: 33.33,
+  },
+  {
+    symptom: '발열',
+    percentage: 25,
+  },
+  {
+    symptom: '두통',
+    percentage: 8.33,
+  },
+];
+
+const VaccinationSchedule = ({ withSource }) => {
   const history = useHistory();
 
   const goReviewPage = () => {
@@ -16,9 +48,10 @@ const VaccinationSchedule = () => {
   return (
     <Container>
       <Calendar>
-        <Title>접종 일정</Title>
-        <Frame showShadow={true} height="fit-content">
-          <Img src={calendar} />
+        <Title>접종 부작용</Title>
+        <Frame showShadow={true} width="100%" height="30rem" styles={frameStyles}>
+          <VaccinationSideEffectChart sideEffects={sideEffectsData} />
+          {withSource && <Source>출처: 자체 설문 조사</Source>}
         </Frame>
       </Calendar>
       <A type="button" href={VACCINATION_RESERVATION_URL}>
@@ -37,6 +70,14 @@ const VaccinationSchedule = () => {
       </A>
     </Container>
   );
+};
+
+VaccinationSchedule.propTypes = {
+  withSource: PropTypes.bool,
+};
+
+VaccinationSchedule.defaultProps = {
+  withSource: false,
 };
 
 export default VaccinationSchedule;

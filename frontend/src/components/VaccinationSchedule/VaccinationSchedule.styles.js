@@ -28,6 +28,12 @@ const buttonStyles = css`
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
 `;
 
+const frameStyles = css`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
 const Title = styled.h3`
   margin-bottom: 1rem;
 
@@ -57,4 +63,12 @@ const A = styled.a`
   }
 `;
 
-export { Container, Img, buttonStyles, Title, Calendar, A };
+const Source = styled.div`
+  position: absolute;
+  font-size: 1.2rem;
+  color: #acacac;
+  bottom: 1.5rem;
+  right: 3rem;
+`;
+
+export { Container, Img, buttonStyles, frameStyles, Title, Calendar, A, Source };
