@@ -38,7 +38,7 @@ const sideEffectsData = [
   },
 ];
 
-const HomeContent = ({ withSource }) => {
+const HomeContent = ({ title, withSource }) => {
   const history = useHistory();
 
   const goReviewPage = () => {
@@ -48,7 +48,7 @@ const HomeContent = ({ withSource }) => {
   return (
     <Container>
       <Content>
-        <Title>접종 부작용</Title>
+        {title && <Title>{title}</Title>}
         <Frame showShadow={true} width="100%" height="30rem" styles={frameStyles}>
           <VaccinationSideEffectChart sideEffects={sideEffectsData} />
           {withSource && <Source>출처: 자체 설문 조사</Source>}
@@ -73,10 +73,12 @@ const HomeContent = ({ withSource }) => {
 };
 
 HomeContent.propTypes = {
+  title: PropTypes.string,
   withSource: PropTypes.bool,
 };
 
 HomeContent.defaultProps = {
+  title: '',
   withSource: false,
 };
 
