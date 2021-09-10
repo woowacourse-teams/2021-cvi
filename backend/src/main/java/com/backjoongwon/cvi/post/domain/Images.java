@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Embeddable
 public class Images {
 
-    @OrderColumn(name = "order")
+    @OrderColumn(name = "orders")
     @OneToMany(mappedBy = "post")
     private final List<Image> images = new ArrayList<>();
 

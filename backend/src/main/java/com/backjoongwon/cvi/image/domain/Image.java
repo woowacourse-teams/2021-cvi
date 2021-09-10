@@ -23,9 +23,9 @@ public class Image extends BaseEntity {
     private String url;
 
     @Builder
-    public Image(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, Post post, String url) {
+    public Image(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String url) {
         super(id, createdAt, lastModifiedAt);
-        this.post = post;
+        this.post = null;
         this.url = url;
     }
 
