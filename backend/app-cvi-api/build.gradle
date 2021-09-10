@@ -4,8 +4,8 @@ dependencies {
     implementation project(path:':common-cvi', configuration: 'default')
     implementation project(path:':domain-cvi', configuration: 'default')
     implementation project(path:':domain-cvi-oauth-service', configuration: 'default')
-    implementation project(path:':domain-cvi-scheduler', configuration: 'default')
     implementation project(path:':domain-cvi-publicdata-service', configuration: 'default')
+    implementation project(path:':domain-cvi-scheduler', configuration: 'default')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -14,7 +14,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'javax.cache:cache-api:1.1.1'
     implementation 'org.ehcache:ehcache:3.9.4'
-
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행

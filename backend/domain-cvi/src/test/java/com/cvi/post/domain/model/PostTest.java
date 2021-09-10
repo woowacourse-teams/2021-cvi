@@ -1,10 +1,11 @@
-package com.backjoongwon.cvi.post.domain;
+package com.cvi.post.domain.model;
 
-import com.backjoongwon.cvi.comment.domain.Comment;
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
-import com.backjoongwon.cvi.common.exception.NotFoundException;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.User;
+import com.cvi.comment.domain.model.Comment;
+import com.cvi.exception.InvalidOperationException;
+import com.cvi.exception.NotFoundException;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

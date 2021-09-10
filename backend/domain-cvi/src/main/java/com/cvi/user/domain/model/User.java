@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Entity
@@ -56,7 +57,7 @@ public class User extends BaseEntity {
     }
 
     private void validateNickName(String nickname) {
-        if (StringUtils.isEmpty(nickname) || nickname.contains(" ")) {
+        if (Objects.isNull(nickname) || nickname.isEmpty() || nickname.contains(" ")) {
             log.info("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: {}", nickname);
             throw new InvalidInputException(String.format("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: %s", nickname));
         }

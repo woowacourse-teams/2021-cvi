@@ -1,6 +1,6 @@
-package com.backjoongwon.cvi.user.domain;
+package com.cvi.user.domain.model;
 
-import com.backjoongwon.cvi.common.exception.InvalidInputException;
+import com.cvi.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,10 @@
-package com.backjoongwon.cvi.like.domain;
+package com.cvi.like.domain.model;
 
-import com.backjoongwon.cvi.post.domain.Post;
-import com.backjoongwon.cvi.post.domain.VaccinationType;
-import com.backjoongwon.cvi.user.domain.AgeRange;
-import com.backjoongwon.cvi.user.domain.User;
+import com.cvi.post.domain.model.Post;
+import com.cvi.post.domain.model.VaccinationType;
+import com.cvi.user.domain.model.AgeRange;
+import com.cvi.user.domain.model.SocialProvider;
+import com.cvi.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

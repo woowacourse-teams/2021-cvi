@@ -1,6 +1,6 @@
 rootProject.name = 'cvi'
-include 'app-cvi-api'
 include 'app-cvi-admin'
+include 'app-cvi-api'
 include 'cvi-publicdata-parser'
 include 'common-cvi'
 include 'domain-cvi'

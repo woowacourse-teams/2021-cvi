@@ -1,4 +1,4 @@
-package com.backjoongwon.cvi.publicdata.domain;
+package com.cvi.publicdata.domain.model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

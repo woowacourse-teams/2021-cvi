@@ -1,9 +1,10 @@
-package com.backjoongwon.cvi.auth.domain.authorization;
+package com.cvi.parser;
 
 import com.cvi.dto.profile.KakaoProfile;
 import com.cvi.dto.profile.NaverProfile;
 import com.cvi.dto.profile.UserInformation;
-import com.backjoongwon.cvi.common.exception.InvalidOperationException;
+import com.cvi.exception.InvalidOperationException;
+import com.cvi.user.domain.model.SocialProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

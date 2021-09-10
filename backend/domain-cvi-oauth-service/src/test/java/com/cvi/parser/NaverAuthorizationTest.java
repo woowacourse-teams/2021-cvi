@@ -1,10 +1,10 @@
-package com.backjoongwon.cvi.auth.domain.authorization;
+package com.cvi.parser;
 
-import com.backjoongwon.cvi.auth.dto.oauthtoken.NaverOAuthToken;
-import com.backjoongwon.cvi.auth.dto.oauthtoken.OAuthToken;
+import com.cvi.dto.oauthtoken.NaverOAuthToken;
+import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.SocialProfile;
 import com.cvi.dto.profile.UserInformation;
-import com.backjoongwon.cvi.common.exception.MappingFailureException;
+import com.cvi.exception.MappingFailureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
