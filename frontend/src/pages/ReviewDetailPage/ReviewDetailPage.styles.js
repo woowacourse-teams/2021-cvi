@@ -112,16 +112,26 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  height: 3.6rem;
 `;
 
 const BottomContainer = styled.div`
   display: flex;
   padding: 2rem 3rem;
   gap: 2rem;
+  align-items: flex-end;
 
   @media screen and (max-width: 1024px) {
     padding: 2rem;
   }
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 68rem;
+  margin: 3rem auto 0 auto;
+  align-items: center;
 `;
 
 export {
@@ -142,4 +152,5 @@ export {
   buttonStyles,
   IconContainer,
   BottomContainer,
+  ImageContainer,
 };

@@ -12,6 +12,8 @@ import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
 import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
 import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
 import VaccinationSideEffectChart from './VaccinationSideEffectChart/VaccinationSideEffectChart';
+import ImageModal from './ImageModal/ImageModal';
+import ReviewImage from './ReviewImage/ReviewImage';
 
 export {
   Preview,
@@ -28,4 +30,6 @@ export {
   RegionalStateTable,
   ReviewFilterList,
   VaccinationSideEffectChart,
+  ImageModal,
+  ReviewImage,
 };

@@ -30,15 +30,15 @@ const PreviewItem = ({ review, accessToken, onClick }) => {
 
   return (
     <Container onClick={onClick}>
-      <TopContainer>
-        <Label
-          sizeType={LABEL_SIZE_TYPE.SMALL}
-          backgroundColor={VACCINATION_COLOR[vaccinationType]}
-          fontColor={labelFontColor}
-        >
-          {VACCINATION[vaccinationType]}
-        </Label>
-      </TopContainer>
+      {/* <TopContainer> */}
+      <Label
+        sizeType={LABEL_SIZE_TYPE.SMALL}
+        backgroundColor={VACCINATION_COLOR[vaccinationType]}
+        fontColor={labelFontColor}
+      >
+        {VACCINATION[vaccinationType]}
+      </Label>
+      {/* </TopContainer> */}
       <Content>{content}</Content>
       <BottomContainer>
         <IconContainer>

@@ -12,7 +12,6 @@ const config = {
     publicPath: '/',
   },
   devServer: {
-    hot: true,
     open: true,
     host: 'localhost',
     compress: true,
@@ -44,10 +43,6 @@ const config = {
       {
         test: /\.svg$/,
         use: ['@svgr/webpack'],
-      },
-      {
-        test: /\.css$/,
-        use: ['css-loader'],
       },
     ],
   },

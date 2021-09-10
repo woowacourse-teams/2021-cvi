@@ -54,7 +54,7 @@ const HomeContent = ({ title, withSource }) => {
           {withSource && <Source>출처: 자체 설문 조사</Source>}
         </Frame>
       </Content>
-      <A type="button" href={VACCINATION_RESERVATION_URL}>
+      <A type="button" target="_blank" href={VACCINATION_RESERVATION_URL}>
         접종 예약 하러가기
       </A>
       <Button
@@ -65,7 +65,7 @@ const HomeContent = ({ title, withSource }) => {
       >
         접종 후기 쓰러가기
       </Button>
-      <A type="button" href={NAVER_LEFT_VACCINATION_URL}>
+      <A type="button" target="_blank" href={NAVER_LEFT_VACCINATION_URL}>
         잔여 백신 보러가기
       </A>
     </Container>

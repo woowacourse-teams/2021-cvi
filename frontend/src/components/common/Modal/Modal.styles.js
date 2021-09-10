@@ -13,6 +13,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 999;
+
+  ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
 `;
 
 const modalFrameStyles = css`
