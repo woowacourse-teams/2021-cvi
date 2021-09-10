@@ -27,6 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,6 +69,9 @@ class PostMyPageServiceTest {
     @Autowired
     private PostService postService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private User user;
     private Optional<User> optionalUser;
     private List<Post> posts;
@@ -79,6 +84,8 @@ class PostMyPageServiceTest {
         initLikes(posts);
         initComments(posts);
         initImages(posts);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     private User initUser() {
