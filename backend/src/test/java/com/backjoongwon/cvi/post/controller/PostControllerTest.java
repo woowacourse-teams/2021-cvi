@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.post.controller;
 
 import com.backjoongwon.cvi.common.exception.NotFoundException;
+import com.backjoongwon.cvi.post.domain.SearchType;
 import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -238,6 +239,98 @@ class PostControllerTest extends PreprocessPostControllerTest {
         ResultActions response = 글_타입별_시간필터링_조회_요청(VaccinationType.PFIZER, 24);
         //then
         글_타입별_시간필터링_조회_요청_성공함(response);
+    }
+
+    @DisplayName("게시글 내용으로 검색 - 성공")
+    @Test
+    void searchByTypesAndQueryWhenSearchTypeIsContent() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(1L, userResponse, "이건 올바른 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(37L, userResponse, "이건 올바른 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3), imageUrls),
+                new PostResponse(146L, userResponse, "이건 올바른 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5), imageUrls)
+        ));
+        willReturn(postResponses).given(postService).searchByTypesAndQuery(any(VaccinationType.class), any(SearchType.class), anyString(), any());
+        //when
+        ResultActions response = 글_검색_요청(VaccinationType.PFIZER, SearchType.CONTENT, "올바른");
+        //then
+        글_내용으로_검색_성공(response, postResponses);
+    }
+
+    @DisplayName("게시글 내용으로 검색 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void searchByTypesAndQueryWhenPostsIsEmpty() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).searchByTypesAndQuery(any(VaccinationType.class), any(SearchType.class), anyString(), any());
+        //when
+        ResultActions response = 글_검색_요청(VaccinationType.PFIZER, SearchType.CONTENT, "올바른");
+        //then
+        글_내용으로_검색_성공함_게시글없음(response, postResponses);
+    }
+
+    @DisplayName("게시글 작성자로 검색 - 성공")
+    @Test
+    void searchByTypesAndQueryWhenSearchTypeIsWriter() throws Exception {
+        //given
+        List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
+                new PostResponse(1L, userResponse, "이건 올바른 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(37L, userResponse, "이건 올바른 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3), imageUrls),
+                new PostResponse(146L, userResponse, "이건 올바른 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5), imageUrls)
+        ));
+        willReturn(postResponses).given(postService).searchByTypesAndQuery(any(VaccinationType.class), any(SearchType.class), anyString(), any());
+        //when
+        ResultActions response = 글_검색_요청(VaccinationType.PFIZER, SearchType.WRITER, "user");
+        //then
+        글_작성자로_검색_성공(response, postResponses);
+    }
+
+    @DisplayName("게시글 작성자로 검색 - 성공 - 게시글이 하나도 없는 경우")
+    @Test
+    void searchByTypesAndQueryWhenWriterDoesNotPost() throws Exception {
+        //given
+        List<PostResponse> postResponses = Collections.emptyList();
+        willReturn(postResponses).given(postService).searchByTypesAndQuery(any(VaccinationType.class), any(SearchType.class), anyString(), any());
+        //when
+        ResultActions response = 글_검색_요청(VaccinationType.PFIZER, SearchType.WRITER, "user");
+        //then
+        글_작성자로_검색_성공함_게시글없음(response, postResponses);
+    }
+
+    private ResultActions 글_검색_요청(VaccinationType vaccinationType, SearchType searchType, String query) throws Exception {
+        return mockMvc.perform(get("/api/v1/posts/search")
+                .queryParam("vaccinationType", vaccinationType.name())
+                .queryParam("searchType", searchType.name())
+                .queryParam("q", query)
+                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 글_내용으로_검색_성공(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-post"));
+    }
+
+    private void 글_내용으로_검색_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-post-when-empty"));
+    }
+
+    private void 글_작성자로_검색_성공(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-writer"));
+    }
+
+    private void 글_작성자로_검색_성공함_게시글없음(ResultActions response, List<PostResponse> postResponses) throws Exception {
+        response.andExpect(status().isOk())
+                .andExpect(content().json(toJson(postResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-writer-when-empty"));
     }
 
     private ResultActions 글_등록_요청(PostRequest request) throws Exception {

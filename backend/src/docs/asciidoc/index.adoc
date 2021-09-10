@@ -575,3 +575,33 @@ include::{snippets}/comment-delete/http-response.adoc[]
 ===== Request
 include::{snippets}/comment-delete-failure/http-request.adoc[]
 
+== Search (게시글 검색)
+=== 게시글 내용으로 검색
+==== 성공
+===== Request
+include::{snippets}/search-post/http-request.adoc[]
+
+===== Response
+include::{snippets}/search-post/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/search-post-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/search-post-when-empty/http-response.adoc[]
+
+=== 게시글 작성자로 검색
+==== 성공
+===== Request
+include::{snippets}/search-writer/http-request.adoc[]
+
+===== Response
+include::{snippets}/search-writer/http-response.adoc[]
+
+==== 실패
+===== Request
+include::{snippets}/search-writer-when-empty/http-request.adoc[]
+
+===== Response
+include::{snippets}/search-writer-when-empty/http-response.adoc[]
