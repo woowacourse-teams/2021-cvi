@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 33%);
   padding: 2.5rem 8rem 6rem 8rem;
   column-gap: 2.4rem;
   row-gap: 6rem;

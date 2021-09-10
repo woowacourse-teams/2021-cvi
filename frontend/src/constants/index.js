@@ -2,7 +2,13 @@ import PATH from './path';
 import PALETTE from './palette';
 import VACCINATION from './vaccination';
 import { VACCINATION_COLOR, FONT_COLOR, THEME_COLOR } from './theme';
-import { LINE_LIMIT, COMMENT_LIMIT, NICKNAME_LIMIT, PAGING_SIZE } from './limit';
+import {
+  LINE_LIMIT,
+  COMMENT_LIMIT,
+  NICKNAME_LIMIT,
+  PAGING_SIZE,
+  REVIEW_IMAGE_LIMIT,
+} from './limit';
 import AGE_RANGE from './ageRange';
 import {
   ERROR_MESSAGE,
@@ -54,4 +60,5 @@ export {
   REGION_NAME,
   FILTER_TYPE,
   SORT_TYPE,
+  REVIEW_IMAGE_LIMIT,
 };

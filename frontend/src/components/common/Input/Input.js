@@ -11,8 +11,8 @@ const Input = ({
   labelStyles,
   minLength,
   maxLength,
-  required,
   onChange,
+  ...props
 }) => (
   <Label labelStyles={labelStyles}>
     <LabelText>{labelText}</LabelText>
@@ -24,8 +24,8 @@ const Input = ({
       inputStyles={inputStyles}
       minLength={minLength}
       maxLength={maxLength}
-      required={required}
       onChange={onChange}
+      {...props}
     />
   </Label>
 );
