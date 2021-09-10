@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OrderBy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Embeddable
 public class Images {
 
-    @OrderColumn(name = "orders")
+    @OrderBy("createdAt asc")
     @OneToMany(mappedBy = "post")
     private final List<Image> images = new ArrayList<>();
 
