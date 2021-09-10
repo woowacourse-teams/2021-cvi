@@ -18,4 +18,6 @@ public interface PostQueryDsl {
     Optional<Post> findWithCommentsByPostId(Long id);
 
     List<Post> findByUserId(Long userId, int offset, int size);
+
+    List<Post> searchBbyTypesAndQuery(VaccinationType vaccinationType, SearchType searchType, String query);
 }

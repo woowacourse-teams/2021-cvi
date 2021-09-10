@@ -1,5 +1,6 @@
 package com.backjoongwon.cvi.post.controller;
 
+import com.backjoongwon.cvi.post.domain.SearchType;
 import com.backjoongwon.cvi.post.service.PostService;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
@@ -46,6 +47,15 @@ public class PostController {
                                                          @RequestParam(defaultValue = "500") int fromHoursBefore,
                                                          @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> searchByTypesAndQuery(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
+                                                    @RequestParam(defaultValue = "CONTENT") SearchType searchType,
+                                                    @RequestParam String q,
+                                                    @AuthenticationPrincipal Optional<User> user) {
+        return postService.searchByTypesAndQuery(vaccinationType, searchType, q, user);
     }
 
     @GetMapping("/{id}")

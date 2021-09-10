@@ -109,6 +109,11 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
+    public List<PostResponse> searchByTypesAndQuery(VaccinationType vaccinationType, SearchType searchType, String q, Optional<User> optionalUser) {
+        List<Post> posts = postRepository.searchBbyTypesAndQuery(vaccinationType, searchType, q);
+        return PostResponse.toList(posts, optionalUser.orElse(null));
+    }
+
     @Transactional
     public void update(Long id, Optional<User> optionalUser, PostRequest postRequest) {
         validateSignedin(optionalUser);

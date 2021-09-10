@@ -44,17 +44,6 @@ public class PostRepositoryImpl implements PostQueryDsl {
                 .fetch();
     }
 
-    private BooleanExpression fromHoursBefore(int hours) {
-        return post.createdAt.after(LocalDateTime.now().minusHours(hours));
-    }
-
-    private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
-        if (Objects.nonNull(vaccinationType) && !vaccinationType.equals(VaccinationType.ALL)) {
-            return post.vaccinationType.eq(vaccinationType);
-        }
-        return null;
-    }
-
     @Override
     public List<Post> findByUserId(Long userId) {
         return queryFactory.selectFrom(post)
@@ -95,5 +84,32 @@ public class PostRepositoryImpl implements PostQueryDsl {
                 .offset(offset)
                 .limit(size)
                 .fetch();
+    }
+
+    @Override
+    public List<Post> searchBbyTypesAndQuery(VaccinationType vaccinationType, SearchType searchType, String query) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.user, user).fetchJoin()
+                .where(vaccinationTypeEq(vaccinationType), searchTypeEq(searchType, query))
+                .orderBy(post.createdAt.desc())
+                .fetch();
+    }
+
+    private BooleanExpression searchTypeEq(SearchType searchType, String query) {
+        if (Objects.nonNull(searchType) && !searchType.equals(SearchType.CONTENT)) {
+            return post.user.nickname.eq(query);
+        }
+        return post.content.contains(query);
+    }
+
+    private BooleanExpression fromHoursBefore(int hours) {
+        return post.createdAt.after(LocalDateTime.now().minusHours(hours));
+    }
+
+    private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
+        if (Objects.nonNull(vaccinationType) && !vaccinationType.equals(VaccinationType.ALL)) {
+            return post.vaccinationType.eq(vaccinationType);
+        }
+        return null;
     }
 }
