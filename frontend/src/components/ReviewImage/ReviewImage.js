@@ -17,6 +17,7 @@ const ReviewImage = ({
   showCloseIcon,
   onClick,
   onClickDeleteButton,
+  alt,
 }) => (
   <Container onClick={onClick}>
     {showDetailIcon && (
@@ -35,7 +36,7 @@ const ReviewImage = ({
         </Button>
       </CloseIconWrapper>
     )}
-    <Image src={src} width={width} />
+    <Image src={src} width={width} alt={alt} />
   </Container>
 );
 
@@ -46,12 +47,14 @@ ReviewImage.propTypes = {
   showCloseIcon: PropTypes.bool,
   onClickDeleteButton: PropTypes.func,
   width: PropTypes.string,
+  alt: PropTypes.string,
 };
 
 ReviewImage.defaultProps = {
   showDetailIcon: false,
   showCloseIcon: false,
   width: '',
+  alt: '',
   onClickDeleteButton: () => {},
   onClick: () => {},
 };

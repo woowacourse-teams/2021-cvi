@@ -73,7 +73,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
         <Content>{content}</Content>
         {!!images?.length && (
           <PreviewImageContainer>
-            <PreviewImage src={images[0]} />
+            <PreviewImage src={images[0]} alt={`${id}-preview`} />
             {images?.length > 1 && <MoreImageCount>+ {images?.length - 1}</MoreImageCount>}
           </PreviewImageContainer>
         )}
