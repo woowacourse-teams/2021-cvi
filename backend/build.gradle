@@ -112,7 +112,6 @@ configure(queryDslProjects){
     }
 }
 
-
 def asciidoctorConfigureProjects = [project(':app-cvi-api')]
 configure(asciidoctorConfigureProjects){
     apply plugin: "org.asciidoctor.convert"
@@ -143,5 +142,3 @@ configure(asciidoctorConfigureProjects){
         }
     }
 }
-
-project(':domain-cvi-scheduler')
