@@ -23,11 +23,6 @@ const Container = styled.div`
   & > *:nth-of-type(5) > :nth-of-type(2) {
     background-color: #b2ebf2;
   }
-  width: 44rem;
-
-  @media screen and (max-width: 375px) {
-    width: 37.5rem;
-  }
 `;
 
 const SideEffectContainer = styled.div`
@@ -55,7 +50,7 @@ const SideEffect = styled.div`
 const Bar = styled.div`
   border-radius: 0.3rem;
   height: 3.5rem;
-  width: ${({ percentage }) => (percentage ? `${percentage * 0.35}rem` : '0')};
+  width: ${({ percentage }) => (percentage ? `${percentage * 0.13}vw` : '0')};
 
   -webkit-animation: bar-animation 1.2s ${({ index }) => `0.${index + 1}`}s forwards;
   -moz-animation: bar-animation 1.2s ${({ index }) => `0.${index + 1}`}s forwards;
@@ -67,14 +62,19 @@ const Bar = styled.div`
     }
   }
 
-  @media screen and (max-width: 375px) {
-    width: ${({ percentage }) => (percentage ? `${percentage * 0.25}rem` : '0')};
+  @media only screen and (min-width: 1025px) and (max-width: 1300px) {
+    width: ${({ percentage }) => (percentage ? `${percentage * 0.1}vw` : '0')};
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: ${({ percentage }) => (percentage ? `${percentage * 0.7}vw` : '0')};
   }
 `;
 
 const Percentage = styled.div`
   margin-left: 0.5rem;
   color: ${FONT_COLOR.LIGHT_GRAY};
+  font-size: 1.4rem;
 `;
 
 export { Container, SideEffectContainer, SideEffect, Bar, Percentage };
