@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 44rem;
 
   @media screen and (max-width: 1024px) {
     gap: 2rem;
