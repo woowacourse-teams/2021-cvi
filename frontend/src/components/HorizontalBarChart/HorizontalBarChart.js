@@ -1,10 +1,4 @@
-import {
-  Container,
-  SymptomContainer,
-  Name,
-  Bar,
-  Percentage,
-} from './VaccinationSideEffectChart.styles';
+import { Container, ItemContainer, Name, Bar, Percentage } from './HorizontalBarChart.styles';
 
 // 210913 02:37 업데이트
 const symptomList = [
@@ -35,16 +29,16 @@ const symptomList = [
   },
 ];
 
-const VaccinationSideEffectChart = () => (
+const HorizontalBarChart = () => (
   <Container>
     {symptomList.map((symptom, index) => (
-      <SymptomContainer key={index} index={index}>
+      <ItemContainer key={index} index={index}>
         <Name>{symptom.name}</Name>
         <Bar index={index} percentage={symptom.percentage} color={symptom.barColor} />
         <Percentage>{`${symptom.percentage}%`}</Percentage>
-      </SymptomContainer>
+      </ItemContainer>
     ))}
   </Container>
 );
 
-export default VaccinationSideEffectChart;
+export default HorizontalBarChart;

@@ -11,7 +11,7 @@ import CommentItem from './CommentItem/CommentItem';
 import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
 import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
 import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
-import VaccinationSideEffectChart from './VaccinationSideEffectChart/VaccinationSideEffectChart';
+import HorizontalBarChart from './HorizontalBarChart/HorizontalBarChart';
 import ImageModal from './ImageModal/ImageModal';
 import ReviewImage from './ReviewImage/ReviewImage';
 
@@ -29,7 +29,7 @@ export {
   RegionalStateChart,
   RegionalStateTable,
   ReviewFilterList,
-  VaccinationSideEffectChart,
+  HorizontalBarChart,
   ImageModal,
   ReviewImage,
 };

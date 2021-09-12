@@ -13,7 +13,7 @@ import {
   Source,
 } from './HomeContent.styles';
 import { NAVER_LEFT_VACCINATION_URL, PATH, VACCINATION_RESERVATION_URL } from '../../constants';
-import { VaccinationSideEffectChart } from '..';
+import { HorizontalBarChart } from '..';
 
 const HomeContent = ({ title, withSource }) => {
   const history = useHistory();
@@ -27,7 +27,7 @@ const HomeContent = ({ title, withSource }) => {
       <Content>
         {title && <Title>{title}</Title>}
         <Frame showShadow={true} width="100%" height="30rem" styles={frameStyles}>
-          <VaccinationSideEffectChart />
+          <HorizontalBarChart />
           {withSource && <Source>출처: 자체 설문 조사</Source>}
         </Frame>
       </Content>

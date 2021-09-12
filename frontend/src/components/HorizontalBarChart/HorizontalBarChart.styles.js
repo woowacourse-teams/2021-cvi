@@ -5,7 +5,7 @@ const Container = styled.div`
   padding: 1.6rem;
 `;
 
-const SymptomContainer = styled.div`
+const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0.5rem 0;
@@ -59,4 +59,4 @@ const Percentage = styled.div`
   font-size: 1.4rem;
 `;
 
-export { Container, SymptomContainer, Name, Bar, Percentage };
+export { Container, ItemContainer, Name, Bar, Percentage };
