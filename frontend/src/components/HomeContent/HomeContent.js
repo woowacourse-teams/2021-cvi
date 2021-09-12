@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, Frame } from '../common';
+import { Button, Frame, HorizontalBarChart } from '../common';
 import { BUTTON_BACKGROUND_TYPE, BUTTON_SIZE_TYPE } from '../common/Button/Button.styles';
 import {
   buttonStyles,
@@ -13,7 +13,6 @@ import {
   Source,
 } from './HomeContent.styles';
 import { NAVER_LEFT_VACCINATION_URL, PATH, VACCINATION_RESERVATION_URL } from '../../constants';
-import { HorizontalBarChart } from '..';
 
 const HomeContent = ({ title, withSource }) => {
   const history = useHistory();

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FONT_COLOR } from '../../constants';
+import { FONT_COLOR } from '../../../constants';
 
 const Container = styled.div`
   padding: 1.6rem;
