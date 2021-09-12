@@ -37,8 +37,12 @@ const config = {
         },
       },
       {
-        test: /\.(eot|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
+        test: /\.(png|jpg|gif|webp|mp4)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/i,
+        type: 'asset/inline',
       },
       {
         test: /\.svg$/,
