@@ -21,6 +21,9 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
+      minify: {
+        collapseWhitespace: true,
+      },
     }),
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed || {})),
   ],
