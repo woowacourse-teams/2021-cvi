@@ -1,18 +1,20 @@
-import Preview from './Preview/Preview';
-import PreviewItem from './PreviewItem/PreviewItem';
-import PreviewList from './PreviewList/PreviewList';
-import ReviewItem from './ReviewItem/ReviewItem';
-import ReviewWritingModal from './ReviewWritingModal/ReviewWritingModal';
-import VaccinationState from './VaccinationState/VaccinationState';
-import VaccinationSchedule from './VaccinationSchedule/VaccinationSchedule';
-import Comment from './Comment/Comment';
-import CommentForm from './CommentForm/CommentForm';
-import CommentItem from './CommentItem/CommentItem';
-import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
-import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
-import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
-import ImageModal from './ImageModal/ImageModal';
-import ReviewImage from './ReviewImage/ReviewImage';
+import lodable from '@loadable/component';
+
+const Preview = lodable(() => import('./Preview/Preview'));
+const PreviewItem = lodable(() => import('./PreviewItem/PreviewItem'));
+const PreviewList = lodable(() => import('./PreviewList/PreviewList'));
+const ReviewItem = lodable(() => import('./ReviewItem/ReviewItem'));
+const ReviewWritingModal = lodable(() => import('./ReviewWritingModal/ReviewWritingModal'));
+const VaccinationState = lodable(() => import('./VaccinationState/VaccinationState'));
+const VaccinationSchedule = lodable(() => import('./VaccinationSchedule/VaccinationSchedule'));
+const Comment = lodable(() => import('./Comment/Comment'));
+const CommentForm = lodable(() => import('./CommentForm/CommentForm'));
+const CommentItem = lodable(() => import('./CommentItem/CommentItem'));
+const RegionalStateChart = lodable(() => import('./RegionalStateChart/RegionalStateChart'));
+const RegionalStateTable = lodable(() => import('./RegionalStateTable/RegionalStateTable'));
+const ReviewFilterList = lodable(() => import('./ReviewFilterList/ReviewFilterList'));
+const ImageModal = lodable(() => import('./ImageModal/ImageModal'));
+const ReviewImage = lodable(() => import('./ReviewImage/ReviewImage'));
 
 export {
   Preview,

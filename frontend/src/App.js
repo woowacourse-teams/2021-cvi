@@ -28,12 +28,16 @@ const App = () => {
       <BrowserRouter>
         <BaseLayout>
           <Switch>
-            <PublicRoute exact path={PATH.HOME} component={HomePage} />
-            <PublicRoute exact path={PATH.REVIEW} component={ReviewPage} />
-            <PublicRoute exact path={`${PATH.REVIEW}/:id`} component={ReviewDetailPage} />
-            <PublicRoute exact path={`${PATH.REVIEW}/:id/edit`} component={ReviewEditPage} />
-            <PublicRoute restricted exact path={PATH.LOGIN} component={LoginPage} />
-            <PublicRoute restricted exact path={PATH.SIGNUP} component={SignupPage} />
+            <PublicRoute exact path={PATH.HOME} component={() => <HomePage />} />
+            <PublicRoute exact path={PATH.REVIEW} component={() => <ReviewPage />} />
+            <PublicRoute exact path={`${PATH.REVIEW}/:id`} component={() => <ReviewDetailPage />} />
+            <PublicRoute
+              exact
+              path={`${PATH.REVIEW}/:id/edit`}
+              component={() => <ReviewEditPage />}
+            />
+            <PublicRoute restricted exact path={PATH.LOGIN} component={() => <LoginPage />} />
+            <PublicRoute restricted exact path={PATH.SIGNUP} component={() => <SignupPage />} />
             <PrivateRoute
               exact
               path={PATH.MY_PAGE_ACCOUNT}
@@ -70,9 +74,9 @@ const App = () => {
                 </MyPage>
               )}
             />
-            <PublicRoute restricted exact path={PATH.OAUTH_KAKAO} component={OAuthPage} />
-            <PublicRoute restricted exact path={PATH.OAUTH_NAVER} component={OAuthPage} />
-            <PublicRoute exact path={PATH.STATE} component={StatePage} />
+            <PublicRoute restricted exact path={PATH.OAUTH_KAKAO} component={() => <OAuthPage />} />
+            <PublicRoute restricted exact path={PATH.OAUTH_NAVER} component={() => <OAuthPage />} />
+            <PublicRoute exact path={PATH.STATE} component={() => <StatePage />} />
             <Redirect to={PATH.HOME} />
           </Switch>
         </BaseLayout>
