@@ -3,26 +3,6 @@ import { FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
   padding: 1.6rem;
-
-  & > *:nth-of-type(1) > :nth-of-type(2) {
-    background-color: #00acc1;
-  }
-
-  & > *:nth-of-type(2) > :nth-of-type(2) {
-    background-color: #26c6da;
-  }
-
-  & > *:nth-of-type(3) > :nth-of-type(2) {
-    background-color: #26c6da;
-  }
-
-  & > *:nth-of-type(4) > :nth-of-type(2) {
-    background-color: #80deea;
-  }
-
-  & > *:nth-of-type(5) > :nth-of-type(2) {
-    background-color: #b2ebf2;
-  }
 `;
 
 const SymptomContainer = styled.div`
@@ -33,6 +13,7 @@ const SymptomContainer = styled.div`
 
 const Name = styled.div`
   width: 11rem;
+
   -webkit-animation: fade-in-text 2.2s 0.1s forwards;
   -moz-animation: fade-in-text 2.2s 0.1s forwards;
   animation: fade-in-text 2.2s 0.1s forwards;
@@ -51,6 +32,7 @@ const Bar = styled.div`
   border-radius: 0.3rem;
   height: 3.5rem;
   width: ${({ percentage }) => (percentage ? `${percentage * 0.13}vw` : '0')};
+  background-color: ${({ color }) => color && color};
 
   -webkit-animation: bar-animation 1.2s ${({ index }) => `0.${index + 1}`}s forwards;
   -moz-animation: bar-animation 1.2s ${({ index }) => `0.${index + 1}`}s forwards;

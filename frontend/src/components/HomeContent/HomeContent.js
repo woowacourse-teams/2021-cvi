@@ -15,29 +15,6 @@ import {
 import { NAVER_LEFT_VACCINATION_URL, PATH, VACCINATION_RESERVATION_URL } from '../../constants';
 import { VaccinationSideEffectChart } from '..';
 
-const symptomList = [
-  {
-    name: '접종 부위 통증',
-    percentage: 66.67,
-  },
-  {
-    name: '근육통',
-    percentage: 33.33,
-  },
-  {
-    name: '피로감',
-    percentage: 33.33,
-  },
-  {
-    name: '발열',
-    percentage: 25,
-  },
-  {
-    name: '두통',
-    percentage: 8.33,
-  },
-];
-
 const HomeContent = ({ title, withSource }) => {
   const history = useHistory();
 
@@ -50,7 +27,7 @@ const HomeContent = ({ title, withSource }) => {
       <Content>
         {title && <Title>{title}</Title>}
         <Frame showShadow={true} width="100%" height="30rem" styles={frameStyles}>
-          <VaccinationSideEffectChart symptomList={symptomList} />
+          <VaccinationSideEffectChart />
           {withSource && <Source>출처: 자체 설문 조사</Source>}
         </Frame>
       </Content>
