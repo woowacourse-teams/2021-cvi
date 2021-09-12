@@ -25,13 +25,13 @@ const Container = styled.div`
   }
 `;
 
-const SideEffectContainer = styled.div`
+const SymptomContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0.5rem 0;
 `;
 
-const SideEffect = styled.div`
+const Name = styled.div`
   width: 11rem;
   -webkit-animation: fade-in-text 2.2s 0.1s forwards;
   -moz-animation: fade-in-text 2.2s 0.1s forwards;
@@ -77,4 +77,4 @@ const Percentage = styled.div`
   font-size: 1.4rem;
 `;
 
-export { Container, SideEffectContainer, SideEffect, Bar, Percentage };
+export { Container, SymptomContainer, Name, Bar, Percentage };

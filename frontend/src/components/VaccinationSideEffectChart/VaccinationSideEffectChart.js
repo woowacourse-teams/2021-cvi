@@ -2,26 +2,31 @@ import PropTypes from 'prop-types';
 
 import {
   Container,
-  SideEffectContainer,
-  SideEffect,
+  SymptomContainer,
+  Name,
   Bar,
   Percentage,
 } from './VaccinationSideEffectChart.styles';
 
-const VaccinationSideEffectChart = ({ sideEffects }) => (
+const VaccinationSideEffectChart = ({ symptomList }) => (
   <Container>
-    {sideEffects.map((sideEffect, index) => (
-      <SideEffectContainer key={index} index={index}>
-        <SideEffect>{sideEffect.symptom}</SideEffect>
-        <Bar index={index} percentage={sideEffect.percentage} />
-        <Percentage>{`${sideEffect.percentage}%`}</Percentage>
-      </SideEffectContainer>
+    {symptomList.map((symptom, index) => (
+      <SymptomContainer key={index} index={index}>
+        <Name>{symptom.name}</Name>
+        <Bar index={index} percentage={symptom.percentage} />
+        <Percentage>{`${symptom.percentage}%`}</Percentage>
+      </SymptomContainer>
     ))}
   </Container>
 );
 
 VaccinationSideEffectChart.propTypes = {
-  sideEffects: PropTypes.array.isRequired,
+  symptomList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      percentage: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default VaccinationSideEffectChart;
