@@ -46,6 +46,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar, logout }) => {
             styles={css`
               padding: 0;
             `}
+            aria-label="close-button"
             onClick={() => setIsOpenSideBar(false)}
           >
             <CloseIcon width="32" height="32" stroke={FONT_COLOR.BLACK} />

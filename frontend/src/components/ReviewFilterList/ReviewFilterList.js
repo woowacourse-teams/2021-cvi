@@ -45,6 +45,7 @@ const ReviewFilterList = ({
       <Button
         backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
         styles={closeOptionListButtonStyles}
+        aria-label="close-button"
         onClick={hideOptionList}
       >
         <CloseIcon height="24" width="24" stroke={FONT_COLOR.BLACK} />
