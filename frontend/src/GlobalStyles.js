@@ -4,8 +4,6 @@ import { FONT_COLOR } from './constants';
 const GlobalStyles = () => (
   <Global
     styles={css`
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-
       * {
         box-sizing: border-box;
       }

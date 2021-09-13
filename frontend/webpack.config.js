@@ -20,7 +20,6 @@ const config = {
     port: 9000,
   },
   plugins: [
-    // new BundleAnalyzerPlugin(),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       minify: {
@@ -47,7 +46,7 @@ const config = {
         type: 'asset/resource',
       },
       {
-        test: /\.(eot|ttf|woff|woff2)$/i,
+        test: /\.(woff|woff2)$/i,
         type: 'asset/inline',
       },
       {
