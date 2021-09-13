@@ -15,7 +15,7 @@ const Container = styled.div`
   }
 `;
 
-const Img = styled.img`
+const Video = styled.video`
   position: absolute;
   width: ${({ width }) => width && width};
   height: ${({ height }) => height && height};
@@ -25,4 +25,4 @@ const Img = styled.img`
   z-index: 999;
 `;
 
-export { Container, Img };
+export { Container, Video };

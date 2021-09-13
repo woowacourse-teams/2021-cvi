@@ -20,8 +20,12 @@ const config = {
     port: 9000,
   },
   plugins: [
+    // new BundleAnalyzerPlugin(),
     new HtmlWebpackPlugin({
       template: './public/index.html',
+      minify: {
+        collapseWhitespace: true,
+      },
     }),
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed || {})),
     new BundleAnalyzerPlugin(),
@@ -39,8 +43,12 @@ const config = {
         },
       },
       {
-        test: /\.(eot|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
+        test: /\.(png|jpg|gif|webp|mp4)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/i,
+        type: 'asset/inline',
       },
       {
         test: /\.svg$/,
