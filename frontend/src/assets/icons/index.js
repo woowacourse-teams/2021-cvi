@@ -15,7 +15,6 @@ import MyPageIcon from './mypage.svg';
 import CommentIcon from './comment.svg';
 import LikeIcon from './like.svg';
 import LikeTrueIcon from './like-true.svg';
-import LoadingIcon from './loading.mp4';
 import MenuIcon from './menu.svg';
 import MyReviewMenuIcon from './my-review-menu.svg';
 import StateIcon from './state.svg';
@@ -44,7 +43,6 @@ export {
   LikeTrueIcon,
   MenuIcon,
   MyReviewMenuIcon,
-  LoadingIcon,
   StateIcon,
   MapIcon,
   BarChartIcon,

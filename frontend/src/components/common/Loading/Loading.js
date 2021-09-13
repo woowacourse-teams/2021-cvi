@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Container, Video } from './Loading.styles';
-import { LoadingIcon } from '../../../assets/icons';
+import { LoadingIcon } from '../../../assets/videoes';
 
 const Loading = ({ isLoading, backgroundColor, width, height }) => (
   <Container isLoading={isLoading} backgroundColor={backgroundColor}>
