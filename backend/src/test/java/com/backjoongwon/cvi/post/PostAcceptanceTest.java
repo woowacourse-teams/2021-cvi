@@ -2,6 +2,7 @@ package com.backjoongwon.cvi.post;
 
 import com.backjoongwon.cvi.AcceptanceTest;
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.post.domain.SearchType;
 import com.backjoongwon.cvi.post.domain.Sort;
 import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.post.dto.PostRequest;
@@ -180,19 +181,6 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(resultPostContents).containsExactly("내용2", "내용1");
     }
 
-    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, Sort sort, UserResponse user) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer" + user.getAccessToken())
-                .param("vaccinationType", vaccinationType)
-                .queryParam("offset", offset)
-                .param("size", size)
-                .param("sort", sort)
-                .when().get("/api/v1/posts/paging")
-                .then().log().all()
-                .extract();
-    }
-
     @DisplayName("게시글 수정 - 성공")
     @Test
     void update() {
@@ -249,11 +237,55 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(noExistsPostResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
+    @DisplayName("게시글 검색 - 성공 - 게시글 내용으로 검색")
+    @Test
+    void searchPostByContentInPost() {
+        //given
+        게시글_작성_요청(userResponse, postRequestPFIZER);
+        게시글_작성_요청(userResponse, postRequestAZ);
+        게시글_작성_요청(userResponse, postRequestMODERNA);
+        게시글_작성_요청(userResponse, postRequestJANSSEN);
+        //when
+        ExtractableResponse<Response> response = 게시글_검색(VaccinationType.ALL, SearchType.CONTENT, "내용", 가입회원);
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.as(List.class)).hasSize(4);
+    }
+
+    @DisplayName("게시글 검색 - 성공 - 게시글 작성자로 검색")
+    @Test
+    void searchPostByWriter() {
+        //given
+        게시글_작성_요청(userResponse, postRequestPFIZER);
+        게시글_작성_요청(userResponse, postRequestAZ);
+        게시글_작성_요청(anotherUserResponse, postRequestMODERNA);
+        게시글_작성_요청(anotherUserResponse, postRequestJANSSEN);
+        //when
+        ExtractableResponse<Response> response = 게시글_검색(VaccinationType.ALL, SearchType.WRITER, "닉네임", 가입회원);
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.as(List.class)).hasSize(2);
+        assertThat(response.as(List.class)).extracting("vaccinationType").containsExactlyElementsOf(Arrays.asList("ASTRAZENECA", "PFIZER"));
+    }
+
     private ExtractableResponse<Response> 백신_타입별_게시글_조회(VaccinationType vaccinationType) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .param("vaccinationType", vaccinationType)
                 .when().get("/api/v1/posts")
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, Sort sort, UserResponse user) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer" + user.getAccessToken())
+                .param("vaccinationType", vaccinationType)
+                .queryParam("offset", offset)
+                .param("size", size)
+                .param("sort", sort)
+                .when().get("/api/v1/posts/paging")
                 .then().log().all()
                 .extract();
     }
@@ -273,6 +305,17 @@ public class PostAcceptanceTest extends AcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer" + user.getAccessToken())
                 .when().delete("/api/v1/posts/{postId}", postId)
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 게시글_검색(VaccinationType vaccinationType, SearchType searchType, String query, UserResponse user) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .param("vaccinationType", vaccinationType)
+                .param("searchType", searchType)
+                .param("q", query)
+                .when().get("/api/v1/posts/search")
                 .then().log().all()
                 .extract();
     }
