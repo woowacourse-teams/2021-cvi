@@ -11,6 +11,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
+    clean: true,
   },
   devServer: {
     open: true,

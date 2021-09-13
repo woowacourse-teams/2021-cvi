@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import Compressor from 'compressorjs';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -142,12 +143,22 @@ const ReviewEditPage = () => {
         continue;
       }
 
-      const reader = new FileReader();
+      new Compressor(file, {
+        maxWidth: 1200,
+        quality: 1,
+        strict: true,
+        success: (result) => {
+          const reader = new FileReader();
 
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImages((prevState) => [...prevState, reader.result]);
-      };
+          reader.readAsDataURL(result);
+          reader.onload = () => {
+            setImages((prevState) => [...prevState, reader.result]);
+          };
+        },
+        error: (error) => {
+          console.log(error.message);
+        },
+      });
     }
   };
 

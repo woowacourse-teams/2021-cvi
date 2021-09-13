@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import Compressor from 'compressorjs';
 import {
   ALERT_MESSAGE,
   FONT_COLOR,
@@ -51,7 +52,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     return { type: type.substring(startIndex + 1, endIndex).toUpperCase(), data };
   };
 
-  const uploadImages = (event) => {
+  const uploadImages = async (event) => {
     if (images.length === REVIEW_IMAGE_LIMIT) {
       alert(ALERT_MESSAGE.OVER_IMAGE_COUNT);
 
@@ -74,12 +75,22 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
         continue;
       }
 
-      const reader = new FileReader();
+      new Compressor(file, {
+        maxWidth: 1200,
+        quality: 1,
+        strict: true,
+        success: (result) => {
+          const reader = new FileReader();
 
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImages((prevState) => [...prevState, reader.result]);
-      };
+          reader.readAsDataURL(result);
+          reader.onload = () => {
+            setImages((prevState) => [...prevState, reader.result]);
+          };
+        },
+        error: (error) => {
+          console.log(error.message);
+        },
+      });
     }
   };
 
