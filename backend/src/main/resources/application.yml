@@ -81,6 +81,15 @@ logging:
 spring:
   config:
     activate:
+      on-profile: dev
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+---
+spring:
+  config:
+    activate:
       on-profile: deploy1
 
 server:
