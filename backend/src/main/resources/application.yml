@@ -79,10 +79,6 @@ spring:
         format_sql: true
     generate-ddl: true
 
-  flyway:
-    enabled: false
-    baseline-on-migrate: true
-
 logging:
   level:
     org.hibernate.SQL: debug
