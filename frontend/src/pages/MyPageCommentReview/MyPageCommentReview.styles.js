@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { PALETTE } from '../../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -32,6 +33,10 @@ const ScrollLoadingContainer = styled.div`
 
 const MyCommentReviewListContainer = styled.div`
   width: 100%;
+
+  & > *:not(:last-child) {
+    border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+  }
 `;
 
 const Title = styled.div`

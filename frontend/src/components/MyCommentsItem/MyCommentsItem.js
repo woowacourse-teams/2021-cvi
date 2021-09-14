@@ -9,12 +9,15 @@ import {
   CreatedAt,
   CommentContent,
   ReviewContainer,
-  TopContainer,
   ReviewContent,
   Writer,
+  PreviewImage,
+  PreviewImageContainer,
+  MoreImageCount,
 } from './MyCommentsItem.styles';
 
 const MyCommentsItem = ({ myCommentReview, myComments, innerRef, onClick }) => {
+  const { vaccinationType, content, writer, images } = myCommentReview;
   const labelFontColor =
     myCommentReview.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
 
@@ -30,18 +33,21 @@ const MyCommentsItem = ({ myCommentReview, myComments, innerRef, onClick }) => {
           );
         })}
         <ReviewContainer>
-          <TopContainer>
-            <Label
-              fontColor={labelFontColor}
-              backgroundColor={VACCINATION_COLOR[myCommentReview.vaccinationType]}
-            >
-              {VACCINATION[myCommentReview.vaccinationType]}
+          <div>
+            <Label fontColor={labelFontColor} backgroundColor={VACCINATION_COLOR[vaccinationType]}>
+              {VACCINATION[vaccinationType]}
             </Label>
-          </TopContainer>
-          <ReviewContent>{myCommentReview.content}</ReviewContent>
-          <Writer>
-            {myCommentReview.writer.nickname} · {myCommentReview.writer.ageRange.meaning}
-          </Writer>
+            <ReviewContent>{content}</ReviewContent>
+            <Writer>
+              {writer.nickname} · {writer.ageRange.meaning}
+            </Writer>
+          </div>
+          {!!images?.length && (
+            <PreviewImageContainer>
+              <PreviewImage src={images[0]} />
+              {images?.length > 1 && <MoreImageCount>+ {images?.length - 1}</MoreImageCount>}
+            </PreviewImageContainer>
+          )}
         </ReviewContainer>
       </Content>
     </Container>
@@ -58,6 +64,7 @@ MyCommentsItem.propTypes = {
       }).isRequired,
       nickname: PropTypes.string.isRequired,
     }).isRequired,
+    images: PropTypes.array.isRequired,
   }).isRequired,
   myComments: PropTypes.array.isRequired,
   innerRef: PropTypes.number,
