@@ -56,7 +56,7 @@ public class PostService {
     }
 
     private void assignImages(Post post, List<ImageRequest> imageRequests) {
-        if (imageRequests.isEmpty()) {
+        if (imageRequests == null || imageRequests.isEmpty()) {
             return;
         }
         final List<String> imageUrls = getUploadedImageUrls(imageRequests);
