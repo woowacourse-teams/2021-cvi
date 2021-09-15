@@ -32,9 +32,9 @@ const symptomList = [
 const HorizontalBarChart = () => (
   <Container>
     {symptomList.map((symptom, index) => (
-      <ItemContainer key={index}>
+      <ItemContainer key={symptom.name}>
         <Name>{symptom.name}</Name>
-        <Bar index={symptom.name} percentage={symptom.percentage} color={symptom.barColor} />
+        <Bar index={index} percentage={symptom.percentage} color={symptom.barColor} />
         <Percentage>{`${symptom.percentage}%`}</Percentage>
       </ItemContainer>
     ))}
