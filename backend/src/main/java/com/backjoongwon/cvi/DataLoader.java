@@ -2,6 +2,7 @@ package com.backjoongwon.cvi;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.comment.domain.Comment;
+import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.Post;
@@ -11,7 +12,6 @@ import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Profile("local")
+@Profile("dev")
 public class DataLoader implements CommandLineRunner {
 
     private static final int USER_COUNT = 50;
@@ -33,15 +33,17 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
     private final Random random = new Random();
-
-    @Autowired
     private final EntityManager em;
 
     @Override
     @Transactional
     public void run(String... args) {
-        if (userRepository.findAll().isEmpty()) {
+        if (userRepository.findAll().isEmpty()
+                && postRepository.findAll().isEmpty()
+                && likeRepository.findAll().isEmpty()
+                && commentRepository.findAll().isEmpty()) {
             List<User> users = new ArrayList<>();
             for (int i = 0; i < USER_COUNT; i++) {
                 User user = User.builder().nickname(String.valueOf(i)).socialId("socialId").socialProvider(SocialProvider.KAKAO).profileUrl("pictureUrl").ageRange(AgeRange.FIFTIES).build();

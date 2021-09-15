@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: local
+
   jpa:
     properties:
       hibernate.default_batch_fetch_size: 500
@@ -55,6 +58,8 @@ spring:
   config:
     activate:
       on-profile: local
+    import:
+      - file:./cvi-backend-secret/application-publicdata-secret.yml
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -73,6 +78,15 @@ spring:
       hibernate:
         format_sql: true
     generate-ddl: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
 
 logging:
   level:
