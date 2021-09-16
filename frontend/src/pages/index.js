@@ -1,16 +1,18 @@
-import HomePage from './HomePage/HomePage';
-import ReviewPage from './ReviewPage/ReviewPage';
-import ReviewDetailPage from './ReviewDetailPage/ReviewDetailPage';
-import ReviewEditPage from './ReviewEditPage/ReviewEditPage';
-import LoginPage from './LoginPage/LoginPage';
-import SignupPage from './SignupPage/SignupPage';
-import OAuthPage from './OAuthPage/OAuthPage';
-import MyPage from './MyPage/MyPage';
-import MyPageAccount from './MyPageAccount/MyPageAccount';
-import MyPageReview from './MyPageReview/MyPageReview';
-import MyPageCommentReview from './MyPageCommentReview/MyPageCommentReview';
-import MyPageLikeReview from './MyPageLikeReview/MyPageLikeReview';
-import StatePage from './StatePage/StatePage';
+import lodable from '@loadable/component';
+
+const HomePage = lodable(() => import('./HomePage/HomePage'));
+const ReviewPage = lodable(() => import('./ReviewPage/ReviewPage'));
+const ReviewDetailPage = lodable(() => import('./ReviewDetailPage/ReviewDetailPage'));
+const ReviewEditPage = lodable(() => import('./ReviewEditPage/ReviewEditPage'));
+const LoginPage = lodable(() => import('./LoginPage/LoginPage'));
+const SignupPage = lodable(() => import('./SignupPage/SignupPage'));
+const OAuthPage = lodable(() => import('./OAuthPage/OAuthPage'));
+const MyPage = lodable(() => import('./MyPage/MyPage'));
+const MyPageAccount = lodable(() => import('./MyPageAccount/MyPageAccount'));
+const MyPageReview = lodable(() => import('./MyPageReview/MyPageReview'));
+const MyPageCommentReview = lodable(() => import('./MyPageCommentReview/MyPageCommentReview'));
+const MyPageLikeReview = lodable(() => import('./MyPageLikeReview/MyPageLikeReview'));
+const StatePage = lodable(() => import('./StatePage/StatePage'));
 
 export {
   HomePage,

@@ -190,7 +190,8 @@ const ReviewDetailPage = () => {
                 <ImageContainer>
                   {review?.images?.map((image, index) => (
                     <ReviewImage
-                      key={index}
+                      key={`${review.id}-image-${index}`}
+                      alt={`${review.id}-image-${index}`}
                       src={image}
                       showDetailIcon={true}
                       onClick={() => clickImage(image)}

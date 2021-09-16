@@ -11,9 +11,8 @@ const Button = ({
   isSelected,
   selectedStyles,
   styles,
-  type,
-  disabled,
   onClick,
+  ...props
 }) => (
   <Container
     backgroundType={backgroundType}
@@ -23,9 +22,8 @@ const Button = ({
     isSelected={isSelected}
     selectedStyles={selectedStyles}
     styles={styles}
-    type={type}
-    disabled={disabled}
     onClick={onClick}
+    {...props}
   >
     {children}
   </Container>
@@ -40,8 +38,6 @@ Button.propTypes = {
   isSelected: PropTypes.bool,
   selectedStyles: PropTypes.object,
   styles: PropTypes.object,
-  type: PropTypes.string,
-  disabled: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
@@ -53,8 +49,6 @@ Button.defaultProps = {
   isSelected: false,
   selectedStyles: null,
   styles: null,
-  type: 'submit',
-  disabled: false,
   onClick: () => {},
 };
 

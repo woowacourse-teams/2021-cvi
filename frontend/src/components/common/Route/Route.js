@@ -18,7 +18,7 @@ const PrivateRoute = ({ render: renderComponent, ...rest }) => (
 );
 
 PublicRoute.propTypes = {
-  component: PropTypes.func,
+  component: PropTypes.elementType,
   restricted: PropTypes.bool,
 };
 
@@ -28,7 +28,7 @@ PrivateRoute.propTypes = {
 };
 
 PublicRoute.defaultProps = {
-  component: () => {},
+  component: null,
   restricted: false,
 };
 

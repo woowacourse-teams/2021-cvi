@@ -69,6 +69,7 @@ const BaseLayout = ({ children }) => {
       <NavBar isOpenSideBar={false}>
         <Button
           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
+          aria-label="open-sidebar-in-mobile"
           styles={css`
             padding: 0;
           `}

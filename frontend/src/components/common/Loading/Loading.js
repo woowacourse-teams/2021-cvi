@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
-import { Container, Img } from './Loading.styles';
-import { LoadingIcon } from '../../../assets/icons';
+import { Container, Video } from './Loading.styles';
+import { LoadingIcon } from '../../../assets/videoes';
 
-const Loading = ({ isLoading, width, height, backgroundColor }) => (
+const Loading = ({ isLoading, backgroundColor, width, height }) => (
   <Container isLoading={isLoading} backgroundColor={backgroundColor}>
-    <Img src={LoadingIcon} width={width} height={height} />
+    <Video autoPlay loop muted width={width} height={height}>
+      <source src={LoadingIcon} type="video/mp4" />
+    </Video>
   </Container>
 );
 
