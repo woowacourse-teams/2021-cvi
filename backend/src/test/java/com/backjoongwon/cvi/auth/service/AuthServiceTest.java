@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
 import com.backjoongwon.cvi.auth.dto.profile.NaverProfile;
 import com.backjoongwon.cvi.auth.dto.profile.UserInformation;
 import com.backjoongwon.cvi.auth.dto.AuthRequest;
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.backjoongwon.cvi.user.domain.AgeRange;
 import com.backjoongwon.cvi.user.domain.JwtTokenProvider;
@@ -38,6 +39,9 @@ class AuthServiceTest {
     private static final String STATE = "STATE";
     private static final String NAVER_ID = "NAVER_ID";
     private static final String NAVER_PROFILE_URL = "naver.com/profile";
+
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
 
     @Autowired
     private AuthService authService;

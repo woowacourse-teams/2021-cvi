@@ -20,7 +20,9 @@
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
+    "@loadable/component": "^5.15.0",
     "@reduxjs/toolkit": "^1.6.0",
+    "compressorjs": "^1.0.7",
     "dotenv": "^10.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -29,8 +31,7 @@
     "react-intersection-observer": "^8.32.0",
     "react-lottie": "^1.2.3",
     "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0",
-    "tesseract.js": "^2.1.5"
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
@@ -45,7 +46,6 @@
     "@webpack-cli/generators": "^2.2.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-react-require": "^3.1.3",
-    "css-loader": "^6.2.0",
     "cypress": "^8.0.0",
     "cypress-localstorage-commands": "^1.5.0",
     "cypress-react-selector": "^2.3.11",
@@ -57,16 +57,15 @@
     "html-webpack-plugin": "^5.3.2",
     "prettier": "^2.3.2",
     "webpack": "^5.43.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
   },
   "description": "My webpack project",
   "scripts": {
     "build": "cp ./env/.env.production ./.env && webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch",
-    "start": "cp ./env/.env.development ./.env && webpack serve --mode=development",
+    "build:dev": "cp ./env/.env.development ./.env && webpack --mode=production --node-env=production",
+    "start": "cp ./env/.env.local ./.env && webpack serve --mode=development",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "cypress open"

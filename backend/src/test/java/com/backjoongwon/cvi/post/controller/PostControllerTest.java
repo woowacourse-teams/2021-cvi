@@ -38,10 +38,10 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void createPost() throws Exception {
         //given
-        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, request.getContent(), 0, 0, 0, false, request.getVaccinationType(), LocalDateTime.now());
+        PostResponse expectedResponse = new PostResponse(POST_ID, userResponse, createPostRequest.getContent(), 0, 0, 0, false, createPostRequest.getVaccinationType(), LocalDateTime.now(), imageUrls);
         willReturn(expectedResponse).given(postService).create(any(), any(PostRequest.class));
         //when
-        ResultActions response = 글_등록_요청(request);
+        ResultActions response = 글_등록_요청(createPostRequest);
         //then
         글_등록_성공함(response, expectedResponse);
     }
@@ -52,7 +52,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
         //given
         willThrow(new NotFoundException("해당 id의 사용자가 존재하지 않습니다.")).given(postService).create(any(), any(PostRequest.class));
         //when
-        ResultActions response = 글_등록_요청(request);
+        ResultActions response = 글_등록_요청(createPostRequest);
         //then
         글_등록_실패함(response);
     }
@@ -61,7 +61,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
     @Test
     void find() throws Exception {
         //given
-        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, 2, false, VaccinationType.PFIZER, LocalDateTime.now());
+        PostResponse expectedPostResponse = new PostResponse(POST_ID, userResponse, "글 내용", 1, 0, 2, false, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls);
         willReturn(expectedPostResponse).given(postService).findById(any(Long.class), any());
         //when
         ResultActions response = 글_단일_조회_요청(POST_ID);
@@ -86,8 +86,8 @@ class PostControllerTest extends PreprocessPostControllerTest {
         //given
         UserResponse anotherUserResponse = UserResponse.of(user, null);
         List<PostResponse> postResponse = new LinkedList<>(Arrays.asList(
-                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, 3, false, VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, 13, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L))
+                new PostResponse(POST_ID + 1, anotherUserResponse, "글 내용2", 12, 0, 3, false, VaccinationType.MODERNA, LocalDateTime.now(), imageUrls),
+                new PostResponse(POST_ID, userResponse, "글 내용1", 55, 5, 13, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls)
         ));
         willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
@@ -114,7 +114,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
         //given
         willDoNothing().given(postService).update(any(Long.class), any(), any(PostRequest.class));
         //when
-        ResultActions response = 글_수정_요청(POST_ID, request);
+        ResultActions response = 글_수정_요청(POST_ID, updatePostRequest);
         //then
         글_수정_성공함(response);
     }
@@ -125,7 +125,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
         //given
         willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(postService).update(any(Long.class), any(), any(PostRequest.class));
         //when
-        ResultActions response = 글_수정_요청(POST_ID, request);
+        ResultActions response = 글_수정_요청(POST_ID, updatePostRequest);
         //then
         글_수정_실패함(response);
     }
@@ -157,9 +157,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineType() throws Exception {
         //given
         List<PostResponse> postResponse = new LinkedList<>(Arrays.asList(
-                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, 4, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, 10, true, VaccinationType.PFIZER, LocalDateTime.now())
+                new PostResponse(3L, userResponse, "이건 내용입니다.", 100, 10, 4, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(2L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(1L, userResponse, "이건 내용입니다.3", 300, 30, 10, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls)
         ));
         willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), any());
         //when
@@ -185,9 +185,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypePaging() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 4, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
-                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, 2, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
+                new PostResponse(38L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 4, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1), imageUrls),
+                new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, 2, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2), imageUrls)
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -213,9 +213,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypeSorting() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 5, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 8, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 1, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2))
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 5, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 8, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1), imageUrls),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 1, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2), imageUrls)
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when
@@ -229,9 +229,9 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypeHourFiltering() throws Exception {
         //given
         List<PostResponse> postResponses = new LinkedList<>(Arrays.asList(
-                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3)),
-                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5))
+                new PostResponse(1L, userResponse, "이건 내용입니다.", 100, 10, 3, true, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+                new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3), imageUrls),
+                new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5), imageUrls)
         ));
         willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
         //when

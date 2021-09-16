@@ -1,6 +1,7 @@
 package com.backjoongwon.cvi.user.service;
 
 import com.backjoongwon.cvi.auth.domain.authorization.SocialProvider;
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.common.exception.DuplicateException;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
@@ -28,7 +29,10 @@ import static org.mockito.BDDMockito.willThrow;
 @SpringBootTest
 @Transactional
 @DisplayName("사용자 비즈니스 흐름 테스트")
-public class UserServiceTest {
+class UserServiceTest {
+
+    @MockBean
+    private AwsS3Uploader awsS3Uploader;
 
     @Autowired
     private UserService userService;

@@ -2,6 +2,14 @@ spring:
   profiles:
     active: test
 
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.aws.autoconfigure.context.ContextCredentialsAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextResourceLoaderAutoConfiguration
+      - org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
@@ -17,6 +25,7 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
+        default_batch_fetch_size: 500
         format_sql: true
     generate-ddl: true
 
@@ -30,12 +39,31 @@ security:
       expire-length: 3600000
 
   auth:
+    kakao:
+      redirectUrl: redirect-url
     naver:
       client-secret: client-secret
 
   public:
     data:
-      vaccination: bRU9Gbs0x/64WQS6gH05wpOxkM+X0GY0bXrUKRpW/072Bu6hlrJIqGVv6JC/uEz4mt4EC1l+l/8rxmz3ShAAAw==
+      vaccination: publicdata-secret
+
+aws:
+  s3:
+    bucket_name: bucket-name
+    directory:
+      path:
+        posts:
+          images: dir-path
+  cloudfront:
+    url: https://cloudfront.net
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 logging:
   level:

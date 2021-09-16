@@ -15,14 +15,15 @@ const Container = styled.div`
   }
 `;
 
-const Img = styled.img`
+const Video = styled.video`
   position: absolute;
-  width: ${({ width }) => width && width};
-  height: ${({ height }) => height && height};
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 999;
+
+  height: ${({ height }) => height && height};
+  width: ${({ width }) => width && width};
 `;
 
-export { Container, Img };
+export { Container, Video };

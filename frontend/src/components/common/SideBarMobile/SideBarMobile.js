@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Dimmer,
@@ -14,8 +12,7 @@ import {
   ProfileContainer,
   User,
 } from './SideBarMobile.styles';
-import { FONT_COLOR, LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE } from '../../../constants';
-import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
+import { FONT_COLOR, PATH } from '../../../constants';
 import {
   HomeIcon,
   LoginIcon,
@@ -30,37 +27,15 @@ import { css } from '@emotion/react';
 import { AVATAR_SIZE_TYPE } from '../Avatar/Avatar.styles';
 import Avatar from '../Avatar/Avatar';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
-import { useSnackBar } from '../../../hooks';
 
-const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
-  const history = useHistory();
-  const dispatch = useDispatch();
+const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar, logout }) => {
   const user = useSelector((state) => state.authReducer?.user);
-
-  const { openSnackBar } = useSnackBar();
-
-  const logout = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
-    dispatch(logoutAction());
-
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
-    setIsOpenSideBar(false);
-    history.push(PATH.HOME);
-  };
 
   const closeSideBar = (event) => {
     if (event.target !== event.currentTarget) return;
 
     setIsOpenSideBar(false);
   };
-
-  useEffect(() => {
-    const accessToken = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN));
-
-    if (!accessToken) return;
-
-    dispatch(getMyInfoAsync(accessToken));
-  }, []);
 
   return (
     <Dimmer isOpenSideBar={isOpenSideBar} onClick={closeSideBar}>
@@ -71,6 +46,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
             styles={css`
               padding: 0;
             `}
+            aria-label="close-button"
             onClick={() => setIsOpenSideBar(false)}
           >
             <CloseIcon width="32" height="32" stroke={FONT_COLOR.BLACK} />
@@ -135,6 +111,7 @@ const SideBarMobile = ({ isOpenSideBar, setIsOpenSideBar }) => {
 };
 
 SideBarMobile.propTypes = {
+  logout: PropTypes.func.isRequired,
   isOpenSideBar: PropTypes.bool,
   setIsOpenSideBar: PropTypes.func,
 };

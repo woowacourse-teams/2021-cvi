@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { FONT_COLOR } from '../../constants';
 
 const Container = styled.div`
   padding: 2.5rem 8rem 6rem 8rem;
@@ -46,11 +47,21 @@ const Content = styled.div`
 
 const Title = styled.h2`
   font-size: 2.8rem;
-  margin-bottom: 3.2rem;
+  margin-bottom: 2.8rem;
 
   @media screen and (max-width: 1024px) {
     margin-left: 2rem;
   }
 `;
 
-export { Container, Content, Title };
+const Source = styled.div`
+  font-size: 1.2rem;
+  color: ${FONT_COLOR.GRAY};
+  margin: 3.2rem auto 0 auto;
+
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 2rem;
+  }
+`;
+
+export { Container, Content, Title, Source };

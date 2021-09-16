@@ -38,6 +38,8 @@ const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount })
 
   useEffect(() => {
     getCommentList();
+
+    return () => setCommentList([]);
   }, [getCommentList]);
 
   return (

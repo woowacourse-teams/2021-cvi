@@ -4,12 +4,15 @@ import {
   Content,
   Writer,
   ViewCount,
-  TopContainer,
+  ContentContainer,
   BottomContainer,
   IconContainer,
   InfoContainer,
   CreatedAt,
   buttonStyles,
+  PreviewImage,
+  PreviewImageContainer,
+  MoreImageCount,
 } from './ReviewItem.styles';
 import { LABEL_SIZE_TYPE } from '../common/Label/Label.styles';
 import {
@@ -37,6 +40,7 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
     hasLiked,
     likeCount,
     commentCount,
+    images,
   } = review;
 
   const labelFontColor = vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -58,16 +62,22 @@ const ReviewItem = ({ review, accessToken, innerRef, path, onClick }) => {
 
   return (
     <Container ref={innerRef} onClick={onClick}>
-      <TopContainer>
-        <Label
-          backgroundColor={VACCINATION_COLOR[vaccinationType]}
-          sizeType={LABEL_SIZE_TYPE.MEDIUM}
-          fontColor={labelFontColor}
-        >
-          {VACCINATION[vaccinationType]}
-        </Label>
-      </TopContainer>
-      <Content>{content}</Content>
+      <Label
+        backgroundColor={VACCINATION_COLOR[vaccinationType]}
+        sizeType={LABEL_SIZE_TYPE.MEDIUM}
+        fontColor={labelFontColor}
+      >
+        {VACCINATION[vaccinationType]}
+      </Label>
+      <ContentContainer>
+        <Content>{content}</Content>
+        {!!images?.length && (
+          <PreviewImageContainer>
+            <PreviewImage src={images[0]} alt={`${id}-preview`} />
+            {images?.length > 1 && <MoreImageCount>+ {images?.length - 1}</MoreImageCount>}
+          </PreviewImageContainer>
+        )}
+      </ContentContainer>
       <Writer>
         {writer?.nickname} · {writer?.ageRange.meaning}
       </Writer>
@@ -116,7 +126,8 @@ ReviewItem.propTypes = {
     viewCount: PropTypes.number.isRequired,
     hasLiked: PropTypes.bool.isRequired,
     likeCount: PropTypes.number.isRequired,
-    commentCount: PropTypes.number,
+    commentCount: PropTypes.number.isRequired,
+    images: PropTypes.array.isRequired,
   }).isRequired,
   accessToken: PropTypes.string.isRequired,
   innerRef: PropTypes.func,

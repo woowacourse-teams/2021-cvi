@@ -27,9 +27,10 @@ public class PostWithCommentResponse {
     private List<CommentResponse> comments;
     private VaccinationType vaccinationType;
     private LocalDateTime createdAt;
+    private List<String> images;
 
     public PostWithCommentResponse(Long id, UserResponse user, String content, int viewCount, int likeCount,
-                                   boolean hasLiked, List<CommentResponse> comments, VaccinationType vaccinationType, LocalDateTime createdAt) {
+                                   boolean hasLiked, List<CommentResponse> comments, VaccinationType vaccinationType, LocalDateTime createdAt, List<String> imageUrls) {
         this.id = id;
         this.writer = user;
         this.content = content;
@@ -39,11 +40,13 @@ public class PostWithCommentResponse {
         this.comments = comments;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
+        this.images = imageUrls;
     }
 
     public static PostWithCommentResponse of(Post post, User viewer) {
         return new PostWithCommentResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
-                post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer), makeCommentResponses(post.getCommentsAsList()), post.getVaccinationType(), post.getCreatedAt());
+                post.getViewCount(), post.getLikesCount(), post.isAlreadyLikedBy(viewer),
+                makeCommentResponses(post.getCommentsAsList()), post.getVaccinationType(), post.getCreatedAt(), post.getImagesAsUrlList());
     }
 
     private static List<CommentResponse> makeCommentResponses(List<Comment> comments) {

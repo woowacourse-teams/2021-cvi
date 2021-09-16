@@ -98,7 +98,7 @@ class PostTest {
                 .build();
         post.assignUser(user);
         //when
-        post.update(updatedPost, user);
+        post.updateContent(updatedPost, user);
         //then
         assertThat(post.getContent()).isEqualTo(updatedPost.getContent());
     }
@@ -117,7 +117,7 @@ class PostTest {
         post.assignUser(user);
         //when
         //then
-        assertThatThrownBy(() -> post.update(updatedPost, targetUser))
+        assertThatThrownBy(() -> post.updateContent(updatedPost, targetUser))
                 .isExactlyInstanceOf(InvalidOperationException.class);
     }
 

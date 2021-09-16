@@ -9,6 +9,7 @@ const Container = styled.div`
   @media screen and (max-width: 1024px) {
     padding: 0;
     margin-top: 0;
+    padding-bottom: 2.6rem;
   }
 `;
 
@@ -16,7 +17,7 @@ const FrameContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 55rem;
+  min-height: 55rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -72,10 +73,12 @@ const CreatedAt = styled.div`
   color: ${FONT_COLOR.LIGHT_GRAY};
   padding-bottom: 0.2rem;
   margin: 0 1.6rem 0 0.3rem;
+  white-space: nowrap;
 `;
+
 const TextArea = styled.textarea`
   margin: 3rem;
-  height: 100%;
+  min-height: 40rem;
   padding: 2rem 3rem;
   font-size: 1.6rem;
   color: ${FONT_COLOR.BLACK};
@@ -105,6 +108,39 @@ const EditButtonContainer = styled.div`
   }
 `;
 
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 68rem;
+  margin: 3rem auto 0 auto;
+  align-items: center;
+`;
+
+const inputStyles = css`
+  display: none;
+`;
+
+const labelStyles = css`
+  display: block;
+  width: 5.2rem;
+  height: 5.2rem;
+  font-size: 3.8rem;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: ${FONT_COLOR.WHITE};
+  padding: 0.1rem 0.3rem 0 0;
+  margin: 0 auto 3.2rem auto;
+  background-color: ${FONT_COLOR.BLUE_GRAY};
+
+  &:hover {
+    background-color: #9da5ad;
+  }
+`;
+
 export {
   Container,
   FrameContent,
@@ -120,4 +156,7 @@ export {
   ViewCount,
   editButtonStyles,
   EditButtonContainer,
+  ImageContainer,
+  inputStyles,
+  labelStyles,
 };

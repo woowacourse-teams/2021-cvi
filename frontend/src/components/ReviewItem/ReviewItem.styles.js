@@ -14,7 +14,6 @@ const Container = styled.li`
 `;
 
 const Content = styled.div`
-  width: 100%;
   margin: 2.4rem 0;
   line-height: 1.5;
   white-space: normal;
@@ -33,9 +32,10 @@ const ViewCount = styled.div`
   margin-left: 0.4rem;
 `;
 
-const TopContainer = styled.div`
+const ContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 2rem;
 `;
 
 const BottomContainer = styled.div`
@@ -60,12 +60,37 @@ const IconContainer = styled.div`
 const CreatedAt = styled.div`
   display: flex;
   align-items: center;
-  min-width: 7.6rem;
+  white-space: nowrap;
 `;
 
 const buttonStyles = css`
   color: ${FONT_COLOR.LIGHT_GRAY};
   padding-left: 0;
+`;
+
+const PreviewImage = styled.img`
+  width: 12rem;
+  height: 12rem;
+`;
+
+const PreviewImageContainer = styled.div`
+  width: 12rem;
+  height: 12rem;
+  position: relative;
+`;
+
+const MoreImageCount = styled.div`
+  width: 12rem;
+  height: 12rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 2.8rem;
+  color: ${FONT_COLOR.WHITE};
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export {
@@ -74,9 +99,12 @@ export {
   Content,
   Writer,
   ViewCount,
-  TopContainer,
+  ContentContainer,
   BottomContainer,
   InfoContainer,
   CreatedAt,
   buttonStyles,
+  PreviewImage,
+  PreviewImageContainer,
+  MoreImageCount,
 };

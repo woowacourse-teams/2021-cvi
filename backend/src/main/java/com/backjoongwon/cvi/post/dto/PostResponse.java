@@ -5,6 +5,7 @@ import com.backjoongwon.cvi.post.domain.VaccinationType;
 import com.backjoongwon.cvi.user.domain.User;
 import com.backjoongwon.cvi.user.dto.UserResponse;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,11 +26,12 @@ public class PostResponse {
     private boolean hasLiked;
     private VaccinationType vaccinationType;
     private LocalDateTime createdAt;
+    private List<String> images;
 
-    public PostResponse(Long id, UserResponse user, String content, int viewCount, int likeCount, int commentCount,
-                        boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt) {
+    @Builder
+    public PostResponse(Long id, UserResponse writer, String content, int viewCount, int likeCount, int commentCount, boolean hasLiked, VaccinationType vaccinationType, LocalDateTime createdAt, List<String> imageUrls) {
         this.id = id;
-        this.writer = user;
+        this.writer = writer;
         this.content = content;
         this.viewCount = viewCount;
         this.likeCount = likeCount;
@@ -37,11 +39,17 @@ public class PostResponse {
         this.hasLiked = hasLiked;
         this.vaccinationType = vaccinationType;
         this.createdAt = createdAt;
+        this.images = imageUrls;
     }
 
     public static PostResponse of(Post post, User viewer) {
         return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
-                post.getViewCount(), post.getLikesCount(), post.getCommentsAsList().size(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt());
+                post.getViewCount(), post.getLikesCount(), post.getCommentsAsList().size(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt(), post.getImagesAsUrlList());
+    }
+
+    public static PostResponse of(Post post, User viewer, List<String> imageUrls) {
+        return new PostResponse(post.getId(), UserResponse.of(post.getUser(), null), post.getContent(),
+                post.getViewCount(), post.getLikesCount(), post.getCommentsAsList().size(), post.isAlreadyLikedBy(viewer), post.getVaccinationType(), post.getCreatedAt(), imageUrls);
     }
 
     public static List<PostResponse> toList(List<Post> posts, User viewer) {

@@ -9,6 +9,7 @@ import com.backjoongwon.cvi.common.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,7 +25,9 @@ public class KakaoAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-    private static final String REDIRECT_URL = "https://vaccine-review.com/auth/kakao/callback";
+
+    @Value("${security.auth.kakao.redirectUrl}")
+    private String redirectUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -74,7 +77,7 @@ public class KakaoAuthorization implements Authorization {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "1a06cf63be2ce0a6ebd8f49cd534e1c9");
-        params.add("redirect_uri", REDIRECT_URL);
+        params.add("redirect_uri", redirectUrl);
         params.add("code", code);
 
         HttpHeaders headers = new HttpHeaders();

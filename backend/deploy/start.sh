@@ -24,18 +24,23 @@ echo "> $JAR_LOCATION 실행"
 IDLE_PROFILE=$(find_idle_profile)
 
 echo "> $JAR_LOCATION 를 profile=$IDLE_PROFILE 로 실행합니다."
-if [[ "$1" == prod ]]
-then
-  nohup java -jar \
-    -Duser.timezone=Asia/Seoul \
-    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-client-secret.yml,/home/ubuntu/deploy/application-publicdata-secret.yml \
-    -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
-    $JAR_LOCATION > ~/nohup.out 2>&1 &
-else
-  nohup java -jar \
-    -Duser.timezone=Asia/Seoul \
-    -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-client-secret.yml,/home/ubuntu/deploy/application-publicdata-secret.yml \
-    -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
-    $JAR_LOCATION > ~/nohup.out 2>&1 &
-fi
 
+case $1 in
+  "dev")
+    nohup java -jar \
+        -Duser.timezone=Asia/Seoul \
+        -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-auth.yml,/home/ubuntu/deploy/application-publicdata-secret.yml,/home/ubuntu/deploy/application-aws-s3.yml \
+        -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
+        $JAR_LOCATION > ~/nohup.out 2>&1 &
+    ;;
+  "prod")
+    nohup java -jar \
+        -Duser.timezone=Asia/Seoul \
+        -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-auth.yml,/home/ubuntu/deploy/application-publicdata-secret.yml,/home/ubuntu/deploy/application-aws-s3.yml \
+        -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
+        $JAR_LOCATION > ~/nohup.out 2>&1 &
+    ;;
+  *)
+    echo "올바르지 않은 배포 환경입니다. 입력된 배포 환경 : $1"
+    exit 1
+esac

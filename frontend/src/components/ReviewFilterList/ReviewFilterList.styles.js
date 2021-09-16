@@ -27,7 +27,7 @@ const Type = styled.div`
 
   @media screen and (max-width: 801px) {
     align-items: flex-start;
-    padding-top: 1rem;
+    padding-top: 0.4rem;
   }
 `;
 

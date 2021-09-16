@@ -31,7 +31,11 @@ const App = () => {
             <PublicRoute exact path={PATH.HOME} component={HomePage} />
             <PublicRoute exact path={PATH.REVIEW} component={ReviewPage} />
             <PublicRoute exact path={`${PATH.REVIEW}/:id`} component={ReviewDetailPage} />
-            <PublicRoute exact path={`${PATH.REVIEW}/:id/edit`} component={ReviewEditPage} />
+            <PublicRoute
+              exact
+              path={`${PATH.REVIEW}/:id/edit`}
+              component={() => <ReviewEditPage />}
+            />
             <PublicRoute restricted exact path={PATH.LOGIN} component={LoginPage} />
             <PublicRoute restricted exact path={PATH.SIGNUP} component={SignupPage} />
             <PrivateRoute

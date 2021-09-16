@@ -116,7 +116,6 @@ const requestPostOAuthLogin = (data) =>
     body: JSON.stringify(data),
   });
 
-// users -> users/me
 const requestPutAccount = (accessToken, data) =>
   fetch(`${BASE_URL}/users/me`, {
     method: 'PUT',
@@ -208,6 +207,8 @@ const requestGetMyLikeReviewList = (accessToken, offset) =>
 const requestGetCommentList = (postId, offset) =>
   fetch(`${BASE_URL}/posts/${postId}/comments/paging?offset=${offset}&size=${PAGING_SIZE}`);
 
+const requestGetImage = (image) => fetch(image, { method: 'GET' });
+
 export {
   requestGetAllReviewList,
   requestGetSelectedReviewList,
@@ -230,4 +231,5 @@ export {
   requestGetMyCommentReviewList,
   requestGetMyLikeReviewList,
   requestGetCommentList,
+  requestGetImage,
 };

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import Lottie from 'react-lottie';
+import loadable from '@loadable/component';
 import { Container, Designer, Description } from './LottieAnimation.styles';
+
+const Lottie = loadable.lib(() => import('react-lottie'));
 
 const LottieAnimation = ({
   data,

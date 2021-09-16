@@ -1,9 +1,13 @@
 package com.backjoongwon.cvi.post.service;
 
+import com.backjoongwon.cvi.aws.s3.AwsS3Uploader;
 import com.backjoongwon.cvi.comment.domain.Comment;
 import com.backjoongwon.cvi.comment.domain.CommentRepository;
 import com.backjoongwon.cvi.common.exception.NotFoundException;
 import com.backjoongwon.cvi.common.exception.UnAuthorizedException;
+import com.backjoongwon.cvi.image.domain.Image;
+import com.backjoongwon.cvi.image.domain.ImageRepository;
+import com.backjoongwon.cvi.image.dto.ImageRequest;
 import com.backjoongwon.cvi.like.domain.Like;
 import com.backjoongwon.cvi.like.domain.LikeRepository;
 import com.backjoongwon.cvi.post.domain.*;
@@ -13,9 +17,12 @@ import com.backjoongwon.cvi.post.dto.PostWithCommentResponse;
 import com.backjoongwon.cvi.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,7 +34,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
+    @Value("${aws.s3.directory.path.posts.images}")
+    private String awsS3PostsImagesDirPath;
+
+    private final ImageConverter imageConverter;
+    private final AwsS3Uploader awsS3Uploader;
     private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
 
@@ -38,7 +51,41 @@ public class PostService {
         Post post = postRequest.toEntity();
         post.assignUser(writer);
         postRepository.save(post);
+        assignImages(post, postRequest.getImages());
         return PostResponse.of(post, writer);
+    }
+
+    private void assignImages(Post post, List<ImageRequest> imageRequests) {
+        if (imageRequests == null || imageRequests.isEmpty()) {
+            return;
+        }
+        final List<String> imageUrls = getUploadedImageUrls(imageRequests);
+        assignPostToImages(post, imageUrls);
+    }
+
+    private List<String> getUploadedImageUrls(List<ImageRequest> imageRequests) {
+        final List<String> imageUrls = new ArrayList<>();
+        for (ImageRequest imageRequest : imageRequests) {
+            final ImageFile imageFile = imageConverter.convertBytesToImageFile(imageRequest.getData(), imageRequest.getType());
+            final File file = imageFile.getFile();
+            final String imageUrl = awsS3Uploader.upload(awsS3PostsImagesDirPath, file);
+            imageFile.delete();
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
+
+    private List<Image> assignPostToImages(Post post, List<String> imageUrls) {
+        final List<Image> images = new ArrayList<>();
+        for (String imageUrl : imageUrls) {
+            final Image image = Image.builder()
+                    .url(imageUrl)
+                    .build();
+            image.assignPost(post);
+            imageRepository.save(image);
+            images.add(image);
+        }
+        return images;
     }
 
     @Transactional
@@ -67,7 +114,27 @@ public class PostService {
         validateSignedin(optionalUser);
         User user = optionalUser.get();
         Post post = findPostByPostId(id);
-        post.update(postRequest.toEntity(), user);
+        updateImages(post, postRequest.getImages());
+        post.updateContent(postRequest.toEntity(), user);
+    }
+
+    private void updateImages(Post post, List<ImageRequest> imageRequests) {
+        deleteAllImagesInPost(post);
+        if (imageRequests.isEmpty()) {
+            return;
+        }
+        assignImages(post, imageRequests);
+    }
+
+    private void deleteAllImagesInPost(Post post) {
+        deleteImagesFromAwsS3(post.getS3PathsOfAllImages());
+        imageRepository.deleteAll(post.getAllImagesAsList());
+    }
+
+    private void deleteImagesFromAwsS3(List<String> s3PathsToDelete) {
+        for (String path : s3PathsToDelete) {
+            awsS3Uploader.delete(awsS3PostsImagesDirPath, path);
+        }
     }
 
     @Transactional
@@ -76,6 +143,8 @@ public class PostService {
         User user = optionalUser.get();
         Post post = findPostByPostId(id);
         post.validateAuthor(user);
+        deleteImagesFromAwsS3(post.getS3PathsOfAllImages());
+        imageRepository.deleteAll(post.getAllImagesAsList());
         postRepository.deleteById(id);
     }
 

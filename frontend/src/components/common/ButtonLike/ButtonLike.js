@@ -18,6 +18,7 @@ const ButtonLike = ({
     backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
     color={color}
     styles={likeButtonStyles}
+    aria-label="like-button"
     onClick={onClickLike}
   >
     {hasLiked ? (
