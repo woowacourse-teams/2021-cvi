@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { AVATAR_SIZE_TYPE, Container } from './Avatar.styles';
-import defaultImg from '../../../assets/images/default_profile.webp';
+import defaultImg from '../../../assets/images/default_profile.png';
 
 const Avatar = ({ sizeType, src, styles, onClick }) => (
   <Container
