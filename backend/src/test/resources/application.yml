@@ -39,8 +39,6 @@ security:
       expire-length: 3600000
 
   auth:
-    kakao:
-      redirectUrl: redirect-url
     naver:
       client-secret: client-secret
 

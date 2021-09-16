@@ -46,6 +46,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
     private ExtractableResponse<Response> 소셜_로그인_요청(AuthRequest authRequest) {
         return RestAssured.given().log().all()
+                .header("Origin", "http://localhost:9000")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(authRequest)
                 .when().post("/api/v1/auth")

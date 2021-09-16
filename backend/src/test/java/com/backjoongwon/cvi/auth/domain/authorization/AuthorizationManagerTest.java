@@ -25,6 +25,7 @@ class AuthorizationManagerTest {
     private static final String KAKAO_PROFILE_RESPONSE = "{\"id\":1816688137,\"connected_at\":\"2021-07-22T05:43:16Z\",\"properties\":{\"nickname\":\"김영빈\"},\"kakao_account\":{\"profile_nickname_needs_agreement\":false,\"profile_image_needs_agreement\":false,\"profile\":{\"nickname\":\"김영빈\",\"thumbnail_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg\",\"profile_image_url\":\"http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg\",\"is_default_image\":true}}}";
     private static final String STATE = "STATE";
     private static final String SOCIAL_CODE = "CODE";
+    private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
     private Map<String, Authorization> authorizationMap = new HashMap<>();
     private AuthorizationManager authorizationManager = new AuthorizationManager(authorizationMap);
@@ -52,9 +53,9 @@ class AuthorizationManagerTest {
     @Test
     void requestNaverUserInfo() {
         //given
-        willReturn(naverUserInfo).given(naverAuthorization).requestProfile(SOCIAL_CODE, STATE);
+        willReturn(naverUserInfo).given(naverAuthorization).requestProfile(SOCIAL_CODE, STATE, REQUEST_ORIGIN);
         //when
-        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.NAVER, SOCIAL_CODE, STATE);
+        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.NAVER, SOCIAL_CODE, STATE, REQUEST_ORIGIN);
         //then
         assertThat(expected).isEqualTo(naverUserInfo);
     }
@@ -63,9 +64,9 @@ class AuthorizationManagerTest {
     @Test
     void requestKakaoUserInfo() {
         //given
-        willReturn(kakaoUserInfo).given(kakaoAuthorization).requestProfile(SOCIAL_CODE, null);
+        willReturn(kakaoUserInfo).given(kakaoAuthorization).requestProfile(SOCIAL_CODE, null, REQUEST_ORIGIN);
         //when
-        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, null);
+        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, null, REQUEST_ORIGIN);
         //then
         assertThat(expected).isEqualTo(kakaoUserInfo);
     }
@@ -76,7 +77,7 @@ class AuthorizationManagerTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE))
+        assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE, REQUEST_ORIGIN))
                 .isExactlyInstanceOf(InvalidOperationException.class)
                 .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
     }

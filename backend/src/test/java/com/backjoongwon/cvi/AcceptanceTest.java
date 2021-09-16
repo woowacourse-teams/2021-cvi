@@ -78,11 +78,11 @@ public class AcceptanceTest {
     }
 
     protected UserResponse 가입된_회원_로그인() {
-        return willReturn(가입회원).given(authService).authenticate(any(AuthRequest.class));
+        return willReturn(가입회원).given(authService).authenticate(any(AuthRequest.class), any(String.class));
     }
 
     protected UserResponse 신규_회원_로그인() {
-        return willReturn(신규회원).given(authService).authenticate(any(AuthRequest.class));
+        return willReturn(신규회원).given(authService).authenticate(any(AuthRequest.class), any(String.class));
     }
 
     protected UserResponse 회원_가입_되어있음(UserRequest signupRequest) {
