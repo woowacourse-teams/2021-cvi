@@ -24,7 +24,7 @@ const LottieAnimation = ({
 
   return (
     <Container width={width} mobileWidth={mobileWidth}>
-      <Lottie options={defaultOptions} />
+      <Lottie>{({ default: LottieContent }) => <LottieContent options={defaultOptions} />}</Lottie>
       {designer && <Designer mobileWidth={mobileWidth}>Animation by {designer}</Designer>}
       {description && (
         <Description mobileWidth={mobileWidth} styles={descriptionStyles}>
