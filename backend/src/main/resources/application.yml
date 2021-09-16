@@ -27,6 +27,8 @@ security:
       expire-length: 3600000
 
   auth:
+    kakao:
+      redirectUrl: http://localhost:9000/auth/kakao/callback
     naver:
       client-secret: client-secret
 
