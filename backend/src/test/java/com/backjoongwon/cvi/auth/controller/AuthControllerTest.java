@@ -68,7 +68,7 @@ public class AuthControllerTest extends ApiDocument {
     @Test
     void authenticate() throws Exception {
         //given
-        willReturn(userResponse).given(authService).authenticate(any(AuthRequest.class));
+        willReturn(userResponse).given(authService).authenticate(any(AuthRequest.class), any(String.class));
         //when
         ResultActions response = 사용자_OAuth_요청(authRequest);
         //then
@@ -79,7 +79,7 @@ public class AuthControllerTest extends ApiDocument {
     @Test
     void authenticateFailure() throws Exception {
         //given
-        willThrow(new UnAuthorizedException("OAuth 인증에 실패하였습니다.")).given(authService).authenticate(any(AuthRequest.class));
+        willThrow(new UnAuthorizedException("OAuth 인증에 실패하였습니다.")).given(authService).authenticate(any(AuthRequest.class), any(String.class));
         //when
         ResultActions response = 사용자_OAuth_요청(authRequest);
         //then
@@ -102,6 +102,7 @@ public class AuthControllerTest extends ApiDocument {
 
     private ResultActions 사용자_OAuth_요청(AuthRequest authRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/auth")
+                .header("Origin", "http://localhost:9000")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(authRequest)));
     }

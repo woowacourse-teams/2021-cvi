@@ -39,6 +39,7 @@ class AuthServiceTest {
     private static final String STATE = "STATE";
     private static final String NAVER_ID = "NAVER_ID";
     private static final String NAVER_PROFILE_URL = "naver.com/profile";
+    private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
     @MockBean
     private AwsS3Uploader awsS3Uploader;
@@ -86,9 +87,9 @@ class AuthServiceTest {
         //given
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState(), REQUEST_ORIGIN);
         //when
-        UserResponse expected = authService.authenticate(authRequest);
+        UserResponse expected = authService.authenticate(authRequest, REQUEST_ORIGIN);
         //then
         assertThat(expected.getNickname()).isEqualTo(userResponse.getNickname());
     }
@@ -99,9 +100,9 @@ class AuthServiceTest {
         //given
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NEW_ID");
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState(), REQUEST_ORIGIN);
         //when
-        UserResponse expected = authService.authenticate(authRequest);
+        UserResponse expected = authService.authenticate(authRequest, REQUEST_ORIGIN);
         //then
         assertThat(expected.getNickname()).isNull();
         assertThat(expected.getId()).isNull();
@@ -115,10 +116,10 @@ class AuthServiceTest {
 
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState(), REQUEST_ORIGIN);
         //when
         //then
-        assertThatThrownBy(() -> authService.authenticate(invalidRequest))
+        assertThatThrownBy(() -> authService.authenticate(invalidRequest, REQUEST_ORIGIN))
                 .isExactlyInstanceOf(MappingFailureException.class);
     }
 
@@ -130,10 +131,10 @@ class AuthServiceTest {
 
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState(), REQUEST_ORIGIN);
         //when
         //then
-        assertThatThrownBy(() -> authService.authenticate(invalidRequest))
+        assertThatThrownBy(() -> authService.authenticate(invalidRequest, REQUEST_ORIGIN))
                 .isExactlyInstanceOf(MappingFailureException.class);
     }
 }

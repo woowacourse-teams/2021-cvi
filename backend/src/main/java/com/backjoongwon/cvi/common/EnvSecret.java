@@ -16,7 +16,6 @@ public class EnvSecret {
 
     @PostConstruct
     public void init() {
-        log.info("kakao.redirectUrl = " + env.getProperty("security.auth.kakao.redirectUrl"));
         log.info("naver.client-secret = " + env.getProperty("security.auth.naver.client-secret"));
         log.info("jwt.secret-key = " + env.getProperty("security.jwt.token.secret-key"));
     }
