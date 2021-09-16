@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -19,9 +20,9 @@ public class AuthController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse authenticate(@RequestBody @Valid AuthRequest authRequest, HttpServletResponse httpServletResponse) {
-        UserResponse userResponse = authService.authenticate(authRequest);
-        httpServletResponse.setHeader("Authorization", userResponse.getAccessToken());
+    public UserResponse authenticate(@RequestBody @Valid AuthRequest authRequest, HttpServletRequest request, HttpServletResponse response) {
+        UserResponse userResponse = authService.authenticate(authRequest, request.getHeader("Origin"));
+        response.setHeader("Authorization", userResponse.getAccessToken());
         return userResponse;
     }
 }

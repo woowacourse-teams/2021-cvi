@@ -33,6 +33,7 @@ class NaverAuthorizationTest {
     private static final String ACCESS_TOKEN = "{ACCESS_TOKEN received from Social Provider}";
     private static final String REFRESH_TOKEN = "{REFRESH_TOKEN received from Social Provider}";
     private static final String EXPIRE_TIME = "3600";
+    private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
     private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
     private HttpEntity<MultiValueMap<String, String>> naverTokenRequest;
@@ -42,7 +43,7 @@ class NaverAuthorizationTest {
 
     @BeforeEach
     void beforeEach() {
-        naverTokenRequest = naverAuthorization.createTokenRequest(CODE, STATE);
+        naverTokenRequest = naverAuthorization.createTokenRequest(CODE, STATE, REQUEST_ORIGIN);
         tokenResponse = ResponseEntity.ok(TOKEN_RESPONSE);
         profileResponse = ResponseEntity.ok(PROFILE_RESPONSE);
 
@@ -57,7 +58,7 @@ class NaverAuthorizationTest {
     void requestProfile() {
         //given
         //when
-        UserInformation userInformation = naverAuthorization.requestProfile(CODE, STATE);
+        UserInformation userInformation = naverAuthorization.requestProfile(CODE, STATE, REQUEST_ORIGIN);
         //then
         assertThat(userInformation.getSocialId()).isEqualTo(NAVER_ID);
         assertThat(userInformation.getSocialProfileUrl()).isEqualTo(NAVER_PROFILE_URL);
@@ -68,7 +69,7 @@ class NaverAuthorizationTest {
     void requestToken() {
         //given
         //when
-        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.requestToken(CODE, STATE);
+        NaverOAuthToken expected = (NaverOAuthToken) naverAuthorization.requestToken(CODE, STATE, REQUEST_ORIGIN);
         //then
         assertThat(expected.getToken_type()).isEqualTo(BEARER);
         assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
@@ -80,11 +81,11 @@ class NaverAuthorizationTest {
     @Test
     void requestTokenFailure() {
         //given
-        HttpEntity<MultiValueMap<String, String>> invalidToken = naverAuthorization.createTokenRequest("INVALID_TOKEN", STATE);
+        HttpEntity<MultiValueMap<String, String>> invalidToken = naverAuthorization.createTokenRequest("INVALID_TOKEN", STATE, REQUEST_ORIGIN);
         willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(naverAuthorization).sendRequest(invalidToken, TOKEN_REQUEST_URL);
         //when
         //then
-        assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", STATE))
+        assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", STATE, REQUEST_ORIGIN))
                 .isExactlyInstanceOf(MappingFailureException.class);
     }
 
