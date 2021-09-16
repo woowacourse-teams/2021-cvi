@@ -45,7 +45,7 @@ const MyCommentsItem = ({ myCommentReview, myComments, innerRef, onClick }) => {
           {!!images?.length && (
             <PreviewImageContainer>
               <PreviewImage src={images[0]} />
-              {images?.length > 1 && <MoreImageCount>+ {images?.length - 1}</MoreImageCount>}
+              {images.length > 1 && <MoreImageCount>+ {images.length - 1}</MoreImageCount>}
             </PreviewImageContainer>
           )}
         </ReviewContainer>
