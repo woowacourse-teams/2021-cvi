@@ -47,7 +47,7 @@ public class PublicDataService {
     public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDate targetDate) {
         List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findAll();
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
-        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDate);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findKoreaRecentlyStatistics(targetDate);
         return recentlyStatistics.stream()
                 .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());
