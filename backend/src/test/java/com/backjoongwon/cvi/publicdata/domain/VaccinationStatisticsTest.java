@@ -48,7 +48,7 @@ class VaccinationStatisticsTest {
                 VACCINATION_STATISTICS_FROM_DB, TARGET_DATE.minusDays(1)
         );
         //then
-        assertThat(unSavedStatistics.size()).isEqualTo(WORLD_VACCINATION_STATISTICS_FROM_API.size()-1);
+        assertThat(unSavedStatistics.size()).isEqualTo(WORLD_VACCINATION_STATISTICS_FROM_API.size() - 1);
         assertThat(unSavedStatistics).allMatch(it -> it.getRegionPopulation() == RegionPopulation.WORLD);
     }
 
@@ -78,6 +78,4 @@ class VaccinationStatisticsTest {
         assertThat(worldRecentlyStatistics).extracting(VaccinationStatistic::getBaseDate)
                 .doesNotContain(TARGET_DATE);
     }
-
-
 }
