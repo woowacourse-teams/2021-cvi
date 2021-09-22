@@ -1,0 +1,26 @@
+name: front-build-test
+
+on:
+  pull_request: # 적용될 액션
+    branches: develop # 적용될 브랜치
+    paths:
+      - "frontend/**" # workflow에서 적용될 path
+
+defaults:
+  run:
+    working-directory: ./frontend # workflow에서 default working directory
+
+jobs:
+  open-localhost:
+    runs-on: ubuntu-latest # 인스턴스 OS
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2 # 워크플로에서 액세스할 수 있도록 에서 저장소를 체크아웃
+
+      - name: Install Dependencies
+        run: yarn
+
+      - run: yarn start &
+          sleep 10 &&
+          curl http://localhost:9000 &&
+          npx cypress run
