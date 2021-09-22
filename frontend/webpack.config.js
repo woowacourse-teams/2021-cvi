@@ -28,7 +28,7 @@ const config = {
       },
     }),
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed || {})),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   module: {
     rules: [
