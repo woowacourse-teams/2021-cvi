@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegionVaccinationDataFactory {
+public class KoreaVaccinationDataFactory {
 
     private final List<KoreaRegionVaccinationData> koreaRegionVaccinationData;
 
-    public RegionVaccinationDataFactory(List<KoreaRegionVaccinationData> koreaRegionVaccinationData) {
+    public KoreaVaccinationDataFactory(List<KoreaRegionVaccinationData> koreaRegionVaccinationData) {
         this.koreaRegionVaccinationData = new ArrayList<>(koreaRegionVaccinationData);
     }
 
