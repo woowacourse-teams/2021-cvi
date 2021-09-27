@@ -4,7 +4,7 @@ import com.backjoongwon.cvi.dto.KoreaVaccineParserResponse;
 import com.backjoongwon.cvi.dto.WorldVaccinationParserResponse;
 import com.backjoongwon.cvi.parser.VaccinationParser;
 import com.backjoongwon.cvi.publicdata.domain.*;
-import com.backjoongwon.cvi.publicdata.dto.RegionVaccinationDataFactory;
+import com.backjoongwon.cvi.publicdata.dto.KoreaVaccinationDataFactory;
 import com.backjoongwon.cvi.publicdata.dto.VaccinationStatisticResponse;
 import com.backjoongwon.cvi.publicdata.dto.WorldVaccinationDataFactory;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,8 @@ public class PublicDataService {
     public List<VaccinationStatisticResponse> saveVaccinationStatistics(LocalDate targetDate) {
         KoreaVaccineParserResponse koreaVaccineParserResponse = vacinationparser.parseToKoreaPublicData(targetDate, publicDataProperties.getVaccination());
 
-        RegionVaccinationDataFactory regionVaccinationDataFactory = new RegionVaccinationDataFactory(koreaVaccineParserResponse.getData());
-        VaccinationStatistics vaccinationStatistics = regionVaccinationDataFactory.toVaccinationStatistics();
+        KoreaVaccinationDataFactory koreaVaccinationDataFactory = new KoreaVaccinationDataFactory(koreaVaccineParserResponse.getData());
+        VaccinationStatistics vaccinationStatistics = koreaVaccinationDataFactory.toVaccinationStatistics();
         List<VaccinationStatistic> foundByDate = vaccinationStatisticRepository.findByBaseDate(targetDate);
         List<VaccinationStatistic> unSavedStatistics = vaccinationStatistics.findUnSavedStatistics(foundByDate, targetDate);
         return vaccinationStatisticRepository.saveAll(unSavedStatistics)
@@ -47,7 +47,7 @@ public class PublicDataService {
     public List<VaccinationStatisticResponse> findVaccinationStatistics(LocalDate targetDate) {
         List<VaccinationStatistic> foundVaccinationStatistics = vaccinationStatisticRepository.findAll();
         VaccinationStatistics vaccinationStatistics = new VaccinationStatistics(foundVaccinationStatistics);
-        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findRecentlyStatistics(targetDate);
+        List<VaccinationStatistic> recentlyStatistics = vaccinationStatistics.findKoreaRecentlyStatistics(targetDate);
         return recentlyStatistics.stream()
                 .map(VaccinationStatisticResponse::toResponse)
                 .collect(Collectors.toList());

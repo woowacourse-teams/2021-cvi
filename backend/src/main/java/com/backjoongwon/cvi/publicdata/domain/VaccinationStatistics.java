@@ -23,9 +23,9 @@ public class VaccinationStatistics {
                 .collect(Collectors.toList());
     }
 
-    public List<VaccinationStatistic> findRecentlyStatistics(LocalDate targetDate) {
+    public List<VaccinationStatistic> findKoreaRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(isSameOrBefore(targetDate).and(isSameRegionPopulation(RegionPopulation.WORLD).negate()))
+                .filter(isSameOrBefore(targetDate).and(isWorldRegion().negate()))
                 .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
                 .limit(RegionPopulation.size() - 1)
                 .sorted(Comparator.comparing(VaccinationStatistic::getRegionPopulation))
@@ -34,7 +34,7 @@ public class VaccinationStatistics {
 
     public List<VaccinationStatistic> findWorldRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(isSameOrBefore(targetDate).and(isSameRegionPopulation(RegionPopulation.WORLD)))
+                .filter(isSameOrBefore(targetDate).and(isWorldRegion()))
                 .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
                 .limit(1)
                 .collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class VaccinationStatistics {
         return vaccinationStatistic -> vaccinationStatistic.getBaseDate().isEqual(targetDate) || vaccinationStatistic.getBaseDate().isBefore(targetDate);
     }
 
-    private Predicate<VaccinationStatistic> isSameRegionPopulation(RegionPopulation regionPopulation) {
-        return vaccinationStatistic -> vaccinationStatistic.isSameRegionPopulation(regionPopulation);
+    private Predicate<VaccinationStatistic> isWorldRegion() {
+        return vaccinationStatistic -> vaccinationStatistic.isSameRegionPopulation(RegionPopulation.WORLD);
     }
 }
