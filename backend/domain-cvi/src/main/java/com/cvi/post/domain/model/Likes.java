@@ -26,9 +26,9 @@ public class Likes {
 
     private Like findLikeByUserId(Long userId) {
         return likes.stream()
-                .filter(like -> like.isSameUser(userId))
-                .findAny()
-                .orElseThrow(() -> new UnAuthorizedException("해당 사용자의 좋아요가 글에 존재하지 않습니다."));
+            .filter(like -> like.isSameUser(userId))
+            .findAny()
+            .orElseThrow(() -> new UnAuthorizedException("해당 사용자의 좋아요가 글에 존재하지 않습니다."));
     }
 
     public void delete(Long userId) {
@@ -55,7 +55,7 @@ public class Likes {
 
     public boolean isAlreadyLikedBy(Long userId) {
         return likes.stream()
-                .anyMatch(like -> like.isSameUser(userId));
+            .anyMatch(like -> like.isSameUser(userId));
     }
 
     public void add(Like like) {

@@ -4,17 +4,32 @@ import com.cvi.comment.domain.model.Comment;
 import com.cvi.config.entity.BaseEntity;
 import com.cvi.exception.InvalidOperationException;
 import com.cvi.exception.NotFoundException;
+import com.cvi.image.domain.Image;
 import com.cvi.like.domain.model.Like;
 import com.cvi.user.domain.model.User;
-import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @Entity
@@ -22,6 +37,9 @@ import java.util.stream.Collectors;
 @AttributeOverride(name = "id", column = @Column(name = "post_id"))
 @ToString(of = {"content", "viewCount", "vaccinationType"})
 public class Post extends BaseEntity {
+
+    @Embedded
+    private final Images images = new Images();
 
     @Embedded
     private final Likes likes = new Likes();
@@ -44,7 +62,7 @@ public class Post extends BaseEntity {
 
     @Builder
     public Post(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, User user,
-                String content, int viewCount, VaccinationType vaccinationType) {
+        String content, int viewCount, VaccinationType vaccinationType) {
         super(id, createdAt, lastModifiedAt);
         this.user = user;
         this.content = content;
@@ -65,7 +83,7 @@ public class Post extends BaseEntity {
         this.user = user;
     }
 
-    public void update(Post updatePost, User user) {
+    public void updateContent(Post updatePost, User user) {
         if (!this.user.equals(user)) {
             throw new InvalidOperationException("다른 사용자의 게시글은 수정할 수 없습니다.");
         }
@@ -120,8 +138,8 @@ public class Post extends BaseEntity {
     public List<Comment> sliceCommentsAsList(int offset, int size) {
         List<Comment> comments = this.comments.getComments();
         comments = comments.stream()
-                .sorted(Comparator.comparing(Comment::getCreatedAt).reversed())
-                .collect(Collectors.toList());
+            .sorted(Comparator.comparing(Comment::getCreatedAt).reversed())
+            .collect(Collectors.toList());
         int fromIndex = offset;
         fromIndex = resizePagingRange(comments, fromIndex);
         int toIndex = offset + size;
@@ -134,5 +152,27 @@ public class Post extends BaseEntity {
             fromIndex = comments.size();
         }
         return fromIndex;
+    }
+
+    public void assignImages(List<Image> images) {
+        this.images.addAll(images, this);
+    }
+
+    public List<String> getImagesAsUrlList() {
+        return images.getImages().stream()
+            .map(Image::getUrl)
+            .collect(Collectors.toList());
+    }
+
+    public boolean hasImages() {
+        return images.size() > 0;
+    }
+
+    public List<Image> getAllImagesAsList() {
+        return new ArrayList<>(images.getImages());
+    }
+
+    public List<String> getS3PathsOfAllImages() {
+        return images.getS3PathsOfAllImages();
     }
 }

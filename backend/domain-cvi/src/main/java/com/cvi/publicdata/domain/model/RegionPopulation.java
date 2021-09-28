@@ -1,10 +1,9 @@
 package com.cvi.publicdata.domain.model;
 
-import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 
 @Getter
 public enum RegionPopulation {
@@ -32,7 +31,7 @@ public enum RegionPopulation {
 
     static {
         Arrays.stream(values())
-                .forEach(it -> regions.put(it.region, it));
+            .forEach(it -> regions.put(it.region, it));
     }
 
     private final String region;

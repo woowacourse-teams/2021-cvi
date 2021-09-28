@@ -39,8 +39,8 @@ public class VaccinationStatistic extends PublicData {
 
     @Builder
     public VaccinationStatistic(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation,
-                                LocalDate baseDate, long firstCnt, long secondCnt, long totalFirstCnt, long totalSecondCnt, long accumulatedFirstCnt,
-                                long accumulatedSecondCnt, BigDecimal totalFirstRate, BigDecimal totalSecondRate) {
+        LocalDate baseDate, long firstCnt, long secondCnt, long totalFirstCnt, long totalSecondCnt, long accumulatedFirstCnt,
+        long accumulatedSecondCnt, BigDecimal totalFirstRate, BigDecimal totalSecondRate) {
         super(id, createdAt, lastModifiedAt, regionPopulation);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;
@@ -71,7 +71,7 @@ public class VaccinationStatistic extends PublicData {
 
     private BigDecimal calculateRate(long totalCnt) {
         return BigDecimal.valueOf(totalCnt).scaleByPowerOfTen(2)
-                .divide(BigDecimal.valueOf(this.regionPopulation.getPopulation()), 1, RoundingMode.HALF_EVEN);
+            .divide(BigDecimal.valueOf(this.regionPopulation.getPopulation()), 1, RoundingMode.HALF_EVEN);
     }
 
     public BigDecimal getTotalFirstRate() {

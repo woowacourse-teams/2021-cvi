@@ -2,17 +2,23 @@ package com.cvi.user.domain.model;
 
 import com.cvi.config.entity.BaseEntity;
 import com.cvi.exception.InvalidInputException;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.util.StringUtils;
-
-import javax.persistence.*;
+import java.time.LocalDateTime;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Entity
@@ -45,7 +51,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String nickname,
-                AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
+        AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
         super(id, createdAt, lastModifiedAt);
         validateNickName(nickname);
         this.nickname = nickname;
@@ -57,7 +63,7 @@ public class User extends BaseEntity {
     }
 
     private void validateNickName(String nickname) {
-        if (Objects.isNull(nickname) || nickname.isEmpty() || nickname.contains(" ")) {
+        if (StringUtils.isEmpty(nickname) || nickname.contains(" ")) {
             log.info("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: {}", nickname);
             throw new InvalidInputException(String.format("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: %s", nickname));
         }

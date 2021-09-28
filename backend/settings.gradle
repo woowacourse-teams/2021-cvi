@@ -7,4 +7,5 @@ include 'domain-cvi'
 include 'domain-cvi-oauth-service'
 include 'domain-cvi-publicdata-service'
 include 'domain-cvi-scheduler'
+include 'domain-cvi-aws-s3-service'
 

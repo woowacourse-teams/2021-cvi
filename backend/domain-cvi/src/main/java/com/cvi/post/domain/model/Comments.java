@@ -54,8 +54,8 @@ public class Comments {
 
     private Comment findById(Long commentId) {
         return comments.stream()
-                .filter(comment -> comment.isSameAs(commentId))
-                .findAny()
-                .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
+            .filter(comment -> comment.isSameAs(commentId))
+            .findAny()
+            .orElseThrow(() -> new NotFoundException("찾을 수 없는 댓글입니다."));
     }
 }

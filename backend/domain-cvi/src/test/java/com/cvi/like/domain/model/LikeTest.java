@@ -1,20 +1,19 @@
 package com.cvi.like.domain.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisplayName("댓글 도메인 테스트")
-public class LikeTest {
+class LikeTest {
 
     private Post post;
     private User user;
@@ -23,20 +22,20 @@ public class LikeTest {
     @BeforeEach
     void setUp() {
         post = Post.builder()
-                .id(1L)
-                .content("게시글 내용")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .id(1L)
+            .content("게시글 내용")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .createdAt(LocalDateTime.now())
+            .build();
         user = User.builder()
-                .id(1L)
-                .nickname("안녕하세욘")
-                .ageRange(AgeRange.TEENS)
-                .socialProvider(SocialProvider.KAKAO)
-                .socialId("KAKAO_ID")
-                .profileUrl("kakao.com/profile")
-                .createdAt(LocalDateTime.now())
-                .build();
+            .id(1L)
+            .nickname("안녕하세욘")
+            .ageRange(AgeRange.TEENS)
+            .socialProvider(SocialProvider.KAKAO)
+            .socialId("KAKAO_ID")
+            .profileUrl("kakao.com/profile")
+            .createdAt(LocalDateTime.now())
+            .build();
         like = Like.builder().id(1L).user(user).createdAt(LocalDateTime.now()).build();
     }
 

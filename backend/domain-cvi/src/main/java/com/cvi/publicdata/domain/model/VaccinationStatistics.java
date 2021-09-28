@@ -17,34 +17,34 @@ public class VaccinationStatistics {
 
     public List<VaccinationStatistic> findUnSavedStatistics(List<VaccinationStatistic> foundVaccinationStatistics, LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(isSameOrBefore(targetDate))
-                .filter(base -> foundVaccinationStatistics.stream()
-                        .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation)))
-                .collect(Collectors.toList());
+            .filter(isSameOrBefore(targetDate))
+            .filter(base -> foundVaccinationStatistics.stream()
+                .noneMatch(target -> target.isSameDate(base.getBaseDate()) && target.isSameRegionPopulation(base.regionPopulation)))
+            .collect(Collectors.toList());
     }
 
-    public List<VaccinationStatistic> findRecentlyStatistics(LocalDate targetDate) {
+    public List<VaccinationStatistic> findKoreaRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(isSameOrBefore(targetDate).and(isSameRegionPopulation(RegionPopulation.WORLD).negate()))
-                .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
-                .limit(RegionPopulation.size() - 1)
-                .sorted(Comparator.comparing(VaccinationStatistic::getRegionPopulation))
-                .collect(Collectors.toList());
+            .filter(isSameOrBefore(targetDate).and(isWorldRegion().negate()))
+            .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
+            .limit(RegionPopulation.size() - 1)
+            .sorted(Comparator.comparing(VaccinationStatistic::getRegionPopulation))
+            .collect(Collectors.toList());
     }
 
     public List<VaccinationStatistic> findWorldRecentlyStatistics(LocalDate targetDate) {
         return this.vaccinationStatistics.stream()
-                .filter(isSameOrBefore(targetDate).and(isSameRegionPopulation(RegionPopulation.WORLD)))
-                .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
-                .limit(1)
-                .collect(Collectors.toList());
+            .filter(isSameOrBefore(targetDate).and(isWorldRegion()))
+            .sorted(Comparator.comparing(VaccinationStatistic::getBaseDate).reversed())
+            .limit(1)
+            .collect(Collectors.toList());
     }
 
     private Predicate<VaccinationStatistic> isSameOrBefore(LocalDate targetDate) {
         return vaccinationStatistic -> vaccinationStatistic.getBaseDate().isEqual(targetDate) || vaccinationStatistic.getBaseDate().isBefore(targetDate);
     }
 
-    private Predicate<VaccinationStatistic> isSameRegionPopulation(RegionPopulation regionPopulation) {
-        return vaccinationStatistic -> vaccinationStatistic.isSameRegionPopulation(regionPopulation);
+    private Predicate<VaccinationStatistic> isWorldRegion() {
+        return vaccinationStatistic -> vaccinationStatistic.isSameRegionPopulation(RegionPopulation.WORLD);
     }
 }
