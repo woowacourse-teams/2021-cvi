@@ -1,6 +1,7 @@
 package com.cvi;
 
 import com.cvi.comment.domain.model.Comment;
+import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.like.domain.model.Like;
 import com.cvi.like.domain.repository.LikeRepository;
 import com.cvi.post.domain.model.Post;
@@ -10,22 +11,24 @@ import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.*;
-
 @Component
 @RequiredArgsConstructor
-@Profile("local")
+@Profile("dev")
 public class DataLoader implements CommandLineRunner {
 
     private static final int USER_COUNT = 50;
@@ -33,15 +36,17 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
     private final Random random = new Random();
-
-    @Autowired
     private final EntityManager em;
 
     @Override
     @Transactional
     public void run(String... args) {
-        if (userRepository.findAll().isEmpty()) {
+        if (userRepository.findAll().isEmpty()
+            && postRepository.findAll().isEmpty()
+            && likeRepository.findAll().isEmpty()
+            && commentRepository.findAll().isEmpty()) {
             List<User> users = new ArrayList<>();
             for (int i = 0; i < USER_COUNT; i++) {
                 User user = User.builder().nickname(String.valueOf(i)).socialId("socialId").socialProvider(SocialProvider.KAKAO).profileUrl("pictureUrl").ageRange(AgeRange.FIFTIES).build();

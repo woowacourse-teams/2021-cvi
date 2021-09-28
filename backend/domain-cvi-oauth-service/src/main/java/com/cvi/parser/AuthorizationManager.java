@@ -17,9 +17,9 @@ public class AuthorizationManager {
 
     private final Map<String, Authorization> authorizationMap;
 
-    public UserInformation requestUserInfo(SocialProvider provider, String code, String state) {
+    public UserInformation requestUserInfo(SocialProvider provider, String code, String state, String requestOrigin) {
         Authorization authorization = extractAuthorization(provider);
-        return authorization.requestProfile(code, state);
+        return authorization.requestProfile(code, state, requestOrigin);
     }
 
     private Authorization extractAuthorization(SocialProvider provider) {
@@ -39,4 +39,3 @@ public class AuthorizationManager {
         }
     }
 }
-

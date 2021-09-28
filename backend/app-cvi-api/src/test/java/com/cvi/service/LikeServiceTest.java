@@ -1,5 +1,8 @@
 package com.cvi.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.cvi.dto.LikeResponse;
 import com.cvi.dto.PostResponse;
 import com.cvi.exception.InvalidOperationException;
@@ -10,29 +13,25 @@ import com.cvi.like.domain.repository.LikeRepository;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
+import com.cvi.service.post.PostService;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
 @DisplayName("좋아요 비즈니스 흐름 테스트")
-public class LikeServiceTest {
+class LikeServiceTest {
 
     @Autowired
     private PostRepository postRepository;
@@ -48,9 +47,6 @@ public class LikeServiceTest {
 
     @Autowired
     private LikeService likeService;
-
-    @MockBean
-    private PublicDataScheduler publicDataScheduler;
 
     private User userWithoutLike;
     private User userWithLike;
@@ -68,19 +64,19 @@ public class LikeServiceTest {
 
     private void initUsers() {
         userWithoutLike = User.builder()
-                .nickname("테스트유저")
-                .ageRange(AgeRange.FORTIES)
-                .socialProvider(SocialProvider.NAVER)
-                .socialId("NAVER_ID")
-                .profileUrl("naver.com/profile")
-                .build();
+            .nickname("테스트유저")
+            .ageRange(AgeRange.FORTIES)
+            .socialProvider(SocialProvider.NAVER)
+            .socialId("NAVER_ID")
+            .profileUrl("naver.com/profile")
+            .build();
         userWithLike = User.builder()
-                .nickname("다른유저")
-                .ageRange(AgeRange.FORTIES)
-                .socialProvider(SocialProvider.NAVER)
-                .socialId("NAVER_ID")
-                .profileUrl("naver.com/profile")
-                .build();
+            .nickname("다른유저")
+            .ageRange(AgeRange.FORTIES)
+            .socialProvider(SocialProvider.NAVER)
+            .socialId("NAVER_ID")
+            .profileUrl("naver.com/profile")
+            .build();
 
         optionalUserWithoutLike = Optional.of(userWithoutLike);
         optionalUserWithLike = Optional.of(userWithLike);
@@ -90,11 +86,11 @@ public class LikeServiceTest {
 
     private void initPost() {
         post = Post.builder()
-                .content("테스트게시글")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(userWithLike)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("테스트게시글")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .user(userWithLike)
+            .createdAt(LocalDateTime.now())
+            .build();
         postRepository.save(post);
     }
 
@@ -121,7 +117,7 @@ public class LikeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likeService.createLike(Long.MAX_VALUE, optionalUserWithoutLike))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("좋아요 생성 - 실패 - 동일한 유저가 이미 좋아요를 누른 경우")
@@ -131,7 +127,7 @@ public class LikeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likeService.createLike(post.getId(), optionalUserWithLike))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("좋아요 생성 - 실패 - 비회원 좋아요 생성 시도")
@@ -141,7 +137,7 @@ public class LikeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likeService.createLike(post.getId(), optionalUserNotSignedIn))
-                .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("좋아요 삭제 - 성공")
@@ -151,7 +147,7 @@ public class LikeServiceTest {
         //when
         likeService.deleteLike(post.getId(), optionalUserWithLike);
         Post actualPost = postRepository.findWithLikesByPostId(post.getId())
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
         //then
         assertThat(actualPost.getLikes().getLikes()).isEmpty();
     }
@@ -163,8 +159,8 @@ public class LikeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likeService.deleteLike(post.getId(), optionalUserWithoutLike))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage("해당 사용자의 좋아요가 글에 존재하지 않습니다.");
+            .isInstanceOf(UnAuthorizedException.class)
+            .hasMessage("해당 사용자의 좋아요가 글에 존재하지 않습니다.");
     }
 
     @DisplayName("좋아요 삭제 - 실패 - 삭제 요청한 좋아요의 게시글이 없는 경우")
@@ -174,8 +170,8 @@ public class LikeServiceTest {
         //when
         //then
         assertThatThrownBy(() -> likeService.deleteLike(Long.MAX_VALUE, optionalUserWithoutLike))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("해당 id의 게시글이 존재하지 않습니다. 입력 값: " + Long.MAX_VALUE);
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage("해당 id의 게시글이 존재하지 않습니다. 입력 값: " + Long.MAX_VALUE);
     }
 
     @DisplayName("좋아요 누른 유저 hasLiked 상태값(true) 확인 - 성공")

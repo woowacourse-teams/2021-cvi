@@ -1,5 +1,7 @@
 package com.cvi.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.dto.PostResponse;
@@ -9,10 +11,21 @@ import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.Sort;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
+import com.cvi.service.post.PostService;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,22 +34,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
 @DisplayName("게시글 - 조회 비즈니스 흐름 테스트")
-public class PostFindServiceTest {
+class PostFindServiceTest {
 
     @Autowired
     private PostRepository postRepository;
@@ -52,9 +55,6 @@ public class PostFindServiceTest {
 
     @Autowired
     private PostService postService;
-
-    @MockBean
-    private PublicDataScheduler publicDataScheduler;
 
     @PersistenceContext
     private EntityManager em;
@@ -79,12 +79,12 @@ public class PostFindServiceTest {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             User dummyUser = User.builder()
-                    .nickname("테스트유저댓글" + i + "좋아요" + i)
-                    .ageRange(AgeRange.FORTIES)
-                    .socialProvider(SocialProvider.NAVER)
-                    .socialId("NAVER_ID")
-                    .profileUrl("naver.com/profile")
-                    .build();
+                .nickname("테스트유저댓글" + i + "좋아요" + i)
+                .ageRange(AgeRange.FORTIES)
+                .socialProvider(SocialProvider.NAVER)
+                .socialId("NAVER_ID")
+                .profileUrl("naver.com/profile")
+                .build();
             users.add(dummyUser);
         }
         user = users.get(0);
@@ -94,23 +94,23 @@ public class PostFindServiceTest {
 
     private List<Post> initPost(List<User> users) {
         postWithoutLikesAndComments = Post.builder()
-                .content("Test 0")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(users.get(0))
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("Test 0")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .user(users.get(0))
+            .createdAt(LocalDateTime.now())
+            .build();
         postWithOneLikesAndComments = Post.builder()
-                .content("Test 1")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(users.get(1))
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("Test 1")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .user(users.get(1))
+            .createdAt(LocalDateTime.now())
+            .build();
         postWithTwoLikesAndComments = Post.builder()
-                .content("Test 2")
-                .vaccinationType(VaccinationType.PFIZER)
-                .user(users.get(2))
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("Test 2")
+            .vaccinationType(VaccinationType.PFIZER)
+            .user(users.get(2))
+            .createdAt(LocalDateTime.now())
+            .build();
         postWithOneLikesAndComments.increaseViewCount();
         postWithTwoLikesAndComments.increaseViewCount();
         postWithTwoLikesAndComments.increaseViewCount();
@@ -160,16 +160,16 @@ public class PostFindServiceTest {
         List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, optionalUser);
         //then
         assertThat(postResponses).filteredOn(
-                response -> response.getVaccinationType().equals(vaccinationType)
+            response -> response.getVaccinationType().equals(vaccinationType)
         );
     }
 
     static Stream<Arguments> findByVaccineType() {
         return Stream.of(
-                Arguments.of(VaccinationType.PFIZER),
-                Arguments.of(VaccinationType.ASTRAZENECA),
-                Arguments.of(VaccinationType.MODERNA),
-                Arguments.of(VaccinationType.JANSSEN)
+            Arguments.of(VaccinationType.PFIZER),
+            Arguments.of(VaccinationType.ASTRAZENECA),
+            Arguments.of(VaccinationType.MODERNA),
+            Arguments.of(VaccinationType.JANSSEN)
         );
     }
 
@@ -211,9 +211,9 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeFirstPage() {
         return Stream.of(
-                Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 1")),
-                Arguments.of(VaccinationType.ASTRAZENECA, 2, Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, 1, Arrays.asList("Test 2"))
+            Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 1")),
+            Arguments.of(VaccinationType.ASTRAZENECA, 2, Arrays.asList("Test 1", "Test 0")),
+            Arguments.of(VaccinationType.PFIZER, 1, Arrays.asList("Test 2"))
         );
     }
 
@@ -231,7 +231,7 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeNextPage() {
         return Stream.of(
-                Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 0"))
+            Arguments.of(VaccinationType.ASTRAZENECA, 1, Arrays.asList("Test 0"))
         );
     }
 
@@ -249,9 +249,9 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeNextPageIsNull() {
         return Stream.of(
-                Arguments.of(VaccinationType.PFIZER, 1, Collections.emptyList()),
-                Arguments.of(VaccinationType.JANSSEN, 1, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, 1, Collections.emptyList())
+            Arguments.of(VaccinationType.PFIZER, 1, Collections.emptyList()),
+            Arguments.of(VaccinationType.JANSSEN, 1, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, 1, Collections.emptyList())
         );
     }
 
@@ -267,11 +267,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByLikeCountAsc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -287,11 +287,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByLikeCountDesc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -307,11 +307,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByCommentsCountAsc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -327,11 +327,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByCommentsCountDesc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -347,11 +347,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByViewCountAsc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -367,11 +367,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByViewCountDesc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -387,11 +387,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByCreatedAtAsc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 0", "Test 1", "Test 2")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 0", "Test 1")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -407,11 +407,11 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeSortByCreatedAtDesc() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
-                Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
-                Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Arrays.asList("Test 2", "Test 1", "Test 0")),
+            Arguments.of(VaccinationType.ASTRAZENECA, Arrays.asList("Test 1", "Test 0")),
+            Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
+            Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
         );
     }
 
@@ -427,10 +427,10 @@ public class PostFindServiceTest {
 
     static Stream<Arguments> findByVaccineTypeFilterByHour() {
         return Stream.of(
-                Arguments.of(VaccinationType.ALL, Integer.MAX_VALUE, Arrays.asList("Test 2", "Test 1", "Test 0")),
-                Arguments.of(VaccinationType.ALL, 3, Arrays.asList("Test 2", "Test 1")),
-                Arguments.of(VaccinationType.ALL, 2, Arrays.asList("Test 2")),
-                Arguments.of(VaccinationType.ALL, 1, Collections.emptyList())
+            Arguments.of(VaccinationType.ALL, Integer.MAX_VALUE, Arrays.asList("Test 2", "Test 1", "Test 0")),
+            Arguments.of(VaccinationType.ALL, 3, Arrays.asList("Test 2", "Test 1")),
+            Arguments.of(VaccinationType.ALL, 2, Arrays.asList("Test 2")),
+            Arguments.of(VaccinationType.ALL, 1, Collections.emptyList())
         );
     }
 }

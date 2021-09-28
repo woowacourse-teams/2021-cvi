@@ -1,5 +1,10 @@
 package com.cvi.parser;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.spy;
+
 import com.cvi.dto.oauthtoken.KakaoOAuthToken;
 import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.SocialProfile;
@@ -12,11 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.spy;
 
 @DisplayName("Kakao Authorization 도메인 테스트")
 class KakaoAuthorizationTest {
@@ -33,6 +33,7 @@ class KakaoAuthorizationTest {
     private static final String REFRESH_TOKEN = "{REFRESH_TOKEN received from Social Provider}";
     private static final String TOKEN_EXPIRE_TIME = "25184000";
     private static final String SCOPE = "account_email profile";
+    private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
     private KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
     private HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest;
@@ -42,7 +43,7 @@ class KakaoAuthorizationTest {
 
     @BeforeEach
     void beforeEach() {
-        kakaoTokenRequest = kakaoAuthorization.createTokenRequest(CODE, null);
+        kakaoTokenRequest = kakaoAuthorization.createTokenRequest(CODE, null, REQUEST_ORIGIN);
         tokenResponse = ResponseEntity.ok(TOKEN_RESPONSE);
         profileResponse = ResponseEntity.ok(PROFILE_RESPONSE);
 
@@ -57,7 +58,7 @@ class KakaoAuthorizationTest {
     void requestProfile() {
         //given
         //when
-        UserInformation userInformation = kakaoAuthorization.requestProfile(CODE, null);
+        UserInformation userInformation = kakaoAuthorization.requestProfile(CODE, null, REQUEST_ORIGIN);
         //then
         assertThat(userInformation.getSocialId()).isEqualTo(KAKAO_SOCIAL_ID);
         assertThat(userInformation.getSocialProfileUrl()).isEqualTo("http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
@@ -68,7 +69,7 @@ class KakaoAuthorizationTest {
     void requestToken() {
         //given
         //when
-        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.requestToken(CODE, null);
+        KakaoOAuthToken expected = (KakaoOAuthToken) kakaoAuthorization.requestToken(CODE, null, REQUEST_ORIGIN);
         //then
         assertThat(expected.getToken_type()).isEqualTo(BEARER);
         assertThat(expected.getAccess_token()).isEqualTo(ACCESS_TOKEN);
@@ -82,12 +83,12 @@ class KakaoAuthorizationTest {
     @Test
     void requestTokenFailure() {
         //given
-        HttpEntity<MultiValueMap<String, String>> invalidToken = kakaoAuthorization.createTokenRequest("INVALID_TOKEN", null);
+        HttpEntity<MultiValueMap<String, String>> invalidToken = kakaoAuthorization.createTokenRequest("INVALID_TOKEN", null, REQUEST_ORIGIN);
         willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(kakaoAuthorization).sendRequest(invalidToken, TOKEN_REQUEST_URL);
         //when
         //then
-        assertThatThrownBy(() -> kakaoAuthorization.requestToken("INVALID_TOKEN", null))
-                .isExactlyInstanceOf(MappingFailureException.class);
+        assertThatThrownBy(() -> kakaoAuthorization.requestToken("INVALID_TOKEN", null, REQUEST_ORIGIN))
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("토큰 매핑 테스트 - 성공")
@@ -112,7 +113,7 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.mapToOAuthToken(ResponseEntity.ok("NOT_VALID_TOKEN")))
-                .isExactlyInstanceOf(MappingFailureException.class);
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 요청 테스트 - 성공")
@@ -136,7 +137,7 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.parseProfile(oAuthToken))
-                .isExactlyInstanceOf(MappingFailureException.class);
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("프로필 매핑 테스트 - 성공")
@@ -157,6 +158,6 @@ class KakaoAuthorizationTest {
         //when
         //then
         assertThatThrownBy(() -> kakaoAuthorization.mapToProfile(ResponseEntity.ok("NOT_VALID_PROFILE")))
-                .isExactlyInstanceOf(MappingFailureException.class);
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 }

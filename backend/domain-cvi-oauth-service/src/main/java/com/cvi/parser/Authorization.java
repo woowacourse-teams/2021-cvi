@@ -9,17 +9,17 @@ import org.springframework.util.MultiValueMap;
 
 public interface Authorization {
 
-    UserInformation requestProfile(String code, String state);
+    UserInformation requestProfile(String code, String state, String requestOrigin);
 
     UserInformation parseProfile(OAuthToken oAuthToken);
 
-    OAuthToken requestToken(String code, String state);
+    OAuthToken requestToken(String code, String state, String requestOrigin);
 
     OAuthToken mapToOAuthToken(ResponseEntity<String> response);
 
     SocialProfile mapToProfile(ResponseEntity<String> response);
 
-    HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state);
+    HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state, String requestOrigin);
 
     HttpEntity<MultiValueMap<String, String>> createProfileRequest(OAuthToken oAuthToken);
 

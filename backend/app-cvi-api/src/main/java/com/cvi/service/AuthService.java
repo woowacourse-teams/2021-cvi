@@ -22,9 +22,9 @@ public class AuthService {
     private final AuthorizationManager authorizationManager;
 
     @Transactional
-    public UserResponse authenticate(AuthRequest authRequest) {
+    public UserResponse authenticate(AuthRequest authRequest, String requestOrigin) {
         UserInformation userInformation =
-                authorizationManager.requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
+            authorizationManager.requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState(), requestOrigin);
         return createUserResponse(authRequest, userInformation);
     }
 

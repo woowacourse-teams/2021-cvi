@@ -1,5 +1,8 @@
 package com.cvi.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.dto.CommentRequest;
@@ -9,24 +12,20 @@ import com.cvi.exception.UnAuthorizedException;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
+import com.cvi.service.post.PostService;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -50,9 +49,6 @@ public class CommentServiceTest {
     @Autowired
     private CommentService commentService;
 
-    @MockBean
-    private PublicDataScheduler publicDataScheduler;
-
     private User user;
     private User anotherUser;
     private Optional<User> optionalUser;
@@ -70,19 +66,19 @@ public class CommentServiceTest {
 
     private void initUsers() {
         user = User.builder()
-                .nickname("테스트유저")
-                .ageRange(AgeRange.FORTIES)
-                .socialProvider(SocialProvider.NAVER)
-                .socialId("NAVER_ID")
-                .profileUrl("naver.com/profile")
-                .build();
+            .nickname("테스트유저")
+            .ageRange(AgeRange.FORTIES)
+            .socialProvider(SocialProvider.NAVER)
+            .socialId("NAVER_ID")
+            .profileUrl("naver.com/profile")
+            .build();
         anotherUser = User.builder()
-                .nickname("다른유저")
-                .ageRange(AgeRange.FORTIES)
-                .profileUrl("naver.com/profile")
-                .socialId("NAVER_ID")
-                .socialProvider(SocialProvider.NAVER)
-                .build();
+            .nickname("다른유저")
+            .ageRange(AgeRange.FORTIES)
+            .profileUrl("naver.com/profile")
+            .socialId("NAVER_ID")
+            .socialProvider(SocialProvider.NAVER)
+            .build();
         optionalUser = Optional.of(user);
         optionalAnotherUser = Optional.of(anotherUser);
         optionalUserNotSignedIn = Optional.empty();
@@ -91,11 +87,11 @@ public class CommentServiceTest {
 
     private void initPost() {
         post = Post.builder()
-                .content("테스트게시글")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("테스트게시글")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .user(user)
+            .createdAt(LocalDateTime.now())
+            .build();
         postRepository.save(post);
     }
 
@@ -106,7 +102,7 @@ public class CommentServiceTest {
         //when
         CommentResponse commentResponse = commentService.createComment(post.getId(), optionalAnotherUser, commentRequest);
         Post foundPost = postRepository.findWithCommentsByPostId(post.getId())
-                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
+            .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 없습니다."));
         //then
         assertThat(foundPost.getCommentsAsList()).extracting("id").contains(commentResponse.getId());
     }
@@ -118,7 +114,7 @@ public class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.createComment(post.getId(), optionalUserNotSignedIn, commentRequest))
-                .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("댓글 수정 - 성공")
@@ -142,8 +138,8 @@ public class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.updateComment(post.getId(), COMMENT_ID, optionalUser, updateRequest))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("찾을 수 없는 댓글입니다.");
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage("찾을 수 없는 댓글입니다.");
     }
 
     @DisplayName("댓글 수정 - 실패 - 댓글 작성자가 아님")
@@ -155,8 +151,8 @@ public class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.updateComment(post.getId(), commentResponse.getId(), optionalAnotherUser, updateRequest))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: " + user.toString());
+            .isInstanceOf(UnAuthorizedException.class)
+            .hasMessage("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: " + user.toString());
     }
 
     @DisplayName("댓글 삭제 - 성공")
@@ -182,8 +178,8 @@ public class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.deleteComment(post.getId(), COMMENT_ID, optionalUser))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("찾을 수 없는 댓글입니다.");
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage("찾을 수 없는 댓글입니다.");
     }
 
     @DisplayName("댓글 삭제 - 실패 - 댓글 작성자가 아님")
@@ -194,8 +190,8 @@ public class CommentServiceTest {
         //when
         //then
         assertThatThrownBy(() -> commentService.deleteComment(post.getId(), commentResponse.getId(), optionalAnotherUser))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
+            .isInstanceOf(UnAuthorizedException.class)
+            .hasMessage("다른 사용자의 게시글은 삭제할 수 없습니다.");
     }
 
     @DisplayName("게시글 삭제시 댓글 삭제 - 성공")

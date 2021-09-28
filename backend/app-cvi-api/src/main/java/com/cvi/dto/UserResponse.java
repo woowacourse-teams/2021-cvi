@@ -20,7 +20,7 @@ public class UserResponse {
     private String socialProfileUrl;
 
     public UserResponse(Long id, String nickname, AgeRangeResponse ageRange, boolean shotVerified, String accessToken,
-                        SocialProvider socialProvider, String socialId, String socialProfileUrl) {
+        SocialProvider socialProvider, String socialId, String socialProfileUrl) {
         this.id = id;
         this.nickname = nickname;
         this.ageRange = ageRange;
@@ -33,16 +33,16 @@ public class UserResponse {
 
     public static UserResponse of(User user) {
         return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
-                user.isShotVerified(), null, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
+            user.isShotVerified(), null, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
 
     public static UserResponse of(User user, String token) {
         return new UserResponse(user.getId(), user.getNickname(), new AgeRangeResponse(user.getAgeRange()),
-                user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
+            user.isShotVerified(), token, user.getSocialProvider(), user.getSocialId(), user.getProfileUrl());
     }
 
     public static UserResponse newUser(SocialProvider socialProvider, String socialId, String socialProfileUrl) {
         return new UserResponse(null, null, null, false,
-                null, socialProvider, socialId, socialProfileUrl);
+            null, socialProvider, socialId, socialProfileUrl);
     }
 }

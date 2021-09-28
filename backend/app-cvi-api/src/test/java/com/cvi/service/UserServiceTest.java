@@ -1,5 +1,9 @@
 package com.cvi.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.willReturn;
+
 import com.cvi.auth.JwtTokenProvider;
 import com.cvi.dto.UserRequest;
 import com.cvi.dto.UserResponse;
@@ -10,6 +14,8 @@ import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,18 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.BDDMockito.willThrow;
-
 @SpringBootTest
 @Transactional
 @DisplayName("사용자 비즈니스 흐름 테스트")
-public class UserServiceTest {
+class UserServiceTest {
 
     @Autowired
     private UserService userService;
@@ -38,10 +36,6 @@ public class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @MockBean
-    private PublicDataScheduler publicDataScheduler;
-
     private UserRequest userRequest;
 
     @BeforeEach
@@ -57,7 +51,7 @@ public class UserServiceTest {
         UserResponse userResponse = userService.signup(userRequest);
         //then
         User foundUser = userRepository.findById(userResponse.getId())
-                .orElseThrow(() -> new NotFoundException("User 조회 에러"));
+            .orElseThrow(() -> new NotFoundException("User 조회 에러"));
 
         assertThat(foundUser.getNickname()).isEqualTo("인비");
         assertThat(foundUser.getAgeRange()).isEqualTo(AgeRange.TEENS);
@@ -73,7 +67,7 @@ public class UserServiceTest {
         //when
         //then
         assertThatThrownBy(() -> userService.signup(userRequest))
-                .isInstanceOf(DuplicateException.class);
+            .isInstanceOf(DuplicateException.class);
     }
 
     @DisplayName("Access Token을 이용한 사용자 조회 - 성공")
@@ -108,7 +102,7 @@ public class UserServiceTest {
         //when
         //then
         assertThatThrownBy(() -> userService.findById(lastIndex + 1L))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("사용자 수정 - 성공")
@@ -122,7 +116,7 @@ public class UserServiceTest {
         userService.update(Optional.of(user), updateRequest);
         //then
         User updatedUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
+            .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getNickname()).isEqualTo(updateRequest.getNickname());
         assertThat(updatedUser.getAgeRange()).isEqualTo(AgeRange.THIRTIES);
@@ -140,7 +134,7 @@ public class UserServiceTest {
         userService.update(Optional.of(user), updateRequest);
         //then
         User updatedUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
+            .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(updatedUser.getNickname()).isEqualTo(userRequest.getNickname());
     }
@@ -156,21 +150,21 @@ public class UserServiceTest {
         User user2 = userService.findUserById(signupResponse2.getId());
 
         UserRequest updateRequest = UserRequest.builder()
-                .nickname("인비")
-                .ageRange(AgeRange.FIFTIES)
-                .build();
+            .nickname("인비")
+            .ageRange(AgeRange.FIFTIES)
+            .build();
         //when
         assertThatThrownBy(() -> userService.update(Optional.of(user2), updateRequest))
-                .isInstanceOf(DuplicateException.class);
+            .isInstanceOf(DuplicateException.class);
         //then
         User notUpdatedUser1 = userRepository.findById(user1.getId())
-                .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
+            .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(notUpdatedUser1.getNickname()).isEqualTo(userRequest.getNickname());
         assertThat(notUpdatedUser1.getAgeRange()).isSameAs(userRequest.getAgeRange());
 
         User notUpdatedUser2 = userRepository.findById(signupResponse2.getId())
-                .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
+            .orElseThrow(() -> new NotFoundException("사용자 조회 실패"));
 
         assertThat(notUpdatedUser2.getNickname()).isEqualTo(signUpRequest2.getNickname());
         assertThat(notUpdatedUser2.getAgeRange()).isSameAs(signUpRequest2.getAgeRange());
@@ -185,7 +179,7 @@ public class UserServiceTest {
         UserRequest updateRequest = new UserRequest(null, null, false, null, null, null);
         //then
         assertThatThrownBy(() -> userService.update(Optional.empty(), updateRequest))
-                .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("사용자 삭제 - 성공")
@@ -208,17 +202,17 @@ public class UserServiceTest {
         //when
         //then
         assertThatThrownBy(() -> userService.delete(Optional.empty()))
-                .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(UnAuthorizedException.class);
     }
 
     private Long getLastIndex() {
         User lastUser = User.builder()
-                .nickname("라이언")
-                .ageRange(AgeRange.TWENTIES)
-                .socialProvider(SocialProvider.KAKAO)
-                .socialId("KAKAO_ID")
-                .profileUrl("kakao.com/profile")
-                .build();
+            .nickname("라이언")
+            .ageRange(AgeRange.TWENTIES)
+            .socialProvider(SocialProvider.KAKAO)
+            .socialId("KAKAO_ID")
+            .profileUrl("kakao.com/profile")
+            .build();
         return userRepository.save(lastUser).getId();
     }
 }

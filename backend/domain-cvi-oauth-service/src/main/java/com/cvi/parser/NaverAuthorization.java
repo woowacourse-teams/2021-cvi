@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
-public class NaverAuthorization implements Authorization {
+public  class NaverAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
     private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
@@ -33,8 +33,8 @@ public class NaverAuthorization implements Authorization {
     private String clientSecret;
 
     @Override
-    public UserInformation requestProfile(String code, String state) {
-        OAuthToken naverOAuthToken = requestToken(code, state);
+    public UserInformation requestProfile(String code, String state, String requestOrigin) {
+        OAuthToken naverOAuthToken = requestToken(code, state, requestOrigin);
         return parseProfile(naverOAuthToken);
     }
 
@@ -46,8 +46,8 @@ public class NaverAuthorization implements Authorization {
     }
 
     @Override
-    public OAuthToken requestToken(String code, String state) {
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = createTokenRequest(code, state);
+    public OAuthToken requestToken(String code, String state, String requestOrigin) {
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = createTokenRequest(code, state, requestOrigin);
         ResponseEntity<String> response = sendRequest(naverTokenRequest, TOKEN_REQUEST_URL);
         return mapToOAuthToken(response);
     }
@@ -73,7 +73,7 @@ public class NaverAuthorization implements Authorization {
     }
 
     @Override
-    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
+    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state, String requestOrigin) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "nr6cVo7X8bw1cRQCKOQu");
@@ -97,10 +97,10 @@ public class NaverAuthorization implements Authorization {
     @Override
     public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                String.class
+            url,
+            HttpMethod.POST,
+            request,
+            String.class
         );
     }
 }

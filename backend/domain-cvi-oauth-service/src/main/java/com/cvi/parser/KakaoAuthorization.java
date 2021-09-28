@@ -24,15 +24,14 @@ public class KakaoAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-    private static final String REDIRECT_URL = "https://vaccine-review.com/auth/kakao/callback";
-    //private static final String REDIRECT_URL = "https://localhost:9000/auth/kakao/callback";
+    private static final String CALLBACK_URL_SUFFIX = "/auth/kakao/callback";
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public UserInformation requestProfile(String code, String state) {
-        OAuthToken kakaoOAuthToken = requestToken(code, state);
+    public UserInformation requestProfile(String code, String state, String requestOrigin) {
+        OAuthToken kakaoOAuthToken = requestToken(code, state, requestOrigin);
         return parseProfile(kakaoOAuthToken);
     }
 
@@ -44,8 +43,8 @@ public class KakaoAuthorization implements Authorization {
     }
 
     @Override
-    public OAuthToken requestToken(String code, String state) {
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = createTokenRequest(code, state);
+    public OAuthToken requestToken(String code, String state, String requestOrigin) {
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = createTokenRequest(code, state, requestOrigin);
         ResponseEntity<String> response = sendRequest(kakaoTokenRequest, TOKEN_REQUEST_URL);
         return mapToOAuthToken(response);
     }
@@ -71,11 +70,11 @@ public class KakaoAuthorization implements Authorization {
     }
 
     @Override
-    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state) {
+    public HttpEntity<MultiValueMap<String, String>> createTokenRequest(String code, String state, String requestOrigin) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "1a06cf63be2ce0a6ebd8f49cd534e1c9");
-        params.add("redirect_uri", REDIRECT_URL);
+        params.add("redirect_uri", requestOrigin + CALLBACK_URL_SUFFIX);
         params.add("code", code);
 
         HttpHeaders headers = new HttpHeaders();
@@ -94,10 +93,10 @@ public class KakaoAuthorization implements Authorization {
     @Override
     public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                String.class
+            url,
+            HttpMethod.POST,
+            request,
+            String.class
         );
     }
 }

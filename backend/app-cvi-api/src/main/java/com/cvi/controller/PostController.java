@@ -5,7 +5,7 @@ import com.cvi.dto.PostRequest;
 import com.cvi.dto.PostResponse;
 import com.cvi.post.domain.model.Sort;
 import com.cvi.post.domain.model.VaccinationType;
-import com.cvi.service.PostService;
+import com.cvi.service.post.PostService;
 import com.cvi.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class PostController {
                                                          @RequestParam(defaultValue = "0") int offset,
                                                          @RequestParam(defaultValue = "6") int size,
                                                          @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
-                                                         @RequestParam(defaultValue = "#{T(java.lang.String).valueOf(T(java.lang.Integer).MAX_VALUE)}") int fromHoursBefore,
+                                                         @RequestParam(defaultValue = "500") int fromHoursBefore,
                                                          @AuthenticationPrincipal Optional<User> user) {
         return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
     }

@@ -5,7 +5,7 @@ import com.cvi.dto.PostWithCommentResponse;
 import com.cvi.dto.UserRequest;
 import com.cvi.dto.UserResponse;
 import com.cvi.post.domain.model.Filter;
-import com.cvi.service.PostService;
+import com.cvi.service.post.PostService;
 import com.cvi.service.UserService;
 import com.cvi.user.domain.model.User;
 import lombok.RequiredArgsConstructor;

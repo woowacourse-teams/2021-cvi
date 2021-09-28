@@ -16,6 +16,9 @@ spring:
         format_sql: true
     generate-ddl: true
 
+  flyway:
+    enabled: false
+
 security:
   public:
     data:

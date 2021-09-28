@@ -1,5 +1,10 @@
 package com.cvi.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
+
 import com.cvi.auth.JwtTokenProvider;
 import com.cvi.dto.AuthRequest;
 import com.cvi.dto.UserResponse;
@@ -13,6 +18,7 @@ import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,13 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.BDDMockito.willThrow;
 
 @SpringBootTest
 @TestPropertySource(properties = {"security.auth.naver.client-secret"})
@@ -38,6 +37,7 @@ class AuthServiceTest {
     private static final String STATE = "STATE";
     private static final String NAVER_ID = "NAVER_ID";
     private static final String NAVER_PROFILE_URL = "naver.com/profile";
+    private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
     @Autowired
     private AuthService authService;
@@ -50,10 +50,6 @@ class AuthServiceTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-
-    @MockBean
-    private PublicDataScheduler publicDataScheduler;
-
     private AuthRequest authRequest;
     private User user;
     private String token;
@@ -65,13 +61,13 @@ class AuthServiceTest {
     void beforeEach() throws JsonProcessingException {
         authRequest = new AuthRequest(SocialProvider.NAVER, SOCIAL_CODE, STATE);
         user = User.builder()
-                .id(1L)
-                .nickname("test_user")
-                .ageRange(AgeRange.TEENS)
-                .socialId(NAVER_ID)
-                .profileUrl(NAVER_PROFILE_URL)
-                .socialProvider(SocialProvider.NAVER)
-                .build();
+            .id(1L)
+            .nickname("test_user")
+            .ageRange(AgeRange.TEENS)
+            .socialId(NAVER_ID)
+            .profileUrl(NAVER_PROFILE_URL)
+            .socialProvider(SocialProvider.NAVER)
+            .build();
         token = "naver_auth_token";
 
         NaverProfile naverProfile = objectMapper.readValue(NAVER_PROFILE_RESPONSE, NaverProfile.class);
@@ -86,9 +82,9 @@ class AuthServiceTest {
         //given
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState(), REQUEST_ORIGIN);
         //when
-        UserResponse expected = authService.authenticate(authRequest);
+        UserResponse expected = authService.authenticate(authRequest, REQUEST_ORIGIN);
         //then
         assertThat(expected.getNickname()).isEqualTo(userResponse.getNickname());
     }
@@ -99,9 +95,9 @@ class AuthServiceTest {
         //given
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, "NEW_ID");
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState());
+        willReturn(userInfo).given(authorizationManager).requestUserInfo(authRequest.getProvider(), authRequest.getCode(), authRequest.getState(), REQUEST_ORIGIN);
         //when
-        UserResponse expected = authService.authenticate(authRequest);
+        UserResponse expected = authService.authenticate(authRequest, REQUEST_ORIGIN);
         //then
         assertThat(expected.getNickname()).isNull();
         assertThat(expected.getId()).isNull();
@@ -115,11 +111,11 @@ class AuthServiceTest {
 
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState(), REQUEST_ORIGIN);
         //when
         //then
-        assertThatThrownBy(() -> authService.authenticate(invalidRequest))
-                .isExactlyInstanceOf(MappingFailureException.class);
+        assertThatThrownBy(() -> authService.authenticate(invalidRequest, REQUEST_ORIGIN))
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 
     @DisplayName("네이버 소셜 로그인 - 실패 - 잘못된 STATE인 경우")
@@ -130,10 +126,10 @@ class AuthServiceTest {
 
         willReturn(Optional.of(user)).given(userRepository).findBySocialProviderAndSocialId(SocialProvider.NAVER, NAVER_ID);
         willReturn(token).given(jwtTokenProvider).createToken(user.getId());
-        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState());
+        willThrow(new MappingFailureException("토큰 정보를 불러오는 데 실패했습니다.")).given(authorizationManager).requestUserInfo(invalidRequest.getProvider(), invalidRequest.getCode(), invalidRequest.getState(), REQUEST_ORIGIN);
         //when
         //then
-        assertThatThrownBy(() -> authService.authenticate(invalidRequest))
-                .isExactlyInstanceOf(MappingFailureException.class);
+        assertThatThrownBy(() -> authService.authenticate(invalidRequest, REQUEST_ORIGIN))
+            .isExactlyInstanceOf(MappingFailureException.class);
     }
 }

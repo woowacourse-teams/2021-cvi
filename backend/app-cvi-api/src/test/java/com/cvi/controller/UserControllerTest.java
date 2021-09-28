@@ -1,5 +1,21 @@
 package com.cvi.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.anyInt;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.cvi.ApiDocument;
 import com.cvi.auth.JwtTokenProvider;
 import com.cvi.comment.domain.model.Comment;
@@ -12,12 +28,17 @@ import com.cvi.exception.NotFoundException;
 import com.cvi.exception.UnAuthorizedException;
 import com.cvi.post.domain.model.Filter;
 import com.cvi.post.domain.model.VaccinationType;
-import com.cvi.service.PostService;
 import com.cvi.service.UserService;
+import com.cvi.service.post.PostService;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
-import com.cvi.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,17 +51,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("사용자 컨트롤러 Mock 테스트")
 @WebMvcTest(controllers = UserController.class)
@@ -61,9 +71,6 @@ class UserControllerTest extends ApiDocument {
     private UserService userService;
 
     @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
     private PostService postService;
 
     @MockBean
@@ -75,22 +82,24 @@ class UserControllerTest extends ApiDocument {
     private UserResponse userResponse;
     private UserResponse userMeResponse;
     private List<CommentResponse> commentResponses;
+    private List<String> imageUrls;
 
     @BeforeEach
     void beforeEach() {
         user = User.builder()
-                .id(USER_ID)
-                .nickname(NICKNAME)
-                .ageRange(AgeRange.TWENTIES)
-                .socialProvider(SOCIAL_PROVIDER)
-                .socialId(SOCIAL_ID)
-                .profileUrl(PROFILE_URL)
-                .build();
+            .id(USER_ID)
+            .nickname(NICKNAME)
+            .ageRange(AgeRange.TWENTIES)
+            .socialProvider(SOCIAL_PROVIDER)
+            .socialId(SOCIAL_ID)
+            .profileUrl(PROFILE_URL)
+            .build();
 
         signinRequest = new UserRequest(NICKNAME, AGE_RANGE, false, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         updateRequest = new UserRequest(NICKNAME, AGE_RANGE, true, SOCIAL_PROVIDER, SOCIAL_ID, PROFILE_URL);
         userResponse = UserResponse.of(user, ACCESS_TOKEN);
         userMeResponse = UserResponse.of(user, null);
+        imageUrls = Arrays.asList("{이미지1 S3 URL}", "{이미지2 S3 URL}", "{이미지3 S3 URL}");
 
         Comment comment1 = Comment.builder().id(COMMENT_ID).content("댓글1").user(user).createdAt(LocalDateTime.now()).build();
         Comment comment2 = Comment.builder().id(COMMENT_ID + 1).content("댓글2").user(user).createdAt(LocalDateTime.now()).build();
@@ -100,7 +109,6 @@ class UserControllerTest extends ApiDocument {
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));
         given(userService.findUserById(any(Long.class))).willReturn(user);
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     }
 
     @DisplayName("사용자 가입 - 성공")
@@ -152,12 +160,12 @@ class UserControllerTest extends ApiDocument {
     void find() throws Exception {
         //given
         User otherUser = User.builder()
-                .id(1L)
-                .nickname(NICKNAME)
-                .ageRange(AgeRange.TWENTIES)
-                .socialProvider(SOCIAL_PROVIDER)
-                .profileUrl(PROFILE_URL)
-                .build();
+            .id(1L)
+            .nickname(NICKNAME)
+            .ageRange(AgeRange.TWENTIES)
+            .socialProvider(SOCIAL_PROVIDER)
+            .profileUrl(PROFILE_URL)
+            .build();
         UserResponse userResponseWithoutPrivacy = UserResponse.of(otherUser, null);
         willReturn(userResponseWithoutPrivacy).given(userService).findById(any(Long.class));
         //when
@@ -193,7 +201,7 @@ class UserControllerTest extends ApiDocument {
     void updateFailure() throws Exception {
         //given
         willThrow(new InvalidInputException("중복된 닉네임이 존재합니다."))
-                .given(userService).update(any(), any(UserRequest.class));
+            .given(userService).update(any(), any(UserRequest.class));
         //when
         ResultActions response = 사용자_업데이트_요청(updateRequest);
         //then
@@ -227,9 +235,9 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsNone() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()),
-                new PostWithCommentResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now()));
+            new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+            new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now(), imageUrls),
+            new PostWithCommentResponse(POST_ID + 2, userResponse, "글 내용3", 12, 0, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.NONE;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -255,8 +263,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsLikes() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now()));
+            new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+            new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.LIKES;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -282,8 +290,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsComments() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = Arrays.asList(
-                new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now()));
+            new PostWithCommentResponse(POST_ID, userResponse, "글 내용1", 55, 5, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1L), imageUrls),
+            new PostWithCommentResponse(POST_ID + 1, userResponse, "글 내용2", 12, 0, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now(), imageUrls));
         Filter filter = Filter.COMMENTS;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(), any(Filter.class));
         //when
@@ -309,10 +317,10 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsNonePaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L)),
-                new PostWithCommentResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+            new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+            new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls),
+            new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls),
+            new PostWithCommentResponse(35L, userResponse, "이건 내용입니다.3", 300, 30, false, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls)
         ));
         Filter filter = Filter.NONE;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), any(Integer.class), anyInt(), any());
@@ -339,9 +347,9 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsLikesPaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L)),
-                new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L))
+            new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, true, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+            new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, true, Collections.emptyList(), VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls),
+            new PostWithCommentResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, true, Collections.emptyList(), VaccinationType.ASTRAZENECA, LocalDateTime.now().minusHours(2L), imageUrls)
         ));
         Filter filter = Filter.LIKES;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
@@ -368,8 +376,8 @@ class UserControllerTest extends ApiDocument {
     void findMyPostsWhenFilterIsCommentsPaging() throws Exception {
         //given
         List<PostWithCommentResponse> postWithCommentResponse = new LinkedList<>(Arrays.asList(
-                new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now()),
-                new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L))
+            new PostWithCommentResponse(38L, userResponse, "이건 내용입니다.", 100, 10, false, commentResponses, VaccinationType.PFIZER, LocalDateTime.now(), imageUrls),
+            new PostWithCommentResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, false, commentResponses, VaccinationType.MODERNA, LocalDateTime.now().minusDays(1L), imageUrls)
         ));
         Filter filter = Filter.COMMENTS;
         willReturn(postWithCommentResponse).given(postService).findByUserAndFilter(any(Filter.class), anyInt(), anyInt(), any());
@@ -405,10 +413,10 @@ class UserControllerTest extends ApiDocument {
 
     static Stream<Arguments> validateUserRequestWhenInvalidNickName() {
         return Stream.of(
-                Arguments.of(new UserRequest(" ", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
-                Arguments.of(new UserRequest("123456789012345678901", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
-                Arguments.of(new UserRequest("!@#$%^", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
-                Arguments.of(new UserRequest("👏", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)));
+            Arguments.of(new UserRequest(" ", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+            Arguments.of(new UserRequest("123456789012345678901", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+            Arguments.of(new UserRequest("!@#$%^", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+            Arguments.of(new UserRequest("👏", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)));
     }
 
     @ParameterizedTest(name = "UserRequest validation - 유효하지 않은 경우 - 그 외")
@@ -425,148 +433,148 @@ class UserControllerTest extends ApiDocument {
 
     static Stream<Arguments> validateUserRequest() {
         return Stream.of(
-                Arguments.of(new UserRequest(NICKNAME, null, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
-                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, null, SOCIAL_ID, PROFILE_URL)),
-                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, "  ", PROFILE_URL)),
-                Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, " ")));
+            Arguments.of(new UserRequest(NICKNAME, null, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)),
+            Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, null, SOCIAL_ID, PROFILE_URL)),
+            Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, "  ", PROFILE_URL)),
+            Arguments.of(new UserRequest(NICKNAME, AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, " ")));
     }
 
     private ResultActions 사용자_회원가입_요청(UserRequest request) throws Exception {
         return mockMvc.perform(post("/api/v1/users/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request)));
     }
 
     private void 사용자_회원가입_성공함(ResultActions response, UserResponse userResponse) throws Exception {
         response.andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/v1/users/" + userResponse.getId()))
-                .andExpect(content().json(toJson(userResponse)))
-                .andDo(print())
-                .andDo(toDocument("user-signup"));
+            .andExpect(header().string("Location", "/api/v1/users/" + userResponse.getId()))
+            .andExpect(content().json(toJson(userResponse)))
+            .andDo(print())
+            .andDo(toDocument("user-signup"));
     }
 
     private void 사용자_회원가입_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isBadRequest())
-                .andDo(print())
-                .andDo(toDocument("user-signup-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-signup-failure"));
     }
 
     private ResultActions 사용자_내_정보_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/users/me")
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_내_정보_조회_성공함(ResultActions response, UserResponse userResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(userResponse)))
-                .andDo(print())
-                .andDo(toDocument("user-find-me"));
+            .andExpect(content().json(toJson(userResponse)))
+            .andDo(print())
+            .andDo(toDocument("user-find-me"));
     }
 
     private void 사용자_내_정보_조회_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-find-me-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-find-me-failure"));
     }
 
     private ResultActions 사용자_조회_요청(Long id) throws Exception {
         return mockMvc.perform(get("/api/v1/users/" + id)
-                .contentType(MediaType.APPLICATION_JSON));
+            .contentType(MediaType.APPLICATION_JSON));
     }
 
     private void 사용자_조회_성공함(ResultActions response, UserResponse userResponse) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(userResponse)))
-                .andDo(print())
-                .andDo(toDocument("user-find"));
+            .andExpect(content().json(toJson(userResponse)))
+            .andDo(print())
+            .andDo(toDocument("user-find"));
     }
 
     private void 사용자_조회_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isNotFound())
-                .andDo(print())
-                .andDo(toDocument("user-find-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-find-failure"));
     }
 
     private ResultActions 사용자_업데이트_요청(UserRequest request) throws Exception {
         return mockMvc.perform(put("/api/v1/users/me")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(request))
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(request))
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_업데이트_성공(ResultActions response) throws Exception {
         response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("user-update"));
+            .andDo(print())
+            .andDo(toDocument("user-update"));
     }
 
     private void 사용자_업데이트_실패함(ResultActions response) throws Exception {
         response.andExpect(status().isBadRequest())
-                .andDo(print())
-                .andDo(toDocument("user-update-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-update-failure"));
     }
 
     private ResultActions 사용자_삭제_요청() throws Exception {
         return mockMvc.perform(delete("/api/v1/users")
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 사용자_삭제_성공(ResultActions response) throws Exception {
         response.andExpect(status().isNoContent())
-                .andDo(print())
-                .andDo(toDocument("user-delete"));
+            .andDo(print())
+            .andDo(toDocument("user-delete"));
     }
 
     private void 사용자_삭제_실패(ResultActions response) throws Exception {
         response.andExpect(status().isNotFound())
-                .andDo(print())
-                .andDo(toDocument("user-delete-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-delete-failure"));
     }
 
     private ResultActions 내가_쓴_글_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/users/me/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private ResultActions 마이페이지_글_필터링_조회_요청(Filter filter) throws Exception {
         return mockMvc.perform(get("/api/v1/users/me/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .queryParam("filter", filter.name()));
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN)
+            .queryParam("filter", filter.name()));
     }
 
     private ResultActions 마이페이지_글_타입별_페이징_조회_요청(Filter filter, int offset, int size) throws Exception {
         return mockMvc.perform(get("/api/v1/users/me/posts/paging")
-                .queryParam("filter", filter.name())
-                .queryParam("offset", String.valueOf(offset))
-                .queryParam("size", String.valueOf(size))
-                .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
+            .queryParam("filter", filter.name())
+            .queryParam("offset", String.valueOf(offset))
+            .queryParam("size", String.valueOf(size))
+            .header(HttpHeaders.AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 마이페이지_글_타입별_페이징_조회_요청_성공함(ResultActions response, List<PostWithCommentResponse> postWithCommentResponse, Filter filter) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postWithCommentResponse)))
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase()));
+            .andExpect(content().json(toJson(postWithCommentResponse)))
+            .andDo(print())
+            .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase()));
     }
 
     private void 마이페이지_글_타입별_페이징_조회_요청_실패함(ResultActions response, Filter filter) throws Exception {
         response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase() + "-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-me-posts-paging-" + filter.name().toLowerCase() + "-failure"));
     }
 
     private void 마이페이지_글_필터링_조회_요청_성공함(ResultActions response, List<PostWithCommentResponse> postWithCommentResponse, Filter filter) throws Exception {
         response.andExpect(status().isOk())
-                .andExpect(content().json(toJson(postWithCommentResponse)))
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase()));
+            .andExpect(content().json(toJson(postWithCommentResponse)))
+            .andDo(print())
+            .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase()));
     }
 
     private void 마이페이지_글_필터링_조회_요청_실패함(ResultActions response, Filter filter) throws Exception {
         response.andExpect(status().isUnauthorized())
-                .andDo(print())
-                .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase() + "-failure"));
+            .andDo(print())
+            .andDo(toDocument("user-me-posts-filter-" + filter.name().toLowerCase() + "-failure"));
     }
 }

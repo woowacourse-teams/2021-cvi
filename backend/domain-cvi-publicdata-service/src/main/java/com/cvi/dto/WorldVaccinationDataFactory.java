@@ -17,9 +17,9 @@ public class WorldVaccinationDataFactory {
 
     public VaccinationStatistics toVaccinationStatistics() {
         List<VaccinationStatistic> vaccinationStatistics = worldVaccinationDataGroup.stream()
-                .map(VaccinationStatisticResponse::from)
-                .map(VaccinationStatisticResponse::toEntity)
-                .collect(Collectors.toList());
+            .map(VaccinationStatisticResponse::from)
+            .map(VaccinationStatisticResponse::toEntity)
+            .collect(Collectors.toList());
         return new VaccinationStatistics(vaccinationStatistics);
     }
 }
