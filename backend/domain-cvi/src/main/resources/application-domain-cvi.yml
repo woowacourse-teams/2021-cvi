@@ -12,7 +12,6 @@ logging:
   level:
     org.hibernate.SQL: info
 
-inbi: handsome
 ---
 spring:
   config:
