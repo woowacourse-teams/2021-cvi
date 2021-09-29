@@ -1,5 +1,3 @@
-version = '0.0.1'
-
 dependencies {
     implementation project(path:':common-cvi', configuration: 'default')
     implementation project(path:':domain-cvi', configuration: 'default')
