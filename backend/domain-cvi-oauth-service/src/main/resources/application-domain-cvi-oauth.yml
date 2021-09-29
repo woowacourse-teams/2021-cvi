@@ -1,0 +1,4 @@
+security:
+  auth:
+    naver:
+      client-secret: client-secret

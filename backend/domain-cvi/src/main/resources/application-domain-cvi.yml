@@ -1,0 +1,53 @@
+spring:
+  jpa:
+    properties:
+      hibernate.default_batch_fetch_size: 500
+  h2:
+    console:
+      enabled: false
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: info
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+    flyway:
+      enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    org.hibernate.SQL: debug

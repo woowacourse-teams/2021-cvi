@@ -1,0 +1,12 @@
+aws:
+  s3:
+    bucket_name: bucket-name
+  cloudfront:
+    url: https://cloudfront.net
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

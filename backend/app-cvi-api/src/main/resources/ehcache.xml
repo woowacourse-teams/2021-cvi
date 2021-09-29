@@ -1,0 +1,49 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+    <!-- 캐시 파일이 생성되는 경로 -->
+      <cache-template name="template">
+        <!--  캐시가 생성되고 삭제되고 하는 이벤트를 모니터링 하고 싶으면 org.ehcache.event.CacheEventListener 를 구현하는 클래스를 만들어서 설정 (태그 순서가 중요)-->
+        <listeners>
+            <listener>
+                <class>com.cvi.service.CacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+                <events-to-fire-on>REMOVED</events-to-fire-on>
+                <events-to-fire-on>UPDATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+            </listener>
+        </listeners>
+      </cache-template>
+
+    <cache alias="cache::worldVaccinationStatistics" uses-template="template">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.util.ArrayList</value-type>
+        <expiry>
+            <!-- 캐시 만료 시간 = timeToLiveSeconds -->
+            <ttl unit="days">1</ttl>
+        </expiry>
+        <resources>
+            <!-- JVM heap 메모리, LRU strategy-->
+            <heap unit="entries">100</heap>
+        </resources>
+    </cache>
+
+    <cache alias="cache::koreaVaccinationStatistics" uses-template="template">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.util.ArrayList</value-type>
+        <expiry>
+            <!-- 캐시 만료 시간 = timeToLiveSeconds -->
+            <ttl unit="days">1</ttl>
+        </expiry>
+        <resources>
+            <!-- JVM heap 메모리, LRU strategy-->
+            <heap unit="entries">100</heap>
+        </resources>
+    </cache>
+</config>
