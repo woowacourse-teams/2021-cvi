@@ -1,0 +1,12 @@
+security:
+  public:
+    data:
+      vaccination: publicdata-secret
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      - file:./cvi-backend-secret/application-publicdata-secret.yml

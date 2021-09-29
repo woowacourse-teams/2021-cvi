@@ -21,7 +21,7 @@ jobs:
         run: yarn
 
       - name: Build
-        run: yarn build
+        run: yarn build:dev
 
       - name: S3 Deploy
         run: aws s3 sync ./dist s3://2021-cvi-dev/ --acl bucket-owner-full-control # s3 이름 2021-cvi-dev

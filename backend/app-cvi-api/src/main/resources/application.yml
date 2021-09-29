@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    active: local
+
+    include:
+      - domain-cvi
+      - domain-cvi-oauth
+      - domain-cvi-publicdata
+      - domain-cvi-aws-s3-service
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 100MB
+
+security:
+  jwt:
+    token:
+      secret-key: cvi_secret_key
+      expire-length: 3600000
+
+aws:
+  s3:
+    directory:
+      path:
+        posts:
+          images: dir-path
+
+server:
+  shutdown: graceful
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy1
+
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy2
+
+server:
+  port: 8082

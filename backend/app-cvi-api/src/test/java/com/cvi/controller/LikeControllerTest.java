@@ -1,0 +1,112 @@
+package com.cvi.controller;
+
+import com.cvi.dto.LikeResponse;
+import com.cvi.exception.NotFoundException;
+import com.cvi.exception.UnAuthorizedException;
+import com.cvi.service.LikeService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@DisplayName("게시글 컨트롤러 Mock 테스트 - 좋아요")
+@WebMvcTest(controllers = LikeController.class)
+public class LikeControllerTest extends PreprocessPostControllerTest {
+
+    @MockBean
+    private LikeService likeService;
+
+    @DisplayName("좋아요 생성 - 성공")
+    @Test
+    void createLike() throws Exception {
+        //given
+        LikeResponse likeResponse = LikeResponse.from(PreprocessPostControllerTest.LIKE_ID);
+        willReturn(likeResponse).given(likeService).createLike(any(Long.class), any());
+        //when
+        ResultActions actualResponse = 좋아요_생성_요청(postResponse.getId());
+        //then
+        좋아요_생성_성공(actualResponse, PreprocessPostControllerTest.LIKE_ID);
+    }
+
+    @DisplayName("좋아요 생성 - 실패 - 게시글이 없는 경우")
+    @Test
+    void createLikeFailureWhenPostNotExists() throws Exception {
+        //given
+        willThrow(new NotFoundException("해당 id의 게시글이 존재하지 않습니다.")).given(likeService).createLike(any(Long.class), any());
+        //when
+        ResultActions response = 좋아요_생성_요청(postResponse.getId());
+        //then
+        좋아요_생성_실패(response);
+    }
+
+    @DisplayName("좋아요 삭제 - 성공")
+    @Test
+    void deleteLike() throws Exception {
+        //given
+        willDoNothing().given(likeService).deleteLike(any(Long.class), any());
+        //when
+        ResultActions response = 좋아요_삭제_요청();
+        //then
+        좋아요_삭제_성공함(response);
+    }
+
+    @DisplayName("좋아요 삭제 - 실패 - 토큰이 유효하지 않은 경우")
+    @Test
+    void deleteLikeFailureWhenNotTokenValid() throws Exception {
+        //given
+        willThrow(new UnAuthorizedException("유효하지 않은 토큰입니다."))
+                .given(likeService).deleteLike(any(Long.class), any());
+        //when
+        ResultActions response = 좋아요_삭제_요청();
+        //then
+        좋아요_삭제_실패함(response);
+    }
+
+    private ResultActions 좋아요_생성_요청(Long postId) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/{postId}/likes", postId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN));
+    }
+
+    private void 좋아요_생성_성공(ResultActions actualResponse, Long likeId) throws Exception {
+        actualResponse.andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/v1/likes/" + likeId))
+                .andDo(print())
+                .andDo(toDocument("like-create"));
+    }
+
+    private void 좋아요_생성_실패(ResultActions response) throws Exception {
+        response.andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(toDocument("like-create-failure"));
+    }
+
+    private ResultActions 좋아요_삭제_요청() throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts/{postId}/likes", PreprocessPostControllerTest.POST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, PreprocessPostControllerTest.BEARER + PreprocessPostControllerTest.ACCESS_TOKEN));
+    }
+
+    private void 좋아요_삭제_성공함(ResultActions response) throws Exception {
+        response.andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(toDocument("like-delete"));
+    }
+
+    private void 좋아요_삭제_실패함(ResultActions response) throws Exception {
+        response.andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(toDocument("like-delete-failure"));
+    }
+}
