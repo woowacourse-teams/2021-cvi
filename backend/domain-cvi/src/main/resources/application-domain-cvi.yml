@@ -11,6 +11,8 @@ spring:
 logging:
   level:
     org.hibernate.SQL: info
+
+inbi: handsome
 ---
 spring:
   config:
@@ -37,6 +39,15 @@ spring:
 
     flyway:
       enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
 
 logging:
   level:
