@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SnackBar as SnackBarComponent } from '../components/common';
+import { SnackBar as SnackBarComponent } from '../components/@common';
 import {
   openSnackBar as openSnackBarAction,
   closeSnackBar as closeSnackBarAction,

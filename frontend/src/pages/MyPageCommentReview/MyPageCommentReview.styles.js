@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { PALETTE } from '../../constants';
+import { FONT_COLOR, PALETTE } from '../../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -31,11 +31,21 @@ const ScrollLoadingContainer = styled.div`
   height: 8rem;
 `;
 
-const MyCommentReviewListContainer = styled.div`
+const MyCommentReviewList = styled.div`
   width: 100%;
 
   & > *:not(:last-child) {
     border-bottom: 0.15rem solid ${PALETTE.NAVY100};
+  }
+`;
+
+const MyCommentReviewItem = styled.div`
+  width: 100%;
+  cursor: pointer;
+  padding: 2.4rem 3.2rem;
+
+  @media screen and (max-width: 1024px) {
+    padding: 2.4rem 2rem;
   }
 `;
 
@@ -57,12 +67,25 @@ const frameStyle = css`
   width: 100%;
 `;
 
+const CreatedAt = styled.div`
+  white-space: nowrap;
+  font-size: 1.4rem;
+  color: ${FONT_COLOR.LIGHT_GRAY};
+`;
+
+const CommentContent = styled.div`
+  margin: 0.6rem 0 2.4rem 0;
+`;
+
 export {
   Container,
   LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
-  MyCommentReviewListContainer,
+  MyCommentReviewList,
+  MyCommentReviewItem,
   Title,
   frameStyle,
+  CreatedAt,
+  CommentContent,
 };

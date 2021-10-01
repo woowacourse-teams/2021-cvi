@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ButtonLike } from '../components/common';
+import { ButtonLike } from '../components/@common';
 import { ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../constants';
 import { deleteLikeAsync, postLikeAsync } from '../service';
 

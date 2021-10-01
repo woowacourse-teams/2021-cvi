@@ -16,7 +16,7 @@ import {
   MyPageLikeReview,
   StatePage,
 } from './pages';
-import { BaseLayout, PrivateRoute, PublicRoute } from './components/common';
+import { BaseLayout, PrivateRoute, PublicRoute } from './components/@common';
 import { useSnackBar } from './hooks';
 
 const App = () => {

@@ -24,16 +24,16 @@ import {
 import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
-} from '../../components/common/Button/Button.styles';
+} from '../../components/@common/Button/Button.styles';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAllReviewListAsync, getSelectedReviewListAsync } from '../../service';
 import { findKey } from '../../utils';
-import { Button, Frame, Tabs } from '../../components/common';
+import { Button, Frame, Tabs } from '../../components/@common';
 import { ReviewFilterList, ReviewItem, ReviewWritingModal } from '../../components';
 import { useLoading } from '../../hooks';
 import { useInView } from 'react-intersection-observer';
-import { SELECTED_TAB_STYLE_TYPE } from '../../components/common/Tabs/Tabs.styles';
+import { SELECTED_TAB_STYLE_TYPE } from '../../components/@common/Tabs/Tabs.styles';
 import { FilterIcon } from '../../assets/icons';
 
 const ReviewPage = () => {

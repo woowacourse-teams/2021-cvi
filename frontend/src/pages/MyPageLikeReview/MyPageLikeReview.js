@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
-import { Frame, LottieAnimation } from '../../components/common';
+import { Frame, LottieAnimation } from '../../components/@common';
 import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import {
   Container,
