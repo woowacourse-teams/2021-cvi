@@ -20,7 +20,7 @@ import {
   ImageContainer,
 } from './ReviewDetailPage.styles';
 import { useHistory, useParams } from 'react-router-dom';
-import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
+import { LABEL_SIZE_TYPE } from '../../components/@common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
@@ -36,11 +36,11 @@ import {
 import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
-} from '../../components/common/Button/Button.styles';
+} from '../../components/@common/Button/Button.styles';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { deleteReviewAsync, getReviewAsync } from '../../service';
-import { Avatar, Button, Frame, Label } from '../../components/common';
+import { Avatar, Button, Frame, Label } from '../../components/@common';
 import { Comment, ImageModal, ReviewImage } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
 

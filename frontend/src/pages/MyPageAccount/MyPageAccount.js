@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input, Selection } from '../../components/common';
-import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
+import { Button, Input, Selection } from '../../components/@common';
+import { BUTTON_SIZE_TYPE } from '../../components/@common/Button/Button.styles';
 import {
   AGE_RANGE,
   ALERT_MESSAGE,

@@ -39,11 +39,11 @@ import toDate from '../../utils/toDate';
 import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
-} from '../../components/common/Button/Button.styles';
-import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
+} from '../../components/@common/Button/Button.styles';
+import { LABEL_SIZE_TYPE } from '../../components/@common/Label/Label.styles';
 import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
-import { Avatar, Button, Frame, Input, Label } from '../../components/common';
+import { Avatar, Button, Frame, Input, Label } from '../../components/@common';
 import { ReviewImage } from '../../components';
 
 const ReviewEditPage = () => {
