@@ -1,11 +1,12 @@
 package com.cvi.post.domain.model;
 
-import static com.cvi.post.domain.model.QPost.post;
-
 import com.cvi.exception.InvalidInputException;
 import com.querydsl.core.types.OrderSpecifier;
-import java.util.Arrays;
 import lombok.Getter;
+
+import java.util.Arrays;
+
+import static com.cvi.post.domain.model.QPost.post;
 
 @Getter
 public enum Sort {
@@ -18,21 +19,21 @@ public enum Sort {
     CREATED_AT_ASC(post.createdAt.asc()),
     CREATED_AT_DESC(post.createdAt.desc());
 
-    private final OrderSpecifier sort;
+    private final OrderSpecifier<? extends Comparable<?>> sort;
 
-    Sort(OrderSpecifier sort) {
+    Sort(OrderSpecifier<? extends Comparable<?>> sort) {
         this.sort = sort;
     }
 
-    public static OrderSpecifier toOrderSpecifier(Sort input) {
+    public static OrderSpecifier<? extends Comparable<?>> toOrderSpecifier(Sort input) {
         return Arrays.stream(values())
-            .filter(Sort::isSameTypeOf)
-            .findAny()
-            .map(sort -> input.getSort())
-            .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
+                .filter(sort -> isSameTypeOf(sort, input))
+                .findAny()
+                .map(sort -> input.getSort())
+                .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
     }
 
-    private static boolean isSameTypeOf(Sort sort) {
-        return sort == sort;
+    private static boolean isSameTypeOf(Sort sort, Sort inputSort) {
+        return sort == inputSort;
     }
 }
