@@ -17,10 +17,11 @@ import {
 } from './MyPageCommentReview.styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { getMyCommentReviewListAsync } from '../../service';
 import { NotFoundAnimation } from '../../assets/lotties';
 import { PreviewItem } from '../../components';
 import { toDate } from '../../utils';
+import customRequest from '../../service/customRequest';
+import { fetchGetMyCommentReviewList } from '../../service/fetch';
 
 const MyPageCommentReview = () => {
   const history = useHistory();
@@ -48,7 +49,7 @@ const MyPageCommentReview = () => {
   const getMyCommentReviewList = useCallback(async () => {
     if (!accessToken) return;
 
-    const response = await getMyCommentReviewListAsync(accessToken, offset);
+    const response = await customRequest(() => fetchGetMyCommentReviewList(accessToken, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getMyCommentReviewList');

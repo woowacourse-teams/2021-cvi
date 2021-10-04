@@ -14,7 +14,6 @@ import {
   LOCAL_STORAGE_KEY,
 } from '../../constants';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { postSignupAsync } from '../../service';
 import {
   signupButtonStyles,
   Container,
@@ -27,6 +26,8 @@ import {
   Span,
 } from './SignupPage.styles';
 import { useSnackBar } from '../../hooks';
+import { fetchPostSignup } from '../../service/fetch';
+import customRequest from '../../service/customRequest';
 
 const SignupPage = () => {
   const history = useHistory();
@@ -62,7 +63,7 @@ const SignupPage = () => {
     }
 
     const data = { nickname, ageRange: AGE_RANGE[selectedAgeRange], ...location.state };
-    const response = await postSignupAsync(data);
+    const response = await customRequest(() => fetchPostSignup(data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SIGNUP);

@@ -15,7 +15,6 @@ import {
   VACCINATION_COLOR,
 } from '../../constants';
 import { useFetch, useSnackBar } from '../../hooks';
-import { requestGetImage, requestGetReview } from '../../requests';
 import {
   Container,
   FrameContent,
@@ -41,10 +40,11 @@ import {
   BUTTON_SIZE_TYPE,
 } from '../../components/@common/Button/Button.styles';
 import { LABEL_SIZE_TYPE } from '../../components/@common/Label/Label.styles';
-import { putReviewAsync } from '../../service';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Input, Label } from '../../components/@common';
 import { ReviewImage } from '../../components';
+import { fetchGetImage, fetchGetReview, fetchPutReview } from '../../service/fetch';
+import customRequest from '../../service/customRequest';
 
 const ReviewEditPage = () => {
   const history = useHistory();
@@ -55,7 +55,7 @@ const ReviewEditPage = () => {
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
 
-  const { response: review } = useFetch({}, () => requestGetReview(accessToken, id));
+  const { response: review } = useFetch({}, () => fetchGetReview(accessToken, id));
   const { openSnackBar } = useSnackBar();
 
   const labelFontColor =
@@ -73,7 +73,7 @@ const ReviewEditPage = () => {
 
   const changeImageToBase64 = async (images) =>
     images?.forEach(async (image) => {
-      const response = await requestGetImage(image);
+      const response = await fetchGetImage(image);
       const blobData = await response.blob();
 
       const reader = new FileReader();
@@ -104,7 +104,7 @@ const ReviewEditPage = () => {
 
     const data = { content, vaccinationType: review?.vaccinationType, images: updatedImageFormat };
 
-    const response = await putReviewAsync(accessToken, id, data);
+    const response = await customRequest(() => fetchPutReview(accessToken, id, data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_EDIT);

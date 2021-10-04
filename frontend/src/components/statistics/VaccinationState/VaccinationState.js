@@ -13,7 +13,10 @@ import {
   Source,
 } from './VaccinationState.styles';
 import { Frame, DonutChart, Button } from '../../@common';
-import { requestVaccinationStateList, requestWorldVaccinationStateList } from '../../../requests';
+import {
+  fetchGetVaccinationStateList,
+  fetchGetWorldVaccinationStateList,
+} from '../../../service/fetch';
 import { useFetch } from '../../../hooks';
 import { numberWithCommas } from '../../../utils';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
@@ -23,10 +26,10 @@ import { RightArrowIcon } from '../../../assets/icons';
 const VaccinationState = ({ title, withWorld, withViewMore, withSource }) => {
   const history = useHistory();
 
-  const { response, error } = useFetch([], requestVaccinationStateList);
+  const { response, error } = useFetch([], fetchGetVaccinationStateList);
   const { response: worldState, error: worldError } = useFetch(
     [],
-    requestWorldVaccinationStateList,
+    fetchGetWorldVaccinationStateList,
   );
   const koreanState = response[0];
 

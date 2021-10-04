@@ -15,8 +15,9 @@ import { useSelector } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useLoading } from '../../hooks';
-import { getMyLikeReviewListAsync } from '../../service';
 import { NotFoundAnimation } from '../../assets/lotties';
+import { fetchGetMyLikeReviewList } from '../../service/fetch';
+import customRequest from '../../service/customRequest';
 
 const MyPageLikeReview = () => {
   const history = useHistory();
@@ -40,7 +41,7 @@ const MyPageLikeReview = () => {
   const getMyLikeReviewList = useCallback(async () => {
     if (!accessToken) return;
 
-    const response = await getMyLikeReviewListAsync(accessToken, offset);
+    const response = await customRequest(() => fetchGetMyLikeReviewList(accessToken, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getMyLikeReviewListAsync');

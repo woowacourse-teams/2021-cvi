@@ -14,9 +14,10 @@ import {
   frameStyle,
 } from './MyPageReview.styles';
 import { useCallback, useEffect, useState } from 'react';
-import { getMyReviewListAsync } from '../../service';
 import { useInView } from 'react-intersection-observer';
 import { NotFoundAnimation } from '../../assets/lotties';
+import { fetchGetMyReviewList } from '../../service/fetch';
+import customRequest from '../../service/customRequest';
 
 const MyPageReview = () => {
   const history = useHistory();
@@ -39,7 +40,7 @@ const MyPageReview = () => {
   const getMyReviewList = useCallback(async () => {
     if (!accessToken) return;
 
-    const response = await getMyReviewListAsync(accessToken, offset);
+    const response = await customRequest(() => fetchGetMyReviewList(accessToken, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getMyReviewListAsync');

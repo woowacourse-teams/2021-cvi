@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import customRequest from '../../service/customRequest';
 import {
   ALERT_MESSAGE,
   LOCAL_STORAGE_KEY,
@@ -10,7 +11,7 @@ import {
 } from '../../constants';
 import { useSnackBar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { postOAuthLoginAsync } from '../../service';
+import { fetchPostOAuthLogin } from '../../service/fetch';
 
 const OAuthPage = () => {
   const history = useHistory();
@@ -29,7 +30,7 @@ const OAuthPage = () => {
       state,
     };
 
-    const response = await postOAuthLoginAsync(data);
+    const response = await customRequest(() => fetchPostOAuthLogin(data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);

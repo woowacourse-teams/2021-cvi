@@ -26,10 +26,11 @@ import {
   CurrentImageCount,
 } from './ReviewWritingModal.styles';
 import { BUTTON_SIZE_TYPE } from '../../@common/Button/Button.styles';
-import { postReviewAsync } from '../../../service';
 import { findKey } from '../../../utils';
 import { Button, Input, Modal, Selection } from '../../@common';
 import { useLoading, useSnackBar } from '../../../hooks';
+import { fetchPostReview } from '../../../service/fetch';
+import customRequest from '../../../service/customRequest';
 
 const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickClose }) => {
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
@@ -114,7 +115,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     const vaccinationType = findKey(VACCINATION, selectedVaccine);
     const data = { content, vaccinationType, images: updatedImageFormat };
 
-    const response = await postReviewAsync(accessToken, data);
+    const response = await customRequest(() => fetchPostReview(accessToken, data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_CREATE_REVIEW);
