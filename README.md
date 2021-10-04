@@ -53,7 +53,7 @@
 
 [자세한 문서화를 했어요.](https://www.notion.so/4b6587fb182447eb93183d6160b5ef0a)
 
-[에자일하게 서비스를 개발했어요.](https://www.notion.so/da2fc7e8d99f4f4484bad58ed2e1b233)
+[애자일하게 서비스를 개발했어요.](https://www.notion.so/da2fc7e8d99f4f4484bad58ed2e1b233)
 
 [우리만의 팀 문화를 만들었어요.](https://www.notion.so/ccf25ce39e2d42389c43ccf9b768b53b)
 
