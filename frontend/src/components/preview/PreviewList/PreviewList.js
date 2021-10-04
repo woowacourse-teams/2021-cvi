@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import PreviewItem from '../PreviewItem/PreviewItem';
 import { Container, Error } from './PreviewList.styles';
 import { useFetch, useLoading } from '../../../hooks';
-import { requestGetAllReviewList } from '../../../requests';
+import { fetchGetAllReviewList } from '../../../service/fetch';
 import { ERROR_MESSAGE, FILTER_TYPE, PATH, SORT_TYPE, THEME_COLOR } from '../../../constants';
 
 const PreviewList = ({ reviewType }) => {
@@ -18,9 +18,7 @@ const PreviewList = ({ reviewType }) => {
     response: reviewList,
     error: reviewError,
     loading,
-  } = useFetch([], () =>
-    requestGetAllReviewList(accessToken, offset, [reviewType, SORT_TYPE.DESC]),
-  );
+  } = useFetch([], () => fetchGetAllReviewList(accessToken, offset, [reviewType, SORT_TYPE.DESC]));
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const goReviewDetailPage = (id) => {

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEY } from '../constants';
-import { requestGetMyInfo } from '../requests';
+import { fetchGetMyInfo } from '../service/fetch';
 
 const getMyInfoAsync = createAsyncThunk('auth/myInfo', async (accessToken) => {
   try {
-    const response = await requestGetMyInfo(accessToken);
+    const response = await fetchGetMyInfo(accessToken);
 
     if (!response.ok) {
       throw new Error(response);

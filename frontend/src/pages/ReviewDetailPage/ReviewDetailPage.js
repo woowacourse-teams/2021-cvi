@@ -39,10 +39,11 @@ import {
 } from '../../components/@common/Button/Button.styles';
 import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
-import { deleteReviewAsync, getReviewAsync } from '../../service';
 import { Avatar, Button, Frame, Label } from '../../components/@common';
 import { Comment, ImageModal, ReviewImage } from '../../components';
 import { useLike, useSnackBar, useLoading } from '../../hooks';
+import customRequest from '../../service/customRequest';
+import { fetchDeleteReview, fetchGetReview } from '../../service/fetch';
 
 const ReviewDetailPage = () => {
   const history = useHistory();
@@ -58,7 +59,7 @@ const ReviewDetailPage = () => {
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const getReview = async () => {
-    const response = await getReviewAsync(accessToken, id);
+    const response = await customRequest(() => fetchGetReview(accessToken, id));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getReviewAsync');
@@ -92,7 +93,7 @@ const ReviewDetailPage = () => {
   const deleteReview = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
 
-    const response = await deleteReviewAsync(accessToken, id);
+    const response = await customRequest(() => fetchDeleteReview(accessToken, id));
 
     if (!response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_DELETE_REVIEW);
