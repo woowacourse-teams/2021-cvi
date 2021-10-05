@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 import static com.cvi.post.domain.model.QPost.post;
 
 @Getter
-public enum Sort {
+public enum SortStrategy {
     LIKE_COUNT_ASC(post.likes.likes.size().asc(),
             (boundary, id) -> post.likes.likes.size().eq(boundary).and(sortByCreatedAtDescending(id)).or(post.likes.likes.size().gt(boundary))),
     LIKE_COUNT_DESC(post.likes.likes.size().desc(),
@@ -31,20 +31,20 @@ public enum Sort {
     private final OrderSpecifier<? extends Comparable<?>> sort;
     private final BiFunction<Integer, Long, BooleanExpression> boundary;
 
-    Sort(OrderSpecifier<? extends Comparable<?>> sort, BiFunction<Integer, Long, BooleanExpression> boundary) {
+    SortStrategy(OrderSpecifier<? extends Comparable<?>> sort, BiFunction<Integer, Long, BooleanExpression> boundary) {
         this.sort = sort;
         this.boundary = boundary;
     }
 
-    public static OrderSpecifier<? extends Comparable<?>> toOrderSpecifier(Sort inputSort) {
-        if (inputSort.getSort() != null) {
-            return inputSort.getSort();
+    public static OrderSpecifier<? extends Comparable<?>> toOrderSpecifier(SortStrategy inputSortStrategy) {
+        if (inputSortStrategy.getSort() != null) {
+            return inputSortStrategy.getSort();
         }
         throw new InvalidInputException("잘못된 정렬 형식입니다");
     }
 
-    public static BooleanExpression toBooleanExpression(int boundary, long id, Sort inputSort) {
-        return inputSort.boundary.apply(boundary, id);
+    public static BooleanExpression toBooleanExpression(int boundary, long id, SortStrategy inputSortStrategy) {
+        return inputSortStrategy.boundary.apply(boundary, id);
     }
 
     private static BooleanExpression sortByCreatedAtAscending(Long id) {

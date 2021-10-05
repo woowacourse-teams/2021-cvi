@@ -6,7 +6,7 @@ import com.cvi.dto.PostRequest;
 import com.cvi.dto.PostResponse;
 import com.cvi.dto.UserRequest;
 import com.cvi.dto.UserResponse;
-import com.cvi.post.domain.model.Sort;
+import com.cvi.post.domain.model.SortStrategy;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
@@ -168,7 +168,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
             게시글_작성_요청(userResponse, postRequest);
         }
         //when
-        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, OFFSET_IS_ONE, SIZE_IS_TWO, Sort.CREATED_AT_DESC, userResponse);
+        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, OFFSET_IS_ONE, SIZE_IS_TWO, SortStrategy.CREATED_AT_DESC, userResponse);
         List<String> resultPostContents = response.jsonPath()
                 .getList(".", PostResponse.class)
                 .stream()
@@ -178,14 +178,14 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(resultPostContents).containsExactly("내용2", "내용1");
     }
 
-    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, Sort sort, UserResponse user) {
+    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, SortStrategy sortStrategy, UserResponse user) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer" + user.getAccessToken())
                 .param("vaccinationType", vaccinationType)
                 .queryParam("offset", offset)
                 .param("size", size)
-                .param("sort", sort)
+                .param("sort", sortStrategy)
                 .when().get("/api/v1/posts/paging")
                 .then().log().all()
                 .extract();

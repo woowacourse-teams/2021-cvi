@@ -341,75 +341,54 @@ include::{snippets}/post-findByVaccinationType-when-empty/http-request.adoc[]
 ===== Response
 include::{snippets}/post-findByVaccinationType-when-empty/http-response.adoc[]
 
-=== 게시글 페이징 & 정렬 & 시간필터링
+=== 게시글 페이징 & 정렬
 ==== 페이징
-[cols=1*]
-|===
-|Paging
-|Param에 아래와 같은 조건을 추가 할 수 있다.
-|예시) offset=0&size=6
-|지금까지 불러온 게시글은 0개이다, 앞으로 6개의 게시글을 불러온다.
-|클라이언트 쪽에서 처음 페이징 요청시 offset에 0을 실어 보내준다.
-|위와 같은 예시에서는 다음 요청시에 offset=6&size=6을 보내주면 된다.
-|그다음 요청시에는 offset=12&size=6을 보내주면 된다.
-|offset 또는 size를 적지 않고 보낼시 아래의 값으로 요청을 합니다.
-|기본값) offset=0, size=6
-|===
-==== 정렬
-[cols=1*]
-|===
-|Sorting
-|Param에 아래와 같은 조건을 추가 할 수 있다.
-|예시) sort=LIKE_COUNT_ASC
-|sort를 적지 않고 보낼시 아래의 값으로 요청을 합니다.
-|기본값) sort=CREATED_AT_DESC
-|===
-[cols=2*]
-|===
-|LIKE_COUNT_ASC
-|좋아요 갯수 오름차순
+===== 공통
+VaccinationType: PFIZER, ASTRAZENECA, MODERNA, JANSSEN, ALL(default)
+size: 페이징으로 한번에 가져올 글의 갯수
+SortStrategy, boundary, id: 아래 설명
 
-|LIKE_COUNT_DESC
-|좋아요 갯수 내림차순
+===== LIKE_COUNT_ASC 좋아요 오름차순
+첫 요청시: boundary 0, id = integer.max
 
-|VIEW_COUNT_ASC
-|조회수 오름차순
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-|VIEW_COUNT_DESC
-|좋아요 내림차순
+===== LIKE_COUNT_DESC 좋아요 내림차순
+첫 요청시: boundary integer.max, id = integer.max
 
-|COMMENT_COUNT_ASC
-|댓글 갯수 오름차순
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-|COMMENT_COUNT_DESC
-|댓글 갯수 내림차순
+===== VIEW_COUNT_ASC 조회수 오름차순
+첫 요청시: boundary 0, id = integer.max
 
-|CREATED_AT_ASC
-|생성시각 오름차순
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-|CREATED_AT_DESC
-|생성시각 내림차순
-|===
-==== 시간 필터링
-[cols=1*]
-|===
-|Hour Filtering
-|Param에 아래와 같은 조건을 추가 할 수 있다.
-|예시) fromHoursBefore=24 (24시간 이내의 게시글을 필터링에 추가한다.)
-|fromHoursBefore을 적지 않고 보낼시 아래의 값으로 요청을 합니다.
-|기본값) fromHoursBefore=Integer.MAX_VALUE
-|===
-[cols=1*]
-==== 모두 다 함께 사용 예시
-|===
-|All Combined
-|/api/v1/posts/paging?offset=6&size=6&sort=CREATED_AT_ASC&fromHoursBefore=24
-|(필터) 24시간 내 생성된 게시글
-|(정렬) 생성시간 기준 오름차순
-|(페이징) 이전에 불러온 6개를 제외한 다음 6개의 글을 불러온다.
-|===
+===== VIEW_COUNT_DESC 조회수 내림차순
+첫 요청시: boundary integer.max, id = integer.max
 
-=== 게시글 타입별 페이징 조회
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
+
+===== COMMENT_COUNT_ASC 댓글 오름차순
+첫 요청시: boundary 0, id = integer.max
+
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 댓글 갯수, @id: 이전 페이징 결과 마지막 글의 id
+
+===== COMMENT_COUNT_DESC 댓글 오름차순
+첫 요청시: boundary integer.max, id = integer.max
+
+다음 요청시: @boundary 이전 페이징 결과 마지막 글의 댓글 갯수, @id: 이전 페이징 결과 마지막 글의 id
+
+===== CREATED_AT_DESC 시간순 오름차순
+첫 요청시: id = integer.max
+
+다음 요청시: @boundary 아무값이나 상관없음, @id: 이전 페이징 결과 마지막 글의 id
+
+===== CREATED_AT_DESC 시간순 오름차순
+첫 요청시: id = 0
+
+다음 요청시: @boundary 아무값이나 상관없음, @id: 이전 페이징 결과 마지막 글의 id
+
+=== 게시글 타입별 정렬 페이징 조회
 ==== 성공
 ===== Request
 include::{snippets}/post-findByVaccinationType-paging/http-request.adoc[]
@@ -423,22 +402,6 @@ include::{snippets}/post-findByVaccinationType-paging-when-empty/http-request.ad
 
 ===== Response
 include::{snippets}/post-findByVaccinationType-paging-when-empty/http-response.adoc[]
-
-=== 게시글 타입별 정렬 조회
-==== 성공
-===== Request
-include::{snippets}/post-findByVaccinationType-paging-sorting/http-request.adoc[]
-
-===== Response
-include::{snippets}/post-findByVaccinationType-paging-sorting/http-response.adoc[]
-
-=== 게시글 타입별 시간필터링 조회
-==== 성공
-===== Request
-include::{snippets}/post-findByVaccinationType-paging-filteringHour/http-request.adoc[]
-
-===== Response
-include::{snippets}/post-findByVaccinationType-paging-filteringHour/http-response.adoc[]
 
 === 게시글 수정
 ==== 성공

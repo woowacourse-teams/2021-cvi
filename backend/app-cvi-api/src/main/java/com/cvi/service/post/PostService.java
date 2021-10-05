@@ -11,7 +11,7 @@ import com.cvi.like.domain.model.Like;
 import com.cvi.like.domain.repository.LikeRepository;
 import com.cvi.post.domain.model.Filter;
 import com.cvi.post.domain.model.Post;
-import com.cvi.post.domain.model.Sort;
+import com.cvi.post.domain.model.SortStrategy;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
 import com.cvi.uploader.AwsS3Uploader;
@@ -107,13 +107,10 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostResponse> findByVaccineType(PostsFindRequest postsFindRequest, Optional<User> optionalUser) {
-        final BooleanExpression booleanExpression = Sort.toBooleanExpression(postsFindRequest.getBoundary(), postsFindRequest.getId(), postsFindRequest.getSort());
-        final OrderSpecifier<? extends Comparable<?>> orderSpecifier = Sort.toOrderSpecifier(postsFindRequest.getSort());
-        List<Post> posts = postRepository.findByVaccineType(postsFindRequest.getVaccinationType(),
-                booleanExpression,
-                postsFindRequest.getSize(),
-                orderSpecifier);
+    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, int boundary, long id, int size, SortStrategy sortStrategy, Optional<User> optionalUser) {
+        final BooleanExpression booleanExpression = SortStrategy.toBooleanExpression(boundary, id, sortStrategy);
+        final OrderSpecifier<? extends Comparable<?>> orderSpecifier = SortStrategy.toOrderSpecifier(sortStrategy);
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, booleanExpression, orderSpecifier, size);
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 

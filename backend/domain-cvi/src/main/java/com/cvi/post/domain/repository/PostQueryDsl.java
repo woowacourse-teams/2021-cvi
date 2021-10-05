@@ -12,7 +12,7 @@ public interface PostQueryDsl {
 
     List<Post> findByVaccineType(VaccinationType vaccinationType);
 
-    List<Post> findByVaccineType(VaccinationType vaccinationType, BooleanExpression booleanExpression, int size, OrderSpecifier<?> orderSpecifier);
+    List<Post> findByVaccineType(VaccinationType vaccinationType, BooleanExpression booleanExpression, OrderSpecifier<?> orderSpecifier, int size);
 
     List<Post> findByUserId(Long userId);
 

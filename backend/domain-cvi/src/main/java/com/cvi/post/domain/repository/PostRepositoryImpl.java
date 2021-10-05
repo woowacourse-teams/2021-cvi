@@ -36,7 +36,7 @@ public class PostRepositoryImpl implements PostQueryDsl {
     }
 
     @Override
-    public List<Post> findByVaccineType(VaccinationType vaccinationType, BooleanExpression booleanExpression, int size, OrderSpecifier<?> orderSpecifier) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, BooleanExpression booleanExpression, OrderSpecifier<?> orderSpecifier, int size) {
         return queryFactory.selectFrom(post)
                 .leftJoin(post.user, user).fetchJoin()
                 .where(vaccinationTypeEq(vaccinationType), booleanExpression)
