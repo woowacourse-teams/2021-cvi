@@ -1,4 +1,4 @@
-package com.cvi.image;
+package com.cvi.image.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
