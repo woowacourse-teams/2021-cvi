@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import PreviewItem from '../PreviewItem/PreviewItem';
 import { Container, Error } from './PreviewList.styles';
-import { useFetch, useLoading } from '../../../hooks';
+import { useFetch, useLoading, useMovePage } from '../../../hooks';
 import { fetchGetAllReviewList } from '../../../service/fetch';
-import { ERROR_MESSAGE, FILTER_TYPE, PATH, SORT_TYPE, THEME_COLOR } from '../../../constants';
+import { ERROR_MESSAGE, FILTER_TYPE, SORT_TYPE, THEME_COLOR } from '../../../constants';
 
 const PreviewList = ({ reviewType }) => {
-  const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
   const [offset, setOffset] = useState(0);
@@ -20,10 +18,7 @@ const PreviewList = ({ reviewType }) => {
     loading,
   } = useFetch([], () => fetchGetAllReviewList(accessToken, offset, [reviewType, SORT_TYPE.DESC]));
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
+  const { goReviewDetailPage } = useMovePage();
 
   useEffect(() => {
     loading ? showLoading() : hideLoading();

@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   VACCINATION,
-  PATH,
   RESPONSE_STATE,
   ALERT_MESSAGE,
   THEME_COLOR,
@@ -25,12 +24,12 @@ import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
 } from '../../components/@common/Button/Button.styles';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { findKey } from '../../utils';
 import { Button, Frame, Tabs } from '../../components/@common';
 import { ReviewFilterList, ReviewItem, ReviewWritingModal } from '../../components';
-import { useLoading } from '../../hooks';
+import { useLoading, useMovePage } from '../../hooks';
 import { useInView } from 'react-intersection-observer';
 import { SELECTED_TAB_STYLE_TYPE } from '../../components/@common/Tabs/Tabs.styles';
 import { FilterIcon } from '../../assets/icons';
@@ -38,7 +37,6 @@ import customRequest from '../../service/customRequest';
 import { fetchGetAllReviewList, fetchGetSelectedReviewList } from '../../service/fetch';
 
 const ReviewPage = () => {
-  const history = useHistory();
   const location = useLocation();
   const accessToken = useSelector((state) => state.authReducer?.accessToken);
 
@@ -60,19 +58,12 @@ const ReviewPage = () => {
     isLoading: isScrollLoading,
     Loading: ScrollLoading,
   } = useLoading();
+  const { goReviewDetailPage, goLoginPage } = useMovePage();
 
   const vaccineList = ['전체', ...Object.values(VACCINATION)];
   const filterList = Object.values(FILTER_TYPE);
   const sortList = Object.values(SORT_TYPE);
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
-
-  const goLoginPage = () => {
-    history.push(PATH.LOGIN);
-  };
 
   const onClickButton = () => {
     if (accessToken) {

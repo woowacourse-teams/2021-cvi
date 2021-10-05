@@ -1,7 +1,6 @@
-import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
 import { Frame, LottieAnimation } from '../../components/@common';
-import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
+import { PAGING_SIZE, RESPONSE_STATE, THEME_COLOR } from '../../constants';
 import {
   Container,
   LottieContainer,
@@ -14,13 +13,12 @@ import {
 import { useSelector } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useLoading } from '../../hooks';
+import { useLoading, useMovePage } from '../../hooks';
 import { NotFoundAnimation } from '../../assets/lotties';
 import { fetchGetMyLikeReviewList } from '../../service/fetch';
 import customRequest from '../../service/customRequest';
 
 const MyPageLikeReview = () => {
-  const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const path = window.location.pathname;
 
@@ -35,6 +33,7 @@ const MyPageLikeReview = () => {
     isLoading: isScrollLoading,
     Loading: ScrollLoading,
   } = useLoading();
+  const { goReviewDetailPage } = useMovePage();
 
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
@@ -53,10 +52,6 @@ const MyPageLikeReview = () => {
     hideScrollLoading();
     setMyLikeReviewList((prevState) => [...prevState, ...response.data]);
   }, [offset, accessToken]);
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
 
   useEffect(() => {
     // 게시글 아무것도 없을 때 처리

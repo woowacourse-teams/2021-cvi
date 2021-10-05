@@ -7,15 +7,13 @@ import {
 import {
   FILTER_TYPE,
   NAVER_LEFT_VACCINATION_URL,
-  PATH,
   VACCINATION_RESERVATION_URL,
 } from '../../constants';
+import { useMovePage } from '../../hooks';
 import { Container, VaccinationSymptomColumn, A, buttonStyles } from './HomePage.styles';
 
 const HomePage = () => {
-  const goReviewPage = () => {
-    history.push(PATH.REVIEW);
-  };
+  const { goReviewPage } = useMovePage();
 
   return (
     <Container>
