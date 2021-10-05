@@ -63,13 +63,23 @@ class CommentTest {
         assertThat(comment.getPost()).isEqualTo(post);
     }
 
-    @DisplayName("게시글 할당 - 실패")
+    @DisplayName("게시글 할당 - 실패 - 게시글이 없는 경우")
     @Test
     void assignPostFailure() {
         //given
         //when
         //then
         assertThatThrownBy(() -> comment.assignPost(null)).isInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 할당 - 실패 - 이미 게시글에 할당된 경우")
+    @Test
+    void assignPostFailureWhenAlreadyAssignedPost() {
+        //given
+        //when
+        comment.assignPost(post);
+        //then
+        assertThatThrownBy(() -> comment.assignPost(post)).isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("유저 할당 - 성공")
