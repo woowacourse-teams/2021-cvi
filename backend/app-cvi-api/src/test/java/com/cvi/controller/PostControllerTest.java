@@ -196,7 +196,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
             new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 4, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1), imageUrls),
             new PostResponse(36L, userResponse, "이건 내용입니다.3", 300, 30, 2, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2), imageUrls)
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0, 3);
         //then
@@ -208,7 +208,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
     void findByVaccineTypePagingWhenPostsIsEmpty() throws Exception {
         //given
         List<PostResponse> postResponse = Collections.emptyList();
-        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        willReturn(postResponse).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), any());
         //when
         ResultActions response = 글_타입별_페이징_조회_요청(VaccinationType.PFIZER, 0, 3);
         //then
@@ -224,7 +224,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
             new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 8, false, VaccinationType.PFIZER, LocalDateTime.now().minusDays(1), imageUrls),
             new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 1, true, VaccinationType.PFIZER, LocalDateTime.now().minusDays(2), imageUrls)
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), any());
         //when
         ResultActions response = 글_타입별_정렬_조회_요청(VaccinationType.PFIZER, Sort.LIKE_COUNT_ASC);
         //then
@@ -240,7 +240,7 @@ class PostControllerTest extends PreprocessPostControllerTest {
             new PostResponse(37L, userResponse, "이건 내용입니다.2", 200, 20, 6, false, VaccinationType.PFIZER, LocalDateTime.now().minusHours(3), imageUrls),
             new PostResponse(146L, userResponse, "이건 내용입니다.3", 300, 30, 7, true, VaccinationType.PFIZER, LocalDateTime.now().minusHours(5), imageUrls)
         ));
-        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), anyInt(), any());
+        willReturn(postResponses).given(postService).findByVaccineType(any(VaccinationType.class), anyInt(), anyInt(), any(), any());
         //when
         ResultActions response = 글_타입별_시간필터링_조회_요청(VaccinationType.PFIZER, 24);
         //then

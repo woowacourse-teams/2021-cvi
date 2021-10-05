@@ -178,7 +178,7 @@ class PostFindServiceTest {
     void findByVaccineTypeFirstPageAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 1, Sort.CREATED_AT_DESC, 24, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 0, 1, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(1);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Collections.singletonList("Test 2"));
@@ -190,7 +190,7 @@ class PostFindServiceTest {
     void findByVaccineTypeNextPageAll() {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 1, 1, Sort.CREATED_AT_DESC, 24, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 1, 1, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(1);
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 1"));
@@ -202,7 +202,7 @@ class PostFindServiceTest {
     void findByVaccineTypeFirstPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, size, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -222,7 +222,7 @@ class PostFindServiceTest {
     void findByVaccineTypeNextPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -240,7 +240,7 @@ class PostFindServiceTest {
     void findByVaccineTypeNextPageIsNull(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 1, size, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(contentResult.size());
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
@@ -260,7 +260,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByLikeCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.LIKE_COUNT_ASC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.LIKE_COUNT_ASC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -280,7 +280,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByLikeCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.LIKE_COUNT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.LIKE_COUNT_DESC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -300,7 +300,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByCommentsCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.COMMENT_COUNT_ASC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.COMMENT_COUNT_ASC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -320,7 +320,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByCommentsCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.COMMENT_COUNT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.COMMENT_COUNT_DESC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -340,7 +340,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByViewCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.VIEW_COUNT_ASC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.VIEW_COUNT_ASC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -360,7 +360,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByViewCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.VIEW_COUNT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.VIEW_COUNT_DESC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -380,7 +380,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByCreatedAtAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.CREATED_AT_ASC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.CREATED_AT_ASC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -400,7 +400,7 @@ class PostFindServiceTest {
     void findByVaccineTypeSortByCreatedAtDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
         //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.CREATED_AT_DESC, Integer.MAX_VALUE, optionalUser);
+        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
     }
@@ -412,25 +412,6 @@ class PostFindServiceTest {
             Arguments.of(VaccinationType.PFIZER, Arrays.asList("Test 2")),
             Arguments.of(VaccinationType.JANSSEN, Collections.emptyList()),
             Arguments.of(VaccinationType.MODERNA, Collections.emptyList())
-        );
-    }
-
-    @ParameterizedTest(name = "게시글 시간 필터링 조회 - 성공")
-    @MethodSource
-    void findByVaccineTypeFilterByHour(VaccinationType vaccinationType, int hour, List<String> contentResult) {
-        //given
-        //when
-        List<PostResponse> postResponses = postService.findByVaccineType(vaccinationType, 0, Integer.MAX_VALUE, Sort.CREATED_AT_DESC, hour, optionalUser);
-        //then
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(contentResult);
-    }
-
-    static Stream<Arguments> findByVaccineTypeFilterByHour() {
-        return Stream.of(
-            Arguments.of(VaccinationType.ALL, Integer.MAX_VALUE, Arrays.asList("Test 2", "Test 1", "Test 0")),
-            Arguments.of(VaccinationType.ALL, 3, Arrays.asList("Test 2", "Test 1")),
-            Arguments.of(VaccinationType.ALL, 2, Arrays.asList("Test 2")),
-            Arguments.of(VaccinationType.ALL, 1, Collections.emptyList())
         );
     }
 }
