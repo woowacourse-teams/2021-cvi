@@ -2,38 +2,48 @@ package com.cvi.post.domain.model;
 
 import com.cvi.exception.InvalidInputException;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.Getter;
 
-import java.util.Arrays;
+import java.util.function.BiFunction;
 
 import static com.cvi.post.domain.model.QPost.post;
 
 @Getter
 public enum Sort {
-    LIKE_COUNT_ASC(post.likes.likes.size().asc()),
-    LIKE_COUNT_DESC(post.likes.likes.size().desc()),
-    VIEW_COUNT_ASC(post.viewCount.asc()),
-    VIEW_COUNT_DESC(post.viewCount.desc()),
-    COMMENT_COUNT_ASC(post.comments.comments.size().asc()),
-    COMMENT_COUNT_DESC(post.comments.comments.size().desc()),
-    CREATED_AT_ASC(post.createdAt.asc()),
-    CREATED_AT_DESC(post.createdAt.desc());
+    LIKE_COUNT_ASC(post.likes.likes.size().asc(),
+            (boundary, id) -> post.likes.likes.size().eq(boundary).and(post.id.lt(id)).or(post.likes.likes.size().gt(boundary))),
+    LIKE_COUNT_DESC(post.likes.likes.size().desc(),
+            (boundary, id) -> post.likes.likes.size().eq(boundary).and(post.id.lt(id)).or(post.likes.likes.size().lt(boundary))),
+    VIEW_COUNT_ASC(post.viewCount.asc(),
+            (boundary, id) -> post.viewCount.eq(boundary).and(post.id.lt(id)).or(post.viewCount.gt(boundary))),
+    VIEW_COUNT_DESC(post.viewCount.desc(),
+            (boundary, id) -> post.viewCount.eq(boundary).and(post.id.lt(id)).or(post.viewCount.lt(boundary))),
+    COMMENT_COUNT_ASC(post.comments.comments.size().asc(),
+            (boundary, id) -> post.comments.comments.size().eq(boundary).and(post.id.lt(id)).or(post.comments.comments.size().gt(boundary))),
+    COMMENT_COUNT_DESC(post.comments.comments.size().desc(),
+            (boundary, id) -> post.comments.comments.size().eq(boundary).and(post.id.lt(id)).or(post.comments.comments.size().lt(boundary))),
+    CREATED_AT_ASC(post.id.asc(),
+            (boundary, id) -> post.id.gt(id)),
+    CREATED_AT_DESC(post.id.desc(),
+            (boundary, id) -> post.id.lt(id));
 
     private final OrderSpecifier<? extends Comparable<?>> sort;
+    private final BiFunction<Integer, Long, BooleanExpression> boundary;
 
-    Sort(OrderSpecifier<? extends Comparable<?>> sort) {
+    Sort(OrderSpecifier<? extends Comparable<?>> sort, BiFunction<Integer, Long, BooleanExpression> boundary) {
         this.sort = sort;
+        this.boundary = boundary;
     }
 
-    public static OrderSpecifier<? extends Comparable<?>> toOrderSpecifier(Sort input) {
-        return Arrays.stream(values())
-                .filter(sort -> isSameTypeOf(sort, input))
-                .findAny()
-                .map(sort -> input.getSort())
-                .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
+    public static OrderSpecifier<? extends Comparable<?>> toOrderSpecifier(Sort inputSort) {
+        if (inputSort.getSort() != null) {
+            return inputSort.getSort();
+        }
+        throw new InvalidInputException("잘못된 정렬 형식입니다");
     }
 
-    private static boolean isSameTypeOf(Sort sort, Sort inputSort) {
-        return sort == inputSort;
+    public static BooleanExpression toBooleanExpression(int boundary, long id, Sort inputSort) {
+        return inputSort.boundary.apply(boundary, id);
     }
 }

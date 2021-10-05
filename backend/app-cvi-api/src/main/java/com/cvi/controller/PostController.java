@@ -3,6 +3,7 @@ package com.cvi.controller;
 import com.cvi.auth.AuthenticationPrincipal;
 import com.cvi.dto.PostRequest;
 import com.cvi.dto.PostResponse;
+import com.cvi.dto.PostsFindRequest;
 import com.cvi.post.domain.model.Sort;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.service.post.PostService;
@@ -37,15 +38,23 @@ public class PostController {
         return postService.findByVaccineType(vaccinationType, user);
     }
 
+//    @GetMapping("/paging")
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
+//                                                         @RequestParam(defaultValue = "0") int boundary,
+//                                                         @RequestParam(defaultValue = "0") long id,
+//                                                         @RequestParam(defaultValue = "6") int size,
+//                                                         @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
+//                                                         @RequestParam(defaultValue = Integer.MAX_VALUE + "") int fromHoursBefore,
+//                                                         @AuthenticationPrincipal Optional<User> user) {
+//        return postService.findByVaccineType(vaccinationType, boundary, id, size, sort, fromHoursBefore, user);
+//    }
+
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-                                                         @RequestParam(defaultValue = "0") int offset,
-                                                         @RequestParam(defaultValue = "6") int size,
-                                                         @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
-                                                         @RequestParam(defaultValue = "500") int fromHoursBefore,
+    public List<PostResponse> findByVaccineTypeAndPaging(@RequestBody @Valid PostsFindRequest postsFindRequest,
                                                          @AuthenticationPrincipal Optional<User> user) {
-        return postService.findByVaccineType(vaccinationType, offset, size, sort, fromHoursBefore, user);
+        return postService.findByVaccineType(postsFindRequest, user);
     }
 
     @GetMapping("/{id}")

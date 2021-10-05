@@ -31,23 +31,18 @@ public class PostRepositoryImpl implements PostQueryDsl {
         return queryFactory.selectFrom(post)
             .leftJoin(post.user, user).fetchJoin()
             .where(vaccinationTypeEq(vaccinationType))
-            .orderBy(post.createdAt.desc())
+            .orderBy(post.id.desc())
             .fetch();
     }
 
     @Override
-    public List<Post> findByVaccineType(VaccinationType vaccinationType, int offset, int size, OrderSpecifier orderSpecifier, int hours) {
+    public List<Post> findByVaccineType(VaccinationType vaccinationType, BooleanExpression booleanExpression, int size, OrderSpecifier<?> orderSpecifier) {
         return queryFactory.selectFrom(post)
-            .leftJoin(post.user, user).fetchJoin()
-            .where(vaccinationTypeEq(vaccinationType), fromHoursBefore(hours))
-            .orderBy(orderSpecifier, post.createdAt.desc())
-            .offset(offset)
-            .limit(size)
-            .fetch();
-    }
-
-    private BooleanExpression fromHoursBefore(int hours) {
-        return post.createdAt.after(LocalDateTime.now().minusHours(hours));
+                .leftJoin(post.user, user).fetchJoin()
+                .where(vaccinationTypeEq(vaccinationType), booleanExpression)
+                .orderBy(orderSpecifier, post.id.desc())
+                .limit(size)
+                .fetch();
     }
 
     private BooleanExpression vaccinationTypeEq(VaccinationType vaccinationType) {
