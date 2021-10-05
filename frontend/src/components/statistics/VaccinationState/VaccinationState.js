@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -17,25 +16,21 @@ import {
   fetchGetVaccinationStateList,
   fetchGetWorldVaccinationStateList,
 } from '../../../service/fetch';
-import { useFetch } from '../../../hooks';
+import { useFetch, useMovePage } from '../../../hooks';
 import { numberWithCommas } from '../../../utils';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
-import { FONT_COLOR, PATH } from '../../../constants';
+import { FONT_COLOR } from '../../../constants';
 import { RightArrowIcon } from '../../../assets/icons';
 
 const VaccinationState = ({ title, withWorld, withViewMore, withSource }) => {
-  const history = useHistory();
-
   const { response, error } = useFetch([], fetchGetVaccinationStateList);
   const { response: worldState, error: worldError } = useFetch(
     [],
     fetchGetWorldVaccinationStateList,
   );
-  const koreanState = response[0];
+  const { goStatePage } = useMovePage();
 
-  const goStatePage = () => {
-    history.push(PATH.STATE);
-  };
+  const koreanState = response[0];
 
   return (
     <Container>

@@ -12,17 +12,16 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { LogoIcon, MenuIcon } from '../../../assets/icons';
 import { LOCAL_STORAGE_KEY, PATH, SNACKBAR_MESSAGE, THEME_COLOR } from '../../../constants';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { css } from '@emotion/react';
 import SideBarMobile from '../SideBarMobile/SideBarMobile';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
-import { useSnackBar } from '../../../hooks';
+import { useMovePage, useSnackBar } from '../../../hooks';
 
 const BaseLayout = ({ children }) => {
-  const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
   const isLogin = !!useSelector((state) => state.authReducer.accessToken);
@@ -31,14 +30,7 @@ const BaseLayout = ({ children }) => {
   const [isOpenSideBar, setIsOpenSideBar] = useState(false);
 
   const { openSnackBar } = useSnackBar();
-
-  const goMyPage = () => {
-    history.push(PATH.MY_PAGE_ACCOUNT);
-  };
-
-  const goHomePage = () => {
-    history.push(PATH.HOME);
-  };
+  const { goMyPage, goHomePage } = useMovePage();
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
@@ -46,7 +38,7 @@ const BaseLayout = ({ children }) => {
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
     setIsOpenSideBar(false);
-    history.push(PATH.HOME);
+    goHomePage();
   };
 
   useEffect(() => {

@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Button, Frame, Input, Selection } from '../../components/@common';
 import { BUTTON_BACKGROUND_TYPE } from '../../components/@common/Button/Button.styles';
 import {
   AGE_RANGE,
   ALERT_MESSAGE,
-  PATH,
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
   NICKNAME_LIMIT,
@@ -25,12 +24,11 @@ import {
   LoginContainer,
   Span,
 } from './SignupPage.styles';
-import { useSnackBar } from '../../hooks';
+import { useMovePage, useSnackBar } from '../../hooks';
 import { fetchPostSignup } from '../../service/fetch';
 import customRequest from '../../service/customRequest';
 
 const SignupPage = () => {
-  const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -38,14 +36,7 @@ const SignupPage = () => {
   const [nickname, setNickname] = useState();
 
   const { openSnackBar } = useSnackBar();
-
-  const goHomePage = () => {
-    history.push(`${PATH.HOME}`);
-  };
-
-  const goLoginPage = () => {
-    history.push(`${PATH.LOGIN}`);
-  };
+  const { goHomePage, goLoginPage } = useMovePage();
 
   const isValidNickname = (nickname) =>
     nickname.length >= NICKNAME_LIMIT.MIN_LENGTH &&

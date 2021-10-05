@@ -19,13 +19,12 @@ import {
   BottomContainer,
   ImageContainer,
 } from './ReviewDetailPage.styles';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { LABEL_SIZE_TYPE } from '../../components/@common/Label/Label.styles';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
   FONT_COLOR,
-  PATH,
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
   THEME_COLOR,
@@ -41,12 +40,11 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Label } from '../../components/@common';
 import { Comment, ImageModal, ReviewImage } from '../../components';
-import { useLike, useSnackBar, useLoading } from '../../hooks';
+import { useLike, useSnackBar, useLoading, useMovePage } from '../../hooks';
 import customRequest from '../../service/customRequest';
 import { fetchDeleteReview, fetchGetReview } from '../../service/fetch';
 
 const ReviewDetailPage = () => {
-  const history = useHistory();
   const { id } = useParams();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
@@ -57,7 +55,7 @@ const ReviewDetailPage = () => {
   const [openedImageSrc, setOpenedImageSrc] = useState('');
 
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
-
+  const { goReviewPage, goReviewEditPage } = useMovePage();
   const getReview = async () => {
     const response = await customRequest(() => fetchGetReview(accessToken, id));
 
@@ -81,14 +79,6 @@ const ReviewDetailPage = () => {
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
-
-  const goReviewPage = () => {
-    history.push(`${PATH.REVIEW}`);
-  };
-
-  const goReviewEditPage = () => {
-    history.push(`${PATH.REVIEW}/${id}/edit`);
-  };
 
   const deleteReview = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_REVIEW)) return;
@@ -171,7 +161,7 @@ const ReviewDetailPage = () => {
                           backgroundType={BUTTON_BACKGROUND_TYPE.TEXT}
                           color={FONT_COLOR.GRAY}
                           styles={buttonStyles}
-                          onClick={goReviewEditPage}
+                          onClick={() => goReviewEditPage(id)}
                         >
                           수정
                         </Button>

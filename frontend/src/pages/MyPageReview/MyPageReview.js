@@ -1,9 +1,8 @@
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { ReviewItem } from '../../components';
 import { Frame, LottieAnimation } from '../../components/@common';
-import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
-import { useLoading } from '../../hooks';
+import { PAGING_SIZE, RESPONSE_STATE, THEME_COLOR } from '../../constants';
+import { useLoading, useMovePage } from '../../hooks';
 import {
   Container,
   LottieContainer,
@@ -20,7 +19,6 @@ import { fetchGetMyReviewList } from '../../service/fetch';
 import customRequest from '../../service/customRequest';
 
 const MyPageReview = () => {
-  const history = useHistory();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
   const [myReviewList, setMyReviewList] = useState([]);
@@ -34,6 +32,7 @@ const MyPageReview = () => {
     isLoading: isScrollLoading,
     Loading: ScrollLoading,
   } = useLoading();
+  const { goReviewDetailPage } = useMovePage();
 
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
 
@@ -52,10 +51,6 @@ const MyPageReview = () => {
     hideScrollLoading();
     setMyReviewList((prevState) => [...prevState, ...response.data]);
   }, [offset, accessToken]);
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
 
   useEffect(() => {
     if (offset === 0) {
