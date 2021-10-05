@@ -24,8 +24,9 @@ import {
   TO_DATE_TYPE,
 } from '../../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
-import { deleteCommentAsync, putCommentAsync } from '../../../service';
 import { useSnackBar } from '../../../hooks';
+import { fetchDeleteComment, fetchPutComment } from '../../../service/fetch';
+import customRequest from '../../../service/customRequest';
 
 const CommentItem = ({
   accessToken,
@@ -45,7 +46,9 @@ const CommentItem = ({
   const deleteComment = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_COMMENT)) return;
 
-    const response = await deleteCommentAsync(accessToken, reviewId, commentId);
+    const response = await customRequest(() =>
+      fetchDeleteComment(accessToken, reviewId, commentId),
+    );
 
     if (!response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_DELETE_COMMENT);
@@ -66,7 +69,9 @@ const CommentItem = ({
     }
 
     const data = { content: editedContent };
-    const response = await putCommentAsync(accessToken, reviewId, commentId, data);
+    const response = await customRequest(() =>
+      fetchPutComment(accessToken, reviewId, commentId, data),
+    );
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_EDIT_COMMENT);

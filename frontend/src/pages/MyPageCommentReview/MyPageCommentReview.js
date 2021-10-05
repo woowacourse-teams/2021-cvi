@@ -1,8 +1,7 @@
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { Frame, LottieAnimation } from '../../components/@common';
-import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR, TO_DATE_TYPE } from '../../constants';
-import { useLoading } from '../../hooks';
+import { PAGING_SIZE, RESPONSE_STATE, THEME_COLOR, TO_DATE_TYPE } from '../../constants';
+import { useLoading, useMovePage } from '../../hooks';
 import {
   Container,
   LottieContainer,
@@ -17,13 +16,13 @@ import {
 } from './MyPageCommentReview.styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { getMyCommentReviewListAsync } from '../../service';
 import { NotFoundAnimation } from '../../assets/lotties';
 import { PreviewItem } from '../../components';
 import { toDate } from '../../utils';
+import customRequest from '../../service/customRequest';
+import { fetchGetMyCommentReviewList } from '../../service/fetch';
 
 const MyPageCommentReview = () => {
-  const history = useHistory();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
@@ -38,17 +37,14 @@ const MyPageCommentReview = () => {
     isLoading: isScrollLoading,
     Loading: ScrollLoading,
   } = useLoading();
+  const { goReviewDetailPage } = useMovePage();
 
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
 
   const getMyCommentReviewList = useCallback(async () => {
     if (!accessToken) return;
 
-    const response = await getMyCommentReviewListAsync(accessToken, offset);
+    const response = await customRequest(() => fetchGetMyCommentReviewList(accessToken, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getMyCommentReviewList');

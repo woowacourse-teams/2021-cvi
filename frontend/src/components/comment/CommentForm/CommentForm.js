@@ -19,8 +19,9 @@ import {
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
 } from '../../../constants';
-import { postCommentAsync } from '../../../service';
 import { useSnackBar } from '../../../hooks';
+import customRequest from '../../../service/customRequest';
+import { fetchPostComment } from '../../../service/fetch';
 
 // TODO: 댓글 최적화
 const CommentForm = ({
@@ -43,7 +44,7 @@ const CommentForm = ({
     }
 
     const data = { content };
-    const response = await postCommentAsync(accessToken, reviewId, data);
+    const response = await customRequest(() => fetchPostComment(accessToken, reviewId, data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_CREATE_COMMENT);

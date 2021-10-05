@@ -10,9 +10,10 @@ import {
   buttonStyles,
 } from './Comment.styles';
 import { Button } from '../../@common';
-import { getCommentListAsync } from '../../../service';
 import { FONT_COLOR, PAGING_SIZE, RESPONSE_STATE } from '../../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
+import customRequest from '../../../service/customRequest';
+import { fetchGetCommentList } from '../../../service/fetch';
 
 const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount }) => {
   const [offset, setOffset] = useState(0);
@@ -21,7 +22,7 @@ const Comment = ({ accessToken, user, reviewId, commentCount, setCommentCount })
   const isMoreButtonShowing = commentCount > PAGING_SIZE && commentCount > commentList.length;
 
   const getCommentList = useCallback(async () => {
-    const response = await getCommentListAsync(reviewId, offset);
+    const response = await customRequest(() => fetchGetCommentList(reviewId, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getCommentListAsync');

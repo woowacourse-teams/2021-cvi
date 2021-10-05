@@ -38,18 +38,6 @@ public class PostController {
         return postService.findByVaccineType(vaccinationType, user);
     }
 
-//    @GetMapping("/paging")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-//                                                         @RequestParam(defaultValue = "0") int boundary,
-//                                                         @RequestParam(defaultValue = "0") long id,
-//                                                         @RequestParam(defaultValue = "6") int size,
-//                                                         @RequestParam(defaultValue = "CREATED_AT_DESC") Sort sort,
-//                                                         @RequestParam(defaultValue = Integer.MAX_VALUE + "") int fromHoursBefore,
-//                                                         @AuthenticationPrincipal Optional<User> user) {
-//        return postService.findByVaccineType(vaccinationType, boundary, id, size, sort, fromHoursBefore, user);
-//    }
-
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestBody @Valid PostsFindRequest postsFindRequest,

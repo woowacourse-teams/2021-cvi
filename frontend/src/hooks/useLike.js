@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { ButtonLike } from '../components/@common';
-import { ALERT_MESSAGE, PATH, RESPONSE_STATE } from '../constants';
-import { deleteLikeAsync, postLikeAsync } from '../service';
+import { ALERT_MESSAGE, RESPONSE_STATE } from '../constants';
+import { fetchDeleteLike, fetchPostLike } from '../service/fetch';
+import customRequest from '../service/customRequest';
+import { useMovePage } from '.';
 
 const useLike = (accessToken, hasLiked, likeCount, postId) => {
-  const history = useHistory();
   const [updatedHasLiked, setUpdatedHasLiked] = useState(hasLiked);
   const [updatedLikeCount, setUpdatedLikeCount] = useState(likeCount);
+
+  const { goLoginPage } = useMovePage();
 
   useEffect(() => {
     setUpdatedHasLiked(hasLiked);
@@ -15,7 +17,7 @@ const useLike = (accessToken, hasLiked, likeCount, postId) => {
   }, [hasLiked, likeCount]);
 
   const deleteLike = async () => {
-    const response = await deleteLikeAsync(accessToken, postId);
+    const response = await customRequest(() => fetchDeleteLike(accessToken, postId));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);
@@ -28,7 +30,7 @@ const useLike = (accessToken, hasLiked, likeCount, postId) => {
   };
 
   const createLike = async () => {
-    const response = await postLikeAsync(accessToken, postId);
+    const response = await customRequest(() => fetchPostLike(accessToken, postId));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);
@@ -45,7 +47,7 @@ const useLike = (accessToken, hasLiked, likeCount, postId) => {
 
     if (!accessToken) {
       alert(ALERT_MESSAGE.NEED_LOGIN);
-      history.push(PATH.LOGIN);
+      goLoginPage();
 
       return;
     }

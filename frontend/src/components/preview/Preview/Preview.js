@@ -1,24 +1,21 @@
-import { FILTER_TYPE, FONT_COLOR, PATH } from '../../../constants';
+import { FILTER_TYPE, FONT_COLOR } from '../../../constants';
 import { Title, Container, ButtonContainer, buttonStyles } from './Preview.styles';
 import PropTypes from 'prop-types';
 import PreviewList from '../PreviewList/PreviewList';
-import { useHistory } from 'react-router-dom';
 import { RightArrowIcon } from '../../../assets/icons';
 import { Button, Frame } from '../../@common';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
+import { useMovePage } from '../../../hooks';
 
 const Preview = ({ title, reviewType }) => {
-  const history = useHistory();
+  const { goReviewPage } = useMovePage();
 
-  const goReviewPage = () => {
+  const goReviewPageWithFilter = () => {
     if (reviewType === FILTER_TYPE.CREATED_AT) {
-      history.push(`${PATH.REVIEW}`);
+      goReviewPage();
     } else if (reviewType === FILTER_TYPE.LIKE_COUNT) {
-      history.push({
-        pathname: `${PATH.REVIEW}`,
-        state: {
-          selectedFilter: FILTER_TYPE.LIKE_COUNT,
-        },
+      goReviewPage({
+        selectedFilter: FILTER_TYPE.LIKE_COUNT,
       });
     }
   };
@@ -32,7 +29,7 @@ const Preview = ({ title, reviewType }) => {
           color={FONT_COLOR.BLUE_GRAY}
           withIcon={true}
           styles={buttonStyles}
-          onClick={goReviewPage}
+          onClick={goReviewPageWithFilter}
         >
           <div>더보기</div>
           <RightArrowIcon width="18" height="18" stroke={FONT_COLOR.BLUE_GRAY} />
