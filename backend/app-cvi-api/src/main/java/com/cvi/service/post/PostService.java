@@ -2,10 +2,7 @@ package com.cvi.service.post;
 
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
-import com.cvi.dto.ImageRequest;
-import com.cvi.dto.PostRequest;
-import com.cvi.dto.PostResponse;
-import com.cvi.dto.PostWithCommentResponse;
+import com.cvi.dto.*;
 import com.cvi.exception.NotFoundException;
 import com.cvi.exception.UnAuthorizedException;
 import com.cvi.image.domain.Image;
@@ -19,17 +16,20 @@ import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
 import com.cvi.uploader.AwsS3Uploader;
 import com.cvi.user.domain.model.User;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -82,8 +82,8 @@ public class PostService {
         final List<Image> images = new ArrayList<>();
         for (String imageUrl : imageUrls) {
             final Image image = Image.builder()
-                .url(imageUrl)
-                .build();
+                    .url(imageUrl)
+                    .build();
             image.assignPost(post);
             imageRepository.save(image);
             images.add(image);
@@ -107,8 +107,13 @@ public class PostService {
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
-    public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, int offset, int size, Sort sort, Optional<User> optionalUser) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType, offset, size, Sort.toOrderSpecifier(sort));
+    public List<PostResponse> findByVaccineType(PostsFindRequest postsFindRequest, Optional<User> optionalUser) {
+        final BooleanExpression booleanExpression = Sort.toBooleanExpression(postsFindRequest.getBoundary(), postsFindRequest.getId(), postsFindRequest.getSort());
+        final OrderSpecifier<? extends Comparable<?>> orderSpecifier = Sort.toOrderSpecifier(postsFindRequest.getSort());
+        List<Post> posts = postRepository.findByVaccineType(postsFindRequest.getVaccinationType(),
+                booleanExpression,
+                postsFindRequest.getSize(),
+                orderSpecifier);
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 
@@ -154,7 +159,7 @@ public class PostService {
     private Post findPostByPostId(Long id) {
         validateNotNull(id);
         return postRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 id의 게시글이 존재하지 않습니다."));
     }
 
     private void validateSignedin(Optional<User> user) {
@@ -190,17 +195,17 @@ public class PostService {
     private List<PostWithCommentResponse> createResponsesFilteredByLikes(User user) {
         List<Like> likes = likeRepository.findByUserId(user.getId());
         List<Post> posts = likes.stream()
-            .map(Like::getPost)
-            .collect(Collectors.toList());
+                .map(Like::getPost)
+                .collect(Collectors.toList());
         return PostWithCommentResponse.toList(posts, user);
     }
 
     private List<PostWithCommentResponse> createResponsesFilteredByComments(User user) {
         List<Comment> comments = commentRepository.findByUserId(user.getId());
         List<Post> posts = comments.stream()
-            .map(Comment::getPost)
-            .distinct()
-            .collect(Collectors.toList());
+                .map(Comment::getPost)
+                .distinct()
+                .collect(Collectors.toList());
         return PostWithCommentResponse.toList(posts, user);
     }
 
@@ -220,17 +225,17 @@ public class PostService {
     private List<PostWithCommentResponse> createResponsesFilteredByLikes(User user, int offset, int size) {
         List<Like> likes = likeRepository.findByUserId(user.getId(), offset, size);
         List<Post> posts = likes.stream()
-            .map(Like::getPost)
-            .collect(Collectors.toList());
+                .map(Like::getPost)
+                .collect(Collectors.toList());
         return PostWithCommentResponse.toList(posts, user);
     }
 
     private List<PostWithCommentResponse> createResponsesFilteredByComments(User user, int offset, int size) {
         List<Comment> comments = commentRepository.findByUserId(user.getId(), offset, size);
         List<Post> posts = comments.stream()
-            .map(Comment::getPost)
-            .distinct()
-            .collect(Collectors.toList());
+                .map(Comment::getPost)
+                .distinct()
+                .collect(Collectors.toList());
         return PostWithCommentResponse.toList(posts, user);
     }
 }

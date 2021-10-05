@@ -5,11 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.cvi.ApiDocument;
 import com.cvi.auth.JwtTokenProvider;
-import com.cvi.dto.CommentResponse;
-import com.cvi.dto.ImageRequest;
-import com.cvi.dto.PostRequest;
-import com.cvi.dto.PostResponse;
-import com.cvi.dto.UserResponse;
+import com.cvi.dto.*;
 import com.cvi.image.domain.ImageType;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
