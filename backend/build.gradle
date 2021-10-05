@@ -8,6 +8,7 @@ plugins {
     id 'application'
 }
 
+
 application {
     mainClass = 'com.cvi.CentralVaccinationInformationApplication'
 }
@@ -21,7 +22,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
-    apply plugin: 'org.sonarqube'
+    apply plugin: "org.sonarqube"
 
     group = 'com.backjoongwon'
     version = '0.0.1-SNAPSHOT'
@@ -57,32 +58,6 @@ subprojects {
         finalizedBy 'jacocoTestReport' // 테스트가 먼저 실행되고 리포트가 작동된다.
     }
 
-    jacocoTestReport {
-        dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
-        reports {
-            html.enabled true
-            xml.enabled true
-            csv.enabled false
-        }
-
-        def Qdomains = []
-        for (qPattern in "**/QA".."**/QZ") {
-            Qdomains.add(qPattern + "*")
-        }
-
-        afterEvaluate {
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
-                        exclude: ['**/DataLoader*',
-                                  '**/CviApplication*',
-                                  '**/DummyData*',
-                                  '**/KakaoProfile*',
-                                  '**/NaverProfile*'] + Qdomains)
-            }))
-        }
-        finalizedBy 'jacocoTestCoverageVerification'
-    }
-
     /**
      * Sonar 관련 설정
      */
@@ -92,10 +67,6 @@ subprojects {
             property "sonar.tests", "src/test/java"
         }
     }
-
-/*    tasks.named('sonarqube').configure {
-        dependsOn jacocoTestCoverageVerification
-    }*/
 }
 
 def queryDslProjects = [project(':domain-cvi')]

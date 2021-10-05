@@ -8,38 +8,47 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
-jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
-    def Qdomains = []
-
-    for (qPattern in "*.QA".."*.QZ") {
-        Qdomains.add(qPattern + "*")
+jacocoTestReport {
+    dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
+    reports {
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
     }
 
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
+                    exclude: ['**/KakaoProfile*',
+                              '**/NaverProfile*'])
+        }))
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
     violationRules { // 위반 규칙
         rule {
             enabled = true
-            element = 'BUNDLE'
+            element = 'GROUP'
 
             limit {
-                counter = 'INSTRUCTION'
+                counter = 'METHOD'
                 value = 'COVEREDRATIO'
                 minimum = 0.85
             }
 
             excludes = [
                     // 커버리지 제외할 클래스
-                    '*.DataLoader*',
-                    '*.CviApplication*',
-                    '*.DummyData*',
                     '*.KakaoProfile*',
                     '*.NaverProfile*'
-            ] + Qdomains
+            ]
         }
     }
 }
 
 sonarqube {
     properties {
-        property "sonar.exclusions", "**/*Test*.*, **/Q*.java, **/*Doc*.java"
+        property "sonar.exclusions", "**/*Test*.*, **/Q*.java, **/*Doc*.java, **/KakaoProfile.java, **/NaverProfile.java"
     }
 }
