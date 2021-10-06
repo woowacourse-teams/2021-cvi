@@ -575,3 +575,5 @@ include::{snippets}/comment-delete/http-response.adoc[]
 ===== Request
 include::{snippets}/comment-delete-failure/http-request.adoc[]
 
+===== Response
+include::{snippets}/comment-delete-failure/http-response.adoc[]
