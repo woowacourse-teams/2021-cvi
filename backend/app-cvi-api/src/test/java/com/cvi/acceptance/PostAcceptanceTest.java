@@ -29,9 +29,6 @@ import org.springframework.http.MediaType;
 @DisplayName("게시글 관련 인수 테스트")
 public class PostAcceptanceTest extends AcceptanceTest {
 
-    private static final int OFFSET_IS_ONE = 1;
-    private static final int SIZE_IS_TWO = 2;
-
     protected UserResponse userResponse;
     protected UserResponse anotherUserResponse;
     private PostRequest invalidPostRequest;
@@ -168,7 +165,7 @@ public class PostAcceptanceTest extends AcceptanceTest {
             게시글_작성_요청(userResponse, postRequest);
         }
         //when
-        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, OFFSET_IS_ONE, SIZE_IS_TWO, SortStrategy.CREATED_AT_DESC, userResponse);
+        ExtractableResponse<Response> response = 백신_타입별_게시글_페이징_조회(VaccinationType.PFIZER, 0, 4, 2, SortStrategy.CREATED_AT_DESC, userResponse);
         List<String> resultPostContents = response.jsonPath()
                 .getList(".", PostResponse.class)
                 .stream()
@@ -178,12 +175,13 @@ public class PostAcceptanceTest extends AcceptanceTest {
         assertThat(resultPostContents).containsExactly("내용2", "내용1");
     }
 
-    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int offset, int size, SortStrategy sortStrategy, UserResponse user) {
+    private ExtractableResponse<Response> 백신_타입별_게시글_페이징_조회(VaccinationType vaccinationType, int boundary, long id, int size, SortStrategy sortStrategy, UserResponse user) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", "Bearer" + user.getAccessToken())
                 .param("vaccinationType", vaccinationType)
-                .queryParam("offset", offset)
+                .param("boundary", boundary)
+                .param("id", id)
                 .param("size", size)
                 .param("sort", sortStrategy)
                 .when().get("/api/v1/posts/paging")
