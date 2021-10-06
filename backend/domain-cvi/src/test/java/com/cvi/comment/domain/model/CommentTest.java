@@ -1,8 +1,5 @@
 package com.cvi.comment.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.cvi.exception.InvalidOperationException;
 import com.cvi.exception.NotFoundException;
 import com.cvi.exception.UnAuthorizedException;
@@ -11,10 +8,14 @@ import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("댓글 도메인 테스트")
 class CommentTest {
@@ -27,29 +28,29 @@ class CommentTest {
     @BeforeEach
     void setUp() {
         post = Post.builder()
-            .id(1L)
-            .content("게시글 내용")
-            .vaccinationType(VaccinationType.ASTRAZENECA)
-            .createdAt(LocalDateTime.now())
-            .build();
+                .id(1L)
+                .content("게시글 내용")
+                .vaccinationType(VaccinationType.ASTRAZENECA)
+                .createdAt(LocalDateTime.now())
+                .build();
         user = User.builder()
-            .id(1L)
-            .nickname("안녕하세욘")
-            .ageRange(AgeRange.TEENS)
-            .socialProvider(SocialProvider.KAKAO)
-            .socialId("KAKAO_ID")
-            .profileUrl("kakao.com/profile")
-            .createdAt(LocalDateTime.now())
-            .build();
+                .id(1L)
+                .nickname("안녕하세욘")
+                .ageRange(AgeRange.TEENS)
+                .socialProvider(SocialProvider.KAKAO)
+                .socialId("KAKAO_ID")
+                .profileUrl("kakao.com/profile")
+                .createdAt(LocalDateTime.now())
+                .build();
         anotherUser = User.builder()
-            .id(2L)
-            .nickname("방구왕라이언")
-            .ageRange(AgeRange.TEENS)
-            .socialProvider(SocialProvider.KAKAO)
-            .socialId("KAKAO_ID")
-            .profileUrl("kakao.com/profile")
-            .createdAt(LocalDateTime.now())
-            .build();
+                .id(2L)
+                .nickname("방구왕라이언")
+                .ageRange(AgeRange.TEENS)
+                .socialProvider(SocialProvider.KAKAO)
+                .socialId("KAKAO_ID")
+                .profileUrl("kakao.com/profile")
+                .createdAt(LocalDateTime.now())
+                .build();
         comment = Comment.builder().id(1L).content("댓글입니다.").build();
     }
 

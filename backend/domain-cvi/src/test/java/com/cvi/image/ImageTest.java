@@ -1,10 +1,10 @@
 package com.cvi.image;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.cvi.image.domain.Image;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Image 도메인 테스트")
 class ImageTest {

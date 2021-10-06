@@ -1,7 +1,5 @@
 package com.cvi.post.domain.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.image.domain.Image;
@@ -14,14 +12,17 @@ import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
-import java.util.Arrays;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("PostRepository 테스트")
 @DataJpaTest
@@ -67,72 +68,72 @@ class PostRepositoryTest {
 
     private void initUsers() {
         user1 = User.builder()
-            .nickname("인비")
-            .ageRange(AgeRange.TEENS)
-            .socialProvider(SocialProvider.KAKAO)
-            .socialId("1000")
-            .profileUrl("profile url 1")
-            .build();
+                .nickname("인비")
+                .ageRange(AgeRange.TEENS)
+                .socialProvider(SocialProvider.KAKAO)
+                .socialId("1000")
+                .profileUrl("profile url 1")
+                .build();
         user2 = User.builder()
-            .nickname("검프")
-            .socialProvider(SocialProvider.NAVER)
-            .socialId("1001")
-            .profileUrl("profile url 2")
-            .ageRange(AgeRange.FIFTIES)
-            .build();
+                .nickname("검프")
+                .socialProvider(SocialProvider.NAVER)
+                .socialId("1001")
+                .profileUrl("profile url 2")
+                .ageRange(AgeRange.FIFTIES)
+                .build();
         userRepository.save(user1);
         userRepository.save(user2);
     }
 
     private void initPost() {
         post1 = Post.builder()
-            .user(user1)
-            .content("내용 1")
-            .vaccinationType(VaccinationType.PFIZER)
-            .build();
+                .user(user1)
+                .content("내용 1")
+                .vaccinationType(VaccinationType.PFIZER)
+                .build();
         postRepository.save(post1);
     }
 
     private void initImages() {
         image1 = Image.builder()
-            .url("image1_s3_url")
-            .build();
+                .url("image1_s3_url")
+                .build();
         image1.assignPost(post1);
         imageRepository.save(image1);
 
         image2 = Image.builder()
-            .url("image2_s3_url")
-            .build();
+                .url("image2_s3_url")
+                .build();
         image2.assignPost(post1);
         imageRepository.save(image2);
     }
 
     private void initComments() {
         comment1 = Comment.builder()
-            .content("댓글 내용1")
-            .user(user1)
-            .build();
+                .content("댓글 내용1")
+                .user(user1)
+                .build();
         comment1.assignPost(post1);
         commentRepository.save(comment1);
 
         comment2 = Comment.builder()
-            .content("댓글 내용2")
-            .user(user2)
-            .build();
+                .content("댓글 내용2")
+                .user(user2)
+                .build();
         comment2.assignPost(post1);
         commentRepository.save(comment2);
     }
 
     private void initLikes() {
         like1 = Like.builder()
-            .user(user1)
-            .build();
+                .user(user1)
+                .build();
         like1.assignPost(post1);
         likeRepository.save(like1);
 
         like2 = Like.builder()
-            .user(user2)
-            .build();
+                .user(user2)
+                .build();
         like2.assignPost(post1);
         likeRepository.save(like2);
     }

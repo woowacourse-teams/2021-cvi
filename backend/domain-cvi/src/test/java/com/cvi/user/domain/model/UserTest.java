@@ -1,16 +1,17 @@
 package com.cvi.user.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.cvi.exception.InvalidInputException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("사용자 도메인 단위 테스트")
 class UserTest {
@@ -20,13 +21,13 @@ class UserTest {
     @BeforeEach
     void init() {
         this.user = User.builder()
-            .id(1L)
-            .ageRange(AgeRange.TEENS)
-            .createdAt(LocalDateTime.now())
-            .nickname("검프")
-            .profileUrl("www.gump.com")
-            .socialProvider(SocialProvider.KAKAO)
-            .build();
+                .id(1L)
+                .ageRange(AgeRange.TEENS)
+                .createdAt(LocalDateTime.now())
+                .nickname("검프")
+                .profileUrl("www.gump.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
     }
 
     @DisplayName("사용자 수정 - 성공")
@@ -34,13 +35,13 @@ class UserTest {
     void update() {
         //given
         User updateUser = User.builder()
-            .id(1L)
-            .ageRange(AgeRange.TWENTIES)
-            .createdAt(LocalDateTime.now())
-            .nickname("인비")
-            .profileUrl("www.budae.com")
-            .socialProvider(SocialProvider.KAKAO)
-            .build();
+                .id(1L)
+                .ageRange(AgeRange.TWENTIES)
+                .createdAt(LocalDateTime.now())
+                .nickname("인비")
+                .profileUrl("www.budae.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
         //when
         user.update(updateUser);
         //then
@@ -55,6 +56,6 @@ class UserTest {
         //when
         //then
         assertThatThrownBy(() -> User.builder().nickname(nickname).build())
-            .isInstanceOf(InvalidInputException.class);
+                .isInstanceOf(InvalidInputException.class);
     }
 }

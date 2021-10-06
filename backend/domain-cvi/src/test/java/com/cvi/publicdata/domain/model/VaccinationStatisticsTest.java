@@ -1,14 +1,12 @@
 package com.cvi.publicdata.domain.model;
 
-import static com.cvi.publicdata.domain.model.VaccinationStatisticFactory.KOREA_VACCINATION_STATISTICS_FROM_API;
-import static com.cvi.publicdata.domain.model.VaccinationStatisticFactory.TARGET_DATE;
-import static com.cvi.publicdata.domain.model.VaccinationStatisticFactory.VACCINATION_STATISTICS_FROM_DB;
-import static com.cvi.publicdata.domain.model.VaccinationStatisticFactory.WORLD_VACCINATION_STATISTICS_FROM_API;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static com.cvi.publicdata.domain.model.VaccinationStatisticFactory.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("VaccinationStatistic 일급 컬렉션 기능 테스트")
 class VaccinationStatisticsTest {

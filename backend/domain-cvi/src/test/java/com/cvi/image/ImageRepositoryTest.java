@@ -1,7 +1,5 @@
 package com.cvi.image;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.cvi.image.domain.Image;
 import com.cvi.image.repository.ImageRepository;
 import com.cvi.post.domain.model.Post;
@@ -11,12 +9,15 @@ import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
-import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ImageRepository 테스트")
 @DataJpaTest
