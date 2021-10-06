@@ -41,7 +41,7 @@ public class PostController {
     @GetMapping("/paging")
     @ResponseStatus(HttpStatus.OK)
     public List<PostResponse> findByVaccineTypeAndPaging(@RequestParam(defaultValue = "ALL") VaccinationType vaccinationType,
-                                                         @RequestParam int boundary,
+                                                         @RequestParam(required = false) int boundary,
                                                          @RequestParam long id,
                                                          @RequestParam int size,
                                                          @RequestParam(defaultValue = "CREATED_AT_DESC") SortStrategy sort,

@@ -346,47 +346,48 @@ include::{snippets}/post-findByVaccinationType-when-empty/http-response.adoc[]
 ===== 공통
 VaccinationType: PFIZER, ASTRAZENECA, MODERNA, JANSSEN, ALL(default)
 size: 페이징으로 한번에 가져올 글의 갯수
+
 SortStrategy, boundary, id: 아래 설명
 
-===== LIKE_COUNT_ASC 좋아요 오름차순
+===== SortStrategy: LIKE_COUNT_ASC (좋아요 오름차순)
 첫 요청시: boundary 0, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== LIKE_COUNT_DESC 좋아요 내림차순
+===== SortStrategy: LIKE_COUNT_DESC (좋아요 내림차순)
 첫 요청시: boundary Integer.max, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== VIEW_COUNT_ASC 조회수 오름차순
+===== SortStrategy: VIEW_COUNT_ASC (조회수 오름차순)
 첫 요청시: boundary 0, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== VIEW_COUNT_DESC 조회수 내림차순
+===== SortStrategy: VIEW_COUNT_DESC (조회수 내림차순)
 첫 요청시: boundary Integer.max, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== COMMENT_COUNT_ASC 댓글 오름차순
+===== SortStrategy: COMMENT_COUNT_ASC (댓글 오름차순)
 첫 요청시: boundary 0, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 댓글 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== COMMENT_COUNT_DESC 댓글 오름차순
+===== SortStrategy: COMMENT_COUNT_DESC (댓글 오름차순)
 첫 요청시: boundary Integer.max, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 댓글 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
-===== CREATED_AT_DESC 시간순 오름차순
+===== SortStrategy: CREATED_AT_DESC (시간순 오름차순)
 첫 요청시: id = Long.max
 
-다음 요청시: @boundary 아무값이나 상관없음, @id: 이전 페이징 결과 마지막 글의 id
+다음 요청시: @boundary 아무값이나 상관없음(넣지 않아도 됨), @id: 이전 페이징 결과 마지막 글의 id
 
-===== CREATED_AT_DESC 시간순 오름차순
+===== SortStrategy: CREATED_AT_DESC (시간순 오름차순)
 첫 요청시: id = 0
 
-다음 요청시: @boundary 아무값이나 상관없음, @id: 이전 페이징 결과 마지막 글의 id
+다음 요청시: @boundary 아무값이나 상관없음(넣지 않아도 됨), @id: 이전 페이징 결과 마지막 글의 id
 
 === 게시글 타입별 정렬 페이징 조회
 ==== 성공
