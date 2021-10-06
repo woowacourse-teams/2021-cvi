@@ -3,7 +3,3 @@ jar { enabled = true }
 
 dependencies {
 }
-
-sonarqube {
-    skipProject = true
-}

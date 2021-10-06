@@ -5,7 +5,3 @@ dependencies {
     implementation project(path:':domain-cvi-publicdata-service' , configuration: 'default')
 
 }
-
-sonarqube {
-    skipProject = true
-}

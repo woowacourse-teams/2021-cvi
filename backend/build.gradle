@@ -22,7 +22,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
-    apply plugin: "org.sonarqube"
+    apply plugin: 'org.sonarqube'
 
     group = 'com.backjoongwon'
     version = '0.0.1-SNAPSHOT'
@@ -66,6 +66,13 @@ subprojects {
             property "sonar.sources", "src/main/java"
             property "sonar.tests", "src/test/java"
         }
+    }
+}
+
+def skipSonarProjects = [project(':app-cvi-admin'), project(':common-cvi'), project(':domain-cvi-aws-s3-service'), project(':domain-cvi-scheduler')]
+configure(skipSonarProjects) {
+    sonarqube {
+        skipProject = true
     }
 }
 
