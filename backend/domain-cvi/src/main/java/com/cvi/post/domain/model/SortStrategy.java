@@ -40,7 +40,7 @@ public enum SortStrategy {
         if (inputSortStrategy.getSort() != null) {
             return inputSortStrategy.getSort();
         }
-        throw new InvalidInputException("잘못된 정렬 형식입니다");
+        return SortStrategy.CREATED_AT_DESC.getSort();
     }
 
     public static BooleanExpression toBooleanExpression(int boundary, long id, SortStrategy inputSortStrategy) {

@@ -350,7 +350,7 @@ size: 페이징으로 한번에 가져올 글의 갯수
 SortStrategy, boundary, id: 아래 설명
 
 ===== SortStrategy: LIKE_COUNT_ASC (좋아요 오름차순)
-첫 요청시: boundary 0, id = Long.max
+첫 요청시: boundary -1, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
@@ -360,7 +360,7 @@ SortStrategy, boundary, id: 아래 설명
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 좋아요 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
 ===== SortStrategy: VIEW_COUNT_ASC (조회수 오름차순)
-첫 요청시: boundary 0, id = Long.max
+첫 요청시: boundary -1, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
@@ -370,7 +370,7 @@ SortStrategy, boundary, id: 아래 설명
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 조회수 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
 ===== SortStrategy: COMMENT_COUNT_ASC (댓글 오름차순)
-첫 요청시: boundary 0, id = Long.max
+첫 요청시: boundary -1, id = Long.max
 
 다음 요청시: @boundary 이전 페이징 결과 마지막 글의 댓글 갯수, @id: 이전 페이징 결과 마지막 글의 id
 
