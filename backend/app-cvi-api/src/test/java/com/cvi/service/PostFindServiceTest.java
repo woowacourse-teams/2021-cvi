@@ -66,7 +66,6 @@ class PostFindServiceTest {
         List<Post> posts = initPost(users);
         initLike(users, posts);
         initComment(users, posts);
-        modifyPostsCreatedAt(posts);
     }
 
     @AfterEach
@@ -143,16 +142,6 @@ class PostFindServiceTest {
                 comments.add(comment);
                 commentRepository.save(comment);
             }
-        }
-    }
-
-    private void modifyPostsCreatedAt(List<Post> posts) {
-        for (int i = posts.size() - 1; i >= 0; i--) {
-            Long id = posts.get(i).getId();
-            Query q = em.createNativeQuery("UPDATE post SET created_at=:created_at WHERE post_id=:post_id");
-            q.setParameter("created_at", LocalDateTime.now().minusHours(posts.size() - i).minusMinutes(30L));
-            q.setParameter("post_id", id);
-            q.executeUpdate();
         }
     }
 
