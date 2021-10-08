@@ -16,23 +16,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:3.11.2'
 }
 
-jacocoTestReport {
-    dependsOn test // 리포트가 만들어지기 전 테스트 실행되어야 한다.
-    reports {
-        html.enabled true
-        xml.enabled true
-        csv.enabled false
-    }
-
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
-                    exclude: '**/Parser*')
-        }))
-    }
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
     violationRules { // 위반 규칙
         rule {
