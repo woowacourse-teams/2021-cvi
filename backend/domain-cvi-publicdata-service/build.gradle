@@ -20,9 +20,3 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
         }
     }
 }
-
-sonarqube {
-    properties {
-        property "sonar.exclusions", "**/*Test*.*, **/Q*.java, **/*Doc*.java"
-    }
-}
