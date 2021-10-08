@@ -44,10 +44,6 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
                 value = 'COVEREDRATIO'
                 minimum = 0.80
             }
-
-            excludes = [
-                    // 커버리지 제외할 클래스
-                    '*.Parser*']
         }
     }
 }

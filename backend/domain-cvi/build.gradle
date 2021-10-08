@@ -53,16 +53,8 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
             limit {
                 counter = 'METHOD'
                 value = 'COVEREDRATIO'
-                minimum = 0.00
+                minimum = 0.80
             }
-
-            excludes = [
-                    // 커버리지 제외할 클래스
-                    '*.Sort*',
-                    '*.Filter*',
-                    '*.PostRepository*',
-                    '*.ImageType.java*',
-            ] + Qdomains
         }
     }
 }

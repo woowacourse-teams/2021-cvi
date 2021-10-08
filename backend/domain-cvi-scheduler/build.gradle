@@ -3,5 +3,4 @@ jar { enabled = true }
 
 dependencies {
     implementation project(path:':domain-cvi-publicdata-service' , configuration: 'default')
-
 }
