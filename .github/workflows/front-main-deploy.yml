@@ -1,0 +1,31 @@
+name: front-main-deploy
+
+on:
+  push: # 적용될 액션
+    branches: main # 적용될 브랜치
+    paths:
+      - "frontend/**" # workflow에서 적용될 path
+
+defaults:
+  run:
+    working-directory: ./frontend # workflow에서 default working directory
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # 인스턴스 OS
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2 # 워크플로에서 액세스할 수 있도록 에서 저장소를 체크아웃
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: S3 Deploy
+        run: aws s3 sync ./dist s3://2021-cvi/ --acl bucket-owner-full-control # s3 이름 2021-cvi
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
