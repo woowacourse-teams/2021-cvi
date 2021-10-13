@@ -1,6 +1,17 @@
-<img src="https://user-images.githubusercontent.com/53412998/135798025-1158fe48-0841-4545-a28f-8015468c3328.png" width="100%" />
+<img src="https://user-images.githubusercontent.com/53412998/135798025-1158fe48-0841-4545-a28f-8015468c3328.png" width="100%"/>
 
 # 프로젝트 소개
+
+<br/>
+
+<p align="center">
+  <a target="_blank" href="https://www.youtube.com/watch?v=W1LziOGs_6g">
+    <img src="https://user-images.githubusercontent.com/53412998/137051501-805cd497-b7d7-421e-b6ac-4f03549e0d93.png" width="50%" height="50%">
+    <p align="center">(클릭하면 영상을 실행할 수 있습니다)</p>
+  </a>
+</p>
+
+<br/>
 
 코로나19 백신 접종 후기를 남기다! 우리는 [`Team CVI`](https://vaccine-review.com) 입니다.
 
