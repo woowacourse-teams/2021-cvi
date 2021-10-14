@@ -12,6 +12,7 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     clean: true,
+    filename: '[name].[contenthash].js',
   },
   devServer: {
     open: true,
@@ -26,6 +27,7 @@ const config = {
       minify: {
         collapseWhitespace: true,
       },
+      hash: true,
     }),
     new webpack.EnvironmentPlugin(Object.keys(dotenv.parsed || {})),
     // new BundleAnalyzerPlugin(),
