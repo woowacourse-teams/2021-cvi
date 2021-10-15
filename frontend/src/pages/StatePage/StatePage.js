@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { RegionalStateChart, RegionalStateTable, VaccinationState } from '../../components';
 import { useFetch, useLoading } from '../../hooks';
-import { requestVaccinationStateList } from '../../requests';
+import { fetchGetVaccinationStateList } from '../../service/fetch';
 import { Container, Title, Content, Source } from './StatePage.styles';
 
 const StatePage = () => {
-  const { response, error, loading } = useFetch([], requestVaccinationStateList);
+  const { response, error, loading } = useFetch([], fetchGetVaccinationStateList);
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const regionalState = response.slice(1);

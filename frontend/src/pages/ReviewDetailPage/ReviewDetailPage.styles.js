@@ -83,6 +83,7 @@ const CreatedAt = styled.div`
 const Content = styled.div`
   min-height: 30rem;
   padding: 2rem 3rem;
+  white-space: pre-wrap;
 
   @media screen and (max-width: 1024px) {
     padding: 2rem;

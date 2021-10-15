@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Compressor from 'compressorjs';
 import {
   ALERT_MESSAGE,
   CONFIRM_MESSAGE,
   FONT_COLOR,
-  PATH,
   RESPONSE_STATE,
   REVIEW_IMAGE_LIMIT,
   SNACKBAR_MESSAGE,
@@ -14,8 +13,7 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import { useFetch, useSnackBar } from '../../hooks';
-import { requestGetImage, requestGetReview } from '../../requests';
+import { useFetch, useMovePage, useSnackBar } from '../../hooks';
 import {
   Container,
   FrameContent,
@@ -39,15 +37,15 @@ import toDate from '../../utils/toDate';
 import {
   BUTTON_BACKGROUND_TYPE,
   BUTTON_SIZE_TYPE,
-} from '../../components/common/Button/Button.styles';
-import { LABEL_SIZE_TYPE } from '../../components/common/Label/Label.styles';
-import { putReviewAsync } from '../../service';
+} from '../../components/@common/Button/Button.styles';
+import { LABEL_SIZE_TYPE } from '../../components/@common/Label/Label.styles';
 import { ClockIcon, EyeIcon, LeftArrowIcon } from '../../assets/icons';
-import { Avatar, Button, Frame, Input, Label } from '../../components/common';
+import { Avatar, Button, Frame, Input, Label } from '../../components/@common';
 import { ReviewImage } from '../../components';
+import { fetchGetImage, fetchGetReview, fetchPutReview } from '../../service/fetch';
+import customRequest from '../../service/customRequest';
 
 const ReviewEditPage = () => {
-  const history = useHistory();
   const { id } = useParams();
   const accessToken = useSelector((state) => state.authReducer.accessToken);
   const user = useSelector((state) => state.authReducer.user);
@@ -55,8 +53,9 @@ const ReviewEditPage = () => {
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
 
-  const { response: review } = useFetch({}, () => requestGetReview(accessToken, id));
+  const { response: review } = useFetch({}, () => fetchGetReview(accessToken, id));
   const { openSnackBar } = useSnackBar();
+  const { goReviewDetailPage, goPreviousPage } = useMovePage();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -64,16 +63,12 @@ const ReviewEditPage = () => {
   const goBack = () => {
     if (!window.confirm(CONFIRM_MESSAGE.GO_BACK)) return;
 
-    history.goBack();
-  };
-
-  const goReviewDetailPage = () => {
-    history.push(`${PATH.REVIEW}/${id}`);
+    goPreviousPage();
   };
 
   const changeImageToBase64 = async (images) =>
     images?.forEach(async (image) => {
-      const response = await requestGetImage(image);
+      const response = await fetchGetImage(image);
       const blobData = await response.blob();
 
       const reader = new FileReader();
@@ -104,7 +99,7 @@ const ReviewEditPage = () => {
 
     const data = { content, vaccinationType: review?.vaccinationType, images: updatedImageFormat };
 
-    const response = await putReviewAsync(accessToken, id, data);
+    const response = await customRequest(() => fetchPutReview(accessToken, id, data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_EDIT);
@@ -113,7 +108,7 @@ const ReviewEditPage = () => {
     }
 
     openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
-    goReviewDetailPage();
+    goReviewDetailPage(id);
   };
 
   const deleteImage = async (src) => {
@@ -165,7 +160,8 @@ const ReviewEditPage = () => {
   useEffect(() => {
     if (Object.keys(review).length && user?.id !== review?.writer?.id) {
       alert(ALERT_MESSAGE.FAIL_TO_ACCESS_EDIT_PAGE);
-      history.goBack();
+
+      goPreviousPage();
     }
 
     setContent(review?.content);

@@ -1,25 +1,28 @@
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Frame, LottieAnimation } from '../../components/common';
-import { PAGING_SIZE, PATH, RESPONSE_STATE, THEME_COLOR } from '../../constants';
-import { useLoading } from '../../hooks';
+import { Frame, LottieAnimation } from '../../components/@common';
+import { PAGING_SIZE, RESPONSE_STATE, THEME_COLOR, TO_DATE_TYPE } from '../../constants';
+import { useLoading, useMovePage } from '../../hooks';
 import {
   Container,
   LottieContainer,
   LoadingContainer,
   ScrollLoadingContainer,
-  MyCommentReviewListContainer,
+  MyCommentReviewList,
+  MyCommentReviewItem,
   Title,
   frameStyle,
+  CreatedAt,
+  CommentContent,
 } from './MyPageCommentReview.styles';
-import MyCommentsItem from '../../components/MyCommentsItem/MyCommentsItem';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { getMyCommentReviewListAsync } from '../../service';
 import { NotFoundAnimation } from '../../assets/lotties';
+import { PreviewItem } from '../../components';
+import { toDate } from '../../utils';
+import customRequest from '../../service/customRequest';
+import { fetchGetMyCommentReviewList } from '../../service/fetch';
 
 const MyPageCommentReview = () => {
-  const history = useHistory();
   const user = useSelector((state) => state.authReducer.user);
   const accessToken = useSelector((state) => state.authReducer.accessToken);
 
@@ -34,17 +37,14 @@ const MyPageCommentReview = () => {
     isLoading: isScrollLoading,
     Loading: ScrollLoading,
   } = useLoading();
+  const { goReviewDetailPage } = useMovePage();
 
   const isLastPost = (index) => index === offset + PAGING_SIZE - 1;
-
-  const goReviewDetailPage = (id) => {
-    history.push(`${PATH.REVIEW}/${id}`);
-  };
 
   const getMyCommentReviewList = useCallback(async () => {
     if (!accessToken) return;
 
-    const response = await getMyCommentReviewListAsync(accessToken, offset);
+    const response = await customRequest(() => fetchGetMyCommentReviewList(accessToken, offset));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert('failure - getMyCommentReviewList');
@@ -89,23 +89,30 @@ const MyPageCommentReview = () => {
         </LottieContainer>
       ) : (
         <Frame styles={frameStyle}>
-          <MyCommentReviewListContainer>
+          <MyCommentReviewList>
             {myCommentReviewList?.map((myCommentReview, index) => {
               const myComments = myCommentReview.comments.filter(
                 (comment) => comment.writer.id === user.id,
               );
 
               return (
-                <MyCommentsItem
-                  key={myCommentReview.id}
-                  myCommentReview={myCommentReview}
-                  myComments={myComments}
-                  innerRef={isLastPost(index) ? ref : null}
-                  onClick={() => goReviewDetailPage(myCommentReview.id)}
-                />
+                <MyCommentReviewItem key={myCommentReview.id} ref={isLastPost(index) ? ref : null}>
+                  {myComments.map((myComment) => (
+                    <div key={myComment.id}>
+                      <CreatedAt>{toDate(TO_DATE_TYPE.TIME, myComment.createdAt)}</CreatedAt>
+                      <CommentContent>{myComment.content}</CommentContent>
+                    </div>
+                  ))}
+                  <PreviewItem
+                    review={myCommentReview}
+                    withShadow={true}
+                    withImage={true}
+                    onClick={() => goReviewDetailPage(myCommentReview.id)}
+                  />
+                </MyCommentReviewItem>
               );
             })}
-          </MyCommentReviewListContainer>
+          </MyCommentReviewList>
         </Frame>
       )}
       {isScrollLoading && (

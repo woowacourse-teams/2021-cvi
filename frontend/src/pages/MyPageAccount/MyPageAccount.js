@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input, Selection } from '../../components/common';
-import { BUTTON_SIZE_TYPE } from '../../components/common/Button/Button.styles';
+import customRequest from '../../service/customRequest';
+import { Button, Input, Selection } from '../../components/@common';
+import { BUTTON_SIZE_TYPE } from '../../components/@common/Button/Button.styles';
 import {
   AGE_RANGE,
   ALERT_MESSAGE,
@@ -12,7 +13,7 @@ import {
 } from '../../constants';
 import { useSnackBar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { putAccountAsync } from '../../service';
+import { fetchPutMyInfo } from '../../service/fetch';
 import {
   Container,
   Title,
@@ -59,7 +60,7 @@ const MyPageAccount = () => {
       socialProfileUrl,
       socialProvider,
     };
-    const response = await putAccountAsync(accessToken, data);
+    const response = await customRequest(() => fetchPutMyInfo(accessToken, data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_EDIT_ACCOUNT);

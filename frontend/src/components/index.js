@@ -1,30 +1,30 @@
-import Preview from './Preview/Preview';
-import PreviewItem from './PreviewItem/PreviewItem';
-import PreviewList from './PreviewList/PreviewList';
-import ReviewItem from './ReviewItem/ReviewItem';
-import ReviewWritingModal from './ReviewWritingModal/ReviewWritingModal';
-import VaccinationState from './VaccinationState/VaccinationState';
-import HomeContent from './HomeContent/HomeContent';
-import Comment from './Comment/Comment';
-import CommentForm from './CommentForm/CommentForm';
-import CommentItem from './CommentItem/CommentItem';
-import RegionalStateChart from './RegionalStateChart/RegionalStateChart';
-import RegionalStateTable from './RegionalStateTable/RegionalStateTable';
-import ReviewFilterList from './ReviewFilterList/ReviewFilterList';
-import ImageModal from './ImageModal/ImageModal';
-import ReviewImage from './ReviewImage/ReviewImage';
+import { Comment, CommentForm, CommentItem } from './comment';
+import { Preview, PreviewItem, PreviewList } from './preview';
+import {
+  ReviewItem,
+  ReviewFilterList,
+  ImageModal,
+  ReviewImage,
+  ReviewWritingModal,
+} from './review';
+import {
+  RegionalStateChart,
+  RegionalStateTable,
+  VaccinationState,
+  VaccinationSymptom,
+} from './statistics';
 
 export {
   Preview,
   PreviewItem,
   PreviewList,
+  Comment,
+  CommentItem,
+  CommentForm,
   ReviewItem,
   ReviewWritingModal,
   VaccinationState,
-  HomeContent,
-  Comment,
-  CommentForm,
-  CommentItem,
+  VaccinationSymptom,
   RegionalStateChart,
   RegionalStateTable,
   ReviewFilterList,

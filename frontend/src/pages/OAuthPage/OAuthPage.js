@@ -1,23 +1,23 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import customRequest from '../../service/customRequest';
 import {
   ALERT_MESSAGE,
   LOCAL_STORAGE_KEY,
-  PATH,
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
 } from '../../constants';
-import { useSnackBar } from '../../hooks';
+import { useMovePage, useSnackBar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
-import { postOAuthLoginAsync } from '../../service';
+import { fetchPostOAuthLogin } from '../../service/fetch';
 
 const OAuthPage = () => {
-  const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
 
   const { openSnackBar } = useSnackBar();
+  const { goHomePage, goSignupPage } = useMovePage();
 
   const login = async () => {
     const code = new URLSearchParams(location.search).get('code');
@@ -29,7 +29,7 @@ const OAuthPage = () => {
       state,
     };
 
-    const response = await postOAuthLoginAsync(data);
+    const response = await customRequest(() => fetchPostOAuthLogin(data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
       alert(ALERT_MESSAGE.FAIL_TO_SERVER);
@@ -40,13 +40,10 @@ const OAuthPage = () => {
     if (!response.data.accessToken) {
       const { socialProvider, socialId, socialProfileUrl } = response.data;
 
-      history.push({
-        pathname: `${PATH.SIGNUP}`,
-        state: {
-          socialProvider,
-          socialId,
-          socialProfileUrl,
-        },
+      goSignupPage({
+        socialProvider,
+        socialId,
+        socialProfileUrl,
       });
     } else {
       const accessToken = response.data.accessToken;
@@ -55,7 +52,7 @@ const OAuthPage = () => {
       dispatch(getMyInfoAsync(accessToken));
 
       openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGIN);
-      history.push(`${PATH.HOME}`);
+      goHomePage();
     }
   };
 

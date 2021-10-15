@@ -1,7 +1,7 @@
 import { Title, Container, frameStyles, KakaoButton, NaverButton } from './LoginPage.styles';
 import { NAVER_LOGIN_URL, KAKAO_LOGIN_URL } from '../../constants';
 import { KakaoIcon, NaverIcon } from '../../assets/icons';
-import { Frame } from '../../components/common';
+import { Frame } from '../../components/@common';
 
 const LoginPage = () => (
   <Container>
