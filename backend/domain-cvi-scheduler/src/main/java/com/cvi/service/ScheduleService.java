@@ -1,11 +1,13 @@
 package com.cvi.service;
 
 import com.cvi.exception.NotFoundException;
+import com.cvi.exception.OptimisticLockException;
 import com.cvi.schedule.domain.model.Schedule;
 import com.cvi.schedule.domain.repository.ScheduleRepository;
 import com.cvi.service.scheduler.Scheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +39,13 @@ public class ScheduleService {
     @Transactional
     public void activeSchedule(String name, Scheduler scheduler) {
         final Schedule schedule = findScheduleByName(name);
-        schedule.reversRunningState();
-        scheduleRepository.flush();
+        try {
+            schedule.reversRunningState();
+            scheduleRepository.flush();
+        } catch (ObjectOptimisticLockingFailureException exception) {
+            log.info("동시에 동일한 엔티티를 수정할 수 없습니다. 타겟 엔티티: {}", exception.getPersistentClassName());
+            throw new OptimisticLockException("동시에 동일한 엔티티를 수정할 수 없습니다. 타겟 엔티티: " + exception.getPersistentClassName());
+        }
         if (schedule.isRunning()) {
             scheduler.doTask();
             schedule.reversRunningState();
