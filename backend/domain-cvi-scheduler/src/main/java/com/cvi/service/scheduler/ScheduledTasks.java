@@ -35,7 +35,7 @@ public class ScheduledTasks {
         );
     }
 
-    @Scheduled(cron = "0 0/1 0/1 * * ?")
+    @Scheduled(cron = "0 0 10 * * ?")
     private void scheduleKoreaVaccinationData2() {
         scheduleService.activeSchedule(PUBLIC_DATA,
                 () -> {
