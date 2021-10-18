@@ -60,7 +60,7 @@ class PostTest {
             .build();
         image = Image.builder()
                 .id(1L)
-                .url("image1_s3_url")
+                .url("image1_s3_url/image")
                 .build();
     }
 
@@ -130,37 +130,6 @@ class PostTest {
             .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("게시글 좋아요 할당 - 성공")
-    @Test
-    void assignLike() {
-        //given
-        //when
-        post.assignLike(like);
-        //then
-        assertThat(post.getLikesCount()).isEqualTo(1);
-    }
-
-    @DisplayName("게시글 댓글 할당 - 실패 - 댓글에 할당된 게시글이 존재함")
-    @Test
-    void assignLikeFailureWhenAlreadyExists() {
-        //given
-        //when
-        post.assignLike(like);
-        //then
-        assertThatThrownBy(() -> post.assignLike(like))
-                .isInstanceOf(InvalidOperationException.class);
-    }
-
-    @DisplayName("게시글 댓글 할당 - 실패 - 할당하려는 댓글이 없음")
-    @Test
-    void assignLikeFailureWhenNull() {
-        //given
-        //when
-        //then
-        assertThatThrownBy(() -> post.assignLike(null))
-            .isInstanceOf(NotFoundException.class);
-    }
-
     @DisplayName("게시글 댓글 수정")
     @Test
     void updateComment() {
@@ -195,6 +164,69 @@ class PostTest {
             .isInstanceOf(UnAuthorizedException.class);
     }
 
+    @DisplayName("게시글 댓글 삭제")
+    @Test
+    void deleteCommentInComments() {
+        //given
+        post.assignComment(comment);
+        //when
+        Comments comments = post.getComments();
+        comments.delete(comment.getId(), user);
+        //then
+        assertThat(comments.getComments()).isEmpty();
+    }
+
+    @DisplayName("게시글 댓글 삭제 - 실패 - 다른 사용자의 게시글인 경우")
+    @Test
+    void deleteCommentInCommentsFailure() {
+        //given
+        User anotherUser = User.builder()
+                .id(2L)
+                .nickname("다른유저")
+                .ageRange(AgeRange.TEENS)
+                .profileUrl("")
+                .socialProvider(SocialProvider.KAKAO)
+                .createdAt(LocalDateTime.now())
+                .build();
+        post.assignComment(comment);
+        //when
+        Comments comments = post.getComments();
+        //then
+        assertThatThrownBy(() -> comments.delete(comment.getId(), anotherUser))
+                .isExactlyInstanceOf(UnAuthorizedException.class);
+    }
+
+    @DisplayName("게시글 좋아요 할당 - 성공")
+    @Test
+    void assignLike() {
+        //given
+        //when
+        post.assignLike(like);
+        //then
+        assertThat(post.getLikesCount()).isEqualTo(1);
+    }
+
+    @DisplayName("게시글 좋아요 할당 - 실패 - 좋아요에 할당된 게시글이 존재함")
+    @Test
+    void assignLikeFailureWhenAlreadyExists() {
+        //given
+        //when
+        post.assignLike(like);
+        //then
+        assertThatThrownBy(() -> post.assignLike(like))
+                .isInstanceOf(InvalidOperationException.class);
+    }
+
+    @DisplayName("게시글 좋아요 할당 - 실패 - 할당하려는 좋아요가 없음")
+    @Test
+    void assignLikeFailureWhenNull() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> post.assignLike(null))
+                .isInstanceOf(NotFoundException.class);
+    }
+
     @DisplayName("게시글 사진 할당 - 성공")
     @Test
     void assignImage() {
@@ -213,6 +245,31 @@ class PostTest {
         //then
         assertThatThrownBy(() -> post.assignImages(Collections.emptyList()))
                 .isInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 이미지 삭제")
+    @Test
+    void delete() {
+        //given
+        post.assignImages(Arrays.asList(image));
+        //when
+        Images images = post.getImages();
+        images.delete(image.getId());
+        //then
+        assertThat(images.getImages()).isEmpty();
+    }
+
+    @DisplayName("게시글의 모든 이미지 주소 조회")
+    @Test
+    void s3PathsOfAllImages() {
+        //given
+        post.assignImages(Arrays.asList(image));
+        //when
+        Images images = post.getImages();
+        List<String> s3PathsOfAllImages = images.getS3PathsOfAllImages();
+        //then
+        assertThat(s3PathsOfAllImages).hasSize(1);
+        assertThat(s3PathsOfAllImages).containsExactly("image");
     }
 
     @DisplayName("게시글 조회수 증가 - 성공")

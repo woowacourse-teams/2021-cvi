@@ -107,7 +107,7 @@ subprojects {
                             // cvi-publicdata-parser
                             "**/Parser.java, " +
                             // domain-cvi
-                            "**/Sort.java, **/Filter.java, **/ImageType.java, **/PostRepositoryImpl.java, " +
+                            "**/Sort.java, **/Filter.java, **/ImageType.java" +
                             // domain-cvi-oauth-service
                             "**/KakaoProfile.java, **/NaverProfile.java"
         }
