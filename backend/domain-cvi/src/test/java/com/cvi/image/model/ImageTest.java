@@ -15,11 +15,11 @@ class ImageTest {
         //given
         final Image image1 = Image.builder()
                 .id(1L)
-                .url("aaaa")
+                .url("aaaa/image1")
                 .build();
         final Image image2 = Image.builder()
                 .id(1L)
-                .url("bbbb")
+                .url("bbbb/image2")
                 .build();
         //when
         //then
@@ -27,5 +27,8 @@ class ImageTest {
                 .isNotSameAs(image2)
                 .isEqualTo(image2)
                 .hasSameHashCodeAs(image2);
+        assertThat(image1.getName()).isEqualTo("image1");
+        assertThat(image2.isSameAs(1L)).isTrue();
     }
 }
+
