@@ -37,6 +37,7 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
                     '*.JpaConfiguration*',
                     '*.Sort*',
                     '*.Filter*',
+                    '*.BooleanToYNConverter*'
             ] + Qdomains
         }
     }
