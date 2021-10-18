@@ -25,37 +25,35 @@ public class ScheduledTasks {
     @PostConstruct
     private void initializeVaccinationDate() {
         scheduleService.saveSchedule(PUBLIC_DATA);
-        scheduleService.activeSchedule(PUBLIC_DATA,
-                () -> {
-                    LocalDate today = LocalDate.now();
-                    log.info("[초기화] 한국 백신접종률 api요청 및 저장 시작:");
-                    publicDataService.saveVaccinationStatistics(today);
-                    log.info("[초기화] 한국 백신접종률 api요청 완료 및 데이터베이스 저장 완료");
-                }
-        );
+        scheduleService.activeSchedule(PUBLIC_DATA, scheduleKoreaVaccine("[초기화]"));
+        scheduleService.activeSchedule(PUBLIC_DATA, scheduleWorldVaccine("[초기화]"));
     }
 
     @Scheduled(cron = "0 0 10 * * ?")
-    private void scheduleKoreaVaccinationData2() {
-        scheduleService.activeSchedule(PUBLIC_DATA,
-                () -> {
-                    LocalDate today = LocalDate.now();
-                    log.info("[스케쥴러] 한국 백신접종률 api요청 및 저장 시작:");
-                    publicDataService.saveVaccinationStatistics(today);
-                    log.info("[스케쥴러] 한국 백신접종률 api요청 완료 및 데이터베이스 저장 완료");
-                }
-        );
+    private void scheduleKoreaVaccinationData() {
+        scheduleService.activeSchedule(PUBLIC_DATA, scheduleKoreaVaccine("[스케쥴러]"));
     }
 
     @Scheduled(cron = "0 20 05 * * ?")
     private void scheduleWorldVaccinationData() {
-        scheduleService.activeSchedule(PUBLIC_DATA,
-                () -> {
-                    LocalDate today = LocalDate.now();
-                    log.info("[스케쥴러] 세계 백신접종률 api요청 및 저장 시작. 시간: {}", today);
-                    publicDataService.saveWorldVaccinationStatistics(today);
-                    log.info("[스케쥴러] 세계 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", today);
-                }
-        );
+        scheduleService.activeSchedule(PUBLIC_DATA, scheduleWorldVaccine("[스케쥴러]"));
+    }
+
+    private Scheduler scheduleKoreaVaccine(String message) {
+        return () -> {
+            LocalDate today = LocalDate.now();
+            log.info("{} 한국 백신접종률 api요청 및 저장 시작. 시간: {}:", message, today);
+            publicDataService.saveVaccinationStatistics(today);
+            log.info("{} 한국 백신접종률 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", message, today);
+        };
+    }
+
+    private Scheduler scheduleWorldVaccine(String message) {
+        return () -> {
+            LocalDate today = LocalDate.now();
+            log.info("{} 세계 백신접종률 api요청 및 저장 시작. 시간: {}:", message, today);
+            publicDataService.saveVaccinationStatistics(today);
+            log.info("{} 세계 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", message, today);
+        };
     }
 }

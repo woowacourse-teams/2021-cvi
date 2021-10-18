@@ -21,13 +21,13 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     /**
-     * Exception을 던지지 않는 이유는, 현재 스케쥴러 저장을 @PostConstruct에서 하고 잇는데,
+     * Exception을 던지지 않는 이유는, 현재 스케쥴러 저장을 @PostConstruct에서 하고 있는데,
      * 이때 예외가 발생하면, 애플리케이션 실행이 되지 않기 때문입니다.
      */
     @Transactional
     public void saveSchedule(String name) {
         if (scheduleRepository.existsByName(name)) {
-            log.info("이미 존재하는 스케쥴러이기에 저장되지 않았습니다.. 입력 값: {}", name);
+            log.info("이미 존재하는 스케쥴러이기에 저장되지 않았습니다. 입력 값: {}", name);
             return;
         }
         final Schedule build = Schedule.builder()
@@ -39,8 +39,8 @@ public class ScheduleService {
     @Transactional
     public void activeSchedule(String name, Scheduler scheduler) {
         final Schedule schedule = findScheduleByName(name);
+        schedule.reverseRunningState();
         try {
-            schedule.reversRunningState();
             scheduleRepository.flush();
         } catch (ObjectOptimisticLockingFailureException exception) {
             log.info("동시에 동일한 엔티티를 수정할 수 없습니다. 타겟 엔티티: {}", exception.getPersistentClassName());
@@ -48,7 +48,7 @@ public class ScheduleService {
         }
         if (schedule.isRunning()) {
             scheduler.doTask();
-            schedule.reversRunningState();
+            schedule.reverseRunningState();
         }
     }
 

@@ -33,7 +33,7 @@ public class Schedule extends BaseEntity {
         this.isRunning = isRunning;
     }
 
-    public void reversRunningState() {
+    public void reverseRunningState() {
         this.isRunning = !isRunning;
     }
 }
