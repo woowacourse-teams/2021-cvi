@@ -65,10 +65,16 @@ subprojects {
             csv.enabled false
         }
 
+        def Qdomains = []
+
+        for (qPattern in "**/QA".."**/QZ") {
+            Qdomains.add(qPattern + "*")
+        }
+
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.collect {
                 fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
-                        exclude: [
+                        excludes: [
                                         // api-cvi-api
                                         '**/DataLoader*',
                                         '**/CentralVaccinationInformationApplication*',
@@ -79,11 +85,10 @@ subprojects {
                                         '**/Sort*',
                                         '**/Filter*',
                                         '**/ImageType*',
-                                        '**/PostRepositoryImpl*',
                                         // domain-cvi-oauth-service
                                         '**/KakaoProfile*',
                                         '**/NaverProfile*'
-                                ])}))
+                                ] + Qdomains)}))
         }
         finalizedBy 'jacocoTestCoverageVerification'
     }
