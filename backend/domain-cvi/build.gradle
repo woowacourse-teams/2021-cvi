@@ -23,12 +23,12 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
     violationRules { // 위반 규칙
         rule {
             enabled = true
-            element = 'GROUP'
+            element = 'CLASS'
 
             limit {
-                counter = 'METHOD'
+                counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.85
             }
 
             excludes = [
