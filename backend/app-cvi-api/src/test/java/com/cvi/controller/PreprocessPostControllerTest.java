@@ -80,7 +80,7 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
             .build();
         anotherUser = User.builder()
             .id(USER_ID + 1)
-            .nickname("another_user")
+            .nickname("anotherUser")
             .ageRange(AgeRange.TWENTIES)
             .profileUrl("kakao.com/profile")
             .socialId("{Unique ID received from social provider}")
