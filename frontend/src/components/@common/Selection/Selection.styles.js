@@ -23,9 +23,9 @@ const Container = styled.div`
     display: grid;
     border-radius: 1.6rem;
     grid-template-columns: repeat(2, 1fr);
-    height: fit-content;
     padding: 1rem;
     width: 100%;
+    min-height: 10rem;
   }
 `;
 

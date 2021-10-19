@@ -34,7 +34,7 @@ const HomePage = () => {
           sizeType={BUTTON_SIZE_TYPE.LARGE}
           backgroundType={BUTTON_BACKGROUND_TYPE.OUTLINE}
           styles={buttonStyles}
-          onClick={goReviewPage}
+          onClick={() => goReviewPage()}
         >
           접종 후기 쓰러가기
         </Button>
