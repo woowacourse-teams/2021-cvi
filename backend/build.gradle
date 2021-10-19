@@ -122,8 +122,8 @@ configure(skipSonarProjects) {
 def queryDslProjects = [project(':domain-cvi')]
 configure(queryDslProjects) {
     dependencies {
-        implementation 'com.querydsl:querydsl-jpa'
-        implementation 'com.querydsl:querydsl-core'
+        compile 'com.querydsl:querydsl-jpa'
+        compile 'com.querydsl:querydsl-core'
         annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")
         // querydsl JPAAnnotationProcessor 사용 지정
         annotationProcessor("jakarta.persistence:jakarta.persistence-api")

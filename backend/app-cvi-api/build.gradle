@@ -1,22 +1,19 @@
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
-    implementation project(path:':common-cvi', configuration: 'default')
-    implementation project(path:':domain-cvi', configuration: 'default')
-    implementation project(path:':domain-cvi-oauth-service', configuration: 'default')
-    implementation project(path:':domain-cvi-publicdata-service', configuration: 'default')
-    implementation project(path:':domain-cvi-scheduler', configuration: 'default')
-    implementation project(path:':domain-cvi-aws-s3-service', configuration: 'default')
+    implementation(project(":domain-cvi"))
+    implementation(project(":domain-cvi-oauth-service"))
+    implementation(project(":domain-cvi-publicdata-service"))
+    implementation(project(":domain-cvi-scheduler"))
+    implementation(project(":domain-cvi-aws-s3-service"))
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    //cache
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'javax.cache:cache-api:1.1.1'
-    implementation 'org.ehcache:ehcache:3.9.4'
-
     testImplementation 'io.rest-assured:rest-assured:4.3.3'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
