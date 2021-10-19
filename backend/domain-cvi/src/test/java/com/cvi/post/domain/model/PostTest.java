@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.exception.InvalidOperationException;
 import com.cvi.exception.NotFoundException;
@@ -21,7 +22,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -297,7 +297,8 @@ class PostTest {
             .isInstanceOf(InvalidOperationException.class);
     }
 
-    @ParameterizedTest(name = "페이징 요청 값 resize - 성공")
+    @DisplayName("페이징 요청 값 resize - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void resizePagingRangeTest(int offset, int size, List<String> contentResult) {
         //given

@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cvi.ApiDocument;
+import com.cvi.CustomParameterizedTest;
 import com.cvi.auth.JwtTokenProvider;
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.dto.CommentResponse;
@@ -42,7 +43,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -399,7 +399,8 @@ class UserControllerTest extends ApiDocument {
         마이페이지_글_타입별_페이징_조회_요청_실패함(response, filter);
     }
 
-    @ParameterizedTest(name = "UserRequest validation - 유효하지 않은 경우 - 닉네임")
+    @DisplayName("UserRequest validation - 유효하지 않은 경우 - 닉네임")
+    @CustomParameterizedTest
     @MethodSource
     void validateUserRequestWhenInvalidNickName(UserRequest userRequest) throws Exception {
         //given
@@ -419,7 +420,8 @@ class UserControllerTest extends ApiDocument {
             Arguments.of(new UserRequest("👏", AgeRange.TEENS, false, SocialProvider.NAVER, SOCIAL_ID, PROFILE_URL)));
     }
 
-    @ParameterizedTest(name = "UserRequest validation - 유효하지 않은 경우 - 그 외")
+    @DisplayName("UserRequest validation - 유효하지 않은 경우 - 그 외")
+    @CustomParameterizedTest
     @MethodSource
     void validateUserRequest(UserRequest userRequest) throws Exception {
         //given

@@ -9,6 +9,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'javax.cache:cache-api:1.1.1'
     implementation 'org.ehcache:ehcache:3.9.4'
+
+    testImplementation(testFixtures(project(":domain-cvi")))
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행

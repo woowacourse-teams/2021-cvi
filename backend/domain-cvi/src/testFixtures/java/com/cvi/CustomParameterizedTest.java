@@ -7,8 +7,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-@ParameterizedTest(name = "{displayName}, {index}, args = {arguments}")
-public @interface CustomParameterizeTest {
+@ParameterizedTest(name = "{displayName} {index}, args = {arguments}")
+public @interface CustomParameterizedTest {
 }

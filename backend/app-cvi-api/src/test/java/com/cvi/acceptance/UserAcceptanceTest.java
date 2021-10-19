@@ -2,6 +2,7 @@ package com.cvi.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.dto.UserRequest;
 import com.cvi.dto.UserResponse;
 import com.cvi.user.domain.model.AgeRange;
@@ -13,7 +14,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpStatus;
@@ -57,7 +57,8 @@ public class UserAcceptanceTest extends AcceptanceTest {
         assertThat(response.as(UserResponse.class).getAccessToken()).isNotNull();
     }
 
-    @ParameterizedTest(name = "신규 회원 가입 - 실패 - 유효하지 않은 값인 경우")
+    @DisplayName("신규 회원 가입 - 실패 - 유효하지 않은 값인 경우")
+    @CustomParameterizedTest
     @MethodSource
     void signupFailure(UserRequest userRequest) {
         //given
@@ -113,7 +114,8 @@ public class UserAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    @ParameterizedTest(name = "내 정보 수정 - 실패 - 유효하지 않은 요청 값인 경우")
+    @DisplayName("내 정보 수정 - 실패 - 유효하지 않은 요청 값인 경우")
+    @CustomParameterizedTest
     @MethodSource
     void updateFailure(UserRequest invalidRequest) {
         //given

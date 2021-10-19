@@ -14,6 +14,8 @@ dependencies {
     }
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.11.2'
     testImplementation 'org.mockito:mockito-inline:3.11.2'
+
+    testImplementation(testFixtures(project(":domain-cvi")))
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행

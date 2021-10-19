@@ -1,6 +1,6 @@
 package com.cvi.user.domain.model;
 
-import com.cvi.CustomParameterizeTest;
+import com.cvi.CustomParameterizedTest;
 import com.cvi.exception.InvalidInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class UserTest {
     }
 
     @DisplayName("사용자 생성 - 성공")
-    @CustomParameterizeTest
+    @CustomParameterizedTest
     @ValueSource(strings = {"ㅁㅇㄹㅁㅇㄹ", "ㅓㅓㅓㅓ", "adfdf", "검프", "검프23213"})
     void save(String name) {
         //given
@@ -45,7 +45,7 @@ class UserTest {
     }
 
     @DisplayName("사용자 생성 - 실패")
-    @CustomParameterizeTest
+    @CustomParameterizedTest
     @NullSource
     @ValueSource(strings = {" ", "라 이언", " gump", "yon ", "", "1234567891234567891232", "ㅇㅇ\n"})
     void saveFailure(String name) {
@@ -64,7 +64,7 @@ class UserTest {
 
 
     @DisplayName("사용자 수정 - 성공")
-    @CustomParameterizeTest
+    @CustomParameterizedTest
     @ValueSource(strings = {"ㅁㅇㄹㅁㅇㄹ", "ㅓㅓㅓㅓ", "adfdf", "검프", "검프23213"})
     void update(String name) {
         //given
