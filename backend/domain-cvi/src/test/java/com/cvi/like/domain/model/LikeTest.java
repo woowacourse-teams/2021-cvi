@@ -1,7 +1,10 @@
 package com.cvi.like.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.cvi.exception.InvalidOperationException;
+import com.cvi.exception.NotFoundException;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
@@ -12,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("댓글 도메인 테스트")
+@DisplayName("좋아요 도메인 테스트")
 class LikeTest {
 
     private Post post;
@@ -47,6 +50,25 @@ class LikeTest {
         like.assignPost(post);
         //then
         assertThat(like.getPost()).isEqualTo(post);
+    }
+
+    @DisplayName("게시글 할당 - 실패 - 게시글이 없는 경우")
+    @Test
+    void assignPostFailure() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> like.assignPost(null)).isInstanceOf(NotFoundException.class);
+    }
+
+    @DisplayName("게시글 할당 - 실패 - 이미 게시글에 할당된 경우")
+    @Test
+    void assignPostFailureWhenAlreadyAssignedPost() {
+        //given
+        //when
+        like.assignPost(post);
+        //then
+        assertThatThrownBy(() -> like.assignPost(post)).isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("좋아요 누른 유저인지 확인")

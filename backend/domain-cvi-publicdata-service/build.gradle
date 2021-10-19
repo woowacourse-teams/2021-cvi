@@ -7,37 +7,16 @@ dependencies {
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
-    def Qdomains = []
-
-    for (qPattern in "*.QA".."*.QZ") {
-        Qdomains.add(qPattern + "*")
-    }
-
     violationRules { // 위반 규칙
         rule {
             enabled = true
-            element = 'BUNDLE'
+            element = 'GROUP'
 
             limit {
-                counter = 'INSTRUCTION'
+                counter = 'METHOD'
                 value = 'COVEREDRATIO'
                 minimum = 0.90
             }
-
-            excludes = [
-                    // 커버리지 제외할 클래스
-                    '*.DataLoader*',
-                    '*.CviApplication*',
-                    '*.DummyData*',
-                    '*.KakaoProfile*',
-                    '*.NaverProfile*'
-            ] + Qdomains
         }
-    }
-}
-
-sonarqube {
-    properties {
-        property "sonar.exclusions", "**/*Test*.*, **/Q*.java, **/*Doc*.java"
     }
 }

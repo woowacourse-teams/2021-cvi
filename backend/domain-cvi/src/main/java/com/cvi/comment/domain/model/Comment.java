@@ -72,8 +72,8 @@ public class Comment extends BaseEntity {
 
     public void update(Comment updateComment, User user) {
         if (!isSameUser(user)) {
-            log.info("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: {}", this.user);
-            throw new UnAuthorizedException(String.format("다른 사용자의 게시글은 수정할 수 없습니다.입력 값: %s", this.user));
+            log.info("다른 사용자의 댓글은 수정할 수 없습니다. 입력 값: {}", this.user);
+            throw new UnAuthorizedException(String.format("다른 사용자의 댓글은 수정할 수 없습니다.입력 값: %s", this.user));
         }
         this.content = updateComment.content;
     }
