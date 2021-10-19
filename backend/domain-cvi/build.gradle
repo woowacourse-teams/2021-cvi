@@ -1,3 +1,12 @@
+plugins{
+    // A Java Library
+    id 'java-library'
+    // which produces test fixtures
+    id 'java-test-fixtures'
+    // and is published
+    id 'maven-publish'
+}
+
 bootJar { enabled = false }
 jar { enabled = true }
 
@@ -11,6 +20,8 @@ dependencies {
     //migration
     implementation 'org.flywaydb:flyway-core:7.11.2'
 
+    //testFixture
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
