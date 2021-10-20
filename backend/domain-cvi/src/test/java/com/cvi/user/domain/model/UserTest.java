@@ -1,16 +1,15 @@
 package com.cvi.user.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import com.cvi.CustomParameterizedTest;
 import com.cvi.exception.InvalidInputException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("사용자 도메인 단위 테스트")
 class UserTest {
@@ -20,41 +19,66 @@ class UserTest {
     @BeforeEach
     void init() {
         this.user = User.builder()
-            .id(1L)
-            .ageRange(AgeRange.TEENS)
-            .createdAt(LocalDateTime.now())
-            .nickname("검프")
-            .profileUrl("www.gump.com")
-            .socialProvider(SocialProvider.KAKAO)
-            .build();
+                .id(1L)
+                .ageRange(AgeRange.TEENS)
+                .createdAt(LocalDateTime.now())
+                .nickname("검프")
+                .profileUrl("www.gump.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
     }
 
+    @DisplayName("사용자 생성 - 성공")
+    @CustomParameterizedTest
+    @ValueSource(strings = {"ㅁㅇㄹㅁㅇㄹ", "ㅓㅓㅓㅓ", "adfdf", "검프", "검프23213"})
+    void save(String name) {
+        //given
+        //when
+        //then
+        assertThatCode(() -> User.builder()
+                .ageRange(AgeRange.TWENTIES)
+                .nickname(name)
+                .profileUrl("www.budae.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build()
+        ).doesNotThrowAnyException();
+    }
+
+    @DisplayName("사용자 생성 - 실패")
+    @CustomParameterizedTest
+    @NullSource
+    @ValueSource(strings = {" ", "라 이언", " gump", "yon ", "", "1234567891234567891232", "ㅇㅇ\n"})
+    void saveFailure(String name) {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> User.builder()
+                .ageRange(AgeRange.TWENTIES)
+                .nickname(name)
+                .profileUrl("www.budae.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build()
+        ).isInstanceOf(InvalidInputException.class)
+                .hasMessageContaining("올바른 닉네임 형식이 아닙니다(특수 문자, 공백 불가).");
+    }
+
+
     @DisplayName("사용자 수정 - 성공")
-    @Test
-    void update() {
+    @CustomParameterizedTest
+    @ValueSource(strings = {"ㅁㅇㄹㅁㅇㄹ", "ㅓㅓㅓㅓ", "adfdf", "검프", "검프23213"})
+    void update(String name) {
         //given
         User updateUser = User.builder()
-            .id(1L)
-            .ageRange(AgeRange.TWENTIES)
-            .createdAt(LocalDateTime.now())
-            .nickname("인비")
-            .profileUrl("www.budae.com")
-            .socialProvider(SocialProvider.KAKAO)
-            .build();
+                .id(1L)
+                .ageRange(AgeRange.TWENTIES)
+                .createdAt(LocalDateTime.now())
+                .nickname(name)
+                .profileUrl("www.budae.com")
+                .socialProvider(SocialProvider.KAKAO)
+                .build();
         //when
         user.update(updateUser);
         //then
-        assertThat(user.getAgeRange()).isEqualTo(updateUser.getAgeRange());
-    }
-
-    @ParameterizedTest(name = "사용자 회원가입 - 실패 - 닉네임 빈 문자열")
-    @NullAndEmptySource
-    @ValueSource(strings = {" ", "라 이언", " gump", "yon "})
-    void signupFailureWhenEmptyNickname(String nickname) {
-        //given
-        //when
-        //then
-        assertThatThrownBy(() -> User.builder().nickname(nickname).build())
-            .isInstanceOf(InvalidInputException.class);
+        assertThat(user.getNickname()).isEqualTo(updateUser.getNickname());
     }
 }

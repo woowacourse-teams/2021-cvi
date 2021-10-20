@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.mock;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.dto.VaccinationStatisticResponse;
 import com.cvi.parser.VaccinationParser;
 import com.cvi.properties.PublicDataProperties;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,8 @@ class PublicDataServiceTest {
         vaccinationStatisticRepository.deleteAll();
     }
 
-    @ParameterizedTest(name = "백신 정종률 데이터 저장 - 성공")
+    @DisplayName("백신 정종률 데이터 저장 - 성공")
+    @CustomParameterizedTest
     @MethodSource("targetDate")
     void saveVaccinationStatistics(LocalDate targetDate) {
         //given
@@ -74,7 +75,8 @@ class PublicDataServiceTest {
             .contains(targetDate);
     }
 
-    @ParameterizedTest(name = "백신 정종률 데이터 조회 - 성공")
+    @DisplayName("백신 정종률 데이터 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource("targetDate")
     void findVaccinationStatistics(LocalDate targetDate) {
         //given

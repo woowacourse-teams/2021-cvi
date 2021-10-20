@@ -2,5 +2,6 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation project(path:':domain-cvi-publicdata-service' , configuration: 'default')
+    implementation(project(":domain-cvi-publicdata-service"))
+    implementation(project(":domain-cvi"))
 }

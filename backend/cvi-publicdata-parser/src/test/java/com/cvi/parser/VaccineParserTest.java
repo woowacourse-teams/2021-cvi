@@ -1,5 +1,6 @@
 package com.cvi.parser;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.dto.KoreaRegionVaccinationData;
 import com.cvi.dto.KoreaVaccineParserResponse;
 import com.cvi.dto.WorldVaccinationData;
@@ -11,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -61,7 +61,8 @@ class VaccineParserTest {
         vaccineParser = new VaccinationParser(parser, jsonMapper);
     }
 
-    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공")
+    @DisplayName("백신 접종 데이터 가져오기 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void parseToPublicDataToBeforeTenAndAnyDate(LocalDate targetDate) throws JsonProcessingException {
         //given
@@ -91,7 +92,8 @@ class VaccineParserTest {
                 .isNotEmpty();
     }
 
-    @ParameterizedTest(name = "백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
+    @DisplayName("백신 접종 데이터 가져오기 - 성공 - 공공데이터 업데이트 전 요청")
+    @CustomParameterizedTest
     @MethodSource
     void parseToPublicDataWhenNotUpdate(LocalDate targetDate) throws JsonProcessingException {
         //given

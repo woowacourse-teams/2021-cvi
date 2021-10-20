@@ -2,6 +2,7 @@ package com.cvi.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.dto.PostWithCommentResponse;
@@ -31,7 +32,6 @@ import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -211,7 +211,8 @@ class PostMyPageServiceTest {
         assertImageUrls(postResponses);
     }
 
-    @ParameterizedTest(name = "내가 작성한 글 첫 페이징 조회 - 성공")
+    @DisplayName("내가 작성한 글 첫 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findMyPostsPagingFirstPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given
@@ -230,7 +231,8 @@ class PostMyPageServiceTest {
             Arguments.of(0, 1, Collections.singletonList("Test 3"), Collections.singletonList(POST3_IMAGE_URLS)));
     }
 
-    @ParameterizedTest(name = "내가 작성한 글 다음 페이징 조회 - 성공")
+    @DisplayName("내가 작성한 글 다음 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findMyPostsPagingNextPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given
@@ -249,7 +251,8 @@ class PostMyPageServiceTest {
             Arguments.of(1, 1, Collections.singletonList("Test 2"), Collections.singletonList(POST2_IMAGE_URLS)));
     }
 
-    @ParameterizedTest(name = "내가 좋아요 한 글 첫 페이징 조회 - 성공")
+    @DisplayName("내가 좋아요 한 글 첫 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findLikedPostsPagingFirstPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given
@@ -268,7 +271,8 @@ class PostMyPageServiceTest {
             Arguments.of(0, 1, Collections.singletonList("Test 3"), Collections.singletonList(POST3_IMAGE_URLS)));
     }
 
-    @ParameterizedTest(name = "내가 좋아요 한 글 다음 페이징 조회 - 성공")
+    @DisplayName("내가 좋아요 한 글 다음 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findLikedPostsPagingNextPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given
@@ -287,7 +291,8 @@ class PostMyPageServiceTest {
             Arguments.of(1, 1, Collections.singletonList("Test 2"), Collections.singletonList(POST2_IMAGE_URLS)));
     }
 
-    @ParameterizedTest(name = "내가 댓글 단 게시글 첫 페이징 조회 - 성공")
+    @DisplayName("내가 댓글 단 게시글 첫 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findCommentedPostFirstPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given
@@ -305,7 +310,8 @@ class PostMyPageServiceTest {
             Arguments.of(0, 1, Collections.singletonList("Test 3"), Collections.singletonList(POST3_IMAGE_URLS)));
     }
 
-    @ParameterizedTest(name = "내가 댓글 단 게시글 다음 페이징 조회 - 성공")
+    @DisplayName("내가 댓글 단 게시글 다음 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findCommentedPostNextPage(int offset, int size, List<String> expectedContents, List<List<String>> expectedImageUrls) {
         //given

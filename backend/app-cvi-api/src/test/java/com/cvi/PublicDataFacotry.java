@@ -1,7 +1,6 @@
 package com.cvi;
 
-import com.cvi.dto.*;
-import com.cvi.util.DateConverter;
+import com.cvi.dto.VaccinationStatisticResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

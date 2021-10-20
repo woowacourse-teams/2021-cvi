@@ -2,8 +2,15 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation project(path:':domain-cvi', configuration: 'default')
-    implementation project(path:':cvi-publicdata-parser', configuration: 'default')
+    implementation(project(":domain-cvi"))
+    implementation(project(":cvi-publicdata-parser"))
+
+    //cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'javax.cache:cache-api:1.1.1'
+    implementation 'org.ehcache:ehcache:3.9.4'
+
+    testImplementation(testFixtures(project(":common-cvi")))
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
