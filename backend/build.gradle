@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.5.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
     id 'jacoco'
     id 'org.sonarqube' version '3.0'
     id 'org.asciidoctor.convert' version '1.5.8'
@@ -18,6 +17,7 @@ sourceCompatibility = '1.8'
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
@@ -122,8 +122,6 @@ configure(skipSonarProjects) {
 def queryDslProjects = [project(':domain-cvi')]
 configure(queryDslProjects) {
     dependencies {
-        compile 'com.querydsl:querydsl-jpa'
-        compile 'com.querydsl:querydsl-core'
         annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")
         // querydsl JPAAnnotationProcessor 사용 지정
         annotationProcessor("jakarta.persistence:jakarta.persistence-api")

@@ -11,7 +11,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     testImplementation 'io.rest-assured:rest-assured:4.3.3'
-    testImplementation(testFixtures(project(":domain-cvi")))
+    testImplementation(testFixtures(project(":common-cvi")))
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
