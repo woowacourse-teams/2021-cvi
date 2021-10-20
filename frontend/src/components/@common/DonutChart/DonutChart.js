@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { THEME_COLOR } from '../../../constants';
-import { Container, Span, Percent } from './DonutChart.styles';
+import { AnimatedCircle, Number, PercentSymbol } from './DonutChart.styles';
 
 const DonutChart = ({
   target,
@@ -13,32 +12,43 @@ const DonutChart = ({
   radius,
   thickness,
 }) => {
-  const [currentNumber, setCurrentNumber] = useState(0);
+  const totalCircleLength = document.querySelector('circle')?.getTotalLength();
+  const circleOffset = (totalCircleLength / 4).toString();
 
-  useEffect(() => {
-    if (!target) return;
+  const getStrokeDasharray = (target) => {
+    const targetPathLength = (totalCircleLength / 100) * target;
 
-    const intervalId = setInterval(() => {
-      if (currentNumber < target) setCurrentNumber((currentNumber) => currentNumber + 1);
-
-      clearInterval(intervalId);
-    }, 10);
-
-    return () => clearInterval(intervalId);
-  }, [currentNumber, target]);
+    return `${targetPathLength} ${totalCircleLength - targetPathLength}`;
+  };
 
   return (
-    <Container
-      currentNumber={currentNumber}
-      filledColor={filledColor}
-      emptyColor={emptyColor}
-      radius={radius}
-    >
-      <Span radius={radius - thickness} fontSize={fontSize} fontColor={fontColor}>
-        {target}
-        <Percent percentSize={percentSize}>%</Percent>
-      </Span>
-    </Container>
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="-32 -32 100 100"
+        width={radius * 2}
+        height={radius * 2}
+      >
+        <circle stroke={emptyColor} strokeWidth={thickness} fill="none" r="40" cx="18" cy="18" />
+        <AnimatedCircle
+          stroke={filledColor}
+          strokeWidth={thickness}
+          strokeDasharray={getStrokeDasharray(target)}
+          strokeDashoffset={circleOffset}
+          fill="none"
+          r="40"
+          cx="18"
+          cy="18"
+          totalCircleLength={totalCircleLength}
+        />
+        <Number x="-10%" y="26%" fontColor={fontColor} fontSize={fontSize}>
+          {target}
+        </Number>
+        <PercentSymbol x="36%" y="26%" percentColor={fontColor} percentSize={percentSize}>
+          %
+        </PercentSymbol>
+      </svg>
+    </>
   );
 };
 
@@ -57,9 +67,9 @@ DonutChart.defaultProps = {
   filledColor: THEME_COLOR.PRIMARY,
   emptyColor: '#EFF5F5',
   fontColor: THEME_COLOR.PRIMARY,
-  fontSize: '2.4rem',
+  fontSize: '2.2rem',
   percentSize: '1.2rem',
-  radius: 50,
+  radius: 52,
   thickness: 16,
 };
 
