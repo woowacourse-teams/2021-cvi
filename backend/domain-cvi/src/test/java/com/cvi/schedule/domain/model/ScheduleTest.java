@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("스케줄러 도메인 테스트")
 class ScheduleTest {
 
     @DisplayName("isRunning 상태를 변경한다.")

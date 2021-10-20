@@ -188,8 +188,8 @@ class PostTest {
                 .socialProvider(SocialProvider.KAKAO)
                 .createdAt(LocalDateTime.now())
                 .build();
-        post.assignComment(comment);
         //when
+        post.assignComment(comment);
         Comments comments = post.getComments();
         //then
         assertThatThrownBy(() -> comments.delete(comment.getId(), anotherUser))
