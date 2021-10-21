@@ -13,6 +13,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 999;
+  overflow-y: auto;
 
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
 `;
@@ -22,6 +23,16 @@ const modalFrameStyles = css`
   min-height: 40rem;
   position: relative;
   padding: 4rem;
+  margin-top: 5rem;
+
+  @media screen and (max-width: 480px) {
+    padding: 4rem 2rem 2rem 2rem;
+    width: 100%;
+    height: 100%;
+    min-width: auto;
+    min-height: auto;
+    margin-top: 0;
+  }
 `;
 
 const CloseButton = styled.div`

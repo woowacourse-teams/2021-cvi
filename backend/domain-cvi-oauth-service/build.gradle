@@ -2,44 +2,22 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation project(path:':domain-cvi', configuration: 'default')
+    implementation(project(":domain-cvi"))
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
-    def Qdomains = []
-
-    for (qPattern in "*.QA".."*.QZ") {
-        Qdomains.add(qPattern + "*")
-    }
-
     violationRules { // 위반 규칙
         rule {
             enabled = true
-            element = 'BUNDLE'
+            element = 'GROUP'
 
             limit {
-                counter = 'INSTRUCTION'
+                counter = 'METHOD'
                 value = 'COVEREDRATIO'
                 minimum = 0.85
             }
-
-            excludes = [
-                    // 커버리지 제외할 클래스
-                    '*.DataLoader*',
-                    '*.CviApplication*',
-                    '*.DummyData*',
-                    '*.KakaoProfile*',
-                    '*.NaverProfile*'
-            ] + Qdomains
         }
-    }
-}
-
-sonarqube {
-    properties {
-        property "sonar.exclusions", "**/*Test*.*, **/Q*.java, **/*Doc*.java"
     }
 }

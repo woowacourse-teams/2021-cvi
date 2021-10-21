@@ -2,23 +2,18 @@ package com.cvi.user.domain.model;
 
 import com.cvi.config.entity.BaseEntity;
 import com.cvi.exception.InvalidInputException;
-import java.time.LocalDateTime;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.util.StringUtils;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Entity
@@ -28,30 +23,22 @@ import org.springframework.util.StringUtils;
 @ToString(of = {"nickname", "ageRange", "shotVerified", "socialProvider"})
 public class User extends BaseEntity {
 
+    private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{1,20}$");
+
     @Column(unique = true)
-    @NotBlank(message = "닉네임은 공백일 수 없습니다.")
-    @Length(max = 20, message = "닉네임의 길이는 최소 1자부터 20자까지 입니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "닉네임은 특수문자가 포함될 수 없습니다.")
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "연령대는 null일 수 없습니다.")
     private AgeRange ageRange;
-    private boolean shotVerified;
-
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "provider(OAuth 제공자)는 null일 수 없습니다.")
     private SocialProvider socialProvider;
-
-    @NotBlank(message = "socialId(OAuth 고유의 id)는 null일 수 없습니다.")
+    private boolean shotVerified;
     private String socialId;
-
-    @NotBlank(message = "profileUrl(OAuth profile url)은 null일 수 없습니다.")
     private String profileUrl;
 
     @Builder
     public User(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String nickname,
-        AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
+                AgeRange ageRange, boolean shotVerified, SocialProvider socialProvider, String socialId, String profileUrl) {
         super(id, createdAt, lastModifiedAt);
         validateNickName(nickname);
         this.nickname = nickname;
@@ -63,9 +50,9 @@ public class User extends BaseEntity {
     }
 
     private void validateNickName(String nickname) {
-        if (StringUtils.isEmpty(nickname) || nickname.contains(" ")) {
-            log.info("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: {}", nickname);
-            throw new InvalidInputException(String.format("닉네임에는 공백 문자가 포함될 수 없습니다. 입력값: %s", nickname));
+        if (Objects.isNull(nickname) || !PATTERN.matcher(nickname).matches()) {
+            log.info("올바른 닉네임 형식이 아닙니다(특수 문자, 공백 불가). 입력값: {}", nickname);
+            throw new InvalidInputException(String.format("올바른 닉네임 형식이 아닙니다(특수 문자, 공백 불가). 입력값: %s", nickname));
         }
     }
 

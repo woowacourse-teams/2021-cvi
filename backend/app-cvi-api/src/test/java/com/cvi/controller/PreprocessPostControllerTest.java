@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.cvi.ApiDocument;
 import com.cvi.auth.JwtTokenProvider;
+import com.cvi.comment.domain.model.Comment;
 import com.cvi.dto.CommentResponse;
 import com.cvi.dto.ImageRequest;
 import com.cvi.dto.PostRequest;
@@ -54,6 +55,8 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
     protected UserResponse userResponse;
 
     protected Post post;
+    protected Comment comment1;
+    protected Comment comment2;
 
     protected PostRequest createPostRequest;
     protected PostRequest updatePostRequest;
@@ -77,7 +80,7 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
             .build();
         anotherUser = User.builder()
             .id(USER_ID + 1)
-            .nickname("another_user")
+            .nickname("anotherUser")
             .ageRange(AgeRange.TWENTIES)
             .profileUrl("kakao.com/profile")
             .socialId("{Unique ID received from social provider}")
@@ -103,12 +106,27 @@ public abstract class PreprocessPostControllerTest extends ApiDocument {
             .createdAt(LocalDateTime.now())
             .viewCount(0)
             .build();
+        comment1 = Comment.builder()
+            .id(1L)
+            .user(user)
+            .content("많은 도움이 됐습니다!")
+            .createdAt(LocalDateTime.now())
+            .post(post)
+            .build();
+        comment2 = Comment.builder()
+            .id(2L)
+            .user(anotherUser)
+            .content("많은 도움이 됐습니다! 2")
+            .createdAt(LocalDateTime.now())
+            .post(post)
+            .build();
 
         createPostRequest = new PostRequest("글 내용", VaccinationType.PFIZER, newPostImagesRequests);
         updatePostRequest = new PostRequest("수정된 글 내용", VaccinationType.ASTRAZENECA, updatePostImagesRequests);
 
         userResponse = UserResponse.of(user, null);
         postResponse = PostResponse.of(post, user, imageUrls);
+        commentResponses = Arrays.asList(CommentResponse.of(comment1), CommentResponse.of(comment2));
 
         given(jwtTokenProvider.isValidToken(ACCESS_TOKEN)).willReturn(true);
         given(jwtTokenProvider.getPayload(ACCESS_TOKEN)).willReturn(String.valueOf(user.getId()));

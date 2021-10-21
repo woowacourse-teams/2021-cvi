@@ -2,6 +2,7 @@ package com.cvi.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
 import com.cvi.dto.PostResponse;
@@ -29,7 +30,6 @@ import javax.persistence.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +152,8 @@ class PostFindServiceTest {
         }
     }
 
-    @ParameterizedTest(name = "게시글 타입별 조회 - 성공")
+    @DisplayName("게시글 타입별 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineType(VaccinationType vaccinationType) {
         //given
@@ -197,7 +198,8 @@ class PostFindServiceTest {
         assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 
-    @ParameterizedTest(name = "게시글 타입별 첫 페이징 조회 - 성공")
+    @DisplayName("게시글 타입별 첫 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeFirstPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
@@ -217,7 +219,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 타입별 다음 페이징 조회 - 성공")
+    @DisplayName("게시글 타입별 다음 페이징 조회 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeNextPage(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
@@ -235,7 +238,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 타입별 다음 페이징 조회(다음페이지 없음) - 성공")
+    @DisplayName("게시글 타입별 다음 페이징 조회(다음페이지 없음) - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeNextPageIsNull(VaccinationType vaccinationType, int size, List<String> contentResult) {
         //given
@@ -255,7 +259,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 좋아요 오름차순- 성공")
+    @DisplayName("게시글 정렬 조회 좋아요 오름차순- 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByLikeCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -275,7 +280,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 좋아요 내림차순 - 성공")
+    @DisplayName("게시글 정렬 조회 좋아요 내림차순 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByLikeCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -295,7 +301,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 댓글 갯수 오름차순- 성공")
+    @DisplayName("게시글 정렬 조회 댓글 갯수 오름차순- 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByCommentsCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -315,7 +322,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 댓글 갯수 내림차순 - 성공")
+    @DisplayName("게시글 정렬 조회 댓글 갯수 내림차순 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByCommentsCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -335,7 +343,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 조회수 오름차순- 성공")
+    @DisplayName("게시글 정렬 조회 조회수 오름차순- 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByViewCountAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -355,7 +364,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 조회수 내림차순 - 성공")
+    @DisplayName("게시글 정렬 조회 조회수 내림차순 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByViewCountDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -375,7 +385,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 시간순 오름차순- 성공")
+    @DisplayName("게시글 정렬 조회 시간순 오름차순- 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByCreatedAtAsc(VaccinationType vaccinationType, List<String> contentResult) {
         //given
@@ -395,7 +406,8 @@ class PostFindServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "게시글 정렬 조회 시간순 내림차순 - 성공")
+    @DisplayName("게시글 정렬 조회 시간순 내림차순 - 성공")
+    @CustomParameterizedTest
     @MethodSource
     void findByVaccineTypeSortByCreatedAtDesc(VaccinationType vaccinationType, List<String> contentResult) {
         //given

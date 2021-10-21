@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("게시글 컨트롤러 Mock 테스트 - 좋아요")
 @WebMvcTest(controllers = LikeController.class)
-public class LikeControllerTest extends PreprocessPostControllerTest {
+class LikeControllerTest extends PreprocessPostControllerTest {
 
     @MockBean
     private LikeService likeService;

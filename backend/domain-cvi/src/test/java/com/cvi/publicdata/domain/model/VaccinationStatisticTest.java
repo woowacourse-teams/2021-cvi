@@ -3,14 +3,16 @@ package com.cvi.publicdata.domain.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
+
+import com.cvi.CustomParameterizedTest;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("백신 접종률 도메인 테스트")
 class VaccinationStatisticTest {
 
-    @ParameterizedTest(name = "인구수 비례 1차 접종률 계산 - 성공 - 전국")
+    @DisplayName("인구수 비례 1차 접종률 계산 - 성공 - 전국")
+    @CustomParameterizedTest
     @CsvSource({
             "2100000, 4.1",
             "21000000, 40.5",
@@ -28,7 +30,8 @@ class VaccinationStatisticTest {
         assertThat(accumulateFirstRate.doubleValue()).isEqualTo(actual);
     }
 
-    @ParameterizedTest(name = "인구수 비례 2차 접종률 계산 - 성공 - 전국")
+    @DisplayName("인구수 비례 2차 접종률 계산 - 성공 - 전국")
+    @CustomParameterizedTest
     @CsvSource({
             "1100000, 2.1",
             "3000000, 5.8",
@@ -46,7 +49,8 @@ class VaccinationStatisticTest {
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
 
-    @ParameterizedTest(name = "인구수 비례 1차 접종률 계산 - 성공 - 전세계")
+    @DisplayName("인구수 비례 1차 접종률 계산 - 성공 - 전세계")
+    @CustomParameterizedTest
     @CsvSource({
             "2253618189, 28.6",
             "2276706840, 28.9",
@@ -64,7 +68,8 @@ class VaccinationStatisticTest {
         assertThat(accumulatedSecondRate.doubleValue()).isEqualTo(actual);
     }
 
-    @ParameterizedTest(name = "인구수 비례 2차 접종률 계산 - 성공 - 잔세계")
+    @DisplayName("인구수 비례 2차 접종률 계산 - 성공 - 전세계")
+    @CustomParameterizedTest
     @CsvSource({
             "1153697698, 14.6",
             "1175939230, 14.9",

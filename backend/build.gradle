@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.5.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
     id 'jacoco'
     id 'org.sonarqube' version '3.0'
     id 'org.asciidoctor.convert' version '1.5.8'
@@ -18,6 +17,7 @@ sourceCompatibility = '1.8'
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
@@ -30,9 +30,7 @@ subprojects {
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        testImplementation('org.springframework.boot:spring-boot-starter-test') {
-            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-        }
+        testImplementation('org.springframework.boot:spring-boot-starter-test')
     }
 
     configurations {
@@ -66,6 +64,7 @@ subprojects {
         }
 
         def Qdomains = []
+
         for (qPattern in "**/QA".."**/QZ") {
             Qdomains.add(qPattern + "*")
         }
@@ -73,12 +72,21 @@ subprojects {
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.collect {
                 fileTree(dir: it, // 리포트 결과에 제외시킬 디렉토리
-                        exclude: ['**/DataLoader*',
-                                  '**/CviApplication*',
-                                  '**/DummyData*',
-                                  '**/KakaoProfile*',
-                                  '**/NaverProfile*'] + Qdomains)
-            }))
+                        excludes: [
+                                        // api-cvi-api
+                                        '**/DataLoader*',
+                                        '**/CentralVaccinationInformationApplication*',
+                                        '**/DummyData*',
+                                        // cvi-publicdata-parser
+                                        '**/Parser*',
+                                        // domain-cvi
+                                        '**/Sort*',
+                                        '**/Filter*',
+                                        '**/ImageType*',
+                                        // domain-cvi-oauth-service
+                                        '**/KakaoProfile*',
+                                        '**/NaverProfile*'
+                                ] + Qdomains)}))
         }
         finalizedBy 'jacocoTestCoverageVerification'
     }
@@ -90,22 +98,36 @@ subprojects {
         properties {
             property "sonar.sources", "src/main/java"
             property "sonar.tests", "src/test/java"
+            property "sonar.exclusions",
+                    "**/*Test*.*, **/Q*.java, **/*Doc*.java, " +
+                            // api-cvi-api
+                            "**/CentralVaccinationInformationApplication.java, **/DataLoader.java, **/DummyData.java, " +
+                            // cvi-publicdata-parser
+                            "**/Parser.java, " +
+                            // domain-cvi
+                            "**/Sort.java, **/Filter.java, **/ImageType.java, " +
+                            // domain-cvi-oauth-service
+                            "**/KakaoProfile.java, **/NaverProfile.java"
         }
     }
+}
 
-/*    tasks.named('sonarqube').configure {
-        dependsOn jacocoTestCoverageVerification
-    }*/
+def skipSonarProjects = [project(':app-cvi-admin'), project(':common-cvi'), project(':domain-cvi-aws-s3-service'), project(':domain-cvi-scheduler')]
+configure(skipSonarProjects) {
+    sonarqube {
+        skipProject = true
+    }
 }
 
 def queryDslProjects = [project(':domain-cvi')]
-configure(queryDslProjects){
+configure(queryDslProjects) {
     dependencies {
-        implementation 'com.querydsl:querydsl-jpa'
-        implementation 'com.querydsl:querydsl-core'
-        annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa") // querydsl JPAAnnotationProcessor 사용 지정
-        annotationProcessor("jakarta.persistence:jakarta.persistence-api") // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
-        annotationProcessor("jakarta.annotation:jakarta.annotation-api") // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
+        annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")
+        // querydsl JPAAnnotationProcessor 사용 지정
+        annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+        // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
+        annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+        // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
     }
 
     /**
@@ -117,7 +139,7 @@ configure(queryDslProjects){
 }
 
 def asciidoctorConfigureProjects = [project(':app-cvi-api')]
-configure(asciidoctorConfigureProjects){
+configure(asciidoctorConfigureProjects) {
     apply plugin: "org.asciidoctor.convert"
 
     dependencies {
@@ -141,7 +163,7 @@ configure(asciidoctorConfigureProjects){
 
     bootJar {
         dependsOn asciidoctor
-        from ("${asciidoctor.outputDir}/html5") {
+        from("${asciidoctor.outputDir}/html5") {
             into 'static/docs'
         }
     }
