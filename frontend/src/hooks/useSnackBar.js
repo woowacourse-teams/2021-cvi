@@ -27,11 +27,11 @@ const useSnackBar = () => {
   useEffect(() => {
     if (!isSnackBarOpen) return;
 
-    const intervalId = setInterval(() => {
+    const timerId = setTimeout(() => {
       dispatch(closeSnackBarAction());
     }, 3000);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(timerId);
   }, [isSnackBarOpen]);
 
   return { isSnackBarOpen, openSnackBar, SnackBar };
