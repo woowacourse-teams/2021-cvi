@@ -31,7 +31,7 @@ const useSnackbar = () => {
       dispatch(closeSnackbarAction());
     }, 3000);
 
-    return () => clearInterval(timerId);
+    return () => clearTimeout(timerId);
   }, [isSnackbarOpen]);
 
   return { isSnackbarOpen, openSnackbar, Snackbar };
