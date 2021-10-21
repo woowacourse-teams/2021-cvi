@@ -40,7 +40,7 @@ import { toDate } from '../../utils';
 import { ClockIcon, EyeIcon, LeftArrowIcon, CommentIcon } from '../../assets/icons';
 import { Avatar, Button, Frame, Label } from '../../components/@common';
 import { Comment, ImageModal, ReviewImage } from '../../components';
-import { useLike, useSnackBar, useLoading, useMovePage } from '../../hooks';
+import { useLike, useSnackbar, useLoading, useMovePage } from '../../hooks';
 import customRequest from '../../service/customRequest';
 import { fetchDeleteReview, fetchGetReview } from '../../service/fetch';
 
@@ -75,7 +75,7 @@ const ReviewDetailPage = () => {
     review?.likeCount,
     id,
   );
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
 
   const labelFontColor =
     review?.vaccinationType === 'ASTRAZENECA' ? FONT_COLOR.GRAY : FONT_COLOR.WHITE;
@@ -91,7 +91,7 @@ const ReviewDetailPage = () => {
       return;
     }
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_REVIEW);
     goReviewPage();
   };
 

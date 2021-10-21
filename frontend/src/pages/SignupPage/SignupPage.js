@@ -24,7 +24,7 @@ import {
   LoginContainer,
   Span,
 } from './SignupPage.styles';
-import { useMovePage, useSnackBar } from '../../hooks';
+import { useMovePage, useSnackbar } from '../../hooks';
 import { fetchPostSignup } from '../../service/fetch';
 import customRequest from '../../service/customRequest';
 
@@ -35,7 +35,7 @@ const SignupPage = () => {
   const [selectedAgeRange, setSelectedAgeRange] = useState('10대');
   const [nickname, setNickname] = useState();
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
   const { goHomePage, goLoginPage } = useMovePage();
 
   const isValidNickname = (nickname) =>
@@ -65,7 +65,7 @@ const SignupPage = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(response.data.accessToken));
     dispatch(getMyInfoAsync(response.data.accessToken));
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_SIGNUP);
     goHomePage();
   };
 

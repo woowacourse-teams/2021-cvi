@@ -19,7 +19,7 @@ import { BUTTON_BACKGROUND_TYPE } from '../Button/Button.styles';
 import { css } from '@emotion/react';
 import SideBarMobile from '../SideBarMobile/SideBarMobile';
 import { getMyInfoAsync, logout as logoutAction } from '../../../redux/authSlice';
-import { useMovePage, useSnackBar } from '../../../hooks';
+import { useMovePage, useSnackbar } from '../../../hooks';
 
 const BaseLayout = ({ children }) => {
   const location = useLocation();
@@ -29,14 +29,14 @@ const BaseLayout = ({ children }) => {
 
   const [isOpenSideBar, setIsOpenSideBar] = useState(false);
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
   const { goMyPage, goHomePage } = useMovePage();
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
     dispatch(logoutAction());
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGOUT);
     setIsOpenSideBar(false);
     goHomePage();
   };

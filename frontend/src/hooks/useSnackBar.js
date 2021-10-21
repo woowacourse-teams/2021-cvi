@@ -1,40 +1,40 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SnackBar as SnackBarComponent } from '../components/@common';
+import { Snackbar as SnackbarComponent } from '../components/@common';
 import {
-  openSnackBar as openSnackBarAction,
-  closeSnackBar as closeSnackBarAction,
+  openSnackbar as openSnackbarAction,
+  closeSnackbar as closeSnackbarAction,
 } from '../redux/snackbarSlice';
 
-const useSnackBar = () => {
+const useSnackbar = () => {
   const dispatch = useDispatch();
-  const { isSnackBarOpen, message } = useSelector((state) => state.snackbarReducer);
+  const { isSnackbarOpen, message } = useSelector((state) => state.snackbarReducer);
 
   const SnackbarPortal = ({ children }) =>
     ReactDOM.createPortal(children, document.getElementById('snackbar'));
 
-  const SnackBar = () => (
+  const Snackbar = () => (
     <SnackbarPortal>
-      <SnackBarComponent>{message}</SnackBarComponent>
+      <SnackbarComponent>{message}</SnackbarComponent>
     </SnackbarPortal>
   );
 
-  const openSnackBar = (message) => {
-    dispatch(openSnackBarAction(message));
+  const openSnackbar = (message) => {
+    dispatch(openSnackbarAction(message));
   };
 
   useEffect(() => {
-    if (!isSnackBarOpen) return;
+    if (!isSnackbarOpen) return;
 
     const timerId = setTimeout(() => {
-      dispatch(closeSnackBarAction());
+      dispatch(closeSnackbarAction());
     }, 3000);
 
     return () => clearInterval(timerId);
-  }, [isSnackBarOpen]);
+  }, [isSnackbarOpen]);
 
-  return { isSnackBarOpen, openSnackBar, SnackBar };
+  return { isSnackbarOpen, openSnackbar, Snackbar };
 };
 
-export default useSnackBar;
+export default useSnackbar;

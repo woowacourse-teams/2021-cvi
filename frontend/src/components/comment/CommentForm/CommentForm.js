@@ -19,7 +19,7 @@ import {
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
 } from '../../../constants';
-import { useSnackBar } from '../../../hooks';
+import { useSnackbar } from '../../../hooks';
 import customRequest from '../../../service/customRequest';
 import { fetchPostComment } from '../../../service/fetch';
 
@@ -34,7 +34,7 @@ const CommentForm = ({
 }) => {
   const [content, setContent] = useState('');
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
 
   const createComment = async () => {
     if (!content.length) {
@@ -52,7 +52,7 @@ const CommentForm = ({
       return;
     }
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_COMMENT);
     setCommentCount((prevstate) => prevstate + 1);
     setCommentList((prevState) => [response.data, ...prevState]);
     setContent('');

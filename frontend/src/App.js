@@ -17,10 +17,10 @@ import {
   StatePage,
 } from './pages';
 import { BaseLayout, PrivateRoute, PublicRoute } from './components/@common';
-import { useSnackBar } from './hooks';
+import { useSnackbar } from './hooks';
 
 const App = () => {
-  const { isSnackBarOpen, SnackBar } = useSnackBar();
+  const { isSnackbarOpen, Snackbar } = useSnackbar();
 
   return (
     <>
@@ -81,7 +81,7 @@ const App = () => {
           </Switch>
         </BaseLayout>
       </BrowserRouter>
-      {isSnackBarOpen && <SnackBar />}
+      {isSnackbarOpen && <Snackbar />}
     </>
   );
 };

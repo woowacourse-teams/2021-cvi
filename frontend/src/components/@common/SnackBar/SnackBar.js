@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { Container } from './SnackBar.styles';
+import { Container } from './Snackbar.styles';
 
-const SnackBar = ({ children }) => <Container>{children}</Container>;
+const Snackbar = ({ children }) => <Container>{children}</Container>;
 
-SnackBar.propTypes = {
+Snackbar.propTypes = {
   children: PropTypes.string.isRequired,
 };
 
-export default SnackBar;
+export default Snackbar;

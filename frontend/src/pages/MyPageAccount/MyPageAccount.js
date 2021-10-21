@@ -11,7 +11,7 @@ import {
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
 } from '../../constants';
-import { useSnackBar } from '../../hooks';
+import { useSnackbar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { fetchPutMyInfo } from '../../service/fetch';
 import {
@@ -34,7 +34,7 @@ const MyPageAccount = () => {
   const [updatedNickname, setUpdatedNickname] = useState(user?.nickname);
   const [updatedAgeRange, setUpdatedAgeRange] = useState(user?.ageRange?.meaning ?? '10대');
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
 
   const isValidNickname = (nickname) =>
     nickname.length >= NICKNAME_LIMIT.MIN_LENGTH &&
@@ -70,7 +70,7 @@ const MyPageAccount = () => {
 
     dispatch(getMyInfoAsync(accessToken));
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_ACCOUNT);
   };
 
   const isDisableButton =
