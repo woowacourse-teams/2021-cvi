@@ -1,6 +1,13 @@
+plugins{
+    // which produces test fixtures
+    id 'java-test-fixtures'
+    // and is published
+    id 'maven-publish'
+}
+
 bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-
+    testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

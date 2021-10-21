@@ -1,9 +1,9 @@
 package com.cvi.controller;
 
+import com.cvi.CustomParameterizedTest;
 import com.cvi.exception.InvalidOperationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.mock.env.MockEnvironment;
 
@@ -13,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("deploy profile 체크 테스트 ")
 class ProfileControllerTest {
 
-    @ParameterizedTest(name = "active된 profile들 중에 deploy1이 포함되어 있을 때, deploy1이 반환횐다.")
+    @DisplayName("active된 profile들 중에 deploy1이 포함되어 있을 때, deploy1이 반환횐다.")
+    @CustomParameterizedTest
     @ValueSource(strings = {"deploy1", "deploy2"})
     void findProfileDeploy1(String expectedProfile) {
         //given

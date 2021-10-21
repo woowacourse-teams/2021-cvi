@@ -62,7 +62,7 @@ class AuthServiceTest {
         authRequest = new AuthRequest(SocialProvider.NAVER, SOCIAL_CODE, STATE);
         user = User.builder()
             .id(1L)
-            .nickname("test_user")
+            .nickname("testUser")
             .ageRange(AgeRange.TEENS)
             .socialId(NAVER_ID)
             .profileUrl(NAVER_PROFILE_URL)

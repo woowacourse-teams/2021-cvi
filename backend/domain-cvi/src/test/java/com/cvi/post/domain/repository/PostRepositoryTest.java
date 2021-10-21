@@ -9,12 +9,18 @@ import com.cvi.image.repository.ImageRepository;
 import com.cvi.like.domain.model.Like;
 import com.cvi.like.domain.repository.LikeRepository;
 import com.cvi.post.domain.model.Post;
+import com.cvi.post.domain.model.Sort;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
 import com.cvi.user.domain.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +60,8 @@ class PostRepositoryTest {
     private Image image1;
     private Image image2;
     private Post post1;
+    private Post post2;
+    private Post post3;
 
     @BeforeEach
     void setUp() {
@@ -87,10 +95,25 @@ class PostRepositoryTest {
     private void initPost() {
         post1 = Post.builder()
             .user(user1)
-            .content("내용 1")
+            .content("화이자 1차 맞았어요.")
             .vaccinationType(VaccinationType.PFIZER)
+            .createdAt(LocalDateTime.now().minusDays(1))
+            .build();
+        post2 = Post.builder()
+            .user(user2)
+            .content("모더나 1차 맞았어요.")
+            .vaccinationType(VaccinationType.MODERNA)
+            .createdAt(LocalDateTime.now())
+            .build();
+        post3 = Post.builder()
+            .user(user1)
+            .content("화이자 2차 맞았어요.")
+            .vaccinationType(VaccinationType.PFIZER)
+            .createdAt(LocalDateTime.now())
             .build();
         postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
     }
 
     private void initImages() {
@@ -138,6 +161,13 @@ class PostRepositoryTest {
     }
 
     private void assertIdAssigned() {
+        assertThat(user1.getId()).isNotNull();
+        assertThat(user2.getId()).isNotNull();
+
+        assertThat(post1.getId()).isNotNull();
+        assertThat(post2.getId()).isNotNull();
+        assertThat(post3.getId()).isNotNull();
+
         assertThat(comment1.getId()).isNotNull();
         assertThat(comment2.getId()).isNotNull();
 
@@ -146,8 +176,6 @@ class PostRepositoryTest {
 
         assertThat(like1.getId()).isNotNull();
         assertThat(like2.getId()).isNotNull();
-
-        assertThat(post1.getId()).isNotNull();
     }
 
     @DisplayName("Post를 삭제하면, 안에 있는 Comment, Like 들은 모두 삭제되고, Image는 삭제되지 않는다.")
@@ -205,6 +233,74 @@ class PostRepositoryTest {
         //when
         post1.getImages().getImages().clear();
         //then
+    }
+
+    @DisplayName("백신 타입별 페이징 조회")
+    @Test
+    void findByVaccineTypePaging() {
+        //given
+        //when
+        List<Post> posts = postRepository.findByVaccineType(VaccinationType.PFIZER, 0, 3, Sort.toOrderSpecifier(Sort.CREATED_AT_DESC));
+        //then
+        assertThat(posts).extracting("id").containsExactlyElementsOf(Arrays.asList(post3.getId(), post1.getId()));
+        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post1.getContent()));
+    }
+
+    @DisplayName("백신 타입별 조회")
+    @Test
+    void findByVaccineType() {
+        //given
+        //when
+        List<Post> posts = postRepository.findByVaccineType(VaccinationType.MODERNA);
+        //then
+        assertThat(posts).hasSize(1);
+        assertThat(posts).extracting("content").containsExactlyElementsOf(Collections.singletonList(post2.getContent()));
+    }
+
+    @DisplayName("작성자 ID로 게시글 페이징 조회")
+    @Test
+    void findByUserId() {
+        //given
+        //when
+        List<Post> postsByUser1 = postRepository.findByUserId(user1.getId(), 0, 10);
+        //then
+        assertThat(postsByUser1).hasSize(2);
+        assertThat(postsByUser1).extracting("id").containsExactlyInAnyOrder(post1.getId(), post3.getId());
+    }
+
+    @DisplayName("작성자 ID로 게시글 조회")
+    @Test
+    void name() {
+        //given
+        //when
+        List<Post> postsByUser1 = postRepository.findByUserId(user1.getId());
+        //then
+        assertThat(postsByUser1).hasSize(2);
+        assertThat(postsByUser1).extracting("id").containsExactlyInAnyOrder(post1.getId(), post3.getId());
+    }
+
+    @DisplayName("게시글 좋아요 검색")
+    @Test
+    void findWithLikesByPostId() {
+        //given
+        //when
+        Optional<Post> posts = postRepository.findWithLikesByPostId(post1.getId());
+        Post post = posts.get();
+        //then
+        assertThat(post.getLikesCount()).isEqualTo(2);
+        assertThat(post.getLikes().getLikes()).extracting("user.id").containsExactlyInAnyOrder(user1.getId(), user2.getId());
+    }
+
+    @DisplayName("게시글 댓글 검색")
+    @Test
+    void findWithCommentsByPostId() {
+        //given
+        //when
+        Optional<Post> posts = postRepository.findWithCommentsByPostId(post1.getId());
+        Post post = posts.get();
+        //then
+        assertThat(post.getComments().getComments()).hasSize(2);
+        assertThat(post.getComments().getComments()).extracting("content").containsExactlyInAnyOrder(comment1.getContent(), comment2.getContent());
     }
 
     private void resetEntityManager() {

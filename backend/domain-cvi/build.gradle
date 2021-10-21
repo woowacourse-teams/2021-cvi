@@ -2,15 +2,18 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation project(path:':common-cvi', configuration: 'default')
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api(project(":common-cvi"))
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'com.querydsl:querydsl-jpa'
+    api 'com.querydsl:querydsl-core'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
 
+    testImplementation(testFixtures(project(":common-cvi")))
+
     //migration
     implementation 'org.flywaydb:flyway-core:7.11.2'
-
 }
 
 jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
@@ -23,12 +26,12 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
     violationRules { // 위반 규칙
         rule {
             enabled = true
-            element = 'GROUP'
+            element = 'CLASS'
 
             limit {
-                counter = 'METHOD'
+                counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.85
             }
 
             excludes = [
@@ -37,6 +40,7 @@ jacocoTestCoverageVerification { // 코드 커버리지 측정항목 시행
                     '*.JpaConfiguration*',
                     '*.Sort*',
                     '*.Filter*',
+                    '*.BooleanToYNConverter*'
             ] + Qdomains
         }
     }
