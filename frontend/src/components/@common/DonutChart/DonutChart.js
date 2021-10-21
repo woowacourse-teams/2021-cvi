@@ -30,17 +30,19 @@ const DonutChart = ({
         height={radius * 2}
       >
         <circle stroke={emptyColor} strokeWidth={thickness} fill="none" r="40" cx="18" cy="18" />
-        <AnimatedCircle
-          stroke={filledColor}
-          strokeWidth={thickness}
-          strokeDasharray={getStrokeDasharray(target)}
-          strokeDashoffset={circleOffset}
-          fill="none"
-          r="40"
-          cx="18"
-          cy="18"
-          totalCircleLength={totalCircleLength}
-        />
+        {target && (
+          <AnimatedCircle
+            stroke={filledColor}
+            strokeWidth={thickness}
+            strokeDasharray={getStrokeDasharray(target)}
+            strokeDashoffset={circleOffset}
+            fill="none"
+            r="40"
+            cx="18"
+            cy="18"
+            totalCircleLength={totalCircleLength}
+          />
+        )}
         <Number x="-10%" y="26%" fontColor={fontColor} fontSize={fontSize}>
           {target}
         </Number>
