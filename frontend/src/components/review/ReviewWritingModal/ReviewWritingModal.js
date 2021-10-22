@@ -28,7 +28,7 @@ import {
 import { BUTTON_SIZE_TYPE } from '../../@common/Button/Button.styles';
 import { findKey } from '../../../utils';
 import { Button, Input, Modal, Selection } from '../../@common';
-import { useLoading, useSnackBar } from '../../../hooks';
+import { useLoading, useSnackbar } from '../../../hooks';
 import { fetchPostReview } from '../../../service/fetch';
 import customRequest from '../../../service/customRequest';
 
@@ -39,7 +39,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
   const { showLoading, hideLoading, isLoading, Loading } = useLoading();
 
   const vaccinationList = Object.values(VACCINATION);
@@ -127,7 +127,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
     onClickClose();
     hideLoading();
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_CREATE_REVIEW);
 
     setReviewList([]);
     setOffset(0);

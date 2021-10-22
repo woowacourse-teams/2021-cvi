@@ -13,7 +13,7 @@ import {
   VACCINATION,
   VACCINATION_COLOR,
 } from '../../constants';
-import { useFetch, useMovePage, useSnackBar } from '../../hooks';
+import { useFetch, useMovePage, useSnackbar } from '../../hooks';
 import {
   Container,
   FrameContent,
@@ -54,7 +54,7 @@ const ReviewEditPage = () => {
   const [images, setImages] = useState([]);
 
   const { response: review } = useFetch({}, () => fetchGetReview(accessToken, id));
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
   const { goReviewDetailPage, goPreviousPage } = useMovePage();
 
   const labelFontColor =
@@ -107,7 +107,7 @@ const ReviewEditPage = () => {
       return;
     }
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_REVIEW);
     goReviewDetailPage(id);
   };
 

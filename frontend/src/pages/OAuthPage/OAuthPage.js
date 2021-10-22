@@ -8,7 +8,7 @@ import {
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
 } from '../../constants';
-import { useMovePage, useSnackBar } from '../../hooks';
+import { useMovePage, useSnackbar } from '../../hooks';
 import { getMyInfoAsync } from '../../redux/authSlice';
 import { fetchPostOAuthLogin } from '../../service/fetch';
 
@@ -16,7 +16,7 @@ const OAuthPage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
   const { goHomePage, goSignupPage } = useMovePage();
 
   const login = async () => {
@@ -51,7 +51,7 @@ const OAuthPage = () => {
       localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, JSON.stringify(accessToken));
       dispatch(getMyInfoAsync(accessToken));
 
-      openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGIN);
+      openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_LOGIN);
       goHomePage();
     }
   };

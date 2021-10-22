@@ -24,7 +24,7 @@ import {
   TO_DATE_TYPE,
 } from '../../../constants';
 import { BUTTON_BACKGROUND_TYPE } from '../../@common/Button/Button.styles';
-import { useSnackBar } from '../../../hooks';
+import { useSnackbar } from '../../../hooks';
 import { fetchDeleteComment, fetchPutComment } from '../../../service/fetch';
 import customRequest from '../../../service/customRequest';
 
@@ -41,7 +41,7 @@ const CommentItem = ({
   const [isEditable, setIsEditable] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
 
-  const { openSnackBar } = useSnackBar();
+  const { openSnackbar } = useSnackbar();
 
   const deleteComment = async () => {
     if (!window.confirm(CONFIRM_MESSAGE.DELETE_COMMENT)) return;
@@ -56,7 +56,7 @@ const CommentItem = ({
       return;
     }
 
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_COMMENT);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_DELETE_COMMENT);
     setCommentList((prevState) => prevState.filter((comment) => comment.id !== commentId));
     setCommentCount((prevState) => prevState - 1);
   };
@@ -90,7 +90,7 @@ const CommentItem = ({
 
       return prevState;
     });
-    openSnackBar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
+    openSnackbar(SNACKBAR_MESSAGE.SUCCESS_TO_EDIT_COMMENT);
   };
 
   return (

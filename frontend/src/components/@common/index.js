@@ -11,7 +11,7 @@ import BaseLayout from './BaseLayout/BaseLayout';
 import SideBar from './SideBar/SideBar';
 import SideBarMobile from './SideBarMobile/SideBarMobile';
 import DonutChart from './DonutChart/DonutChart';
-import SnackBar from './SnackBar/SnackBar';
+import Snackbar from './Snackbar/Snackbar';
 import Loading from './Loading/Loading';
 import ToggleButton from './ToggleButton/ToggleButton';
 import BarChart from './BarChart/BarChart';
@@ -36,7 +36,7 @@ export {
   SideBar,
   SideBarMobile,
   DonutChart,
-  SnackBar,
+  Snackbar,
   Loading,
   ToggleButton,
   BarChart,
