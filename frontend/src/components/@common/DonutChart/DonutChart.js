@@ -25,11 +25,11 @@ const DonutChart = ({
     <>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="-32 -32 100 100"
+        viewBox="0 0 100 100"
         width={radius * 2}
         height={radius * 2}
       >
-        <circle stroke={emptyColor} strokeWidth={thickness} fill="none" r="40" cx="18" cy="18" />
+        <circle stroke={emptyColor} strokeWidth={thickness} fill="none" r="42" cx="50" cy="50" />
         {target && (
           <AnimatedCircle
             stroke={filledColor}
@@ -37,16 +37,16 @@ const DonutChart = ({
             strokeDasharray={getStrokeDasharray(target)}
             strokeDashoffset={circleOffset}
             fill="none"
-            r="40"
-            cx="18"
-            cy="18"
+            r="42"
+            cx="50"
+            cy="50"
             totalCircleLength={totalCircleLength}
           />
         )}
-        <Number x="-10%" y="26%" fontColor={fontColor} fontSize={fontSize}>
+        <Number x="22%" y="59%" fontColor={fontColor} fontSize={fontSize}>
           {target}
         </Number>
-        <PercentSymbol x="36%" y="26%" percentColor={fontColor} percentSize={percentSize}>
+        <PercentSymbol x="69%" y="58%" percentColor={fontColor} percentSize={percentSize}>
           %
         </PercentSymbol>
       </svg>
