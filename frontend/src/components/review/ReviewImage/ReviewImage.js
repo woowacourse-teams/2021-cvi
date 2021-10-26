@@ -28,6 +28,7 @@ const ReviewImage = ({
     {showCloseIcon && (
       <CloseIconWrapper>
         <Button
+          type="button"
           color={FONT_COLOR.BLUE_GRAY}
           styles={deleteImageButtonStyles}
           onClick={onClickDeleteButton}
