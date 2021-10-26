@@ -12,7 +12,7 @@ const DonutChart = ({
   radius,
   thickness,
 }) => {
-  const totalCircleLength = document.querySelector('circle')?.getTotalLength();
+  const totalCircleLength = 2 * Math.PI * radius;
   const circleOffset = (totalCircleLength / 4).toString();
 
   const getStrokeDasharray = (target) => {
@@ -71,7 +71,7 @@ DonutChart.defaultProps = {
   fontColor: THEME_COLOR.PRIMARY,
   fontSize: '2.2rem',
   percentSize: '1.2rem',
-  radius: 52,
+  radius: 42,
   thickness: 16,
 };
 
