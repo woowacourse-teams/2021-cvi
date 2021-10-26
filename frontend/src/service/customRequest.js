@@ -15,7 +15,7 @@ const customRequest = async (callback) => {
     const errorMessage = JSON.parse(error.message).message;
     console.error(errorMessage ?? error);
 
-    return { state: RESPONSE_STATE.FAILURE, data: error };
+    return { state: RESPONSE_STATE.FAILURE, data: errorMessage ?? error };
   }
 };
 

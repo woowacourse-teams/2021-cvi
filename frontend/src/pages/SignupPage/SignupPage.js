@@ -8,6 +8,7 @@ import {
   ALERT_MESSAGE,
   RESPONSE_STATE,
   SNACKBAR_MESSAGE,
+  SERVER_MESSAGE,
   NICKNAME_LIMIT,
   REGEX,
   LOCAL_STORAGE_KEY,
@@ -57,6 +58,12 @@ const SignupPage = () => {
     const response = await customRequest(() => fetchPostSignup(data));
 
     if (response.state === RESPONSE_STATE.FAILURE) {
+      if (response.data.includes(SERVER_MESSAGE.DUPLICATED_NICJNAME)) {
+        alert(ALERT_MESSAGE.FAIL_TO_SIGN_DUPLICATED_NICKNAME);
+
+        return;
+      }
+
       alert(ALERT_MESSAGE.FAIL_TO_SIGNUP);
 
       return;

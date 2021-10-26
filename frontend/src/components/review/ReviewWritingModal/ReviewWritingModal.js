@@ -160,6 +160,7 @@ const ReviewWritingModal = ({ getReviewList, setReviewList, setOffset, onClickCl
               images.map((image, index) => (
                 <PreviewImageContainer key={`preview-image-${index + 1}`}>
                   <Button
+                    type="button"
                     color={FONT_COLOR.BLUE_GRAY}
                     styles={deleteImageButtonStyles}
                     onClick={() => deleteImage(index)}
