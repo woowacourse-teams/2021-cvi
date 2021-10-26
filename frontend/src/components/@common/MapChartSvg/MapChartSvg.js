@@ -18,12 +18,7 @@ const MapChartSvg = ({ dataList, hoveredRegion, setHoveredRegion }) => {
 
   return (
     <>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="20 120 400 800"
-        preserveAspectRatio="xMidYMid meet"
-        width="330px"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="20 120 400 800" width="330px">
         <defs>
           <style type="text/css"></style>
         </defs>

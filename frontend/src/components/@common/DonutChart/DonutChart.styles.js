@@ -13,14 +13,14 @@ const AnimatedCircle = styled.circle`
 `;
 
 const Number = styled.text`
-  font-weight: 600;
+  font-weight: 700;
 
   fill: ${({ fontColor }) => fontColor && fontColor};
   font-size: ${({ fontSize }) => fontSize && fontSize};
 `;
 
 const PercentSymbol = styled.text`
-  font-weight: 600;
+  font-weight: 700;
 
   fill: ${({ percentColor }) => percentColor && percentColor};
   font-size: ${({ percentSize }) => percentSize && percentSize};
