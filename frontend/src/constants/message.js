@@ -5,6 +5,7 @@ const ERROR_MESSAGE = {
 
 const ALERT_MESSAGE = {
   FAIL_TO_SIGNUP: '회원가입에 실패했습니다',
+  FAIL_TO_SIGN_DUPLICATED_NICKNAME: '사용 중인 닉네임입니다',
   FAIL_TO_LOGIN: '닉네임에 공백과 특수문자는 포함할 수 없습니다',
   FAIL_TO_CREATE_REVIEW: '후기를 작성할 수 없습니다',
   FAIL_TO_EDIT_REVIEW: '후기를 수정할 수 없습니다',
@@ -51,4 +52,15 @@ const PLACEHOLDER = {
     '저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다. 건전한 토론문화와 양질의 댓글 문화를 위해, 타인에게 불쾌감을 주는 욕설 또는 특정 계층/민족, 종교 등을 비하하는 단어들은 표시가 제한됩니다.',
 };
 
-export { ERROR_MESSAGE, ALERT_MESSAGE, SNACKBAR_MESSAGE, CONFIRM_MESSAGE, PLACEHOLDER };
+const SERVER_MESSAGE = {
+  DUPLICATED_NICJNAME: '닉네임이 이미 사용중입니다.',
+};
+
+export {
+  ERROR_MESSAGE,
+  ALERT_MESSAGE,
+  SNACKBAR_MESSAGE,
+  CONFIRM_MESSAGE,
+  PLACEHOLDER,
+  SERVER_MESSAGE,
+};
