@@ -52,7 +52,7 @@ public class ScheduledTasks {
         return () -> {
             LocalDate today = LocalDate.now();
             log.info("{} 세계 백신접종률 api요청 및 저장 시작. 시간: {}:", message, today);
-            publicDataService.saveVaccinationStatistics(today);
+            publicDataService.saveWorldVaccinationStatistics(today);
             log.info("{} 세계 api요청 완료 및 데이터베이스 저장 완료. 시간: {}", message, today);
         };
     }
