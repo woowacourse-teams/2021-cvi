@@ -1,23 +1,22 @@
 {
   "content": "다음날 되니 좀 아픈것 같아요 ㅠ ㅠ",
-  "createdAt": "2021-07-27T14:56:43.633",
+  "createdAt": "2021-07-28T14:56:43.633",
   "id": 8,
   "vaccinationType": "MODERNA",
   "viewCount": 0,
   "likeCount": 310,
   "commentCount": 20,
   "writer": {
-    "accessToken": null,
+    "accessToken": "accessToken",
     "ageRange": {
-      "maxAge": 20,
-      "meaning": "10대",
-      "minAge": 10
+      "maxAge": 30,
+      "meaning": "20대",
+      "minAge": 20
     },
-    "id": 1,
-    "nickname": "검프",
-    "shotVerified": true,
-    "socialId": null,
-    "socialProfileUrl": null,
-    "socialProvider": null
+    "id": 8,
+    "nickname": "nickname",
+    "socialId": "socialId",
+    "socialProfileUrl": "http://k.kakaocdn.net/dn/xGvcl/btranGk6QWP/uvRGXQeokXgIhPRD0wTPgk/img_640x640.jpg",
+    "socialProvider": "KAKAO"
   }
 }

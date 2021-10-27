@@ -98,7 +98,7 @@ describe('Before Login Test', () => {
     cy.react('Label').contains('아스트라제네카').should('not.exist');
   });
 
-  it.skip('화이자 탭을 클릭하면, 화이자 접종 후기만 보인다.', () => {
+  it('화이자 탭을 클릭하면, 화이자 접종 후기만 보인다.', () => {
     cy.contains('button', '화이자').click();
 
     cy.react('Label').contains('모더나').should('not.exist');
@@ -106,7 +106,7 @@ describe('Before Login Test', () => {
     cy.react('Label').contains('아스트라제네카').should('not.exist');
   });
 
-  it.skip('얀센 탭을 클릭하면, 얀센 접종 후기만 보인다.', () => {
+  it('얀센 탭을 클릭하면, 얀센 접종 후기만 보인다.', () => {
     cy.contains('button', '얀센').click();
 
     cy.react('Label').contains('화이자').should('not.exist');
@@ -114,7 +114,7 @@ describe('Before Login Test', () => {
     cy.react('Label').contains('아스트라제네카').should('not.exist');
   });
 
-  it.skip('아스트라제네카 탭을 클릭하면, 아스트라제네카 접종 후기만 보인다.', () => {
+  it('아스트라제네카 탭을 클릭하면, 아스트라제네카 접종 후기만 보인다.', () => {
     cy.contains('button', '아스트라제네카').click();
 
     cy.react('Label').contains('화이자').should('not.exist');
@@ -129,7 +129,7 @@ describe('Before Login Test', () => {
     cy.on('window:confirm', (text) => {
       expect(text).to.equal(ALERT_MESSAGE.NEED_LOGIN);
     });
-    cy.on('window:confirm', () => false);
+    cy.on('window:confirm', () => true);
   });
 
   it.skip('접종 후기 페이지가 보인다', () => {
