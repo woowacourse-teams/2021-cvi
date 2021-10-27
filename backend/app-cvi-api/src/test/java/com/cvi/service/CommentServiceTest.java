@@ -160,7 +160,6 @@ public class CommentServiceTest {
     void deleteComment() {
         //given
         CommentResponse commentResponse = commentService.createComment(post.getId(), optionalUser, commentRequest);
-        commentService.createComment(post.getId(), optionalUser, commentRequest);
         //when
         commentService.deleteComment(post.getId(), commentResponse.getId(), optionalUser);
         postRepository.flush();
@@ -169,6 +168,7 @@ public class CommentServiceTest {
         Post foundPost = postRepository.findById(this.post.getId()).get();
         //then
         assertThat(foundComment).isEmpty();
+        assertThat(foundPost.getCommentsAsList()).isNotEmpty();
         assertThat(foundPost.getCommentsAsList()).extracting("id").doesNotContain(commentResponse.getId());
     }
 
