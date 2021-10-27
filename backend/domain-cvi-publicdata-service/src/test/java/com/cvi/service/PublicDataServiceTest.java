@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +42,19 @@ class PublicDataServiceTest {
 
     private VaccinationParser vaccinationParser;
 
-    public static Stream<Arguments> targetDate() {
+    public static Stream<Arguments> koreaVaccinationTargetDate() {
         return Stream.of(
             Arguments.of(LocalDate.now()),
             Arguments.of(LocalDate.now().minusDays(1)),
             Arguments.of(LocalDate.of(2021, 3, 11))
+        );
+    }
+
+    public static Stream<Arguments> worldVaccinationTargetDate() {
+        return Stream.of(
+                Arguments.of(LocalDate.now()),
+                Arguments.of(LocalDate.now().minusDays(1)),
+                Arguments.of(LocalDate.now().minusDays(2))
         );
     }
 
@@ -64,7 +71,7 @@ class PublicDataServiceTest {
 
     @DisplayName("백신 정종률 데이터 저장 - 성공")
     @CustomParameterizedTest
-    @MethodSource("targetDate")
+    @MethodSource("koreaVaccinationTargetDate")
     void saveVaccinationStatistics(LocalDate targetDate) {
         //given
         //when
@@ -77,7 +84,7 @@ class PublicDataServiceTest {
 
     @DisplayName("백신 정종률 데이터 조회 - 성공")
     @CustomParameterizedTest
-    @MethodSource("targetDate")
+    @MethodSource("koreaVaccinationTargetDate")
     void findVaccinationStatistics(LocalDate targetDate) {
         //given
         //when
@@ -105,22 +112,37 @@ class PublicDataServiceTest {
             .isNotEmpty();
         assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getTotalFirstRate)
             .isNotEmpty();
+        assertThat(vaccinationStatistics).extracting(VaccinationStatisticResponse::getTotalSecondRate)
+                .isNotEmpty();
     }
 
     @DisplayName("세계 백신 정좁률 데이터 - 저장 - 성공 ")
-    @Test
-    void saveWorldVaccinationStatistics() {
+    @CustomParameterizedTest
+    @MethodSource("worldVaccinationTargetDate")
+    void saveWorldVaccinationStatistics(LocalDate targetDate) {
         //given
-        LocalDate targetDate = LocalDate.now();
+        //when
+        List<VaccinationStatisticResponse> vaccinationStatisticResponses = 세계_백신_접종률_저장되어_있음(targetDate);
+        //then
+        assertThat(vaccinationStatisticResponses).extracting(VaccinationStatisticResponse::getBaseDate)
+            .contains(targetDate);
+        assertThat(vaccinationStatisticResponses).extracting(VaccinationStatisticResponse::getSido)
+            .contains(RegionPopulation.WORLD.getRegion());
+    }
+
+    @DisplayName("세계 백신 접종률 데이터 - 조회 - 성공")
+    @CustomParameterizedTest
+    @MethodSource("worldVaccinationTargetDate")
+    void findWorldVaccinationStatistics(LocalDate targetDate) {
+        //given
         //when
         세계_백신_접종률_저장되어_있음(targetDate);
-        List<VaccinationStatistic> vaccinationStatistics =
-            vaccinationStatisticRepository.findByRegionPopulation(RegionPopulation.WORLD);
+        final List<VaccinationStatisticResponse> vaccinationStatisticResponses = publicDataService.findWorldVaccinationStatistics(targetDate);
         //then
-        assertThat(vaccinationStatistics).extracting(VaccinationStatistic::getBaseDate)
-            .contains(targetDate);
-        assertThat(vaccinationStatistics).extracting(VaccinationStatistic::getRegionPopulation)
-            .contains(RegionPopulation.WORLD);
+        assertThat(vaccinationStatisticResponses).extracting(VaccinationStatisticResponse::getBaseDate)
+                .contains(targetDate);
+        assertThat(vaccinationStatisticResponses).extracting(VaccinationStatisticResponse::getSido)
+                .contains(RegionPopulation.WORLD.getRegion());
     }
 
     private void 백신_접종률_저장되어_있음(LocalDate targetDate) {
@@ -129,8 +151,8 @@ class PublicDataServiceTest {
         publicDataService.saveVaccinationStatistics(targetDate);
     }
 
-    private void 세계_백신_접종률_저장되어_있음(LocalDate targetDate) {
+    private List<VaccinationStatisticResponse> 세계_백신_접종률_저장되어_있음(LocalDate targetDate) {
         willReturn(toWorldVaccinationParserResponse(targetDate)).given(vaccinationParser).parseToWorldPublicData();
-        publicDataService.saveWorldVaccinationStatistics(targetDate);
+        return publicDataService.saveWorldVaccinationStatistics(targetDate);
     }
 }
