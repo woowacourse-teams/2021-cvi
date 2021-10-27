@@ -77,6 +77,7 @@ subprojects {
                                         '**/DataLoader*',
                                         '**/CentralVaccinationInformationApplication*',
                                         '**/DummyData*',
+                                        '**/CVIControllerAdvice*',
                                         // cvi-publicdata-parser
                                         '**/Parser*',
                                         // domain-cvi
@@ -101,7 +102,7 @@ subprojects {
             property "sonar.exclusions",
                     "**/*Test*.*, **/Q*.java, **/*Doc*.java, " +
                             // api-cvi-api
-                            "**/CentralVaccinationInformationApplication.java, **/DataLoader.java, **/DummyData.java, " +
+                            "**/CentralVaccinationInformationApplication.java, **/DataLoader.java, **/DummyData.java, **/CVIControllerAdvice.java, " +
                             // cvi-publicdata-parser
                             "**/Parser.java, " +
                             // domain-cvi
