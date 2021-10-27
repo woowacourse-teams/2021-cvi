@@ -13,6 +13,9 @@ public class Parser {
     private static final String GET_METHOD = "GET";
     private static final Logger LOG = LoggerFactory.getLogger(Parser.class);
 
+    public Parser() {
+    }
+
     public String parse(String url) {
         try {
             HttpURLConnection con = new URLWrapper(url).openConnection();
