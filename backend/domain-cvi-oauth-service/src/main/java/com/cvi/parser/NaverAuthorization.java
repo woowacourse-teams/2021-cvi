@@ -1,6 +1,5 @@
 package com.cvi.parser;
 
-import com.cvi.jacoco.ExcludeFromJacocoGeneratedReport;
 import com.cvi.dto.oauthtoken.NaverOAuthToken;
 import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.NaverProfile;
@@ -9,6 +8,7 @@ import com.cvi.dto.profile.UserInformation;
 import com.cvi.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -22,13 +22,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
-public  class NaverAuthorization implements Authorization {
+@RequiredArgsConstructor
+public class NaverAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
     private static final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Value("${security.auth.naver.client-secret}")
     private String clientSecret;
@@ -96,13 +97,12 @@ public  class NaverAuthorization implements Authorization {
     }
 
     @Override
-    @ExcludeFromJacocoGeneratedReport
     public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
-            url,
-            HttpMethod.POST,
-            request,
-            String.class
+                url,
+                HttpMethod.POST,
+                request,
+                String.class
         );
     }
 }

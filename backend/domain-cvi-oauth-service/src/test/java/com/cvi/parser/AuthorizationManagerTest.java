@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 import com.cvi.dto.profile.KakaoProfile;
@@ -19,6 +18,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestTemplate;
 
 @DisplayName("Authorization 매니저 도메인 테스트")
 class AuthorizationManagerTest {
@@ -31,11 +31,13 @@ class AuthorizationManagerTest {
 
     private Map<String, Authorization> authorizationMap = new HashMap<>();
     private AuthorizationManager authorizationManager = new AuthorizationManager(authorizationMap);
-
-    private final NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
-    private final KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
-
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private final NaverAuthorization naverAuthorization = spy(new NaverAuthorization(restTemplate, objectMapper));
+    private final KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization(restTemplate, objectMapper));
+
+
     private UserInformation naverUserInfo;
     private UserInformation kakaoUserInfo;
 
@@ -62,17 +64,6 @@ class AuthorizationManagerTest {
         assertThat(expected).isEqualTo(naverUserInfo);
     }
 
-    @DisplayName("Kakao Authorization 매니저 유저 정보 요청 - 성공")
-    @Test
-    void requestKakaoUserInfo() {
-        //given
-        willReturn(kakaoUserInfo).given(kakaoAuthorization).requestProfile(SOCIAL_CODE, null, REQUEST_ORIGIN);
-        //when
-        UserInformation expected = authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, null, REQUEST_ORIGIN);
-        //then
-        assertThat(expected).isEqualTo(kakaoUserInfo);
-    }
-
     @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 Null인 경우")
     @Test
     void requestUserInfoFailureWhenNullSocialProvider() {
@@ -80,8 +71,8 @@ class AuthorizationManagerTest {
         //when
         //then
         assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE, REQUEST_ORIGIN))
-            .isExactlyInstanceOf(InvalidOperationException.class)
-            .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
+                .isExactlyInstanceOf(InvalidOperationException.class)
+                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
     }
 
     @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 유효하지 않은 경우")
