@@ -1,0 +1,92 @@
+[
+  {
+    "id": 361,
+    "writer": {
+      "id": 67,
+      "nickname": "즈므",
+      "ageRange": { "meaning": "40대", "minAge": 40, "maxAge": 50 },
+      "shotVerified": false,
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "cypress-theLatestReview-1",
+    "viewCount": 47,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "MODERNA",
+    "createdAt": "2021-10-27T12:58:10",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-14_e6bdc8e6-dde8-45fb-a52f-3e45060b4541.jpeg"
+    ]
+  },
+  {
+    "id": 362,
+    "writer": {
+      "id": 67,
+      "nickname": "즈므",
+      "ageRange": { "meaning": "40대", "minAge": 40, "maxAge": 50 },
+      "shotVerified": false,
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "cypress-theLatestReview-2",
+    "viewCount": 6,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "PFIZER",
+    "createdAt": "2021-10-27T18:23:25",
+    "images": []
+  },
+  {
+    "id": 363,
+    "writer": {
+      "id": 67,
+      "nickname": "즈므",
+      "ageRange": { "meaning": "40대", "minAge": 40, "maxAge": 50 },
+      "shotVerified": false,
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "cypress-theLatestReview-3",
+    "viewCount": 4,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "JANSSEN",
+    "createdAt": "2021-10-27T18:23:55",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-25-13_04b0e14a-c4a3-405b-b7ba-972a62b4e402.png"
+    ]
+  },
+  {
+    "id": 364,
+    "writer": {
+      "id": 67,
+      "nickname": "즈므",
+      "ageRange": { "meaning": "40대", "minAge": 40, "maxAge": 50 },
+      "shotVerified": false,
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "cypress-theLatestReview-4",
+    "viewCount": 0,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "ASTRAZENECA",
+    "createdAt": "2021-10-27T18:24:52",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-52_74218807-d8c9-4d2d-a6a4-58b48b2984c3.png"
+    ]
+  }
+]
