@@ -105,7 +105,7 @@ public class PostService {
     }
 
     public List<PostResponse> findByVaccineType(VaccinationType vaccinationType, int offset, int size, Sort sort, Optional<User> optionalUser) {
-        List<Post> posts = postRepository.findByVaccineType(vaccinationType, offset, size, Sort.toOrderSpecifier(sort));
+        List<Post> posts = postRepository.findByVaccineType(vaccinationType, offset, size, sort.getSort());
         return PostResponse.toList(posts, optionalUser.orElse(null));
     }
 

@@ -23,8 +23,4 @@ public enum Sort {
     Sort(OrderSpecifier sort) {
         this.sort = sort;
     }
-
-    public static OrderSpecifier toOrderSpecifier(Sort input) {
-        return input.getSort();
-    }
 }

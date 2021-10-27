@@ -24,7 +24,7 @@ public class AuthorizationManager {
 
     private Authorization extractAuthorization(SocialProvider provider) {
         validateSocialProvider(provider);
-        String key = provider.convertToComponentName();
+        String key = provider.getProvider();
         if (!authorizationMap.containsKey(key)) {
             log.info(String.format("해당 OAuth 제공자가 존재하지 않습니다 입력값: %s", key));
             throw new InvalidOperationException(String.format("해당 OAuth 제공자가 존재하지 않습니다 입력값: %s", key));
