@@ -112,7 +112,7 @@ class LikeRepositoryTest {
         assertThat(post1.getId()).isNotNull();
     }
 
-    @DisplayName("유저 아이디로 좋아요를 조회한다.")
+    @DisplayName("유저 아이디로 좋아요를 조회한다. - 성공")
     @Test
     void findCommentByUserId() {
         //given
