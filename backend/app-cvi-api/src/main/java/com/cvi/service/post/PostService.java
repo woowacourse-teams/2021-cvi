@@ -78,17 +78,14 @@ public class PostService {
         return imageUrls;
     }
 
-    private List<Image> assignPostToImages(Post post, List<String> imageUrls) {
-        final List<Image> images = new ArrayList<>();
+    private void assignPostToImages(Post post, List<String> imageUrls) {
         for (String imageUrl : imageUrls) {
             final Image image = Image.builder()
                 .url(imageUrl)
                 .build();
             image.assignPost(post);
             imageRepository.save(image);
-            images.add(image);
         }
-        return images;
     }
 
     @Transactional
@@ -146,8 +143,7 @@ public class PostService {
         User user = optionalUser.get();
         Post post = findPostByPostId(id);
         post.validateAuthor(user);
-        deleteImagesFromAwsS3(post.getS3PathsOfAllImages());
-        imageRepository.deleteAll(post.getAllImagesAsList());
+        deleteAllImagesInPost(post);
         postRepository.deleteById(id);
     }
 
