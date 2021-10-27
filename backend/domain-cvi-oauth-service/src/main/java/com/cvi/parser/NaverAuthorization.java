@@ -1,5 +1,6 @@
 package com.cvi.parser;
 
+import com.cvi.ExcludeFromJacocoGeneratedReport;
 import com.cvi.dto.oauthtoken.NaverOAuthToken;
 import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.NaverProfile;
@@ -95,6 +96,7 @@ public  class NaverAuthorization implements Authorization {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedReport
     public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
             url,
