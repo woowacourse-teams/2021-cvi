@@ -87,7 +87,8 @@ subprojects {
                                         '**/KakaoProfile*',
                                         '**/NaverProfile*',
                                         '**/UserInformation*',
-                                        '**/AuthRequest*'
+                                        '**/AuthRequest*',
+                                        '**/OAuthConfig*'
                                 ] + Qdomains)}))
         }
         finalizedBy 'jacocoTestCoverageVerification'
