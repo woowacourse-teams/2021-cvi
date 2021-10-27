@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum ImageType {
-    JPG, JPEG, PNG, SVG
+    JPG, JPEG, PNG, SVG, HEIC
 }
