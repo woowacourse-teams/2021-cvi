@@ -2,7 +2,9 @@ package com.cvi.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 import com.cvi.dto.profile.KakaoProfile;
@@ -30,10 +32,10 @@ class AuthorizationManagerTest {
     private Map<String, Authorization> authorizationMap = new HashMap<>();
     private AuthorizationManager authorizationManager = new AuthorizationManager(authorizationMap);
 
-    private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
-    private KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
+    private final NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
+    private final KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization());
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private UserInformation naverUserInfo;
     private UserInformation kakaoUserInfo;
 
@@ -71,14 +73,28 @@ class AuthorizationManagerTest {
         assertThat(expected).isEqualTo(kakaoUserInfo);
     }
 
-    @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 유효하지 않은 경우 - Naver")
+    @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 Null인 경우")
     @Test
-    void requestUserInfoFailureWhenInvalidSocialProviderNaver() {
+    void requestUserInfoFailureWhenNullSocialProvider() {
         //given
         //when
         //then
         assertThatThrownBy(() -> authorizationManager.requestUserInfo(null, SOCIAL_CODE, STATE, REQUEST_ORIGIN))
             .isExactlyInstanceOf(InvalidOperationException.class)
             .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: null");
+    }
+
+    @DisplayName("Authorization 매니저 유저 정보 요청 - 실패 - Provider가 유효하지 않은 경우")
+    @Test
+    void requestUserInfoFailureWhenInvalidSocialProvider() {
+        //given
+        //when
+        authorizationMap = spy(HashMap.class);
+        authorizationManager = new AuthorizationManager(authorizationMap);
+        willReturn(false).given(authorizationMap).containsKey(any());
+        //then
+        assertThatThrownBy(() -> authorizationManager.requestUserInfo(SocialProvider.KAKAO, SOCIAL_CODE, STATE, REQUEST_ORIGIN))
+                .isExactlyInstanceOf(InvalidOperationException.class)
+                .hasMessage("해당 OAuth 제공자가 존재하지 않습니다 입력값: kakaoAuthorization");
     }
 }
