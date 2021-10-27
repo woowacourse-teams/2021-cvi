@@ -2,6 +2,7 @@ package com.cvi.like.domain.repository;
 
 import com.cvi.comment.domain.model.Comment;
 import com.cvi.comment.domain.repository.CommentRepository;
+import com.cvi.exception.NotFoundException;
 import com.cvi.like.domain.model.Like;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("LikeRepository 테스트")
@@ -120,6 +122,15 @@ class LikeRepositoryTest {
         assertThat(likeRepository.findByUserId(user2.getId())).hasSize(2);
     }
 
+    @DisplayName("유저 아이디로 댓글을 조회한다. - 실패")
+    @Test
+    void findCommentByUserIdFailure() {
+        //given
+        //when
+        //then
+        assertThat(likeRepository.findByUserId(null)).hasSize(3);
+    }
+
     @DisplayName("유저 아이디로 좋아요를 페이징 조회한다.")
     @Test
     void findCommentByUserIdPaging() {
@@ -128,5 +139,14 @@ class LikeRepositoryTest {
         //then
         assertThat(likeRepository.findByUserId(user1.getId(), 0, 2)).hasSize(1);
         assertThat(likeRepository.findByUserId(user2.getId(), 0, 2)).hasSize(2);
+    }
+
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - 실패")
+    @Test
+    void findCommentByUserIdPagingFailure() {
+        //given
+        //when
+        //then
+        assertThat(likeRepository.findByUserId(null, 0, 2)).hasSize(2);
     }
 }
