@@ -1,5 +1,8 @@
 package com.cvi.user.domain.model;
 
+import lombok.Getter;
+
+@Getter
 public enum SocialProvider {
     NAVER("naverAuthorization"),
     KAKAO("kakaoAuthorization");
@@ -8,9 +11,5 @@ public enum SocialProvider {
 
     SocialProvider(String provider) {
         this.provider = provider;
-    }
-
-    public String convertToComponentName() {
-        return this.provider;
     }
 }
