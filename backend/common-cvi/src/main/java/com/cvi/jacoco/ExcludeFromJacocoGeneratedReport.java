@@ -1,4 +1,4 @@
-package com.cvi;
+package com.cvi.jacoco;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

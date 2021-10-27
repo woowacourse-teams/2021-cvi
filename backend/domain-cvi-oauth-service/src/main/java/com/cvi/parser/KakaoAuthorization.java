@@ -1,6 +1,6 @@
 package com.cvi.parser;
 
-import com.cvi.ExcludeFromJacocoGeneratedReport;
+import com.cvi.jacoco.ExcludeFromJacocoGeneratedReport;
 import com.cvi.dto.oauthtoken.KakaoOAuthToken;
 import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.KakaoProfile;
