@@ -1,9 +1,10 @@
 package com.cvi.image.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.cvi.exception.NotFoundException;
 import com.cvi.image.domain.Image;
-import com.cvi.image.repository.ImageRepository;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
@@ -31,32 +32,32 @@ class ImageRepositoryTest {
     @Autowired
     private ImageRepository imageRepository;
 
-    private User user1;
-    private Image image1;
-    private Post post1;
+    private User user;
+    private Image image;
+    private Post post;
 
     @BeforeEach
     void setUp() {
-        user1 = User.builder()
+        user = User.builder()
                 .nickname("인비")
                 .ageRange(AgeRange.TEENS)
                 .socialProvider(SocialProvider.KAKAO)
                 .socialId("1000")
                 .profileUrl("profile url 1")
                 .build();
-        userRepository.save(user1);
+        userRepository.save(user);
 
-        image1 = Image.builder()
+        image = Image.builder()
                 .url("image1_s3_url")
                 .build();
-        imageRepository.save(image1);
+        imageRepository.save(image);
 
-        post1 = Post.builder()
-                .user(user1)
+        post = Post.builder()
+                .user(user)
                 .content("내용 1")
                 .vaccinationType(VaccinationType.PFIZER)
                 .build();
-        postRepository.save(post1);
+        postRepository.save(post);
     }
 
     @DisplayName("Post에 Image 추가 시 양방향 매핑 테스트")
@@ -64,10 +65,10 @@ class ImageRepositoryTest {
     void assignImageToPost() {
         //given
         //when
-        post1.assignImages(Collections.singletonList(image1));
+        post.assignImages(Collections.singletonList(image));
         //then
-        assertThat(post1.getImages().getImages().contains(image1)).isTrue();
-        assertThat(image1.getPost()).isEqualTo(post1);
+        assertThat(post.getImages().getImages().contains(image)).isTrue();
+        assertThat(image.getPost()).isEqualTo(post);
     }
 
     @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트")
@@ -75,9 +76,18 @@ class ImageRepositoryTest {
     void assignPostToImage() {
         //given
         //when
-        image1.assignPost(post1);
+        image.assignPost(post);
         //then
-        assertThat(post1.getImages().getImages().contains(image1)).isTrue();
-        assertThat(image1.getPost()).isEqualTo(post1);
+        assertThat(post.getImages().getImages().contains(image)).isTrue();
+        assertThat(image.getPost()).isEqualTo(post);
+    }
+
+    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - 실패")
+    @Test
+    void assignPostToImageFailure() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> image.assignPost(null)).isInstanceOf(NotFoundException.class);
     }
 }
