@@ -160,6 +160,7 @@ public class CommentServiceTest {
     void deleteComment() {
         //given
         CommentResponse commentResponse = commentService.createComment(post.getId(), optionalUser, commentRequest);
+        commentService.createComment(post.getId(), optionalUser, commentRequest);
         //when
         commentService.deleteComment(post.getId(), commentResponse.getId(), optionalUser);
         postRepository.flush();
