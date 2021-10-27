@@ -40,7 +40,7 @@ class NaverAuthorizationTest {
 
     private final RestTemplate restTemplate = spy(RestTemplate.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final NaverAuthorization naverAuthorization = new NaverAuthorization(restTemplate, objectMapper);
+    private final Authorization naverAuthorization = new NaverAuthorization(restTemplate, objectMapper);
     private HttpEntity<MultiValueMap<String, String>> naverTokenRequest;
     private ResponseEntity<String> tokenResponse;
     private ResponseEntity<String> profileResponse;

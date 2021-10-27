@@ -34,12 +34,11 @@ class AuthorizationManagerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private final NaverAuthorization naverAuthorization = spy(new NaverAuthorization(restTemplate, objectMapper));
-    private final KakaoAuthorization kakaoAuthorization = spy(new KakaoAuthorization(restTemplate, objectMapper));
+    private final Authorization naverAuthorization = spy(new NaverAuthorization(restTemplate, objectMapper));
+    private final Authorization kakaoAuthorization = spy(new KakaoAuthorization(restTemplate, objectMapper));
 
 
     private UserInformation naverUserInfo;
-    private UserInformation kakaoUserInfo;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
@@ -48,9 +47,6 @@ class AuthorizationManagerTest {
 
         NaverProfile naverProfile = objectMapper.readValue(NAVER_PROFILE_RESPONSE, NaverProfile.class);
         naverUserInfo = UserInformation.of(naverProfile);
-
-        KakaoProfile kakaoProfile = objectMapper.readValue(KAKAO_PROFILE_RESPONSE, KakaoProfile.class);
-        kakaoUserInfo = UserInformation.of(kakaoProfile);
     }
 
     @DisplayName("Naver Authorization 매니저 유저 정보 요청 - 성공")

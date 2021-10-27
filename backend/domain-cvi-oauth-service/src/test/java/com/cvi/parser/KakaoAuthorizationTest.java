@@ -39,7 +39,7 @@ class KakaoAuthorizationTest {
 
     private final RestTemplate restTemplate = spy(RestTemplate.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final KakaoAuthorization kakaoAuthorization = new KakaoAuthorization(restTemplate, objectMapper);
+    private final Authorization kakaoAuthorization = new KakaoAuthorization(restTemplate, objectMapper);
     private HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest;
     private ResponseEntity<String> tokenResponse;
     private ResponseEntity<String> profileResponse;
