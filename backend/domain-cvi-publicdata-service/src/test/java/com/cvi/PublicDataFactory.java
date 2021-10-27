@@ -17,7 +17,7 @@ public class PublicDataFactory {
         "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도");
 
     public static KoreaVaccineParserResponse toVaccineParserResponse(LocalDate targetDate) {
-        String expectDateTime = DateConverter.convertDateToContainsZeroTime(targetDate);
+        String expectDateTime = DateConverter.convertLocalDateToContainsZeroTime(targetDate);
         return new KoreaVaccineParserResponse(18, Arrays.asList(
             new KoreaRegionVaccinationData(19473657, 7146602, expectDateTime,
                 473850, 35955, "전국", 19947507, 7182557),

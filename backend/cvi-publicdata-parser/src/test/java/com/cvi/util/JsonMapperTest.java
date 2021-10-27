@@ -162,5 +162,4 @@ class JsonMapperTest {
         assertThat(worldVaccinationParserResponses).extracting(WorldVaccinationParserResponse::getCountry).contains("Afghanistan", "World");
         assertThat(worldVaccinationParserResponses).extracting(WorldVaccinationParserResponse::getData).isNotEmpty();
     }
-
 }

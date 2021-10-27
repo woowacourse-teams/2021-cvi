@@ -18,9 +18,20 @@ class DateConverterTest {
         //given
         LocalDate expect = LocalDate.now();
         //when
-        String actual = DateConverter.convertDateToContainsZeroTime(expect);
+        String actual = DateConverter.convertLocalDateToContainsZeroTime(expect);
         //then
         assertThat(actual).isEqualTo(LocalDate.now() + ZERO_TIME);
+    }
+
+    @DisplayName("yyyy-MM-dd 형식의 문자열 LocalDate로 변경 - 성공")
+    @Test
+    void convertLocalDateStringToLocalDate() {
+        //given
+        final String expect = "2021-11-26";
+        //when
+        final LocalDate actual = DateConverter.convertLocalDateStringToLocalDate(expect);
+        //then
+        assertThat(actual).isEqualTo(LocalDate.parse(expect));
     }
 
     @DisplayName("00:00:00을 포한함 날짜 문자열, LocalDate로 변경 - 성공")
@@ -32,12 +43,5 @@ class DateConverterTest {
         LocalDate actual = DateConverter.convertLocalDateTimeStringToLocalDate(expect);
         //then
         assertThat(actual).isEqualTo(LocalDate.now());
-    }
-
-    @Test
-    void toLocalDate() {
-        //given
-        //when
-        //then
     }
 }

@@ -12,6 +12,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("URL Wrap 기능 테스트")
 class URLWrapperTest {
 
+    @DisplayName("URL 생성 - 실패 - url형식이 아닐때 ")
+    @Test
+    void createURLWrapper() {
+        //given
+        //when
+        //then
+        assertThatThrownBy(() -> new URLWrapper("htt://www.naver.com"))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
     @DisplayName("URL 연결 - 성공 ")
     @Test
     void openConnection() throws IOException {
@@ -21,15 +31,5 @@ class URLWrapperTest {
         HttpURLConnection httpURLConnection = urlWrapper.openConnection();
         //then
         assertThat(httpURLConnection.getResponseCode()).isEqualTo(HttpURLConnection.HTTP_OK);
-    }
-
-    @DisplayName("URL 생성 - 실패 - url형식이 아닐때 ")
-    @Test
-    void createURLWrapper() throws IOException {
-        //given
-        //when
-        //then
-        assertThatThrownBy(() -> new URLWrapper("htt://www.naver.com"))
-                .isInstanceOf(IllegalStateException.class);
     }
 }

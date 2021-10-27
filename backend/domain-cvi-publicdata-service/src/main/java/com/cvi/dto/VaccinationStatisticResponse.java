@@ -48,7 +48,7 @@ public class VaccinationStatisticResponse {
     }
 
     public static VaccinationStatisticResponse from(WorldVaccinationData worldVaccinationData) {
-        return new VaccinationStatisticResponse(0L, 0L, DateConverter.toLocalDate(worldVaccinationData.getDate()), 0L, 0L, RegionPopulation.WORLD.getRegion(),
+        return new VaccinationStatisticResponse(0L, 0L, DateConverter.convertLocalDateStringToLocalDate(worldVaccinationData.getDate()), 0L, 0L, RegionPopulation.WORLD.getRegion(),
             worldVaccinationData.getPeopleVaccinated(), worldVaccinationData.getPeopleFullyVaccinated(), null, null
         );
     }

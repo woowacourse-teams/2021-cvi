@@ -79,7 +79,7 @@ class VaccineParserTest {
         assertThat(koreaRegionVaccinationData).extracting(KoreaRegionVaccinationData::getAccumulatedSecondCnt)
                 .isNotEmpty();
         assertThat(koreaRegionVaccinationData).extracting(KoreaRegionVaccinationData::getBaseDate)
-                .contains(DateConverter.convertDateToContainsZeroTime(targetDate));
+                .contains(DateConverter.convertLocalDateToContainsZeroTime(targetDate));
         assertThat(koreaRegionVaccinationData).extracting(KoreaRegionVaccinationData::getSido)
                 .containsAll(REGIONS);
         assertThat(koreaRegionVaccinationData).extracting(KoreaRegionVaccinationData::getFirstCnt)
@@ -154,7 +154,7 @@ class VaccineParserTest {
     }
 
     private KoreaVaccineParserResponse toVaccineParserResponse(LocalDate targetDate) {
-        String expectDateTime = DateConverter.convertDateToContainsZeroTime(targetDate);
+        String expectDateTime = DateConverter.convertLocalDateToContainsZeroTime(targetDate);
         return new KoreaVaccineParserResponse(18, Arrays.asList(
                 new KoreaRegionVaccinationData(19473657, 7146602, expectDateTime,
                         473850, 35955, "전국", 19947507, 7182557),

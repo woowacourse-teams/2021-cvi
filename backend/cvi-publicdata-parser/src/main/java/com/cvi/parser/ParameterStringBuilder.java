@@ -11,6 +11,9 @@ public class ParameterStringBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(ParameterStringBuilder.class);
 
+    private ParameterStringBuilder() {
+    }
+
     public static String getParamsString(Map<String, String> params) {
         try {
             StringBuilder result = new StringBuilder();

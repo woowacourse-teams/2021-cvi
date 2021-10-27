@@ -8,16 +8,19 @@ public class DateConverter {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public static String convertDateToContainsZeroTime(LocalDate targetDate) {
+    private DateConverter() {
+    }
+
+    public static String convertLocalDateToContainsZeroTime(LocalDate targetDate) {
         LocalDateTime targetDateTime = targetDate.atStartOfDay();
         return targetDateTime.format(FORMATTER);
     }
 
-    public static LocalDate convertLocalDateTimeStringToLocalDate(String targetLocalDateTime) {
-        return LocalDate.parse(targetLocalDateTime, FORMATTER);
+    public static LocalDate convertLocalDateStringToLocalDate(String targetDate) {
+        return LocalDate.parse(targetDate);
     }
 
-    public static LocalDate toLocalDate(String targetDate) {
-        return LocalDate.parse(targetDate);
+    public static LocalDate convertLocalDateTimeStringToLocalDate(String targetLocalDateTime) {
+        return LocalDate.parse(targetLocalDateTime, FORMATTER);
     }
 }

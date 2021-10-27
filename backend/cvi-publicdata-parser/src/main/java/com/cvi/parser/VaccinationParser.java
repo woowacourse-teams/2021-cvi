@@ -56,7 +56,7 @@ public class VaccinationParser {
         parameters.put("page", "1");
         parameters.put("perPage", "20");
         parameters.put("serviceKey", apiSecretKey);
-        parameters.put("cond[baseDate::EQ]", DateConverter.convertDateToContainsZeroTime(targetDate));
+        parameters.put("cond[baseDate::EQ]", DateConverter.convertLocalDateToContainsZeroTime(targetDate));
         return parameters;
     }
 }
