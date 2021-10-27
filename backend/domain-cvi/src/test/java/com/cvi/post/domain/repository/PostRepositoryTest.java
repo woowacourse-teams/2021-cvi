@@ -97,19 +97,19 @@ class PostRepositoryTest {
             .user(user1)
             .content("화이자 1차 맞았어요.")
             .vaccinationType(VaccinationType.PFIZER)
-            .createdAt(LocalDateTime.now().minusDays(1))
+            .createdAt(LocalDateTime.now().minusHours(3))
             .build();
         post2 = Post.builder()
             .user(user2)
             .content("모더나 1차 맞았어요.")
             .vaccinationType(VaccinationType.MODERNA)
-            .createdAt(LocalDateTime.now())
+            .createdAt(LocalDateTime.now().minusHours(2))
             .build();
         post3 = Post.builder()
             .user(user1)
             .content("화이자 2차 맞았어요.")
             .vaccinationType(VaccinationType.PFIZER)
-            .createdAt(LocalDateTime.now())
+            .createdAt(LocalDateTime.now().minusHours(1))
             .build();
         postRepository.save(post1);
         postRepository.save(post2);
@@ -240,13 +240,13 @@ class PostRepositoryTest {
     void findByVaccineTypePaging() {
         //given
         //when
-        List<Post> posts = postRepository.findByVaccineType(VaccinationType.PFIZER, 0, 3, Sort.toOrderSpecifier(Sort.CREATED_AT_DESC));
+        List<Post> posts = postRepository.findByVaccineType(VaccinationType.PFIZER, 0, 3, Sort.CREATED_AT_DESC.getSort());
         //then
         assertThat(posts).extracting("id").containsExactlyElementsOf(Arrays.asList(post3.getId(), post1.getId()));
         assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post1.getContent()));
     }
 
-    @DisplayName("백신 타입별 조회")
+    @DisplayName("백신 타입별 조회 - 특정 타입 검색")
     @Test
     void findByVaccineType() {
         //given
@@ -255,6 +255,28 @@ class PostRepositoryTest {
         //then
         assertThat(posts).hasSize(1);
         assertThat(posts).extracting("content").containsExactlyElementsOf(Collections.singletonList(post2.getContent()));
+    }
+
+    @DisplayName("백신 타입별 조회 - 백신타입이 주어지지 않은 경우 모든 타입 검색")
+    @Test
+    void findByVaccineTypeNull() {
+        //given
+        //when
+        List<Post> posts = postRepository.findByVaccineType(null);
+        //then
+        assertThat(posts).hasSize(3);
+        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent()));
+    }
+
+    @DisplayName("백신 타입별 조회 - All로 주어지는 경우 모든 타입 검색")
+    @Test
+    void findByVaccineTypeAll() {
+        //given
+        //when
+        List<Post> posts = postRepository.findByVaccineType(VaccinationType.ALL);
+        //then
+        assertThat(posts).hasSize(3);
+        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent()));
     }
 
     @DisplayName("작성자 ID로 게시글 페이징 조회")

@@ -354,8 +354,9 @@ class PostServiceTest {
         assertThat(postResponse.getImages()).containsExactly(IMAGE1_S3_URL, IMAGE2_S3_URL, IMAGE3_S3_URL);
 
         assertThat(foundPost).isNotNull();
+        assertThat(foundPost.hasImages()).isTrue();
         assertThat(foundPost.getUser()).isNotNull();
-        assertThat(foundPost.getImages().getImages())
+        assertThat(foundPost.getAllImagesAsList())
             .extracting("url").containsExactly(IMAGE1_S3_URL, IMAGE2_S3_URL, IMAGE3_S3_URL);
 
         verify(awsS3Uploader, times(3)).upload(any(String.class), any(File.class));
@@ -439,7 +440,7 @@ class PostServiceTest {
             .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없음."));
         //then
         assertThat(updatedPost.getContent()).isEqualTo(updateRequest.getContent());
-        assertThat(updatedPost.getImages().getImages())
+        assertThat(updatedPost.getAllImagesAsList())
             .extracting("url").containsExactly(IMAGE4_S3_URL, IMAGE5_S3_URL);
         assertThat(imageRepository.findAll()).extracting("url").containsExactly(IMAGE4_S3_URL, IMAGE5_S3_URL);
         verify(awsS3Uploader, times(3)).delete(any(String.class), any(String.class));
