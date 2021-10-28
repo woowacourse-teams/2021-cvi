@@ -1,6 +1,7 @@
+import { animated, useSpring } from 'react-spring';
 import PropTypes from 'prop-types';
 import { THEME_COLOR } from '../../../constants';
-import { AnimatedCircle, Number, PercentSymbol } from './DonutChart.styles';
+import { AnimatedCircle } from './DonutChart.styles';
 
 const DonutChart = ({
   target,
@@ -12,6 +13,12 @@ const DonutChart = ({
   radius,
   thickness,
 }) => {
+  const { number } = useSpring({
+    from: { number: 0 },
+    number: target,
+    config: { duration: 3000 },
+  });
+
   const totalCircleLength = 2 * Math.PI * radius;
   const circleOffset = (totalCircleLength / 4).toString();
 
@@ -43,12 +50,12 @@ const DonutChart = ({
             totalCircleLength={totalCircleLength}
           />
         )}
-        <Number x="22%" y="59%" fontColor={fontColor} fontSize={fontSize}>
-          {target}
-        </Number>
-        <PercentSymbol x="69%" y="58%" percentColor={fontColor} percentSize={percentSize}>
+        <animated.text x="22%" y="59%" fill={fontColor} fontSize={fontSize} fontWeight="700">
+          {number.to((n) => n.toFixed(1))}
+        </animated.text>
+        <text x="69%" y="58%" fill={fontColor} fontSize={percentSize} fontWeight="700">
           %
-        </PercentSymbol>
+        </text>
       </svg>
     </>
   );
