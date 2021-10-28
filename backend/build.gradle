@@ -113,7 +113,7 @@ subprojects {
     }
 }
 
-def skipSonarProjects = [project(':app-cvi-admin'), project(':common-cvi'), project(':domain-cvi-aws-s3-service'), project(':domain-cvi-scheduler')]
+def skipSonarProjects = [project(':common-cvi'), project(':domain-cvi-aws-s3-service'), project(':domain-cvi-scheduler')]
 configure(skipSonarProjects) {
     sonarqube {
         skipProject = true
