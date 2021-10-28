@@ -1,6 +1,5 @@
 {
   "baseUrl": "http://localhost:9000",
-  "integrationFolder": "cypress/pages",
   "env": {
     "cypress-react-selector": {
       "root": "#root"

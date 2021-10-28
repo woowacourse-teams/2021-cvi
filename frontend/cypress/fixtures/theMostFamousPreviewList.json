@@ -1,0 +1,90 @@
+[
+  {
+    "id": 14,
+    "writer": {
+      "id": 10,
+      "nickname": "nickname",
+      "ageRange": { "meaning": "20대", "minAge": 20, "maxAge": 30 },
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "theMostFamousPreviewList-14",
+    "viewCount": 47,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "MODERNA",
+    "createdAt": "2021-10-27T12:58:10",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-14_e6bdc8e6-dde8-45fb-a52f-3e45060b4541.jpeg"
+    ]
+  },
+  {
+    "id": 15,
+    "writer": {
+      "id": 10,
+      "nickname": "nickname",
+      "ageRange": { "meaning": "20대", "minAge": 20, "maxAge": 30 },
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "theMostFamousPreviewList-15",
+    "viewCount": 47,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "PFIZER",
+    "createdAt": "2021-10-27T12:58:10",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-14_e6bdc8e6-dde8-45fb-a52f-3e45060b4541.jpeg"
+    ]
+  },
+  {
+    "id": 16,
+    "writer": {
+      "id": 10,
+      "nickname": "nickname",
+      "ageRange": { "meaning": "20대", "minAge": 20, "maxAge": 30 },
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "theMostFamousPreviewList-16",
+    "viewCount": 47,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "JANSSEN",
+    "createdAt": "2021-10-27T12:58:10",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-14_e6bdc8e6-dde8-45fb-a52f-3e45060b4541.jpeg"
+    ]
+  },
+  {
+    "id": 17,
+    "writer": {
+      "id": 10,
+      "nickname": "nickname",
+      "ageRange": { "meaning": "20대", "minAge": 20, "maxAge": 30 },
+      "accessToken": null,
+      "socialProvider": "KAKAO",
+      "socialId": "1817338555",
+      "socialProfileUrl": "http://k.kakaocdn.net/dn/Kd2tL/btqUMFAlQga/pfDHcqt4SOQzqudn5mflFk/img_640x640.jpg"
+    },
+    "content": "theMostFamousPreviewList-17",
+    "viewCount": 47,
+    "likeCount": 0,
+    "commentCount": 0,
+    "hasLiked": false,
+    "vaccinationType": "ASTRAZENECA",
+    "createdAt": "2021-10-27T12:58:10",
+    "images": [
+      "https://d2c5b1goqlbzjy.cloudfront.net/posts/images/post-image_2021-10-27_18-24-14_e6bdc8e6-dde8-45fb-a52f-3e45060b4541.jpeg"
+    ]
+  }
+]
