@@ -1,12 +1,8 @@
+import { CONFIRM_MESSAGE } from '../../src/constants';
+
 const BASE_URL = 'https://dev.cvi-korea.r-e.kr/api/v1';
 
 describe('After Login Test', () => {
-  before(() => {
-    cy.visit('http://localhost:9000');
-
-    cy.waitForReact();
-  });
-
   const login = () => {
     cy.window()
       .its('store')
@@ -27,15 +23,30 @@ describe('After Login Test', () => {
       });
   };
 
-  it('로그인 후 홈화면으로 온다.', () => {
-    login();
+  const getReviewList = () =>
+    cy
+      .intercept('GET', `${BASE_URL}/posts/paging?offset=0&size=10&sort=CREATED_AT_DESC`, {
+        fixture: 'reviewList',
+      })
+      .as('getReviewList');
+
+  const getCommentList = () =>
+    cy
+      .intercept('GET', `${BASE_URL}/posts/8/comments/paging?offset=0&size=10`, {
+        fixture: 'reviewList',
+      })
+      .as('getCommentList');
+
+  before(() => {
+    getReviewList();
+
+    cy.visit('/review');
+    cy.wait('@getReviewList');
+    cy.waitForReact();
   });
 
-  it('접종 후기 메뉴를 클릭하면, 접종 후기 페이지가 보인다.', () => {
+  it('로그인 후 접종 후기 화면으로 간다.', () => {
     login();
-
-    cy.contains('a', '접종후기').click();
-    cy.url().should('include', '/review');
   });
 
   it('후기 작성 버튼을 클릭해서, 후기를 작성한다.', () => {
@@ -43,10 +54,8 @@ describe('After Login Test', () => {
       state: 'SUCCESS',
     }).as('createReview');
     cy.intercept('GET', `${BASE_URL}/posts/paging?offset=0&size=10&sort=CREATED_AT_DESC`, {
-      fixture: 'newReviewList',
+      fixture: 'updatedReviewList',
     }).as('getUpdatedReviewList');
-
-    login();
 
     cy.react('Button').contains('후기 작성').click();
 
@@ -56,13 +65,15 @@ describe('After Login Test', () => {
     cy.wait('@getUpdatedReviewList');
   });
 
-  it('접종 후기에 페이지에서 내가 쓴 후기에 들어가서 수정한다.', () => {
-    cy.intercept('GET', `${BASE_URL}/posts/8`, { fixture: 'newReview' }).as('getNewReview');
+  it('내가 쓴 후기에 들어가서 수정한다.', () => {
     cy.intercept('PUT', `${BASE_URL}/posts/8`, { state: 'SUCCESS' }).as('editReview');
+    cy.intercept('GET', `${BASE_URL}/posts/8`, { fixture: 'newReview' }).as('getNewReview');
+    getCommentList();
 
     cy.react('ReviewItem').eq(0).click();
     cy.url().should('include', '/review/8');
     cy.wait('@getNewReview');
+    cy.wait('@getCommentList');
 
     cy.contains('button', '수정').click();
     cy.wait('@getNewReview');
@@ -73,24 +84,28 @@ describe('After Login Test', () => {
     cy.wait('@editReview');
   });
 
-  it.skip('내가 쓴 후기를 삭제한다.', () => {
-    cy.intercept('GET', `${BASE_URL}/posts/8`, { fixture: 'editReview' }).as('getUpdatedReview');
+  it('내가 쓴 후기를 삭제한다.', () => {
     cy.intercept('DELETE', `${BASE_URL}/posts/8`, { state: 'SUCCESS' }).as('deleteReview');
+    cy.intercept('GET', `${BASE_URL}/posts/8`, { fixture: 'editedReview' }).as('getUpdatedReview');
+    getReviewList();
+    getCommentList();
 
-    cy.waitForReact();
+    cy.visit('/review/8');
     cy.wait('@getUpdatedReview');
+    cy.wait('@getCommentList');
+    login();
+    cy.waitForReact();
 
-    cy.react('Button').contains('삭제').eq(0).click();
+    cy.contains('button', '삭제').eq(0).click();
+    cy.on('window:confirm', (text) => {
+      expect(text).to.equal(CONFIRM_MESSAGE.DELETE_REVIEW);
+    });
+    cy.on('window:confirm', () => true);
+
     cy.wait('@deleteReview');
-  });
-
-  it.skip('내가 쓴 후기를 삭제한다2.', () => {
-    cy.intercept('GET', `${BASE_URL}/posts/paging?offset=0&size=10&sort=CREATED_AT_DESC`, {
-      fixture: 'reviewList',
-    }).as('requestReviewList');
 
     cy.url().should('include', '/review');
-    cy.wait('@requestReviewList');
+    cy.wait('@getReviewList');
 
     cy.react('ReviewItem').its('length').should('eq', 7);
   });
