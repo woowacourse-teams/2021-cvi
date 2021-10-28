@@ -27,12 +27,12 @@ describe('Before Login Test', () => {
     }).as('getTheMostFamousPreviewList');
   };
 
-  const getPreviewComment = (id) =>
+  const getCommentList = (id) =>
     cy
       .intercept('GET', `${BASE_URL}/posts/${id}/comments/paging?offset=0&size=10`, {
-        fixture: 'previewComment',
+        fixture: 'commentList',
       })
-      .as('getPreviewComment');
+      .as('getCommentList');
 
   before(() => {
     getPublicVaccinations();
@@ -82,14 +82,14 @@ describe('Before Login Test', () => {
     cy.intercept('GET', `${BASE_URL}/posts/${reviewId}`, { fixture: 'theLatestPreview' }).as(
       'getTheLatestPreview',
     );
-    getPreviewComment(reviewId);
+    getCommentList(reviewId);
 
     cy.react('Preview', { props: { title: '최신 글' } })
       .find('ul li:first')
       .click();
 
     cy.wait('@getTheLatestPreview');
-    cy.wait('@getPreviewComment');
+    cy.wait('@getCommentList');
     cy.url().should('include', `review/${reviewId}`);
 
     cy.contains('a', '홈').click();
@@ -104,7 +104,7 @@ describe('Before Login Test', () => {
     cy.intercept('GET', `${BASE_URL}/posts/${reviewId}`, { fixture: 'theMostFamousPreview' }).as(
       'getTheMostFamousPreview',
     );
-    getPreviewComment(reviewId);
+    getCommentList(reviewId);
 
     cy.react('Preview', { props: { title: '실시간 인기 글' } })
       .find('ul li:first')
@@ -112,7 +112,7 @@ describe('Before Login Test', () => {
 
     cy.url().should('include', `review/${reviewId}`);
     cy.wait('@getTheMostFamousPreview');
-    cy.wait('@getPreviewComment');
+    cy.wait('@getCommentList');
   });
 
   it('목록 보기 버튼을 클릭하면, 접종 후기 페이지가 보인다.', () => {
