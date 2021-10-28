@@ -81,7 +81,7 @@ class ImageRepositoryTest {
         assertThat(image.getPost()).isEqualTo(post);
     }
 
-    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - 실패")
+    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - null인 경우")
     @Test
     void assignPostToImageFailure() {
         //given
