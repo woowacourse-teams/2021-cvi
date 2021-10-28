@@ -4,7 +4,6 @@
     "id": 10,
     "nickname": "nickname",
     "ageRange": { "meaning": "20대", "minAge": 20, "maxAge": 30 },
-    "shotVerified": false,
     "accessToken": null,
     "socialProvider": "KAKAO",
     "socialId": "1817338555",

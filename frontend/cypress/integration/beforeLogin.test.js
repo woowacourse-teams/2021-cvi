@@ -1,8 +1,8 @@
 import { ALERT_MESSAGE } from '../../src/constants';
 
-describe('Before Login Test', () => {
-  const BASE_URL = 'https://dev.cvi-korea.r-e.kr/api/v1';
+const BASE_URL = 'https://dev.cvi-korea.r-e.kr/api/v1';
 
+describe('Before Login Test', () => {
   const getPublicVaccinations = () => {
     cy.intercept('GET', `${BASE_URL}/publicdata/vaccinations`, {
       fixture: 'publicVaccinations',
