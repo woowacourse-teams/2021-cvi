@@ -1,10 +1,5 @@
 package com.cvi.post.domain.repository;
 
-import static com.cvi.comment.domain.model.QComment.comment;
-import static com.cvi.like.domain.model.QLike.like;
-import static com.cvi.post.domain.model.QPost.post;
-import static com.cvi.user.domain.model.QUser.user;
-
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.QPost;
 import com.cvi.post.domain.model.VaccinationType;
@@ -12,10 +7,16 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.persistence.EntityManager;
+
+import static com.cvi.comment.domain.model.QComment.comment;
+import static com.cvi.like.domain.model.QLike.like;
+import static com.cvi.post.domain.model.QPost.post;
+import static com.cvi.user.domain.model.QUser.user;
 
 public class PostRepositoryImpl implements PostQueryDsl {
 

@@ -39,8 +39,8 @@ public class VaccinationStatistic extends PublicData {
 
     @Builder
     public VaccinationStatistic(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, RegionPopulation regionPopulation,
-        LocalDate baseDate, long firstCnt, long secondCnt, long totalFirstCnt, long totalSecondCnt, long accumulatedFirstCnt,
-        long accumulatedSecondCnt, BigDecimal totalFirstRate, BigDecimal totalSecondRate) {
+                                LocalDate baseDate, long firstCnt, long secondCnt, long totalFirstCnt, long totalSecondCnt, long accumulatedFirstCnt,
+                                long accumulatedSecondCnt, BigDecimal totalFirstRate, BigDecimal totalSecondRate) {
         super(id, createdAt, lastModifiedAt, regionPopulation);
         this.baseDate = baseDate;
         this.firstCnt = firstCnt;

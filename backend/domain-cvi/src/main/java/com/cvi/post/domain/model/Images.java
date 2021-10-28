@@ -2,15 +2,16 @@ package com.cvi.post.domain.model;
 
 import com.cvi.exception.NotFoundException;
 import com.cvi.image.domain.Image;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

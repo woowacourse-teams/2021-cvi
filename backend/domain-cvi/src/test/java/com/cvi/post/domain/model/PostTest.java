@@ -36,31 +36,31 @@ class PostTest {
     @BeforeEach
     void init() {
         post = Post.builder()
-                .content("content1")
-                .vaccinationType(VaccinationType.ASTRAZENECA)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .content("content1")
+            .vaccinationType(VaccinationType.ASTRAZENECA)
+            .createdAt(LocalDateTime.now())
+            .build();
         user = User.builder()
-                .id(1L)
-                .nickname("안녕하세욘")
-                .ageRange(AgeRange.TEENS)
-                .profileUrl("")
-                .socialProvider(SocialProvider.KAKAO)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .id(1L)
+            .nickname("안녕하세욘")
+            .ageRange(AgeRange.TEENS)
+            .profileUrl("")
+            .socialProvider(SocialProvider.KAKAO)
+            .createdAt(LocalDateTime.now())
+            .build();
         comment = Comment.builder()
-                .id(1L)
-                .content("댓글입니다.")
-                .user(user)
-                .build();
+            .id(1L)
+            .content("댓글입니다.")
+            .user(user)
+            .build();
         like = Like.builder()
-                .id(1L)
-                .user(user)
-                .build();
+            .id(1L)
+            .user(user)
+            .build();
         image = Image.builder()
-                .id(1L)
-                .url("image1_s3_url/image")
-                .build();
+            .id(1L)
+            .url("image1_s3_url/image")
+            .build();
     }
 
     @DisplayName("게시글 작성자 할당 - 성공")
@@ -78,14 +78,14 @@ class PostTest {
     void assignUserFailureWhenAlreadyExists() {
         //given
         User targetUser = User.builder()
-                .id(2L)
-                .nickname("독함")
-                .build();
+            .id(2L)
+            .nickname("독함")
+            .build();
         //when
         post.assignUser(user);
         //then
         assertThatThrownBy(() -> post.assignUser(targetUser))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글 작성자 할당 - 실패 - 할당하려는 작성자가 없음")
@@ -95,7 +95,7 @@ class PostTest {
         //when
         //then
         assertThatThrownBy(() -> post.assignUser(null))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("게시글 댓글 할당 - 성공")
@@ -116,7 +116,7 @@ class PostTest {
         post.assignComment(comment);
         //then
         assertThatThrownBy(() -> post.assignComment(comment))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글 댓글 할당 - 실패 - 할당하려는 댓글이 없음")
@@ -126,7 +126,7 @@ class PostTest {
         //when
         //then
         assertThatThrownBy(() -> post.assignComment(null))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("게시글 댓글 수정 - 성공")
@@ -134,9 +134,9 @@ class PostTest {
     void updateComment() {
         //given
         Comment updateComment = Comment.builder()
-                .content("수정된 댓글입니다.")
-                .user(user)
-                .build();
+            .content("수정된 댓글입니다.")
+            .user(user)
+            .build();
         //when
         post.assignComment(comment);
         post.updateComment(1L, updateComment, user);
@@ -149,18 +149,18 @@ class PostTest {
     void updateCommentFailure() {
         //given
         User anotherUser = User.builder()
-                .id(2L)
-                .nickname("다른유저")
-                .build();
+            .id(2L)
+            .nickname("다른유저")
+            .build();
         Comment updateComment = Comment.builder()
-                .content("수정된 댓글입니다.")
-                .user(user)
-                .build();
+            .content("수정된 댓글입니다.")
+            .user(user)
+            .build();
         //when
         post.assignComment(comment);
         //then
         assertThatThrownBy(() -> post.updateComment(1L, updateComment, anotherUser))
-                .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("게시글 댓글 삭제 - 성공")
@@ -180,19 +180,19 @@ class PostTest {
     void deleteCommentInCommentsFailure() {
         //given
         User anotherUser = User.builder()
-                .id(2L)
-                .nickname("다른유저")
-                .ageRange(AgeRange.TEENS)
-                .profileUrl("")
-                .socialProvider(SocialProvider.KAKAO)
-                .createdAt(LocalDateTime.now())
-                .build();
+            .id(2L)
+            .nickname("다른유저")
+            .ageRange(AgeRange.TEENS)
+            .profileUrl("")
+            .socialProvider(SocialProvider.KAKAO)
+            .createdAt(LocalDateTime.now())
+            .build();
         //when
         post.assignComment(comment);
         Comments comments = post.getComments();
         //then
         assertThatThrownBy(() -> comments.delete(comment.getId(), anotherUser))
-                .isExactlyInstanceOf(UnAuthorizedException.class);
+            .isExactlyInstanceOf(UnAuthorizedException.class);
     }
 
     @DisplayName("게시글 좋아요 할당 - 성공")
@@ -213,7 +213,7 @@ class PostTest {
         post.assignLike(like);
         //then
         assertThatThrownBy(() -> post.assignLike(like))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글 좋아요 할당 - 실패 - 할당하려는 좋아요가 없음")
@@ -223,7 +223,7 @@ class PostTest {
         //when
         //then
         assertThatThrownBy(() -> post.assignLike(null))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("게시글 사진 할당 - 성공")
@@ -243,7 +243,7 @@ class PostTest {
         //when
         //then
         assertThatThrownBy(() -> post.assignImages(Collections.emptyList()))
-                .isInstanceOf(NotFoundException.class);
+            .isInstanceOf(NotFoundException.class);
     }
 
     @DisplayName("게시글 이미지 삭제 - 성공")
@@ -286,8 +286,8 @@ class PostTest {
     void update() {
         //given
         Post updatedPost = Post.builder()
-                .content("content2")
-                .build();
+            .content("content2")
+            .build();
         post.assignUser(user);
         //when
         post.updateContent(updatedPost, user);
@@ -300,17 +300,17 @@ class PostTest {
     void updateFailWhenUserNotMatch() {
         //given
         User targetUser = User.builder()
-                .id(2L)
-                .nickname("라이언방구")
-                .build();
+            .id(2L)
+            .nickname("라이언방구")
+            .build();
         Post updatedPost = Post.builder()
-                .content("content2")
-                .build();
+            .content("content2")
+            .build();
         post.assignUser(user);
         //when
         //then
         assertThatThrownBy(() -> post.updateContent(updatedPost, targetUser))
-                .isExactlyInstanceOf(InvalidOperationException.class);
+            .isExactlyInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글 작성자 확인 - 성공")
@@ -318,17 +318,17 @@ class PostTest {
     void deletePost() {
         //given
         User user = User.builder()
-                .id(2L)
-                .nickname("인비")
-                .build();
+            .id(2L)
+            .nickname("인비")
+            .build();
         Post post = Post.builder()
-                .content("내용")
-                .build();
+            .content("내용")
+            .build();
         post.assignUser(user);
         //when
         //then
         assertThatCode(() -> post.validateAuthor(user))
-                .doesNotThrowAnyException();
+            .doesNotThrowAnyException();
     }
 
     @DisplayName("게시글 작성자 확인 - 실패 - 글 작성자가 아님")
@@ -336,21 +336,21 @@ class PostTest {
     void deletePostFailureWhenNotAuthor() {
         //given
         User user = User.builder()
-                .id(2L)
-                .nickname("인비")
-                .build();
+            .id(2L)
+            .nickname("인비")
+            .build();
         User otherUser = User.builder()
-                .id(3L)
-                .nickname("라이언")
-                .build();
+            .id(3L)
+            .nickname("라이언")
+            .build();
         Post post = Post.builder()
-                .content("내용")
-                .build();
+            .content("내용")
+            .build();
         post.assignUser(user);
         //when
         //then
         assertThatThrownBy(() -> post.validateAuthor(otherUser))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글 좋아요 이미 누름 - 성공")
@@ -377,21 +377,21 @@ class PostTest {
     void isNotAlreadyLikedBy() {
         //given
         User user = User.builder()
-                .id(2L)
-                .nickname("인비")
-                .build();
+            .id(2L)
+            .nickname("인비")
+            .build();
         User otherUser = User.builder()
-                .id(3L)
-                .nickname("라이언")
-                .build();
+            .id(3L)
+            .nickname("라이언")
+            .build();
         Post post = Post.builder()
-                .content("내용")
-                .build();
+            .content("내용")
+            .build();
         post.assignUser(user);
         //when
         //then
         assertThatThrownBy(() -> post.validateAuthor(otherUser))
-                .isInstanceOf(InvalidOperationException.class);
+            .isInstanceOf(InvalidOperationException.class);
     }
 
     @DisplayName("게시글이 이미지 보유 확인 - 성공 - 있음")
@@ -446,13 +446,13 @@ class PostTest {
     void resizePagingRangeTest(int offset, int size, List<String> contentResult) {
         //given
         User user = User.builder()
-                .id(1L)
-                .nickname("인비")
-                .build();
+            .id(1L)
+            .nickname("인비")
+            .build();
         Post post = Post.builder()
-                .content("내용")
-                .user(user)
-                .build();
+            .content("내용")
+            .user(user)
+            .build();
         Comment comment1 = Comment.builder().content("댓글1").user(user).createdAt(LocalDateTime.now().minusHours(1L)).build();
         Comment comment2 = Comment.builder().content("댓글2").user(user).createdAt(LocalDateTime.now().minusHours(2L)).build();
         post.assignComment(comment1);
@@ -465,10 +465,10 @@ class PostTest {
 
     static Stream<Arguments> resizePagingRangeTest() {
         return Stream.of(
-                Arguments.of(0, 2, Arrays.asList("댓글1", "댓글2")),
-                Arguments.of(1, 1, Collections.singletonList("댓글2")),
-                Arguments.of(0, 1, Collections.singletonList("댓글1")),
-                Arguments.of(2, 1, Collections.emptyList())
+            Arguments.of(0, 2, Arrays.asList("댓글1", "댓글2")),
+            Arguments.of(1, 1, Collections.singletonList("댓글2")),
+            Arguments.of(0, 1, Collections.singletonList("댓글1")),
+            Arguments.of(2, 1, Collections.emptyList())
         );
     }
 }

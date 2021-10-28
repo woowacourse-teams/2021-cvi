@@ -23,21 +23,21 @@ public class CommentRepositoryImpl implements CommentQueryDsl {
     @Override
     public List<Comment> findByUserId(Long userId) {
         return queryFactory.selectFrom(comment)
-                .leftJoin(comment.user, user).fetchJoin()
-                .where(userIdEq(userId))
-                .orderBy(comment.createdAt.desc())
-                .fetch();
+            .leftJoin(comment.user, user).fetchJoin()
+            .where(userIdEq(userId))
+            .orderBy(comment.createdAt.desc())
+            .fetch();
     }
 
     @Override
     public List<Comment> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(comment)
-                .leftJoin(comment.user, user).fetchJoin()
-                .where(userIdEq(userId))
-                .orderBy(comment.createdAt.desc())
-                .offset(offset)
-                .limit(size)
-                .fetch();
+            .leftJoin(comment.user, user).fetchJoin()
+            .where(userIdEq(userId))
+            .orderBy(comment.createdAt.desc())
+            .offset(offset)
+            .limit(size)
+            .fetch();
     }
 
     private BooleanExpression userIdEq(Long userId) {

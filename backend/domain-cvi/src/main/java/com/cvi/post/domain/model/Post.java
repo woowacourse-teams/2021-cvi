@@ -7,29 +7,16 @@ import com.cvi.exception.NotFoundException;
 import com.cvi.image.domain.Image;
 import com.cvi.like.domain.model.Like;
 import com.cvi.user.domain.model.User;
+import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Entity
@@ -62,7 +49,7 @@ public class Post extends BaseEntity {
 
     @Builder
     public Post(Long id, LocalDateTime createdAt, LocalDateTime lastModifiedAt, User user,
-        String content, int viewCount, VaccinationType vaccinationType) {
+                String content, int viewCount, VaccinationType vaccinationType) {
         super(id, createdAt, lastModifiedAt);
         this.user = user;
         this.content = content;

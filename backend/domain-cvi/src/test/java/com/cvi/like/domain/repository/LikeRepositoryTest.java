@@ -47,54 +47,54 @@ class LikeRepositoryTest {
 
     private void initUsers() {
         user1 = User.builder()
-                .nickname("인비")
-                .ageRange(AgeRange.TEENS)
-                .socialProvider(SocialProvider.KAKAO)
-                .socialId("1000")
-                .profileUrl("profile url 1")
-                .build();
+            .nickname("인비")
+            .ageRange(AgeRange.TEENS)
+            .socialProvider(SocialProvider.KAKAO)
+            .socialId("1000")
+            .profileUrl("profile url 1")
+            .build();
         user2 = User.builder()
-                .nickname("검프")
-                .ageRange(AgeRange.FIFTIES)
-                .socialProvider(SocialProvider.NAVER)
-                .socialId("1001")
-                .profileUrl("profile url 2")
-                .build();
+            .nickname("검프")
+            .ageRange(AgeRange.FIFTIES)
+            .socialProvider(SocialProvider.NAVER)
+            .socialId("1001")
+            .profileUrl("profile url 2")
+            .build();
         userRepository.save(user1);
         userRepository.save(user2);
     }
 
     private void initPost() {
         post1 = Post.builder()
-                .user(user1)
-                .content("내용 1")
-                .vaccinationType(VaccinationType.PFIZER)
-                .build();
+            .user(user1)
+            .content("내용 1")
+            .vaccinationType(VaccinationType.PFIZER)
+            .build();
         post2 = Post.builder()
-                .user(user1)
-                .content("내용 2")
-                .vaccinationType(VaccinationType.JANSSEN)
-                .build();
+            .user(user1)
+            .content("내용 2")
+            .vaccinationType(VaccinationType.JANSSEN)
+            .build();
         postRepository.save(post1);
         postRepository.save(post2);
     }
 
     private void initLikes() {
         like1 = Like.builder()
-                .user(user1)
-                .build();
+            .user(user1)
+            .build();
         like1.assignPost(post1);
         likeRepository.save(like1);
 
         like2 = Like.builder()
-                .user(user2)
-                .build();
+            .user(user2)
+            .build();
         like2.assignPost(post1);
         likeRepository.save(like2);
 
         like3 = Like.builder()
-                .user(user2)
-                .build();
+            .user(user2)
+            .build();
         like3.assignPost(post2);
         likeRepository.save(like3);
     }

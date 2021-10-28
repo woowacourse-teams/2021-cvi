@@ -4,20 +4,15 @@ package com.cvi.image.domain;
 import com.cvi.config.entity.BaseEntity;
 import com.cvi.exception.NotFoundException;
 import com.cvi.post.domain.model.Post;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Objects;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Objects;
 
 @Getter
 @Entity

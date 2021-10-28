@@ -22,21 +22,21 @@ public class LikeRepositoryImpl implements LikeQueryDsl {
     @Override
     public List<Like> findByUserId(Long userId) {
         return queryFactory.selectFrom(like)
-                .leftJoin(like.user, user).fetchJoin()
-                .where(userIdEq(userId))
-                .orderBy(like.createdAt.desc())
-                .fetch();
+            .leftJoin(like.user, user).fetchJoin()
+            .where(userIdEq(userId))
+            .orderBy(like.createdAt.desc())
+            .fetch();
     }
 
     @Override
     public List<Like> findByUserId(Long userId, int offset, int size) {
         return queryFactory.selectFrom(like)
-                .leftJoin(like.user, user).fetchJoin()
-                .where(userIdEq(userId))
-                .orderBy(like.createdAt.desc())
-                .offset(offset)
-                .limit(size)
-                .fetch();
+            .leftJoin(like.user, user).fetchJoin()
+            .where(userIdEq(userId))
+            .orderBy(like.createdAt.desc())
+            .offset(offset)
+            .limit(size)
+            .fetch();
     }
 
     private BooleanExpression userIdEq(Long userId) {

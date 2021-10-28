@@ -1,11 +1,9 @@
 package com.cvi.post.domain.model;
 
-import static com.cvi.post.domain.model.QPost.post;
-
-import com.cvi.exception.InvalidInputException;
 import com.querydsl.core.types.OrderSpecifier;
-import java.util.Arrays;
 import lombok.Getter;
+
+import static com.cvi.post.domain.model.QPost.post;
 
 @Getter
 public enum Sort {

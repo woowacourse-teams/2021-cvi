@@ -22,13 +22,13 @@ class UserTest {
     @BeforeEach
     void init() {
         this.user = User.builder()
-                .id(1L)
-                .ageRange(AgeRange.TEENS)
-                .createdAt(LocalDateTime.now())
-                .nickname("검프")
-                .profileUrl("www.gump.com")
-                .socialProvider(SocialProvider.KAKAO)
-                .build();
+            .id(1L)
+            .ageRange(AgeRange.TEENS)
+            .createdAt(LocalDateTime.now())
+            .nickname("검프")
+            .profileUrl("www.gump.com")
+            .socialProvider(SocialProvider.KAKAO)
+            .build();
     }
 
     @DisplayName("사용자 생성 - 성공")
@@ -39,11 +39,11 @@ class UserTest {
         //when
         //then
         assertThatCode(() -> User.builder()
-                .ageRange(AgeRange.TWENTIES)
-                .nickname(name)
-                .profileUrl("www.budae.com")
-                .socialProvider(SocialProvider.KAKAO)
-                .build()
+            .ageRange(AgeRange.TWENTIES)
+            .nickname(name)
+            .profileUrl("www.budae.com")
+            .socialProvider(SocialProvider.KAKAO)
+            .build()
         ).doesNotThrowAnyException();
     }
 
@@ -56,13 +56,13 @@ class UserTest {
         //when
         //then
         assertThatThrownBy(() -> User.builder()
-                .ageRange(AgeRange.TWENTIES)
-                .nickname(name)
-                .profileUrl("www.budae.com")
-                .socialProvider(SocialProvider.KAKAO)
-                .build()
+            .ageRange(AgeRange.TWENTIES)
+            .nickname(name)
+            .profileUrl("www.budae.com")
+            .socialProvider(SocialProvider.KAKAO)
+            .build()
         ).isInstanceOf(InvalidInputException.class)
-                .hasMessageContaining("올바른 닉네임 형식이 아닙니다(특수 문자, 공백 불가).");
+            .hasMessageContaining("올바른 닉네임 형식이 아닙니다(특수 문자, 공백 불가).");
     }
 
 
@@ -72,14 +72,14 @@ class UserTest {
     void update(String name, AgeRange ageRange, boolean shotVerified) {
         //given
         User updateUser = User.builder()
-                .id(1L)
-                .ageRange(ageRange)
-                .createdAt(LocalDateTime.now())
-                .nickname(name)
-                .profileUrl("www.budae.com")
-                .shotVerified(shotVerified)
-                .socialProvider(SocialProvider.KAKAO)
-                .build();
+            .id(1L)
+            .ageRange(ageRange)
+            .createdAt(LocalDateTime.now())
+            .nickname(name)
+            .profileUrl("www.budae.com")
+            .shotVerified(shotVerified)
+            .socialProvider(SocialProvider.KAKAO)
+            .build();
         //when
         user.update(updateUser);
         //then
@@ -90,6 +90,6 @@ class UserTest {
 
     static Stream<Arguments> update() {
         return Stream.of(Arguments.of("1", AgeRange.TWENTIES, true),
-                Arguments.of("2", AgeRange.THIRTIES, false));
+            Arguments.of("2", AgeRange.THIRTIES, false));
     }
 }
