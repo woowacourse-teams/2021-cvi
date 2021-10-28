@@ -5,3 +5,6 @@
 
 ## 의존 모듈
 - 없음 
+
+## 도식화
+![image](https://user-images.githubusercontent.com/48986787/139180246-a4154206-d3ba-41c1-bafc-74395e0a28f2.png)

@@ -62,7 +62,7 @@
 
 # 우리팀의 강점
 
-<!-- [자세한 문서화를 했어요.](https://www.notion.so/4b6587fb182447eb93183d6160b5ef0a) -->
+[자세한 문서화를 했어요.](https://www.notion.so/4b6587fb182447eb93183d6160b5ef0a)
 
 [애자일하게 서비스를 개발했어요.](https://www.notion.so/da2fc7e8d99f4f4484bad58ed2e1b233)
 

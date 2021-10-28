@@ -2,7 +2,7 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation(project(":domain-cvi"))
+    api(project(":domain-cvi"))
     implementation(project(":cvi-publicdata-parser"))
 
     //cache

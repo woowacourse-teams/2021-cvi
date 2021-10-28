@@ -6,3 +6,9 @@
 
 ## 의존 모듈 
 - `common-cvi`: 예외 응답 객체를 사용해요.
+
+## 외부 제공 모듈
+- `common-cvi`
+
+## 도식화 
+![image](https://user-images.githubusercontent.com/48986787/139180231-d74b454e-546d-4b79-a7e7-e80caa02f6cb.png)
