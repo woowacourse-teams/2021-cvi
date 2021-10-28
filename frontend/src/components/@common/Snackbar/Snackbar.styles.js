@@ -13,19 +13,18 @@ const Container = styled.div`
   color: ${FONT_COLOR.WHITE};
   box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
   z-index: 100;
-  position: absolute;
+  position: fixed;
   bottom: 1.6rem;
   left: 50%;
   transform: translateX(-50%);
+  animation: fade 3s;
+  -webkit-animation: fade 3s;
+  animation-fill-mode: forwards;
 
   @keyframes fade {
     0% {
       opacity: 0;
       bottom: 0;
-    }
-    25% {
-      opacity: 1;
-      bottom: 1.6rem;
     }
     50% {
       opacity: 1;
@@ -41,10 +40,6 @@ const Container = styled.div`
       opacity: 0;
       bottom: 0;
     }
-    25% {
-      opacity: 1;
-      bottom: 1.6rem;
-    }
     50% {
       opacity: 1;
       bottom: 1.6rem;
@@ -54,9 +49,6 @@ const Container = styled.div`
       bottom: 0;
     }
   }
-
-  animation: fade 3s;
-  -webkit-animation: fade 3s;
 `;
 
 export { Container };

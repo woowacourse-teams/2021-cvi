@@ -1,0 +1,46 @@
+[
+  {
+    "content": "test3",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 3,
+    "vaccinationType": "PFIZER",
+    "viewCount": 0,
+    "likeCount": 8,
+    "commentCount": 17,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  },
+  {
+    "content": "test4",
+    "createdAt": "2021-07-27T14:56:43.633",
+    "id": 4,
+    "vaccinationType": "PFIZER",
+    "viewCount": 0,
+    "likeCount": 23,
+    "commentCount": 4,
+    "writer": {
+      "accessToken": null,
+      "ageRange": {
+        "maxAge": 20,
+        "meaning": "10대",
+        "minAge": 10
+      },
+      "id": 1,
+      "nickname": "검프",
+      "socialId": null,
+      "socialProfileUrl": null,
+      "socialProvider": null
+    }
+  }
+]
