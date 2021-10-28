@@ -3,7 +3,6 @@ version = '0.0.1-SNAPSHOT'
 dependencies {
     implementation(project(":domain-cvi"))
     implementation(project(":domain-cvi-oauth-service"))
-    implementation(project(":domain-cvi-publicdata-service"))
     implementation(project(":domain-cvi-scheduler"))
     implementation(project(":domain-cvi-aws-s3-service"))
 
