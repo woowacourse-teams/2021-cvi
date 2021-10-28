@@ -8,6 +8,7 @@ import com.cvi.dto.profile.UserInformation;
 import com.cvi.exception.MappingFailureException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +21,15 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class KakaoAuthorization implements Authorization {
 
     private static final String PROFILE_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
     private static final String CALLBACK_URL_SUFFIX = "/auth/kakao/callback";
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
     public UserInformation requestProfile(String code, String state, String requestOrigin) {
@@ -93,10 +95,10 @@ public class KakaoAuthorization implements Authorization {
     @Override
     public ResponseEntity<String> sendRequest(HttpEntity<MultiValueMap<String, String>> request, String url) {
         return restTemplate.exchange(
-            url,
-            HttpMethod.POST,
-            request,
-            String.class
+                url,
+                HttpMethod.POST,
+                request,
+                String.class
         );
     }
 }

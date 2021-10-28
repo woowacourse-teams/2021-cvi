@@ -86,7 +86,10 @@ subprojects {
                                         '**/ImageType*',
                                         // domain-cvi-oauth-service
                                         '**/KakaoProfile*',
-                                        '**/NaverProfile*'
+                                        '**/NaverProfile*',
+                                        '**/UserInformation*',
+                                        '**/AuthRequest*',
+                                        '**/OAuthConfig*'
                                 ] + Qdomains)}))
         }
         finalizedBy 'jacocoTestCoverageVerification'
@@ -108,7 +111,7 @@ subprojects {
                             // domain-cvi
                             "**/Sort.java, **/Filter.java, **/ImageType.java, " +
                             // domain-cvi-oauth-service
-                            "**/KakaoProfile.java, **/NaverProfile.java"
+                            "**/KakaoProfile.java, **/NaverProfile.java, **/UserInformation.java, **/AuthRequest.java, **/OAuthConfig.java"
         }
     }
 }

@@ -10,13 +10,16 @@ import com.cvi.dto.oauthtoken.OAuthToken;
 import com.cvi.dto.profile.SocialProfile;
 import com.cvi.dto.profile.UserInformation;
 import com.cvi.exception.MappingFailureException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @DisplayName("Naver Authorization 도메인 테스트")
 class NaverAuthorizationTest {
@@ -35,11 +38,12 @@ class NaverAuthorizationTest {
     private static final String EXPIRE_TIME = "3600";
     private static final String REQUEST_ORIGIN = "http://localhost:9000";
 
-    private NaverAuthorization naverAuthorization = spy(new NaverAuthorization());
+    private final RestTemplate restTemplate = spy(RestTemplate.class);
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Authorization naverAuthorization = new NaverAuthorization(restTemplate, objectMapper);
     private HttpEntity<MultiValueMap<String, String>> naverTokenRequest;
     private ResponseEntity<String> tokenResponse;
     private ResponseEntity<String> profileResponse;
-    private HttpEntity<MultiValueMap<String, String>> naverProfileRequest;
 
     @BeforeEach
     void beforeEach() {
@@ -47,10 +51,9 @@ class NaverAuthorizationTest {
         tokenResponse = ResponseEntity.ok(TOKEN_RESPONSE);
         profileResponse = ResponseEntity.ok(PROFILE_RESPONSE);
 
-        naverProfileRequest = naverAuthorization.createProfileRequest(naverAuthorization.mapToOAuthToken(tokenResponse));
-
-        willReturn(tokenResponse).given(naverAuthorization).sendRequest(naverTokenRequest, TOKEN_REQUEST_URL);
-        willReturn(profileResponse).given(naverAuthorization).sendRequest(naverProfileRequest, PROFILE_REQUEST_URL);
+        HttpEntity<MultiValueMap<String, String>> naverProfileRequest = naverAuthorization.createProfileRequest(naverAuthorization.mapToOAuthToken(tokenResponse));
+        willReturn(tokenResponse).given(restTemplate).exchange(TOKEN_REQUEST_URL, HttpMethod.POST, naverTokenRequest, String.class);
+        willReturn(profileResponse).given(restTemplate).exchange(PROFILE_REQUEST_URL, HttpMethod.POST, naverProfileRequest, String.class);
     }
 
     @DisplayName("네이버 프로필 요청 테스트 - 성공")
@@ -82,7 +85,7 @@ class NaverAuthorizationTest {
     void requestTokenFailure() {
         //given
         HttpEntity<MultiValueMap<String, String>> invalidToken = naverAuthorization.createTokenRequest("INVALID_TOKEN", STATE, REQUEST_ORIGIN);
-        willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(naverAuthorization).sendRequest(invalidToken, TOKEN_REQUEST_URL);
+        willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(restTemplate).exchange(TOKEN_REQUEST_URL, HttpMethod.POST, invalidToken, String.class);
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.requestToken("INVALID_TOKEN", STATE, REQUEST_ORIGIN))
@@ -129,7 +132,7 @@ class NaverAuthorizationTest {
         //given
         OAuthToken oAuthToken = naverAuthorization.mapToOAuthToken(tokenResponse);
         HttpEntity<MultiValueMap<String, String>> invalidProfileRequest = naverAuthorization.createProfileRequest(oAuthToken);
-        willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(naverAuthorization).sendRequest(invalidProfileRequest, PROFILE_REQUEST_URL);
+        willReturn(new ResponseEntity<>("{\"ERROR\":\"ERROR\"}", HttpStatus.BAD_REQUEST)).given(restTemplate).exchange(PROFILE_REQUEST_URL, HttpMethod.POST, invalidProfileRequest, String.class);
         //when
         //then
         assertThatThrownBy(() -> naverAuthorization.parseProfile(oAuthToken))
@@ -155,5 +158,14 @@ class NaverAuthorizationTest {
         //then
         assertThatThrownBy(() -> naverAuthorization.mapToProfile(ResponseEntity.ok("NOT_VALID_PROFILE")))
             .isExactlyInstanceOf(MappingFailureException.class);
+    }
+
+    @DisplayName("외부요청 테스트 - 성공")
+    @Test
+    void sendRequest() {
+        //given
+        //when
+        //then
+        assertThat(naverAuthorization.sendRequest(naverTokenRequest, TOKEN_REQUEST_URL)).isEqualTo(tokenResponse);
     }
 }
