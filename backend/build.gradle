@@ -78,7 +78,7 @@ subprojects {
                                         '**/CentralVaccinationInformationApplication*',
                                         '**/DummyData*',
                                         '**/CVIControllerAdvice*',
-                                        // cvi-publicdata-parser
+                                        // domain-cvi-publicdata-parser
                                         '**/Parser*',
                                         // domain-cvi
                                         '**/Sort*',
@@ -103,7 +103,7 @@ subprojects {
                     "**/*Test*.*, **/Q*.java, **/*Doc*.java, " +
                             // api-cvi-api
                             "**/CentralVaccinationInformationApplication.java, **/DataLoader.java, **/DummyData.java, **/CVIControllerAdvice.java, " +
-                            // cvi-publicdata-parser
+                            // domain-cvi-publicdata-parser
                             "**/Parser.java, " +
                             // domain-cvi
                             "**/Sort.java, **/Filter.java, **/ImageType.java, " +
