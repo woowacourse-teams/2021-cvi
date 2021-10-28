@@ -136,7 +136,7 @@ class CommentTest {
         assertThatThrownBy(() -> comment.update(updateComment, anotherUser)).isInstanceOf(UnAuthorizedException.class);
     }
 
-    @DisplayName("댓글 작성자가 같은 지 확인")
+    @DisplayName("댓글 작성자가 같은 지 확인 - 성공")
     @Test
     void isSameUser() {
         //given
@@ -147,7 +147,7 @@ class CommentTest {
         assertThat(comment.isSameUser(user)).isTrue();
     }
 
-    @DisplayName("같은 댓글인지 확인")
+    @DisplayName("같은 댓글인지 확인 - 성공")
     @Test
     void isSameAs() {
         //given

@@ -106,7 +106,7 @@ class CommentRepositoryTest {
         assertThat(post1.getId()).isNotNull();
     }
 
-    @DisplayName("유저 아이디로 댓글을 조회한다. - 성공")
+    @DisplayName("유저 아이디로 댓글을 조회한다 - 성공")
     @Test
     void findCommentByUserId() {
         //given
@@ -116,16 +116,16 @@ class CommentRepositoryTest {
         assertThat(commentRepository.findByUserId(user2.getId())).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 조회한다. - null인 경우")
+    @DisplayName("유저 아이디로 댓글을 조회한다 - 성공 - null인 경우")
     @Test
-    void findCommentByUserIdFailure() {
+    void findCommentByUserIdWhenNull() {
         //given
         //when
         //then
         assertThat(commentRepository.findByUserId(null)).hasSize(3);
     }
 
-    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - 성공")
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다 - 성공")
     @Test
     void findCommentByUserIdPaging() {
         //given
@@ -135,9 +135,9 @@ class CommentRepositoryTest {
         assertThat(commentRepository.findByUserId(user2.getId(), 0, 2)).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - null인 경우")
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다 - 성공 - null인 경우")
     @Test
-    void findCommentByUserIdPagingFailure() {
+    void findCommentByUserIdPagingWhenNull() {
         //given
         //when
         //then

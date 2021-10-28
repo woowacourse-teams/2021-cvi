@@ -9,10 +9,10 @@ public class BooleanToYNConverter implements AttributeConverter<Boolean, String>
 
     @Override
     public String convertToDatabaseColumn(Boolean attribute) {
-        if (!Objects.isNull(attribute) && attribute) {
-            return "Y";
+        if (Objects.isNull(attribute) || !attribute) {
+            return "N";
         }
-        return "N";
+        return "Y";
     }
 
     @Override

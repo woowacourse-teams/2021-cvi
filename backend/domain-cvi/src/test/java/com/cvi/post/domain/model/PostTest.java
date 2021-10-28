@@ -129,7 +129,7 @@ class PostTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("게시글 댓글 수정")
+    @DisplayName("게시글 댓글 수정 - 성공")
     @Test
     void updateComment() {
         //given
@@ -163,7 +163,7 @@ class PostTest {
                 .isInstanceOf(UnAuthorizedException.class);
     }
 
-    @DisplayName("게시글 댓글 삭제")
+    @DisplayName("게시글 댓글 삭제 - 성공")
     @Test
     void deleteCommentInComments() {
         //given
@@ -231,7 +231,7 @@ class PostTest {
     void assignImage() {
         //given
         //when
-        post.assignImages(Arrays.asList(image));
+        post.assignImages(Collections.singletonList(image));
         //then
         assertThat(post.getAllImagesAsList()).hasSize(1);
     }
@@ -246,7 +246,7 @@ class PostTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    @DisplayName("게시글 이미지 삭제")
+    @DisplayName("게시글 이미지 삭제 - 성공")
     @Test
     void delete() {
         //given
@@ -258,7 +258,7 @@ class PostTest {
         assertThat(images.getImages()).isEmpty();
     }
 
-    @DisplayName("게시글의 모든 이미지 주소 조회")
+    @DisplayName("게시글의 모든 이미지 주소 조회 - 성공")
     @Test
     void s3PathsOfAllImages() {
         //given
@@ -353,7 +353,7 @@ class PostTest {
                 .isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("게시글 좋아요 이미 누름")
+    @DisplayName("게시글 좋아요 이미 누름 - 성공")
     @Test
     void isAlreadyLikedBy() {
         //given
@@ -363,7 +363,7 @@ class PostTest {
         assertThat(post.isAlreadyLikedBy(user)).isTrue();
     }
 
-    @DisplayName("게시글 좋아요 누르지 않음")
+    @DisplayName("게시글 좋아요 누르지 않음 - 성공")
     @Test
     void isNotLikedBy() {
         //given
@@ -394,28 +394,19 @@ class PostTest {
                 .isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("게시글이 이미지 보유 확인 - 있음")
+    @DisplayName("게시글이 이미지 보유 확인 - 성공 - 있음")
     @Test
     void hasImages() {
         //given
-        Image image1 = Image.builder()
-                .url("s3/image1_s3_url")
-                .id(1L)
-                .build();
-        Image image2 = Image.builder()
-                .url("s3/image2_s3_url")
-                .id(2L)
-                .build();
-        image1.assignPost(post);
-        image2.assignPost(post);
-        post.assignImages(Arrays.asList(image1, image2));
+        image.assignPost(post);
+        post.assignImages(Collections.singletonList(image));
         //when
         final boolean hasImages = post.hasImages();
         //then
         assertThat(hasImages).isTrue();
     }
 
-    @DisplayName("게시글이 이미지 보유 확인 - 없음")
+    @DisplayName("게시글이 이미지 보유 확인 - 성공 - 없음")
     @Test
     void hasNoImages() {
         //given
@@ -425,46 +416,28 @@ class PostTest {
         assertThat(hasImages).isFalse();
     }
 
-    @DisplayName("게시글이 이미지 보유 확인 - url 확인")
+    @DisplayName("게시글이 이미지 보유 확인 - 성공 - url 확인")
     @Test
     void getImagesAsUrlList() {
         //given
-        Image image1 = Image.builder()
-                .url("s3/image1_s3_url")
-                .id(1L)
-                .build();
-        Image image2 = Image.builder()
-                .url("s3/image2_s3_url")
-                .id(2L)
-                .build();
-        image1.assignPost(post);
-        image2.assignPost(post);
-        post.assignImages(Arrays.asList(image1, image2));
+        image.assignPost(post);
+        post.assignImages(Collections.singletonList(image));
         //when
         final List<String> imagesAsUrlList = post.getImagesAsUrlList();
         //then
-        assertThat(imagesAsUrlList).containsExactly("s3/image1_s3_url", "s3/image2_s3_url");
+        assertThat(imagesAsUrlList).containsExactly("image1_s3_url/image");
     }
 
-    @DisplayName("게시글 s3url 이미지 보유 확인 - s3 url 확인")
+    @DisplayName("게시글 s3url 이미지 보유 확인 - 성공 - s3 url 확인")
     @Test
     void getS3PathsOfAllImages() {
         //given
-        Image image1 = Image.builder()
-                .url("s3/image1_s3_url")
-                .id(1L)
-                .build();
-        Image image2 = Image.builder()
-                .url("s3/image2_s3_url")
-                .id(2L)
-                .build();
-        image1.assignPost(post);
-        image2.assignPost(post);
-        post.assignImages(Arrays.asList(image1, image2));
+        image.assignPost(post);
+        post.assignImages(Collections.singletonList(image));
         //when
         final List<String> imagesAsUrlList = post.getS3PathsOfAllImages();
         //then
-        assertThat(imagesAsUrlList).containsExactly("image1_s3_url", "image2_s3_url");
+        assertThat(imagesAsUrlList).containsExactly("image");
     }
 
     @DisplayName("페이징 요청 값 resize - 성공")
@@ -493,8 +466,8 @@ class PostTest {
     static Stream<Arguments> resizePagingRangeTest() {
         return Stream.of(
                 Arguments.of(0, 2, Arrays.asList("댓글1", "댓글2")),
-                Arguments.of(1, 1, Arrays.asList("댓글2")),
-                Arguments.of(0, 1, Arrays.asList("댓글1")),
+                Arguments.of(1, 1, Collections.singletonList("댓글2")),
+                Arguments.of(0, 1, Collections.singletonList("댓글1")),
                 Arguments.of(2, 1, Collections.emptyList())
         );
     }

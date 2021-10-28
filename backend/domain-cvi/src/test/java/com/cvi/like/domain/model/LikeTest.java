@@ -71,7 +71,7 @@ class LikeTest {
         assertThatThrownBy(() -> like.assignPost(post)).isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("좋아요 누른 유저인지 확인")
+    @DisplayName("좋아요 누른 유저인지 확인 - 성공")
     @Test
     void isSameUser() {
         //given

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Image 도메인 테스트")
 class ImageTest {
 
-    @DisplayName("객체 주소값, 내용이 달라도 id만 같으면 동일한 객체로 본다.")
+    @DisplayName("객체 주소값, 내용이 달라도 id만 같으면 동일한 객체 - 성공")
     @Test
     void equalsAndHashcode() {
         //given

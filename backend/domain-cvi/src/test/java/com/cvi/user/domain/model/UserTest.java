@@ -88,7 +88,8 @@ class UserTest {
         assertThat(user.isShotVerified()).isEqualTo(updateUser.isShotVerified());
     }
 
-    static Stream<Arguments> update(){
-        return Stream.of(Arguments.of("1", AgeRange.TWENTIES, true), Arguments.of("2", AgeRange.THIRTIES, false));
+    static Stream<Arguments> update() {
+        return Stream.of(Arguments.of("1", AgeRange.TWENTIES, true),
+                Arguments.of("2", AgeRange.THIRTIES, false));
     }
 }

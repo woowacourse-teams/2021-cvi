@@ -59,7 +59,7 @@ class ImageRepositoryTest {
         postRepository.save(post);
     }
 
-    @DisplayName("Post에 Image 추가 시 양방향 매핑 테스트")
+    @DisplayName("Post에 Image 추가 시 양방향 매핑 테스트 - 성공")
     @Test
     void assignImageToPost() {
         //given
@@ -70,7 +70,7 @@ class ImageRepositoryTest {
         assertThat(image.getPost()).isEqualTo(post);
     }
 
-    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트")
+    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - 성공")
     @Test
     void assignPostToImage() {
         //given
@@ -81,9 +81,9 @@ class ImageRepositoryTest {
         assertThat(image.getPost()).isEqualTo(post);
     }
 
-    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - null인 경우")
+    @DisplayName("Image에 Post 추가 시 양방향 매핑 테스트 - 성공 - null인 경우")
     @Test
-    void assignPostToImageFailure() {
+    void assignPostToImageWhenNull() {
         //given
         //when
         //then

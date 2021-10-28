@@ -242,8 +242,10 @@ class PostRepositoryTest {
         //when
         List<Post> posts = postRepository.findByVaccineType(VaccinationType.PFIZER, 0, 3, Sort.CREATED_AT_DESC.getSort());
         //then
-        assertThat(posts).extracting("id").containsExactlyElementsOf(Arrays.asList(post3.getId(), post1.getId()));
-        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post1.getContent()));
+        final List<Long> extractedIds = Arrays.asList(post3.getId(), post1.getId());
+        assertThat(posts).extracting("id").containsExactlyElementsOf(extractedIds);
+        final List<String> extractedContents = Arrays.asList(post3.getContent(), post1.getContent());
+        assertThat(posts).extracting("content").containsExactlyElementsOf(extractedContents);
     }
 
     @DisplayName("백신 타입별 조회 - 특정 타입 검색")
@@ -265,7 +267,8 @@ class PostRepositoryTest {
         List<Post> posts = postRepository.findByVaccineType(null);
         //then
         assertThat(posts).hasSize(3);
-        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent()));
+        final List<String> extractedContents = Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent());
+        assertThat(posts).extracting("content").containsExactlyElementsOf(extractedContents);
     }
 
     @DisplayName("백신 타입별 조회 - All로 주어지는 경우 모든 타입 검색")
@@ -276,7 +279,8 @@ class PostRepositoryTest {
         List<Post> posts = postRepository.findByVaccineType(VaccinationType.ALL);
         //then
         assertThat(posts).hasSize(3);
-        assertThat(posts).extracting("content").containsExactlyElementsOf(Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent()));
+        final List<String> extractedContents = Arrays.asList(post3.getContent(), post2.getContent(), post1.getContent());
+        assertThat(posts).extracting("content").containsExactlyElementsOf(extractedContents);
     }
 
     @DisplayName("작성자 ID로 게시글 페이징 조회")

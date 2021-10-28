@@ -1,8 +1,5 @@
 package com.cvi.like.domain.repository;
 
-import com.cvi.comment.domain.model.Comment;
-import com.cvi.comment.domain.repository.CommentRepository;
-import com.cvi.exception.NotFoundException;
 import com.cvi.like.domain.model.Like;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
@@ -18,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("LikeRepository 테스트")
 @DataJpaTest
@@ -112,7 +107,7 @@ class LikeRepositoryTest {
         assertThat(post1.getId()).isNotNull();
     }
 
-    @DisplayName("유저 아이디로 좋아요를 조회한다. - 성공")
+    @DisplayName("유저 아이디로 좋아요를 조회한다 - 성공")
     @Test
     void findCommentByUserId() {
         //given
@@ -122,16 +117,16 @@ class LikeRepositoryTest {
         assertThat(likeRepository.findByUserId(user2.getId())).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 조회한다. - 실패")
+    @DisplayName("유저 아이디로 댓글을 조회한다 - 실패")
     @Test
-    void findCommentByUserIdFailure() {
+    void findCommentByUserIdWhenNull() {
         //given
         //when
         //then
         assertThat(likeRepository.findByUserId(null)).hasSize(3);
     }
 
-    @DisplayName("유저 아이디로 좋아요를 페이징 조회한다.")
+    @DisplayName("유저 아이디로 좋아요를 페이징 조회한다 - 성공")
     @Test
     void findCommentByUserIdPaging() {
         //given
@@ -141,9 +136,9 @@ class LikeRepositoryTest {
         assertThat(likeRepository.findByUserId(user2.getId(), 0, 2)).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - null인 경우")
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다 - 성공 - null인 경우")
     @Test
-    void findCommentByUserIdPagingFailure() {
+    void findCommentByUserIdPagingWhenNull() {
         //given
         //when
         //then
