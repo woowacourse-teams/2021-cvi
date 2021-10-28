@@ -84,6 +84,7 @@ subprojects {
                                         '**/Sort*',
                                         '**/Filter*',
                                         '**/ImageType*',
+                                        '**/JpaConfiguration*',
                                         // domain-cvi-oauth-service
                                         '**/KakaoProfile*',
                                         '**/NaverProfile*',
@@ -109,7 +110,7 @@ subprojects {
                             // domain-cvi-publicdata-parser
                             "**/Parser.java, " +
                             // domain-cvi
-                            "**/Sort.java, **/Filter.java, **/ImageType.java, " +
+                            "**/Sort.java, **/Filter.java, **/ImageType.java, **/JpaConfiguration.java, " +
                             // domain-cvi-oauth-service
                             "**/KakaoProfile.java, **/NaverProfile.java, **/UserInformation.java, **/AuthRequest.java, **/OAuthConfig.java"
         }

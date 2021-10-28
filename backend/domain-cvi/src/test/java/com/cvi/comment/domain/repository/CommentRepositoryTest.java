@@ -1,7 +1,6 @@
 package com.cvi.comment.domain.repository;
 
 import com.cvi.comment.domain.model.Comment;
-import com.cvi.image.domain.Image;
 import com.cvi.post.domain.model.Post;
 import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.post.domain.repository.PostRepository;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,51 +46,51 @@ class CommentRepositoryTest {
 
     private void initUsers() {
         user1 = User.builder()
-                .nickname("인비")
-                .ageRange(AgeRange.TEENS)
-                .socialProvider(SocialProvider.KAKAO)
-                .socialId("1000")
-                .profileUrl("profile url 1")
-                .build();
+            .nickname("인비")
+            .ageRange(AgeRange.TEENS)
+            .socialProvider(SocialProvider.KAKAO)
+            .socialId("1000")
+            .profileUrl("profile url 1")
+            .build();
         user2 = User.builder()
-                .nickname("검프")
-                .ageRange(AgeRange.FIFTIES)
-                .socialProvider(SocialProvider.NAVER)
-                .socialId("1001")
-                .profileUrl("profile url 2")
-                .build();
+            .nickname("검프")
+            .ageRange(AgeRange.FIFTIES)
+            .socialProvider(SocialProvider.NAVER)
+            .socialId("1001")
+            .profileUrl("profile url 2")
+            .build();
         userRepository.save(user1);
         userRepository.save(user2);
     }
 
     private void initPost() {
         post1 = Post.builder()
-                .user(user1)
-                .content("내용 1")
-                .vaccinationType(VaccinationType.PFIZER)
-                .build();
+            .user(user1)
+            .content("내용 1")
+            .vaccinationType(VaccinationType.PFIZER)
+            .build();
         postRepository.save(post1);
     }
 
     private void initComments() {
         comment1 = Comment.builder()
-                .content("댓글 내용1")
-                .user(user1)
-                .build();
+            .content("댓글 내용1")
+            .user(user1)
+            .build();
         comment1.assignPost(post1);
         commentRepository.save(comment1);
 
         comment2 = Comment.builder()
-                .content("댓글 내용2")
-                .user(user2)
-                .build();
+            .content("댓글 내용2")
+            .user(user2)
+            .build();
         comment2.assignPost(post1);
         commentRepository.save(comment2);
 
         comment3 = Comment.builder()
-                .content("댓글 내용3")
-                .user(user2)
-                .build();
+            .content("댓글 내용3")
+            .user(user2)
+            .build();
         comment3.assignPost(post1);
         commentRepository.save(comment3);
     }
@@ -106,7 +103,7 @@ class CommentRepositoryTest {
         assertThat(post1.getId()).isNotNull();
     }
 
-    @DisplayName("유저 아이디로 댓글을 조회한다. - 성공")
+    @DisplayName("유저 아이디로 댓글을 조회한다 - 성공")
     @Test
     void findCommentByUserId() {
         //given
@@ -116,16 +113,16 @@ class CommentRepositoryTest {
         assertThat(commentRepository.findByUserId(user2.getId())).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 조회한다. - 실패")
+    @DisplayName("유저 아이디로 댓글을 조회한다 - 성공 - null인 경우")
     @Test
-    void findCommentByUserIdFailure() {
+    void findCommentByUserIdWhenNull() {
         //given
         //when
         //then
         assertThat(commentRepository.findByUserId(null)).hasSize(3);
     }
 
-    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - 성공")
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다 - 성공")
     @Test
     void findCommentByUserIdPaging() {
         //given
@@ -135,9 +132,9 @@ class CommentRepositoryTest {
         assertThat(commentRepository.findByUserId(user2.getId(), 0, 2)).hasSize(2);
     }
 
-    @DisplayName("유저 아이디로 댓글을 페이징 조회한다. - 실패")
+    @DisplayName("유저 아이디로 댓글을 페이징 조회한다 - 성공 - null인 경우")
     @Test
-    void findCommentByUserIdPagingFailure() {
+    void findCommentByUserIdPagingWhenNull() {
         //given
         //when
         //then

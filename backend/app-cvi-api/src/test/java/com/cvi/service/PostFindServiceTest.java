@@ -194,7 +194,7 @@ class PostFindServiceTest {
         List<PostResponse> postResponses = postService.findByVaccineType(VaccinationType.ALL, 1, 1, Sort.CREATED_AT_DESC, optionalUser);
         //then
         assertThat(postResponses).size().isEqualTo(1);
-        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Arrays.asList("Test 1"));
+        assertThat(postResponses).extracting("content").containsExactlyElementsOf(Collections.singletonList("Test 1"));
         assertThat(postResponses).extracting("vaccinationType").filteredOn(vaccinationType -> vaccinationType instanceof VaccinationType);
     }
 

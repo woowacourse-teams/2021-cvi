@@ -1,8 +1,5 @@
 package com.cvi.like.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.cvi.exception.InvalidOperationException;
 import com.cvi.exception.NotFoundException;
 import com.cvi.post.domain.model.Post;
@@ -10,10 +7,14 @@ import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("좋아요 도메인 테스트")
 class LikeTest {
@@ -71,7 +72,7 @@ class LikeTest {
         assertThatThrownBy(() -> like.assignPost(post)).isInstanceOf(InvalidOperationException.class);
     }
 
-    @DisplayName("좋아요 누른 유저인지 확인")
+    @DisplayName("좋아요 누른 유저인지 확인 - 성공")
     @Test
     void isSameUser() {
         //given

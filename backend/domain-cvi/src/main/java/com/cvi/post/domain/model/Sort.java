@@ -1,11 +1,9 @@
 package com.cvi.post.domain.model;
 
-import static com.cvi.post.domain.model.QPost.post;
-
-import com.cvi.exception.InvalidInputException;
 import com.querydsl.core.types.OrderSpecifier;
-import java.util.Arrays;
 import lombok.Getter;
+
+import static com.cvi.post.domain.model.QPost.post;
 
 @Getter
 public enum Sort {
@@ -22,17 +20,5 @@ public enum Sort {
 
     Sort(OrderSpecifier sort) {
         this.sort = sort;
-    }
-
-    public static OrderSpecifier toOrderSpecifier(Sort input) {
-        return Arrays.stream(values())
-            .filter(Sort::isSameTypeOf)
-            .findAny()
-            .map(sort -> input.getSort())
-            .orElseThrow(() -> new InvalidInputException("잘못된 정렬 형식입니다."));
-    }
-
-    private static boolean isSameTypeOf(Sort sort) {
-        return sort == sort;
     }
 }

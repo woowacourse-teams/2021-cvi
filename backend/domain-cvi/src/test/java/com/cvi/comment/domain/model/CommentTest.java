@@ -1,8 +1,5 @@
 package com.cvi.comment.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.cvi.exception.InvalidOperationException;
 import com.cvi.exception.NotFoundException;
 import com.cvi.exception.UnAuthorizedException;
@@ -11,10 +8,14 @@ import com.cvi.post.domain.model.VaccinationType;
 import com.cvi.user.domain.model.AgeRange;
 import com.cvi.user.domain.model.SocialProvider;
 import com.cvi.user.domain.model.User;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("댓글 도메인 테스트")
 class CommentTest {
@@ -136,7 +137,7 @@ class CommentTest {
         assertThatThrownBy(() -> comment.update(updateComment, anotherUser)).isInstanceOf(UnAuthorizedException.class);
     }
 
-    @DisplayName("댓글 작성자가 같은 지 확인")
+    @DisplayName("댓글 작성자가 같은 지 확인 - 성공")
     @Test
     void isSameUser() {
         //given
@@ -147,7 +148,7 @@ class CommentTest {
         assertThat(comment.isSameUser(user)).isTrue();
     }
 
-    @DisplayName("같은 댓글인지 확인")
+    @DisplayName("같은 댓글인지 확인 - 성공")
     @Test
     void isSameAs() {
         //given

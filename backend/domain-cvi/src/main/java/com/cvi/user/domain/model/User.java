@@ -4,15 +4,10 @@ import com.cvi.config.entity.BaseEntity;
 import com.cvi.exception.InvalidInputException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j

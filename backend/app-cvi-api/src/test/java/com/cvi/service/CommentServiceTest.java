@@ -168,7 +168,7 @@ public class CommentServiceTest {
         Post foundPost = postRepository.findById(this.post.getId()).get();
         //then
         assertThat(foundComment).isEmpty();
-        assertThat(foundPost.getCommentsAsList()).extracting("id").doesNotContain(commentResponse.getId());
+        assertThat(foundPost.getCommentsAsList()).isEmpty();
     }
 
     @DisplayName("댓글 삭제 - 실패 - 댓글을 찾을 수 없음")
