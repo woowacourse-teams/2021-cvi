@@ -2,10 +2,12 @@ package com.cvi.config.datasource;
 
 import com.cvi.config.datasource.ReplicationDataSourceProperties.Slave;
 import com.zaxxer.hikari.HikariDataSource;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -20,7 +22,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-@Profile("prod")
+@Slf4j
 // @EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(ReplicationDataSourceProperties.class)
 @Configuration
@@ -78,13 +80,15 @@ public class ReplicationDataSourceConfig {
 
     // 매 쿼리 수행마다 Connection 연결
     @Bean
-    public DataSource dataSource() {
-        return new LazyConnectionDataSourceProxy(routingDataSource());
+    public DataSource dataSource() throws SQLException {
+        final DataSource targetDataSource = routingDataSource();
+        log.info("현재 Datasource : {}", targetDataSource.getConnection().getMetaData().getURL());
+        return new LazyConnectionDataSourceProxy(targetDataSource);
     }
 
     // JPA에서 사용하는 EntityManagerFactory 설정. hibernate 설정을 직접 주입한다.
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws SQLException {
         EntityManagerFactoryBuilder entityManagerFactoryBuilder = createEntityManagerFactoryBuilder(jpaProperties);
         return entityManagerFactoryBuilder.dataSource(dataSource())
             .packages("com.cvi")

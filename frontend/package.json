@@ -67,7 +67,7 @@
   "description": "My webpack project",
   "scripts": {
     "build": "cp ./env/.env.production ./.env && webpack --mode=production --node-env=production",
-    "build:dev": "cp ./env/.env.development ./.env && webpack --mode=production --node-env=production",
+    "build:dev": "cp ./env/.env.development ./.env && webpack --mode=development --node-env=development",
     "start": "cp ./env/.env.local ./.env && webpack serve --mode=development",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",

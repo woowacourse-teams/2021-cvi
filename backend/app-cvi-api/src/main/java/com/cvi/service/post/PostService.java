@@ -88,10 +88,10 @@ public class PostService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PostResponse findById(Long id, Optional<User> optionalUser) {
         Post post = findPostByPostId(id);
-        post.increaseViewCount();
+        // post.increaseViewCount();
         return createPostResponse(optionalUser, post);
     }
 
