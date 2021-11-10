@@ -4,9 +4,11 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+@Slf4j
 public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
     private static final String DATASOURCE_KEY_MASTER = "master";
@@ -33,11 +35,12 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
         if (isReadOnly) {
-            logger.info("Connection Slave");
-            return slaveNames.getNext();
+            final String nextSlaveName = slaveNames.getNext();
+            log.info("Connection Slave : {}", nextSlaveName);
+            return nextSlaveName;
         }
 
-        logger.info("Connection Master");
+        log.info("Connection Master");
         return DATASOURCE_KEY_MASTER;
     }
 
