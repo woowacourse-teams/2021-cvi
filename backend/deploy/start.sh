@@ -28,6 +28,7 @@ echo "> $JAR_LOCATION 를 profile=$IDLE_PROFILE 로 실행합니다."
 case $1 in
   "dev")
     nohup java -jar \
+        -Dlog4j2.formatMsgNoLookups=true \
         -Duser.timezone=Asia/Seoul \
         -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-auth.yml,/home/ubuntu/deploy/application-publicdata-secret.yml,/home/ubuntu/deploy/application-aws-s3.yml \
         -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
@@ -35,6 +36,7 @@ case $1 in
     ;;
   "prod")
     nohup java -jar \
+        -Dlog4j2.formatMsgNoLookups=true \
         -Duser.timezone=Asia/Seoul \
         -Dspring.config.location=classpath:/application.yml,/home/ubuntu/deploy/application-db.yml,/home/ubuntu/deploy/application-jwt.yml,/home/ubuntu/deploy/application-auth.yml,/home/ubuntu/deploy/application-publicdata-secret.yml,/home/ubuntu/deploy/application-aws-s3.yml \
         -Dspring.profiles.active=$IDLE_PROFILE,"$1" \
